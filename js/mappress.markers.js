@@ -257,7 +257,7 @@
 				story += '<h2>' + storyData.title + '</h2>';
 				if(storyData.thumbnail)
 					story += '<div class="media-limit"><img class="thumbnail" src="' + storyData.thumbnail + '" /></div>';
-				story += storyData.story;
+				story += storyData.content;
 				story += ' <a href="' + storyData.url + '" target="_blank" rel="external">' + mappress_markers.read_more_label + '</a>';
 
 				map.$.sidebar.story.empty().append($(story));
