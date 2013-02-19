@@ -68,8 +68,6 @@ function mappress_uri() {
 	return content_url($relative_path);
 }
 
-mappress_uri();
-
 function mappress_admin_url() {
 	if(!function_exists('qtrans_getLanguage'))
 		return admin_url('admin-ajax.php');
