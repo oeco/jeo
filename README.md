@@ -8,7 +8,7 @@ Instructions
 
 Currently you have to add the MapPress code to your theme structure. Soon it will be a full featured parent theme.
 
-Add this directory to your theme folder, example:
+Add this repository to your theme folder, example:
 ```
 wp-content/themes/your-theme/mappress
 ```
