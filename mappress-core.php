@@ -260,8 +260,8 @@ function mappress_get_markers_data() {
 				$data['features'][$i]['properties']['id'] = 'post-' . $post->ID;
 				$data['features'][$i]['properties']['title'] = get_the_title();
 				$data['features'][$i]['properties']['date'] = get_the_orig_date(_x('m/d/Y', 'reduced date format', 'infoamazonia'));
-				$data['features'][$i]['properties']['story'] = apply_filters('the_content', get_the_content());
-				$data['features'][$i]['properties']['url'] = get_post_meta($post->ID, 'url', true);
+				$data['features'][$i]['properties']['content'] = apply_filters('the_content', get_the_content());
+				$data['features'][$i]['properties']['url'] = get_permalink();
 
 				// source
 				$publishers = get_the_terms($post->ID, 'publisher');
