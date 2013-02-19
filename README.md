@@ -7,7 +7,9 @@ Instructions
 ------------
 
 Add this directory to your theme folder, example:
-```wp-content/themes/your-theme/mappress```
+```
+wp-content/themes/your-theme/mappress
+```
 
 Include this line in your functions.php file
 ```php
