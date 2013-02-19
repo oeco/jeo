@@ -1,4 +1,4 @@
-mappress
+MapPress
 ========
 
 WordPress + MapBox = MapPress
