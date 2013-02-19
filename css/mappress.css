@@ -1,0 +1,189 @@
+/*
+ * Map styles
+ */
+
+.map-container {
+	position: relative;	
+}
+
+.map-container .map {
+	width: 100%;
+	height: 100%;
+}
+
+.map-container .map.map-fullscreen-map {
+	z-index: 9999999;
+}
+
+.map-container .lang-en,
+.map-container .lang-pt,
+.map-container .lang-es {
+	display: none;
+}
+
+body.locale-en-us .map-container .lang-en,
+body.locale-pt-br .map-container .lang-pt,
+body.locale-es-es .map-container .lang-es {
+	display: block;
+}
+
+body.pt-BR .map-container .lang-pt,
+body.en-US .map-container .lang-en,
+body.es-ES .map-container .lang-es {
+	display: block;
+}
+
+/*
+ * Map widgets
+ */
+
+.map-container .map-widgets {
+	width: 200px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 100;
+	opacity: 1;
+}
+
+.map-container .map-widgets.hide {
+	opacity: 0;
+	-webkit-transition: opacity 150ms;
+	-moz-transition: opacity 150ms;
+	-ms-transition: opacity 150ms;
+	-o-transition: opacity 150ms;
+}
+
+.map-container .map-widgets.fullscreen {
+	position: fixed;
+	z-index: 999999999999;
+}
+
+.map-container .map-widgets .map-widget {
+ 	width: 100%;
+	padding: 0;
+	border: 1px solid #BBB;
+	background: white;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	margin: 0 0 10px;
+}
+
+.map-container .map-widgets .map-widget .widget-title {
+	padding: 5px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 80%;
+	display: block;
+}
+
+/*
+ * Search form
+ */
+
+.map-container .map-widgets .map-search {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+.map-container .map-widgets .map-search input {
+	border: 0;
+	background: transparent;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 5px;
+	display: block;
+	outline: none;
+}
+
+.map-container .map-widgets .geocode-results .widget-title {
+	border-top: 1px solid #f0f0f0;
+}
+
+.map-container .map-widgets .geocode-results ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.map-container .map-widgets .geocode-results ul li {
+	padding: 3px 5px;
+	margin: 0;
+	border-bottom: 1px solid #f3f3f3;
+	cursor: pointer;
+}
+
+.map-container .map-widgets .geocode-results ul li:hover {
+	background-color: #f3f3f3;
+}
+
+.map-container .map-widgets .geocode-results .clear-search {
+	float: right;
+	font-size: 80%;
+	padding: 5px;
+}
+
+/*
+ * Switch layers
+ */
+
+.map-container .map-widgets .switch-layers,
+.map-container .map-widgets .swap-layers {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.map-container .map-widgets .switch-layers li,
+.map-container .map-widgets .swap-layers li {
+	margin: 0;
+	padding: 5px;
+	cursor: pointer;
+	border-bottom: 1px solid #f3f3f3;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	opacity: .5;
+}
+
+.map-container .map-widgets .switch-layers li.active,
+.map-container .map-widgets .swap-layers li.active {
+	opacity: 1;
+}
+
+.map-container .map-widgets .switch-layers li:hover,
+.map-container .map-widgets .swap-layers li:hover {
+	opacity: .7;
+}
+
+.map-container .map-widgets .swap-layers li.active:hover {
+	opacity: 1;
+}
+
+/*
+ * D3 Vectors
+ */
+
+.d3-vec {
+	position:absolute;
+}
+.d3-vec path {
+	fill: #000;
+	fill-opacity: .3;
+	stroke: #fff;
+	stroke-width: 1.5px;
+	
+}
+.d3-vec path:hover {
+	fill-opacity: .7;
+}
+
+.map-container {
+	overflow: hidden;
+}

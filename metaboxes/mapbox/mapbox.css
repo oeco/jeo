@@ -1,0 +1,109 @@
+.clearfix:before,
+.clearfix:after {
+	content: '\0020';
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+.clearfix:after {
+ 	clear: both;
+ }
+.clearfix {
+	zoom: 1;
+}
+
+#mapbox-metabox .layers-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#mapbox-metabox .layers-list li {
+	border: 1px solid #ddd;
+	padding: 10px;
+	margin: 0 0 10px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	background: #fefefe;
+}
+
+#mapbox-metabox .layers-list li .layer-actions {
+	float: right;
+}
+
+#mapbox-metabox .layers-list li .layer-actions .sort {
+	float: right;
+	display: inline-block;
+	height: 24px;
+	cursor: move;
+	width: 14px;
+	margin-left: 20px;
+	background: url(../images/sort.gif) center no-repeat;
+	opacity: .5;
+}
+
+#mapgroup-metabox .map-list li .map-actions .sort:hover {
+	opacity: 1;
+}
+
+#mapbox-metabox .layer-opts {
+	margin: 10px 0 0;
+}
+
+#mapbox-metabox .layer-opts h4 {
+	margin: 0 0 5px 3px;
+	color: #999;
+}
+
+#mapbox-metabox .layer-opts input[type=radio] {
+	margin: 0 5px;
+}
+
+
+#mapbox-metabox .layer-opts .filtering-opts {
+	padding: 5px;
+	margin: 10px 0 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+}
+
+#mapbox-metabox input[type=checkbox] {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#mapbox-metabox .map-container div.map {
+	width: 100%;
+	height: 500px;
+}
+
+#mapbox-metabox .map-visual-settings {
+	clear: both;
+}
+
+#mapbox-metabox .map-setting {
+	width: 33%;
+	float: left;
+	box-sizing: border-box;
+	padding: 10px;
+}
+
+#mapbox-metabox .map-setting h4 {
+	font-size: 14px;
+	color: #666;
+}
+
+#mapbox-metabox .map-setting table tr td:first-child {
+	font-weight: bold;
+	padding-right: 15px;
+}

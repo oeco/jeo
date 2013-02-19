@@ -1,0 +1,58 @@
+#mapgroup-metabox .map-list {
+	list-style: none;
+	margin: 10px 0 0;
+	padding: 0;
+}
+
+#mapgroup-metabox .map-list li {
+	border: 1px solid #ddd;
+	padding: 10px;
+	margin: 0 0 10px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	background: #fefefe;
+	clear: both;
+	line-height: 24px;
+}
+
+#mapgroup-metabox .map-list li:before,
+#mapgroup-metabox .map-list li:after {
+	width: 100%;
+	zoom: 1;
+	content: '\0020';
+	display: block;
+	overflow: hidden;
+	visibility: hidden;
+	clear: both;
+}
+
+#mapgroup-metabox .map-list li .title {
+	display: block;
+	float: left;
+	width: 50%;
+	font-size: 14px;
+	color: #666;
+	line-height: 24px;
+}
+
+#mapgroup-metabox .map-list li .map-actions {
+	float: right;
+}
+
+#mapgroup-metabox .map-list li .map-actions .sort {
+	float: right;
+	display: inline-block;
+	height: 24px;
+	cursor: move;
+	width: 14px;
+	margin-left: 20px;
+	background: url(../images/sort.gif) center no-repeat;
+	opacity: .5;
+}
+
+#mapgroup-metabox .map-list li .map-actions .sort:hover {
+	opacity: 1;
+}
