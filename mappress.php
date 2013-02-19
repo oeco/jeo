@@ -1,9 +1,11 @@
 <?php
 
+define('MAPPRESS_PATH', realpath(dirname(__FILE__)));
+
 /*
  * Mappress
  */
 
 // map functions
-include(TEMPLATEPATH . '/inc/mappress/mappress-core.php');
-include(TEMPLATEPATH . '/inc/mappress/mappress-functions.php');
+include(MAPPRESS_PATH . '/mappress-core.php');
+include(MAPPRESS_PATH . '/mappress-functions.php');

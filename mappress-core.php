@@ -1,10 +1,8 @@
 <?php
 
-define('MAPPRESS_PATH', realpath(dirname(__FILE__)));
-
 function mappress_setup() {
 	// register map and map group post types
-	include(MAPPRESS_PATH . 'mappress-post-types.php');
+	include(MAPPRESS_PATH . '/mappress-post-types.php');
 
 	add_theme_support('post-thumbnails');
 	add_image_size('post-thumb', 245, 90, true);
@@ -15,20 +13,20 @@ add_action('after_setup_theme', 'mappress_setup');
  * Register/enqueue scripts & styles
  */
 function mappress_scripts() {
-	wp_register_script('underscore', get_template_directory_uri() . '/inc/mappress/js/lib/underscore-min.js', array(), '1.4.3');
-	wp_register_script('mapbox-js', get_template_directory_uri() . '/inc/mappress/js/lib/mapbox.js', array(), '0.6.7');
-	wp_enqueue_style('mapbox', get_template_directory_uri() . '/inc/mappress/js/lib/mapbox.css', array(), '0.6.7');
+	wp_register_script('underscore', MAPPRESS_PATH . '/lib/underscore-min.js', array(), '1.4.3');
+	wp_register_script('mapbox-js', MAPPRESS_PATH . '/lib/mapbox.js', array(), '0.6.7');
+	wp_enqueue_style('mapbox', MAPPRESS_PATH . '/lib/mapbox.css', array(), '0.6.7');
 
-	wp_register_script('d3js', get_template_directory_uri() . '/inc/mappress/js/lib/d3.v2.min.js', array('jquery'), '3.0.5');
+	wp_register_script('d3js', MAPPRESS_PATH . '/lib/d3.v2.min.js', array('jquery'), '3.0.5');
 
-	wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/mappress/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.8.20');
-	wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/mappress/js/mappress.hash.js', array('mappress', 'underscore'), '0.0.1.12');
-	wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/mappress/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.4');
-	wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/mappress/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.5');
-	wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/mappress/js/mappress.groups.js', array('mappress', 'underscore'), '0.0.5.1');
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/inc/mappress/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.1');
+	wp_enqueue_script('mappress', MAPPRESS_PATH . '/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.8.20');
+	wp_enqueue_script('mappress.hash', MAPPRESS_PATH . '/js/mappress.hash.js', array('mappress', 'underscore'), '0.0.1.12');
+	wp_enqueue_script('mappress.geocode', MAPPRESS_PATH . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.4');
+	wp_enqueue_script('mappress.filterLayers', MAPPRESS_PATH . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.5');
+	wp_enqueue_script('mappress.groups', MAPPRESS_PATH . '/js/mappress.groups.js', array('mappress', 'underscore'), '0.0.5.1');
+	wp_enqueue_script('mappress.markers', MAPPRESS_PATH . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.1');
 
-	wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/mappress/css/mappress.css', array(), '0.0.1.1');
+	wp_enqueue_style('mappress', MAPPRESS_PATH . '/css/mappress.css', array(), '0.0.1.1');
 
 	wp_localize_script('mappress', 'mappress_localization', array(
 		'ajaxurl' => mappress_admin_url(),
