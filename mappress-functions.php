@@ -32,9 +32,12 @@ function mappress_map($post_id = false) {
 	if(get_post_type($post_id) == 'map-group')
 		return mappress_mapgroup($post_id);
 	setup_postdata(get_post($post_id));
-	if(locate_template(array('content-map.php')))
+	if(locate_template(array('content-map.php'))) {
+		$post = get_post($post_id);
+		setup_postdata($post);
 		get_template_part('content', 'map');
-	else
+		wp_reset_postdata();
+	} else
 		mappress_map_content($post_id);
 	wp_reset_postdata();
 }
@@ -45,8 +48,8 @@ function mappress_map_content($post_id = false) {
 	if(!$post_id);
 		return;
 	?>
-	<div class="map-container"><div id="map_<?php echo $post->ID; ?>" class="map"></div></div>
-	<script type="text/javascript">mappress(<?php echo $post->ID; ?>);</script>
+	<div class="map-container"><div id="map_<?php echo $post_id; ?>" class="map"></div></div>
+	<script type="text/javascript">mappress(<?php echo $post_id; ?>);</script>
 	<?php
 }
 
