@@ -55,6 +55,14 @@
 	 	else
 	 		mapConf.geocode = false;
 
+	 	// handlers
+	 	mapConf.disableHandlers = {};
+		// mousewheel
+	 	if($('#mapbox-metabox .disable-mousewheel').is(':checked'))
+	 		mapConf.disableHandlers.mousewheel = false;
+	 	else
+	 		mapConf.disableHandlers.mousewheel = true;
+
 	 	if($('#mapbox-metabox .toggle-preview-mode').is(':checked'))
 	 		mapConf.preview = true;
 	 	else

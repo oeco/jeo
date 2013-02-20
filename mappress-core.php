@@ -19,7 +19,7 @@ function mappress_scripts() {
 
 	wp_register_script('d3js', mappress_uri() . '/lib/d3.v2.min.js', array('jquery'), '3.0.5');
 
-	wp_enqueue_script('mappress', mappress_uri() . '/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.8.20');
+	wp_enqueue_script('mappress', mappress_uri() . '/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.8.21');
 	wp_enqueue_script('mappress.hash', mappress_uri() . '/js/mappress.hash.js', array('mappress', 'underscore'), '0.0.1.12');
 	wp_enqueue_script('mappress.geocode', mappress_uri() . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.4');
 	wp_enqueue_script('mappress.filterLayers', mappress_uri() . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.5');
@@ -67,6 +67,23 @@ function mappress_uri() {
 	$relative_path = substr(MAPPRESS_PATH, strpos(MAPPRESS_PATH, '/themes'));
 	return content_url($relative_path);
 }
+
+/*
+ * qTranslate fixes
+ */
+
+// fix forced formated date on qtranslate
+function get_the_orig_date($format = false) {
+	global $post;
+	$date = get_the_date($format);
+	if(function_exists('qtrans_getLanguage')) {
+		remove_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
+		$date = get_the_date($format);
+		add_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
+	}
+	return $date;
+}
+
 
 function mappress_admin_url() {
 	if(!function_exists('qtrans_getLanguage'))

@@ -6,7 +6,7 @@ add_action('save_post', 'mapbox_save_postdata');
 
 function mapbox_metabox_init() {
 	// javascript stuff for the metabox
-	wp_enqueue_script('mapbox-metabox', mappress_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'mappress', 'jquery-ui-sortable'), '0.4.14');
+	wp_enqueue_script('mapbox-metabox', mappress_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'mappress', 'jquery-ui-sortable'), '0.4.15');
 	wp_enqueue_style('mapbox-metabox', mappress_uri() . '/metaboxes/mapbox/mapbox.css', array(), '0.0.9.1');
 
 	wp_localize_script('mapbox-metabox', 'mapbox_metabox_localization', array(
@@ -268,7 +268,14 @@ function mapbox_inner_custom_box($post) {
 				<h4><?php _e('Enable geocoding service', 'infoamazonia'); ?></h4>
 				<p>
 					<input class="enable-geocode" id="enable_geocode" type="checkbox" name="map_data[geocode]" <?php if(isset($map_data['geocode']) && $map_data['geocode']) echo 'checked'; ?> />
-					<label for="enable_geocode"><?php _e('Enable geocode search service'); ?></label>
+					<label for="enable_geocode"><?php _e('Enable geocode search service', 'infoamazonia'); ?></label>
+				</p>
+			</div>
+			<div class="handlers map-setting">
+				<h4><?php _e('Map handlers', 'infoamazonia'); ?></h4>
+				<p>
+					<input class="disable-mousewheel" id="disable_mousewheel" type="checkbox" name="map_data[disable_mousewheel]" <?php if(isset($map_data['disable_mousewheel']) && $map_data['disable_mousewheel']) echo 'checked'; ?> />
+					<label for="disable_mousewheel"><?php _e('Disable mousewheel zooming', 'infoamazonia'); ?></label>
 				</p>
 			</div>
 		</div>

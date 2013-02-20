@@ -55,9 +55,21 @@ var mappress = {};
 
 		var map_id = conf.containerID;
 
-		var handlers = null;
+		var handlers = [
+			easey_handlers.DragHandler(),
+			easey_handlers.DoubleClickHandler(),
+			easey_handlers.MouseWheelHandler(),
+			easey_handlers.TouchHandler(),
+			MM.DragHandler(),
+			MM.DoubleClickHandler(),
+			MM.MouseWheelHandler(),
+			MM.TouchHandler()
+		];
 		if(conf.disableInteraction)
 			handlers = [];
+
+		if(conf.disableHandlers.mousewheel)
+			handlers = _.without(handlers, easey_handlers.MouseWheelHandler(), MM.MouseWheelHandler());
 
 		mappress.maps[map_id] = mapbox.map(map_id, null, null, handlers);
 
@@ -322,6 +334,10 @@ var mappress = {};
 
 		if(conf.geocode)
 			newConf.geocode = true;
+
+		newConf.disableHandlers = {};
+		if(conf.disable_mousewheel)
+			newConf.disableHandlers.mousewheel = true;
 
 		if(conf.legend)
 			newConf.legend = conf.legend;

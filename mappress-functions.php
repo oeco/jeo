@@ -49,7 +49,7 @@ function mappress_map_content($post_id = false) {
 		return;
 	?>
 	<div class="map-container"><div id="map_<?php echo $post_id; ?>" class="map"></div></div>
-	<script type="text/javascript">mappress(<?php echo $post_id; ?>);</script>
+	<script type="text/javascript">mappress({postID: <?php echo $post_id; ?> });</script>
 	<?php
 }
 
