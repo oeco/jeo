@@ -6,7 +6,7 @@ add_action('save_post', 'geocoding_save_postdata');
 
 function geocoding_init() {
 	wp_enqueue_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAKPKeHezMTxwc8fyXpqWVBBAE5Wr5O7og&sensor=true');
-	wp_enqueue_script('geocoding-metabox', get_template_directory_uri() . '/inc/metaboxes/geocode/geocode.js', array('jquery', 'google-maps-api'));
+	wp_enqueue_script('geocoding-metabox', MAPPRESS_PATH . '/metaboxes/geocode/geocode.js', array('jquery', 'google-maps-api'));
 }
 
 function geocoding_add_meta_box() {
