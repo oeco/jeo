@@ -21,4 +21,7 @@ define('MAPPRESS_PATH', mappress_path());
 include(MAPPRESS_PATH . '/mappress-core.php');
 include(MAPPRESS_PATH . '/mappress-functions.php');
 
+// add metaboxes
+include(MAPPRESS_PATH . '/metaboxes/metaboxes.php');
+
 ?>
