@@ -32,7 +32,7 @@ function mappress_map($post_id = false) {
 	if(get_post_type($post_id) == 'map-group')
 		return mappress_mapgroup($post_id);
 	setup_postdata(get_post($post_id));
-	if(locate_template('content/map'))
+	if(locate_template(array('content-map.php')))
 		get_template_part('content', 'map');
 	else
 		mappress_map_content($post_id);
