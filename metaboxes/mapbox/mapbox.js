@@ -59,9 +59,9 @@
 	 	mapConf.disableHandlers = {};
 		// mousewheel
 	 	if($('#mapbox-metabox .disable-mousewheel').is(':checked'))
-	 		mapConf.disableHandlers.mousewheel = false;
-	 	else
 	 		mapConf.disableHandlers.mousewheel = true;
+	 	else
+	 		mapConf.disableHandlers.mousewheel = false;
 
 	 	if($('#mapbox-metabox .toggle-preview-mode').is(':checked'))
 	 		mapConf.preview = true;
