@@ -186,7 +186,8 @@
 					return false;
 				});
 
-				story = listPosts.find('li:nth-child(1)').attr('id');
+				if(!fStoryID)
+					story = listPosts.find('li:nth-child(1)').attr('id');
 			}
 
 			markers.open(story, silent);
