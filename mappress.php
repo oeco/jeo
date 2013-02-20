@@ -20,3 +20,5 @@ define('MAPPRESS_PATH', mappress_path());
 // map functions
 include(MAPPRESS_PATH . '/mappress-core.php');
 include(MAPPRESS_PATH . '/mappress-functions.php');
+
+?>

@@ -31,3 +31,5 @@ function mappress_mapgroup($post_id = false) {
 	get_template_part('content', 'map-group');
 	wp_reset_postdata();
 }
+
+?>

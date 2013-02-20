@@ -307,3 +307,5 @@ function mappress_get_markers_data() {
 	echo $data;
 	exit;
 }
+
+?>

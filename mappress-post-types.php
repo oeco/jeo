@@ -91,3 +91,5 @@ function map_group_menu() {
 }
 
 add_action('admin_menu', 'map_group_menu');
+
+?>
