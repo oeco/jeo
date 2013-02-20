@@ -5,7 +5,7 @@ add_action('add_meta_boxes', 'mapgroup_add_meta_box');
 add_action('save_post', 'mapgroup_save_postdata');
 
 function mapgroup_init() {
-	wp_enqueue_script('mapgroup-metabox', MAPPRESS_PATH . '/metaboxes/mapgroup/mapgroup.js', array('jquery', 'underscore', 'jquery-ui-sortable'), '0.0.2');
+	wp_enqueue_script('mapgroup-metabox', mappress_uri() . '/metaboxes/mapgroup/mapgroup.js', array('jquery', 'underscore', 'jquery-ui-sortable'), '0.0.2');
 	wp_localize_script('mapgroup-metabox', 'mapgroup_metabox_localization', array(
 		'map_item' => '
 				<li class="map-item">
