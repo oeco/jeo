@@ -24,7 +24,7 @@ function mappress_scripts() {
 	wp_enqueue_script('mappress.geocode', mappress_uri() . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.4');
 	wp_enqueue_script('mappress.filterLayers', mappress_uri() . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.5');
 	wp_enqueue_script('mappress.groups', mappress_uri() . '/js/mappress.groups.js', array('mappress', 'underscore'), '0.0.5.1');
-	wp_enqueue_script('mappress.markers', mappress_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.2');
+	wp_enqueue_script('mappress.markers', mappress_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.4');
 
 	wp_enqueue_style('mappress', mappress_uri() . '/css/mappress.css', array(), '0.0.1.1');
 

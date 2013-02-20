@@ -15,7 +15,7 @@ function mappress_featured_map() {
 			return false;
 		}
 	}
-	mappress_map($featured_map_id); 
+	mappress_map($featured_map_id);
 }
 
 /*

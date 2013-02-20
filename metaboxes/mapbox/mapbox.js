@@ -8,14 +8,7 @@
 		// layers
 		mapConf.layers = getLayers();
 		mapConf.filteringLayers = getFilteringLayers();
-
-		// hidden layers
-		mapConf.hiddenLayers = [];
-		$('#mapbox-metabox input.hidden_layer:checked').each(function() {
-			var hidden = $(this).val();
-			mapConf.hiddenLayers.push(hidden);
-		}).change();
-
+		
 		// server
 		if($('input[name="map_data[server]"]:checked').val() === 'custom') {
 			mapConf.server = $('input[name="map_data[custom_server]"]').val();

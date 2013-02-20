@@ -187,3 +187,87 @@ body.es-ES .map-container .lang-es {
 .map-container {
 	overflow: hidden;
 }
+
+
+/*
+ * Markers
+ */
+.map-container .story-points {
+	background: url(../img/marker.png);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 25px;
+	height: 30px;
+	cursor: pointer;
+	z-index: 100;
+	pointer-events: all;
+}
+.map-container .story-points.hide,
+.map-container .story-points.forever-hide {
+	display: none;
+}
+.map-container .story-points.active {
+	background: url(../img/marker_active.png);
+	z-index: 101;
+}
+.map-container .story-points:hover {
+	z-index: 102;
+}
+.map-container .story-points:hover .popup {
+	opacity: 1;
+	visibility: visible;
+}
+.map-container .story-points .popup {
+	background: #fff;
+	width: 160px;
+	padding: 10px;
+	position: absolute;
+	bottom: 41px;
+	left: 50%;
+	margin-left: -90px;
+	opacity: 0;
+	visibility: hidden;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	transition: opacity 0.2s ease-in-out;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+}
+.map-container .story-points .popup small {
+		color: #96979C;
+}
+.map-container .story-points .popup h4 {
+	margin: 0;
+}
+.map-container .story-points .popup .arrow {
+	width: 0;
+	height: 0;
+	position: absolute;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid #fff;
+	bottom: -10px;
+	left: 50%;
+	margin-left: -10px;
+}
+.map-container .cluster .popup .story {
+	display: none;
+}
+.map-container .cluster.open .popup .story {
+	display: block;
+}
+.map-container .cluster.open .popup .count {
+	display: none;
+}
+.map-container .inplace {
+	height: 100%;
+	display: none;
+	width: 100%;
+	padding: 0 15px 5px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #111;
+}

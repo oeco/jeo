@@ -146,6 +146,12 @@
 
 				});
 
+			if(map.conf.sidebar === false)
+				return;
+
+			/*
+			 * SIDEBAR STUFF (INFOAMAZONIA)
+			 */
 
 			// FIRST STORY
 			var story = geojson.features[0];
@@ -199,6 +205,11 @@
 		}
 
 		mappress.markers.open = function(marker, silent) {
+
+			if(map.conf.sidebar === false) {
+				window.location = marker.properties.url;
+				return false;
+			}
 
 			if(!markers.fromMap(marker))
 				return;
