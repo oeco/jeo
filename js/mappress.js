@@ -55,26 +55,18 @@ var mappress = {};
 
 		var map_id = conf.containerID;
 
-		var handlers = [
-			easey_handlers.DragHandler(),
-			easey_handlers.DoubleClickHandler(),
-			easey_handlers.MouseWheelHandler(),
-			easey_handlers.TouchHandler(),
-			MM.DragHandler(),
-			MM.DoubleClickHandler(),
-			MM.MouseWheelHandler(),
-			MM.TouchHandler()
-		];
+		var handlers = null;
 		if(conf.disableInteraction)
 			handlers = [];
-
-		if(conf.disableHandlers.mousewheel)
-			handlers = _.without(handlers, easey_handlers.MouseWheelHandler(), MM.MouseWheelHandler());
 
 		mappress.maps[map_id] = mapbox.map(map_id, null, null, handlers);
 
 		map = mappress.maps[map_id];
 
+		// disable handlers
+		if(conf.disableHandlers.mousewheel)
+			map.eventHandlers[3].remove();
+			
 		// store jquery node
 		map.$ = $('#' + map_id);
 
