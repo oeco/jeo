@@ -26,7 +26,7 @@ function mappress_scripts() {
 	wp_enqueue_style('mappress', get_template_directory_uri() . '/css/mappress.css', array(), '0.0.1.1');
 
 	wp_localize_script('mappress', 'mappress_localization', array(
-		'ajaxurl' => mappress_admin_url(),
+		'ajaxurl' => admin_url('admin-ajax.php'),
 		'more_label' => __('More', 'infoamazonia')
 	));
 
@@ -37,60 +37,25 @@ function mappress_scripts() {
 	));
 
 	wp_localize_script('mappress.groups', 'mappress_groups', array(
-		'ajaxurl' => mappress_admin_url(),
+		'ajaxurl' => admin_url('admin-ajax.php'),
 		'more_label' => __('More', 'infoamazonia')
 	));
 
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
-		'ajaxurl' => mappress_admin_url(),
+		'ajaxurl' => admin_url('admin-ajax.php'),
 		'query' => mappress_get_marker_query_args(),
 		'stories_label' => __('stories', 'infoamazonia'),
 		'home' => is_front_page(),
 		'copy_embed_label' => __('Copy the embed code', 'infoamazonia'),
 		'share_label' => __('Share this', 'infoamazonia'),
-		'site_url' => mappress_home_url('/'),
+		'site_url' => home_url('/'),
 		'read_more_label' => __('Read', 'infoamazonia')
-	));
-
-	wp_localize_script('mappress.submit', 'mappress_submit', array(
-		'ajaxurl' => mappress_admin_url(),
-		'success_label' => __('Success! Thank you, your story will be reviewed by one of our editors and soon will be online.', 'infoamazonia'),
-		'error_label' => __('Oops, please try again in a few minutes.', 'infoamazonia')
 	));
 }
 add_action('wp_enqueue_scripts', 'mappress_scripts');
 
-/*
- * qTranslate fixes
- */
-
-// fix forced formated date on qtranslate
-function get_the_orig_date($format = false) {
-	global $post;
-	$date = get_the_date($format);
-	if(function_exists('qtrans_getLanguage')) {
-		remove_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
-		$date = get_the_date($format);
-		add_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
-	}
-	return $date;
-}
-
-
-function mappress_admin_url() {
-	if(!function_exists('qtrans_getLanguage'))
-		return admin_url('admin-ajax.php');
-
-	return admin_url('admin-ajax.php?lang=' . qtrans_getLanguage());
-}
-
-function mappress_home_url($path = '') {
-	$home_url = home_url();
-	if(function_exists('qtrans_getLanguage'))
-		$home_url = qtrans_convertURL($home_url, qtrans_getLanguage());
-
-	return $home_url . $path;
-}
+// Plugins implementations and fixes
+include(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
 
 // marker query args
 
@@ -190,6 +155,7 @@ function mappress_get_mapgroup_data($group_id) {
 		$map_id = 'map_' . $map['id'];
 		$data['maps'][$map_id] = mappress_get_map_data($map['id']);
 	}
+	$data = apply_filters('mappress_mapgroup_data', $data);
 	return $data;
 }
 
@@ -217,6 +183,7 @@ function mappress_get_map_data($map_id = false) {
 	if(get_the_content())
 		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
+	$data = apply_filters('mappress_map_data', $data);
 	return $data;
 }
 
@@ -303,6 +270,7 @@ function mappress_get_markers_data() {
 			}
 		}
 		$data['query_id'] = $query_id;
+		$data = apply_filters('mappress_markers_data', $data);
 		$data = json_encode($data);
 		//set_transient($transient, $data, 60*60*1);
 	}
