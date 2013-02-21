@@ -17,13 +17,10 @@ function get_the_orig_date($format = false) {
 
 
 function mappress_qtrans_admin_url($url, $path) {
-	if(!function_exists('qtrans_getLanguage'))
-		return $url . $path;
+	if($path == 'admin-ajax.php' && function_exists('qtrans_getLanguage'))
+		$url .= '?lang=' . qtrans_getLanguage();
 
-	if($path == 'admin-ajax.php')
-		return $url . 'admin-ajax.php?lang=' . qtrans_getLanguage();
-
-	return $url . $path;
+	return $url;
 }
 add_filter('admin_url', 'mappress_qtrans_admin_url', 10, 2);
 
