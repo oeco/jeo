@@ -21,7 +21,7 @@ function mappress_scripts() {
 	wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.4');
 	wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.5');
 	wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/js/mappress.groups.js', array('mappress', 'underscore'), '0.0.5.1');
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.4');
+	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.4.5');
 
 	wp_enqueue_style('mappress', get_template_directory_uri() . '/css/mappress.css', array(), '0.0.1.1');
 
@@ -187,6 +187,16 @@ function mappress_get_map_data($map_id = false) {
 	return $data;
 }
 
+function mappress_get_bubble($post_id = false) {
+	global $post;
+	$post_id = $post_id ? $post_id : $post->ID;
+	ob_start();
+	get_template_part('content', 'marker-bubble');
+	$bubble = ob_get_contents();
+	ob_end_clean();
+	return $bubble;
+}
+
 /*
  * Markers in GeoJSON
  */
@@ -237,7 +247,7 @@ function mappress_get_markers_data() {
 				$data['features'][$i]['properties'] = array();
 				$data['features'][$i]['properties']['id'] = 'post-' . $post->ID;
 				$data['features'][$i]['properties']['title'] = get_the_title();
-				$data['features'][$i]['properties']['date'] = get_the_orig_date(_x('m/d/Y', 'reduced date format', 'infoamazonia'));
+				$data['features'][$i]['properties']['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'infoamazonia'));
 				$data['features'][$i]['properties']['content'] = apply_filters('the_content', get_the_content());
 				$data['features'][$i]['properties']['url'] = get_permalink();
 
@@ -263,6 +273,9 @@ function mappress_get_markers_data() {
 						$data['features'][$i]['properties']['maps'][] = $map;
 					}
 				}
+
+				// bubble content
+				$data['features'][$i]['properties']['bubble'] = mappress_get_bubble();
 
 				$i++;
 

@@ -74,7 +74,7 @@
 					e.appendChild(o);
 					var content = document.createElement('div');
 					content.className = 'story';
-					content.innerHTML = '<span class="arrow">&nbsp;</span><small>' + x.properties.date + ' - ' + x.properties.source + '</small><h4>' + x.properties.title + '</h4>';
+					content.innerHTML = x.properties.bubble;
 					o.appendChild(content);
 
 					// cluster stuff

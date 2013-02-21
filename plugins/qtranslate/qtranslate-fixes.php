@@ -3,19 +3,18 @@
  * qTranslate fixes
  */
 
-// fix forced formated date on qtranslate
-function get_the_orig_date($format = false) {
-	global $post;
-	$date = get_the_date($format);
-	if(function_exists('qtrans_getLanguage')) {
-		remove_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
-		$date = get_the_date($format);
-		add_filter('get_the_date', 'qtrans_dateFromPostForCurrentLanguage', 0, 4);
+// fix forced formated date on qTranslate
+function mappress_get_custom_format_date($date, $format) {
+	if(function_exists('qtrans_getLanguage') && $format != '') {
+		$post = get_post();
+		$date = mysql2date($format, $post->post_date);
 	}
 	return $date;
 }
+add_filter('get_the_date', 'mappress_get_custom_format_date', 10, 2);
 
 
+// send lang to ajax requests
 function mappress_qtrans_admin_ajax_url($url, $path) {
 	if($path == 'admin-ajax.php' && function_exists('qtrans_getLanguage'))
 		$url .= '?lang=' . qtrans_getLanguage();
