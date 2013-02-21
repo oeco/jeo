@@ -142,7 +142,7 @@ function mappress_get_marker_query_args($posts_per_page = -1) {
 	else 
 		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 	
-	apply_filters('mappress_markers_query', $query);
+	$query = apply_filters('mappress_markers_query', $query);
 	return $query;
 }
 
