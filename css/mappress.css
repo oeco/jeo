@@ -217,13 +217,14 @@ body.es-ES .map-container .lang-es {
 .map-container .story-points:hover .popup {
 	opacity: 1;
 	visibility: visible;
+	bottom: 41px;
 }
 .map-container .story-points .popup {
 	background: #fff;
 	width: 160px;
 	padding: 10px;
 	position: absolute;
-	bottom: 41px;
+	bottom: 50px;
 	left: 50%;
 	margin-left: -90px;
 	opacity: 0;
@@ -231,9 +232,9 @@ body.es-ES .map-container .lang-es {
 	border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
-	transition: opacity 0.2s ease-in-out;
-	-webkit-transition: opacity 0.2s ease-in-out;
-	-moz-transition: opacity 0.2s ease-in-out;
+	transition: all 0.2s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.2s ease-in-out;
 }
 .map-container .story-points .popup small {
 		color: #96979C;
