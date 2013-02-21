@@ -16,18 +16,10 @@ function get_the_orig_date($format = false) {
 }
 
 
-function mappress_qtrans_admin_url($url, $path) {
+function mappress_qtrans_admin_ajax_url($url, $path) {
 	if($path == 'admin-ajax.php' && function_exists('qtrans_getLanguage'))
 		$url .= '?lang=' . qtrans_getLanguage();
 
 	return $url;
 }
-add_filter('admin_url', 'mappress_qtrans_admin_url', 10, 2);
-
-function mappress_qtrans_home_url($url) {
-	if(function_exists('qtrans_getLanguage'))
-		$url = qtrans_convertURL($url, qtrans_getLanguage());
-
-	return $url;
-}
-add_filter('home_url', 'mappress_qtrans_home_url');
+add_filter('admin_url', 'mappress_qtrans_admin_ajax_url', 10, 2);
