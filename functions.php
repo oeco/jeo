@@ -13,7 +13,7 @@ function mappress_featured_map() {
 		$latest_map = get_posts(array('post_type' => array('map', 'map-group'), 'posts_per_page' => 1));
 		if($latest_map) {
 			$latest_map = array_shift($latest_map);
-			$featured_map_id;
+			$featured_map_id = $latest_map->ID;
 		} else {
 			return false;
 		}
@@ -24,8 +24,6 @@ function mappress_featured_map() {
 /*
  * Display maps
  */
-
-// display map
 
 function mappress_map($post_id = false) {
 	global $post;

@@ -3,9 +3,6 @@
 function mappress_setup() {
 	// register map and map group post types
 	include(TEMPLATEPATH . '/inc/mappress-post-types.php');
-
-	add_theme_support('post-thumbnails');
-	add_image_size('post-thumb', 245, 90, true);
 }
 add_action('after_setup_theme', 'mappress_setup');
 
@@ -144,6 +141,8 @@ function mappress_get_marker_query_args($posts_per_page = -1) {
 		unset($query['paged']);
 	else 
 		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
+	
+	apply_filters('mappress_markers_query', $query);
 	return $query;
 }
 
