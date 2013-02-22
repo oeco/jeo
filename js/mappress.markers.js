@@ -60,6 +60,15 @@
 
 					$(e).data('feature', x);
 
+					// styles
+					$(e).css({
+						'background': 'url(' + x.properties.marker.url + ')',
+						'width': x.properties.marker.width,
+						'height': x.properties.marker.height,
+						'margin-top': -x.properties.marker.height,
+						'margin-left': -(x.properties.marker.width/2)
+					});
+
 					/* soon
 					if(!markers.fromMap(x))
 						$(e).addClass('hide');
@@ -71,6 +80,9 @@
 
 					var o = document.createElement('div');
 					o.className = 'popup clearfix';
+					$(o).css({
+						'bottom': x.properties.marker.height + 11
+					});
 					e.appendChild(o);
 					var content = document.createElement('div');
 					content.className = 'story';

@@ -194,11 +194,15 @@ body.es-ES .map-container .lang-es {
  */
 .map-container .story-points {
 	background: url(../img/marker.png);
+	background-position: center;
+	background-repeat: no-repeat;
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 25px;
+	width: 26px;
 	height: 30px;
+	margin-top: -30px;
+	margin-left: -13px;
 	cursor: pointer;
 	z-index: 100;
 	pointer-events: all;
@@ -224,7 +228,6 @@ body.es-ES .map-container .lang-es {
 	width: 160px;
 	padding: 10px;
 	position: absolute;
-	bottom: 50px;
 	left: 50%;
 	margin-left: -90px;
 	opacity: 0;
