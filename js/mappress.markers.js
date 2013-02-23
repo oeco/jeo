@@ -20,6 +20,22 @@
 			build(geojson);
 		});
 
+		markers.getMarker = function(id) {
+			return _.find(features, function(m) { return m.properties.id === id; });
+		}
+
+		markers.open = function(marker) {
+			window.location = marker.properties.url;
+			return false;
+		};
+
+		markers.hasLocation = function(marker) {
+			if(marker.geometry.coordinates[0] ===  0 || !marker.geometry.coordinates[0])
+				return false;
+			else
+				return true;
+		}
+
 		var build = function(geojson) {
 
 			map.addLayer(markersLayer);
@@ -70,7 +86,7 @@
 					o.appendChild(content);
 
 					$(e).click(function() {
-						markers.open(x, false);
+						markers.open(x);
 					});
 
 					return e;
@@ -78,22 +94,6 @@
 				});
 
 		};
-
-		markers.getMarker = function(id) {
-			return _.find(features, function(m) { return m.properties.id === id; });
-		}
-
-		markers.open = function(marker, silent) {
-			window.location = marker.properties.url;
-			return false;
-		};
-
-		markers.hasLocation = function(marker) {
-			if(marker.geometry.coordinates[0] ===  0 || !marker.geometry.coordinates[0])
-				return false;
-			else
-				return true;
-		}
 
 		return map;
 

@@ -92,7 +92,7 @@ function mappress_get_marker_query_args($posts_per_page = -1) {
 			}
 			$meta_query[$i] = array(
 				'key' => 'has_maps',
-				'value' => null,
+				'value' => '',
 				'compare' => 'NOT EXISTS'
 			);
 			$query['meta_query'] = $meta_query;
@@ -187,7 +187,7 @@ function mappress_get_map_data($map_id = false) {
 	return $data;
 }
 
-function mappress_get_bubble($post_id = false) {
+function mappress_get_marker_bubble($post_id = false) {
 	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 	ob_start();
@@ -210,6 +210,19 @@ function mappress_get_marker_class() {
 	global $post;
 	$class = get_post_class();
 	return apply_filters('mappress_marker_class', $class);
+}
+
+function mappress_get_marker_properties() {
+	global $post;
+	$properties = array();
+	$properties['id'] = 'post-' . $post->ID;
+	$properties['title'] = get_the_title();
+	$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'mappress'));
+	$properties['url'] = get_permalink();
+	$properties['bubble'] = mappress_get_marker_bubble();
+	$properties['marker'] = mappress_get_marker_icon();
+	$properties['class'] = mappress_get_marker_class();
+	return apply_filters('mappress_marker_data', $properties, $post);
 }
 
 /*
@@ -259,44 +272,8 @@ function mappress_get_markers_data() {
 				else
 					$data['features'][$i]['geometry']['coordinates'] = array(0, 0);
 
-				$data['features'][$i]['properties'] = array();
-				$data['features'][$i]['properties']['id'] = 'post-' . $post->ID;
-				$data['features'][$i]['properties']['title'] = get_the_title();
-				$data['features'][$i]['properties']['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'infoamazonia'));
-				$data['features'][$i]['properties']['content'] = apply_filters('the_content', get_the_content());
-				$data['features'][$i]['properties']['url'] = get_permalink();
-
-				// source
-				$publishers = get_the_terms($post->ID, 'publisher');
-				if($publishers) {
-					$publisher = array_shift($publishers);
-					$data['features'][$i]['properties']['source'] = $publisher->name;
-				}
-
-				// thumbnail
-				$thumb_src = wp_get_attachment_image_src(get_post_thumbnail_id(), 'post-thumb');
-				if($thumb_src)
-					$data['features'][$i]['properties']['thumbnail'] = $thumb_src[0];
-				else {
-					$data['features'][$i]['properties']['thumbnail'] = get_post_meta($post->ID, 'picture', true);
-				}
-
-				// maps
-				$maps = get_post_meta($post->ID, 'maps');
-				if($maps && !empty($maps)) {
-					foreach($maps as $map) {
-						$data['features'][$i]['properties']['maps'][] = $map;
-					}
-				}
-
-				// bubble content
-				$data['features'][$i]['properties']['bubble'] = mappress_get_bubble();
-
-				// marker
-				$data['features'][$i]['properties']['marker'] = mappress_get_marker_icon();
-
-				// class
-				$data['features'][$i]['properties']['marker_class'] = implode(' ', mappress_get_marker_class());
+				// marker properties
+				$data['features'][$i]['properties'] = mappress_get_marker_properties();
 
 				$i++;
 
