@@ -12,7 +12,7 @@ function geocoding_init() {
 function geocoding_add_meta_box() {
 	add_meta_box(
 		'geocoding-address',
-		__('Address and geolocation', 'infoamazonia'),
+		__('Address and geolocation', 'mappress'),
 		'geocoding_inner_custom_box',
 		'post',
 		'advanced',
@@ -27,20 +27,20 @@ function geocoding_inner_custom_box($post) {
 	$geocode_viewport = get_post_meta($post->ID, 'geocode_viewport', true);
 	?>
 	<div id="geolocate">
-	<h4><?php _e('Write an address', 'infoamazonia'); ?></h4>
+	<h4><?php _e('Write an address', 'mappress'); ?></h4>
 	<p>
 		<input type="text" size="80" id="geocode_address" name="geocode_address" value="<?php if($geocode_address) echo $geocode_address; ?>" />
-	    <a class="button" href="#" onclick="codeAddress();return false;"><?php _e('Geolocate', 'infoamazonia'); ?></a>
+	    <a class="button" href="#" onclick="codeAddress();return false;"><?php _e('Geolocate', 'mappress'); ?></a>
 	</p>
 	<div class="results"></div>
-	<p><?php _e('Drag the marker for a more precise result', 'infoamazonia'); ?></p>
+	<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
 	<div id="geolocate_canvas" style="width:500px;height:300px"></div>
-	<h4><?php _e('Result', 'infoamazonia'); ?>:</h4>
+	<h4><?php _e('Result', 'mappress'); ?>:</h4>
 	<p>
-	    <?php _e('Latitude', 'infoamazonia'); ?>:
+	    <?php _e('Latitude', 'mappress'); ?>:
 	    <input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
 
-	    <?php _e('Longitude', 'infoamazonia'); ?>:
+	    <?php _e('Longitude', 'mappress'); ?>:
 	    <input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
 	</p>
 	<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />

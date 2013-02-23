@@ -8,23 +8,23 @@ add_action( 'init', 'register_cpt_map' );
 
 function register_cpt_map() {
     $labels = array( 
-        'name' => __('Maps', 'infoamazonia'),
-        'singular_name' => __('Map', 'infoamazonia'),
-        'add_new' => __('Add new map', 'infoamazonia'),
-        'add_new_item' => __('Add new map', 'infoamazonia'),
-        'edit_item' => __('Edit map', 'infoamazonia'),
-        'new_item' => __('New map', 'infoamazonia'),
+        'name' => __('Maps', 'mappress'),
+        'singular_name' => __('Map', 'mappress'),
+        'add_new' => __('Add new map', 'mappress'),
+        'add_new_item' => __('Add new map', 'mappress'),
+        'edit_item' => __('Edit map', 'mappress'),
+        'new_item' => __('New map', 'mappress'),
         'view_item' => __('View map'),
-        'search_items' => __('Search maps', 'infoamazonia'),
-        'not_found' => __('No map found', 'infoamazonia'),
-        'not_found_in_trash' => __('No map found in the trash', 'infoamazonia'),
-        'menu_name' => __('Maps', 'infoamazonia')
+        'search_items' => __('Search maps', 'mappress'),
+        'not_found' => __('No map found', 'mappress'),
+        'not_found_in_trash' => __('No map found in the trash', 'mappress'),
+        'menu_name' => __('Maps', 'mappress')
     );
 
     $args = array( 
         'labels' => $labels,
         'hierarchical' => false,
-        'description' => __('MapBox Maps', 'infoamazonia'),
+        'description' => __('MapBox Maps', 'mappress'),
         'supports' => array( 'title', 'editor', 'excerpt'),
 
         'public' => true,
@@ -49,23 +49,23 @@ add_action( 'init', 'register_cpt_map_group' );
 
 function register_cpt_map_group() {
     $labels = array( 
-        'name' => __('Map groups', 'infoamazonia'),
-        'singular_name' => __('Map group', 'infoamazonia'),
-        'add_new' => __('Add new map group', 'infoamazonia'),
-        'add_new_item' => __('Add new map group', 'infoamazonia'),
-        'edit_item' => __('Edit map group', 'infoamazonia'),
-        'new_item' => __('New map group', 'infoamazonia'),
-        'view_item' => __('View map group', 'infoamazonia'),
-        'search_items' => __('Search map group', 'infoamazonia'),
-        'not_found' => __('No map group found', 'infoamazonia'),
-        'not_found_in_trash' => __('No map group found in the trash', 'infoamazonia'),
-        'menu_name' => __('Map groups', 'infoamazonia')
+        'name' => __('Map groups', 'mappress'),
+        'singular_name' => __('Map group', 'mappress'),
+        'add_new' => __('Add new map group', 'mappress'),
+        'add_new_item' => __('Add new map group', 'mappress'),
+        'edit_item' => __('Edit map group', 'mappress'),
+        'new_item' => __('New map group', 'mappress'),
+        'view_item' => __('View map group', 'mappress'),
+        'search_items' => __('Search map group', 'mappress'),
+        'not_found' => __('No map group found', 'mappress'),
+        'not_found_in_trash' => __('No map group found in the trash', 'mappress'),
+        'menu_name' => __('Map groups', 'mappress')
     );
 
     $args = array( 
         'labels' => $labels,
         'hierarchical' => false,
-        'description' => __('MapBox maps agroupment', 'infoamazonia'),
+        'description' => __('MapBox maps agroupment', 'mappress'),
         'supports' => array( 'title'),
 
         'public' => true,
@@ -86,8 +86,8 @@ function register_cpt_map_group() {
 }
 
 function map_group_menu() {
-    add_submenu_page('edit.php?post_type=map', __('Map groups', 'infoamazonia'), __('Map groups', 'infoamazonia'), 'edit_posts', 'edit.php?post_type=map-group');
-    add_submenu_page('edit.php?post_type=map', __('Add new group', 'infoamazonia'), __('Add new map group', 'infoamazonia'), 'edit_posts', 'post-new.php?post_type=map-group');
+    add_submenu_page('edit.php?post_type=map', __('Map groups', 'mappress'), __('Map groups', 'mappress'), 'edit_posts', 'edit.php?post_type=map-group');
+    add_submenu_page('edit.php?post_type=map', __('Add new group', 'mappress'), __('Add new map group', 'mappress'), 'edit_posts', 'post-new.php?post_type=map-group');
 }
 
 add_action('admin_menu', 'map_group_menu');

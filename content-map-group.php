@@ -25,7 +25,7 @@ foreach($data['maps'] as $map) {
 			endforeach; ?>
 			<?php if($more_maps) : ?>
 				<li class="more-tab">
-					<a href="#" class="toggle-more"><?php _e('More...', 'infoamazonia'); ?></a>
+					<a href="#" class="toggle-more"><?php _e('More...', 'mappress'); ?></a>
 					<ul class="more-maps-list">
 						<?php foreach($more_maps as $map) :
 							$post = get_post($map['id']);

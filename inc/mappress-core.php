@@ -27,29 +27,29 @@ function mappress_scripts() {
 
 	wp_localize_script('mappress', 'mappress_localization', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'more_label' => __('More', 'infoamazonia')
+		'more_label' => __('More', 'mappress')
 	));
 
 	wp_localize_script('mappress.geocode', 'mappress_labels', array(
-		'search_placeholder' => __('Find a location', 'infoamazonia'),
-		'results_title' => __('Results', 'infoamazonia'),
-		'clear_search' => __('Clear search', 'infoamazonia')
+		'search_placeholder' => __('Find a location', 'mappress'),
+		'results_title' => __('Results', 'mappress'),
+		'clear_search' => __('Clear search', 'mappress')
 	));
 
 	wp_localize_script('mappress.groups', 'mappress_groups', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'more_label' => __('More', 'infoamazonia')
+		'more_label' => __('More', 'mappress')
 	));
 
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'query' => mappress_get_marker_query_args(),
-		'stories_label' => __('stories', 'infoamazonia'),
+		'stories_label' => __('stories', 'mappress'),
 		'home' => is_front_page(),
-		'copy_embed_label' => __('Copy the embed code', 'infoamazonia'),
-		'share_label' => __('Share this', 'infoamazonia'),
+		'copy_embed_label' => __('Copy the embed code', 'mappress'),
+		'share_label' => __('Share this', 'mappress'),
 		'site_url' => home_url('/'),
-		'read_more_label' => __('Read', 'infoamazonia')
+		'read_more_label' => __('Read', 'mappress')
 	));
 }
 add_action('wp_enqueue_scripts', 'mappress_scripts');

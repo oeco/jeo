@@ -6,7 +6,7 @@ add_action('save_post', 'map_relation_save_postdata');
 function map_relation_add_meta_box() {
 	add_meta_box(
 		'map_relation',
-		__('Set maps for this post', 'infoamazonia'),
+		__('Set maps for this post', 'mappress'),
 		'map_relation_inner_custom_box',
 		'post',
 		'advanced',
@@ -20,7 +20,7 @@ function map_relation_inner_custom_box($post) {
 		$post_maps = array();
 	?>
 	<div id="featured-metabox">
-		<h4><?php _e('Select which maps this post belongs to. If you don\'t mark any they will appear in all maps.', 'infoamazonia'); ?></h4>
+		<h4><?php _e('Select which maps this post belongs to. If you don\'t mark any they will appear in all maps.', 'mappress'); ?></h4>
 		<?php $maps = get_posts(array('post_type' => 'map', 'posts_per_page' => -1)); ?>
 		<?php if($maps) : ?>
 			<ul>
@@ -29,7 +29,7 @@ function map_relation_inner_custom_box($post) {
 				<?php endforeach; ?>
 			</ul>
 		<?php else : ?>
-			<p><?php _e('You haven\'t created any map, yet!', 'infoamazonia'); ?></p>
+			<p><?php _e('You haven\'t created any map, yet!', 'mappress'); ?></p>
 		<?php endif; ?>
 	</div>
 	<?php
