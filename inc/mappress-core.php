@@ -43,13 +43,7 @@ function mappress_scripts() {
 
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => mappress_get_marker_query_args(),
-		'stories_label' => __('stories', 'mappress'),
-		'home' => is_front_page(),
-		'copy_embed_label' => __('Copy the embed code', 'mappress'),
-		'share_label' => __('Share this', 'mappress'),
-		'site_url' => home_url('/'),
-		'read_more_label' => __('Read', 'mappress')
+		'query' => mappress_get_marker_query_args()
 	));
 }
 add_action('wp_enqueue_scripts', 'mappress_scripts');
@@ -118,20 +112,6 @@ function mappress_disable_canonical($redirect_url) {
 		return false;
 }
 
-// story fragment title
-add_filter('wp_title', 'mappress_story_fragment_title', 10, 2);
-function mappress_story_fragment_title($title, $sep) {
-	if(isset($_GET['_escaped_fragment_'])) {
-		$args = substr($_GET['_escaped_fragment_'], 1);
-		parse_str($args, $query);
-		if(isset($query['story'])) {
-			$title = get_the_title(substr($query['story'], 9));
-			return $title . ' ' . $sep . ' ';
-		}
-	}
-	return $title;
-}
-
 // get data
 
 add_action('wp_ajax_nopriv_mapgroup_data', 'mappress_get_mapgroup_json_data');
@@ -155,8 +135,7 @@ function mappress_get_mapgroup_data($group_id) {
 		$map_id = 'map_' . $map['id'];
 		$data['maps'][$map_id] = mappress_get_map_data($map['id']);
 	}
-	$data = apply_filters('mappress_mapgroup_data', $data);
-	return $data;
+	return apply_filters('mappress_mapgroup_data', $data);
 }
 
 add_action('wp_ajax_nopriv_map_data', 'mappress_get_map_json_data');
@@ -183,8 +162,7 @@ function mappress_get_map_data($map_id = false) {
 	if(get_the_content())
 		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
-	$data = apply_filters('mappress_map_data', $data);
-	return $data;
+	return apply_filters('mappress_map_data', $data);
 }
 
 function mappress_get_marker_bubble($post_id = false) {
@@ -194,7 +172,7 @@ function mappress_get_marker_bubble($post_id = false) {
 	get_template_part('content', 'marker-bubble');
 	$bubble = ob_get_contents();
 	ob_end_clean();
-	return $bubble;
+	return apply_filters('mappress_map_bubble', $bubble);
 }
 
 function mappress_get_marker_icon() {
@@ -222,7 +200,7 @@ function mappress_get_marker_properties() {
 	$properties['bubble'] = mappress_get_marker_bubble();
 	$properties['marker'] = mappress_get_marker_icon();
 	$properties['class'] = mappress_get_marker_class();
-	return apply_filters('mappress_marker_data', $properties, $post);
+	return apply_filters('mappress_marker_data', $properties);
 }
 
 /*
