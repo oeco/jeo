@@ -132,7 +132,7 @@ var mappress = {};
 				mappress.geocode(map_id);
 
 			if(conf.filteringLayers && !conf.disableInteraction)
-				mappress.filterLayers(map_id, conf.filteringLayers);
+				mappress.filterLayers(map, conf.filteringLayers);
 
 		}));
 		

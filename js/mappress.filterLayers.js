@@ -1,10 +1,9 @@
 (function($) {
 
-	mappress.filterLayers = function(map_id, layers) {
+	mappress.filterLayers = function(map, layers) {
 
-		var filter = mappress.filterLayers;
-
-		var map = mappress.maps[map_id];
+		var map_id = map.map_id;
+		var filter = map.filterLayers = mappress.filterLayers;
 
 		layers.status = [];
 		_.each(map.conf.layers, function(layerID) {

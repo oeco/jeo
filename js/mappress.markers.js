@@ -5,7 +5,7 @@
 		if(!mappress_markers.query)
 			return;
 
-		var markers = mappress.markers;
+		var markers = map.markers = mappress.markers;
 		var markersLayer = mapbox.markers.layer();
 		var features;
 
@@ -84,10 +84,8 @@
 		}
 
 		markers.open = function(marker, silent) {
-
 			window.location = marker.properties.url;
 			return false;
-
 		};
 
 		markers.hasLocation = function(marker) {
@@ -96,6 +94,8 @@
 			else
 				return true;
 		}
+
+		return map;
 
 	}
 
