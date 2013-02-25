@@ -135,7 +135,6 @@
 		layersList.sortable();
 
 		mappress(updateMapConf());
-		console.log(mapConf);
 
 		/*
 		 * Custom server setup
