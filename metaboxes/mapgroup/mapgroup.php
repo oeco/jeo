@@ -21,7 +21,7 @@ function mapgroup_init() {
 		)
 	);
 
-	wp_enqueue_style('mapgroup-metabox', get_template_directory_uri() . '/inc/metaboxes/mapgroup/mapgroup.css', array(), '0.0.1');
+	wp_enqueue_style('mapgroup-metabox', get_template_directory_uri() . '/metaboxes/mapgroup/mapgroup.css', array(), '0.0.1');
 }
 
 function mapgroup_add_meta_box() {

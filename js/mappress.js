@@ -5,6 +5,7 @@ var mappress = {};
 	/*
 	 * MAP BUILD
 	 * conf:
+	 * - postID
 	 * - containerID (string)
 	 * - server (string)
 	 * - layers (array (layer))
@@ -18,19 +19,18 @@ var mappress = {};
 	 * - geocode (bool)
 	 * - disableHash (bool)
 	 * - disableMarkers (bool)
+	 * - disableInteraction (bool)
 	 */
 
 	var map;
 
 	mappress = function(conf) {
 
-		if(!conf.postID && typeof conf === 'object') { // conf ready
-
+		if(conf.admin) { // is admin panel
 			return mappress.build(conf);
-
 		}
 
-		if(conf.admin) { // is admin panel
+		if(!conf.postID && typeof conf === 'object') { // conf ready
 			return mappress.build(conf);
 		}
 
@@ -41,12 +41,9 @@ var mappress = {};
 			},
 			function(map_data) {
 				mapConf = mappress.convertMapConf(map_data);
-
 				mapConf = _.extend(mapConf, conf);
-
 				return mappress.build(mapConf);
 			});
-
 	};
 
 	mappress.maps = {};
@@ -62,6 +59,10 @@ var mappress = {};
 		mappress.maps[map_id] = mapbox.map(map_id, null, null, handlers);
 
 		map = mappress.maps[map_id];
+
+		// store conf
+		map.conf = conf;
+		map.conf.formattedLayers = layers;
 
 		// disable handlers
 		if(conf.disableHandlers.mousewheel)
@@ -115,25 +116,24 @@ var mappress = {};
 	        }
         }, 200));
 
-		// store conf
-		map.conf = conf;
-		map.conf.formattedLayers = layers;
-
 		// store map id
 		map.map_id = map_id;
 
 		// layers
 		var layers = mappress.setupLayers(conf.layers);
 		map.addLayer(mapbox.layer().id(layers, function() {
-
-			map.interaction.auto();
-
-			if(conf.geocode && !conf.disableInteraction)
-				mappress.geocode(map_id);
-
-			if(conf.filteringLayers && !conf.disableInteraction)
-				mappress.filterLayers(map, conf.filteringLayers);
-
+			if(!conf.disableInteraction) {
+				map.interaction.auto();
+				if(conf.geocode)
+					mappress.geocode(map_id);
+				if(conf.filteringLayers)
+					mappress.filterLayers(map, conf.filteringLayers);
+			}
+			// setup center after layer is loaded (bugfix)
+			if(typeof conf.center === 'object' && conf.center.lat && !isNaN(conf.center.lat) && conf.center.lon && !isNaN(conf.center.lon))
+				map.center(conf.center);
+			else
+				map.center({lat: 0, lon: 0});
 		}));
 		
 		/*
@@ -143,6 +143,14 @@ var mappress = {};
 			map.ui.zoomer.add();
 			map.ui.fullscreen.add();
 		}
+
+		if(((conf.minZoom && !isNaN(conf.minZoom)) || (conf.maxZoom && !isNaN(conf.maxZoom))) && !conf.preview)
+			map.setZoomRange(conf.minZoom, conf.maxZoom);
+
+		if(conf.zoom && !isNaN(conf.zoom))
+			map.zoom(conf.zoom);
+		else
+			map.zoom(2);
 
 		if(conf.extent) {
 			if(typeof conf.extent === 'string')
@@ -166,19 +174,6 @@ var mappress = {};
 					map.setPanLimits(conf.panLimits);
 			}
 		}
-
-		if(((conf.minZoom && !isNaN(conf.minZoom)) || (conf.maxZoom && !isNaN(conf.maxZoom))) && !conf.preview)
-			map.setZoomRange(conf.minZoom, conf.maxZoom);
-
-		if(conf.center && conf.center.lat && !isNaN(conf.center.lat) && conf.center.lon && !isNaN(conf.center.lon))
-			map.center(conf.center);
-		else
-			map.center({lat: 0, lon: 0});
-
-		if(conf.zoom && !isNaN(conf.zoom))
-			map.zoom(conf.zoom);
-		else
-			map.zoom(2);
 
 		if(!conf.disableHash && !conf.admin)
 			mappress.setupHash();
