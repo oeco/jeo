@@ -158,11 +158,17 @@ function mappress_get_map_data($map_id = false) {
 	$data = get_post_meta($map_id, 'map_data', true);
 	$data['postID'] = $map_id;
 	$data['title'] = get_the_title($map_id);
-	$data['legend'] = get_post_meta($map_id, 'legend', true);
+	$data['legend'] = mappress_get_map_legend();
 	if(get_the_content())
 		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
 	return apply_filters('mappress_map_data', $data);
+}
+
+function mappress_get_map_legend($map_id = false) {
+	global $post;
+	$map_id = $map_id ? $map_id : $post->ID;
+	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true));
 }
 
 function mappress_get_marker_bubble($post_id = false) {
@@ -172,7 +178,7 @@ function mappress_get_marker_bubble($post_id = false) {
 	get_template_part('content', 'marker-bubble');
 	$bubble = ob_get_contents();
 	ob_end_clean();
-	return apply_filters('mappress_map_bubble', $bubble);
+	return apply_filters('mappress_marker_bubble', $bubble);
 }
 
 function mappress_get_marker_icon() {
