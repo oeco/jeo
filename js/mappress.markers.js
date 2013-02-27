@@ -59,7 +59,7 @@
 
 					$(e).addClass('story-points')
 						.addClass(x.properties.id)
-						.addClass(x.properties.marker_class)
+						.addClass(x.properties.class);
 
 					$(e).data('feature', x);
 
