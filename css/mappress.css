@@ -44,6 +44,7 @@ body.es-ES .map-container .lang-es {
 	right: 10px;
 	z-index: 100;
 	opacity: 1;
+	pointer-events: all;
 }
 
 .map-container .map-widgets.hide {
