@@ -125,7 +125,7 @@ var mappress = {};
 			if(!conf.disableInteraction) {
 				map.interaction.auto();
 				if(conf.geocode)
-					mappress.geocode(map_id);
+					mappress.geocode(map);
 				if(conf.filteringLayers)
 					mappress.filterLayers(map, conf.filteringLayers);
 			}

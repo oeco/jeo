@@ -1,6 +1,8 @@
 (function($) {
 
-	mappress.geocode = function(map_id) {
+	mappress.geocode = function(map) {
+
+		var map_id = map.map_id;
 
 		var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + mappress_labels.search_placeholder + '" /></form>';
 

@@ -94,10 +94,10 @@ var groups = {};
 				group.map.$.widgets.empty();
 
 				if(conf.geocode)
-					mappress.geocode(group.id);
+					mappress.geocode(group.map);
 
 				if(conf.filteringLayers)
-					mappress.filterLayers(group.id, conf.filteringLayers);
+					mappress.filterLayers(group.map, conf.filteringLayers);
 
 				group.map.ui.legend.remove();
 
