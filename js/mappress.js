@@ -217,11 +217,18 @@ var mappress = {};
 	 * Map widgets
 	 */
 
-	mappress.widget = function(map_id, content) {
+	mappress.widget = function(map_id, content, widgetClass, group) {
 		var $map = $('#' + map_id);
 		var $widgets = $map.parent().find('.map-widgets');
 		// add widget
-		var widget = $('<div class="map-widget"></div>').append($(content));
+		var widget = $('<div class="map-widget" />');
+		if(typeof group !== 'undefined') {
+			widget.append('<div class="' + group + '" />');
+			widget.find('.' + group).append($(content));
+		} else {
+			widget.append($(content));
+		}
+		if(typeof widgetClass !== 'undefined') widget.addClass(widgetClass);
 		$widgets.append(widget);
 		return widget;
 	};

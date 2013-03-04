@@ -6,7 +6,7 @@
 
 		var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + mappress_labels.search_placeholder + '" /></form>';
 
-		var widget = mappress.widget(map_id, form);
+		var widget = mappress.widget(map_id, form, 'geocode-widget');
 		widget.append('<div class="geocode-results"></div>');
 
 		// bind submit event

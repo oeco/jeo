@@ -32,7 +32,7 @@
 						filter.disableLayer(layer.id);
 					list += '<li data-layer="' + layer.id + '" ' + attrs + '>' + layer.title + '</li>';
 				});
-				swapWidget = mappress.widget(map_id, '<ul class="swap-layers">' + list + '</ul>');
+				swapWidget = mappress.widget(map_id, '<ul class="swap-layers">' + list + '</ul>', 'swap-layers-widget', 'filter-layers');
 
 				swapWidget.find('li').click(function() {
 					filter.swap($(this).data('layer'), swap);
@@ -53,7 +53,7 @@
 					}
 					list += '<li data-layer="' + layer.id + '" ' + attrs + '>' + layer.title + '</li>';
 				});
-				switchWidget = mappress.widget(map_id, '<ul class="switch-layers">' + list + '</ul>');
+				switchWidget = mappress.widget(map_id, '<ul class="switch-layers">' + list + '</ul>', 'switch-layers-widget', 'filter-layers');
 
 				switchWidget.find('li').click(function() {
 					filter.switch($(this).data('layer'));
