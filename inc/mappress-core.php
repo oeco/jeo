@@ -219,21 +219,22 @@ add_action('wp_ajax_markers_geojson', 'mappress_get_markers_data');
 function mappress_get_markers_data() {
 	$query = $_REQUEST['query'];
 
-	$query_id = md5(serialize($query));
-
-	$transient = $query_id . '_geojson';
+	$cache_key = 'markers_';
 
 	if($_REQUEST['lang'])
-		$transient .= '_' . $_REQUEST['lang'];
+		$cache_key .= $_REQUEST['lang'] . '_';
+
+	$query_id = md5(serialize($query));
+	$cache_key .= $query_id;
 
 	$data = false;
-	//$data = get_transient($transient);
+	//$data = get_transient($cache_key);
 
 	if($data === false) {
 
 		$data = array();
 
-		$posts = get_posts($query);
+		$posts = apply_filters('mappress_the_markers_posts', get_posts($query), $query);
 
 		if($posts) {
 			global $post;
@@ -271,12 +272,12 @@ function mappress_get_markers_data() {
 		//set_transient($transient, $data, 60*60*1);
 	}
 
-	/*
-	$expires = 60 * 15; // 15 minutes of browser cache
+	/* Browser caching */
+	$expires = 60 * 10; // 10 minutes of browser cache
 	header('Pragma: public');
 	header('Cache-Control: maxage=' . $expires);
 	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
-	*/
+	/* --------------- */
 
 	header('Content Type: application/json');
 	echo $data;
