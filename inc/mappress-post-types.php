@@ -25,7 +25,7 @@ function register_cpt_map() {
         'labels' => $labels,
         'hierarchical' => false,
         'description' => __('MapBox Maps', 'mappress'),
-        'supports' => array( 'title', 'editor', 'excerpt'),
+        'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail'),
 
         'public' => true,
         'show_ui' => true,
