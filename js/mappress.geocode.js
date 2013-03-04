@@ -47,12 +47,11 @@
 		var resultsContainer = widget.find('.geocode-results');
 
 		$.getJSON('http://nominatim.openstreetmap.org/search.php?json_callback=?', query, function(data) {
-				if(data.length && typeof map_id != 'undefined')
-					mappress.geocode.draw(map, data, widget);
-				else
-					resultsContainer.append('<span class="widget-title">' + mappress_labels.not_found +  '</span>');
-			}
-		);
+			if(data.length && typeof map_id != 'undefined')
+				mappress.geocode.draw(map, data, widget);
+			else
+				resultsContainer.append('<span class="widget-title">' + mappress_labels.not_found +  '</span>');
+		});
 	}
 
 	mappress.geocode.clear = function(map, widget) {
