@@ -4,6 +4,8 @@
  * mappress rewrite rules
  */
 
+
+// geojson api
 function mappress_geojson_query_var($vars) {
 	$vars[] = 'geojson';
 	return $vars;
@@ -12,9 +14,8 @@ add_filter('query_vars', 'mappress_geojson_query_var');
 
 function mappress_geojson_api() {
 	if(get_query_var('geojson')) {
-		global $wp_query;
-		$wp_query->query['posts_per_page'] = -1;
-		mappress_get_markers_data();
+		$query = mappress_get_marker_query_args();
+		mappress_get_markers_data($query);
 		exit;
 	}
 }

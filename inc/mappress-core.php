@@ -164,7 +164,7 @@ function mappress_get_mapgroup_data($group_id) {
 		$map_id = 'map_' . $map['id'];
 		$data['maps'][$map_id] = mappress_get_map_data($map['id']);
 	}
-	return apply_filters('mappress_mapgroup_data', $data);
+	return apply_filters('mappress_mapgroup_data', $data, $post);
 }
 
 add_action('wp_ajax_nopriv_map_data', 'mappress_get_map_json_data');
@@ -191,13 +191,13 @@ function mappress_get_map_data($map_id = false) {
 	if(get_the_content())
 		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
-	return apply_filters('mappress_map_data', $data);
+	return apply_filters('mappress_map_data', $data, $post);
 }
 
 function mappress_get_map_legend($map_id = false) {
 	global $post;
 	$map_id = $map_id ? $map_id : $post->ID;
-	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true));
+	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $post);
 }
 
 function mappress_get_marker_bubble($post_id = false) {
@@ -207,22 +207,23 @@ function mappress_get_marker_bubble($post_id = false) {
 	get_template_part('content', 'marker-bubble');
 	$bubble = ob_get_contents();
 	ob_end_clean();
-	return apply_filters('mappress_marker_bubble', $bubble);
+	return apply_filters('mappress_marker_bubble', $bubble, $post);
 }
 
 function mappress_get_marker_icon() {
+	global $post;
 	$marker = array(
 		'url' => get_template_directory_uri() . '/img/marker.png',
 		'width' => 26,
 		'height' => 30
 	);
-	return apply_filters('mappress_marker_icon', $marker);
+	return apply_filters('mappress_marker_icon', $marker, $post);
 }
 
 function mappress_get_marker_class() {
 	global $post;
 	$class = get_post_class();
-	return apply_filters('mappress_marker_class', $class);
+	return apply_filters('mappress_marker_class', $class, $post);
 }
 
 function mappress_get_marker_properties() {
@@ -235,7 +236,7 @@ function mappress_get_marker_properties() {
 	$properties['bubble'] = mappress_get_marker_bubble();
 	$properties['marker'] = mappress_get_marker_icon();
 	$properties['class'] = implode(' ', mappress_get_marker_class());
-	return apply_filters('mappress_marker_data', $properties);
+	return apply_filters('mappress_marker_data', $properties, $post);
 }
 
 /*
@@ -244,17 +245,18 @@ function mappress_get_marker_properties() {
 
 add_action('wp_ajax_nopriv_markers_geojson', 'mappress_get_markers_data');
 add_action('wp_ajax_markers_geojson', 'mappress_get_markers_data');
-function mappress_get_markers_data() {
-	global $wp_query;
-	$query = $_REQUEST['query'] ? $_REQUEST['query'] : $wp_query->query;
+function mappress_get_markers_data($query = false) {
+	$query = $query ? $query : $_REQUEST['query'];
 
 	$cache_key = 'markers_';
 
-	if($_REQUEST['lang'])
-		$cache_key .= $_REQUEST['lang'] . '_';
+	if(function_exists('qtrans_getLanguage'))
+		$cache_key .= qtrans_getLanguage() . '_';
 
 	$query_id = md5(serialize($query));
 	$cache_key .= $query_id;
+
+	$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
 	$data = false;
 	//$data = get_transient($cache_key);
@@ -264,6 +266,8 @@ function mappress_get_markers_data() {
 		$data = array();
 
 		$posts = apply_filters('mappress_the_markers_posts', get_posts($query), $query);
+
+		$data['query_id'] = $cache_key;
 
 		if($posts) {
 			global $post;
@@ -295,7 +299,6 @@ function mappress_get_markers_data() {
 				wp_reset_postdata();
 			}
 		}
-		$data['query_id'] = $query_id;
 		$data = apply_filters('mappress_markers_data', $data);
 		$data = json_encode($data);
 		//set_transient($transient, $data, 60*60*1);
