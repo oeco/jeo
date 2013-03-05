@@ -304,6 +304,8 @@ function mappress_get_markers_data($query = false) {
 		//set_transient($transient, $data, 60*60*1);
 	}
 
+	header('Content Type: application/json');
+
 	/* Browser caching */
 	$expires = 60 * 10; // 10 minutes of browser cache
 	header('Pragma: public');
@@ -311,7 +313,6 @@ function mappress_get_markers_data($query = false) {
 	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
-	header('Content Type: application/json');
 	echo $data;
 	exit;
 }
