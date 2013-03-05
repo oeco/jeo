@@ -66,6 +66,9 @@ add_action('wp_enqueue_scripts', 'mappress_scripts');
 // Plugins implementations and fixes
 include(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
 
+// Rewrite stuff
+include(TEMPLATEPATH . '/inc/mappress-rewrite.php');
+
 // geocode service choice
 function mappress_geocode_service() {
 	// osm or gmaps (gmaps requires api key)
@@ -242,7 +245,8 @@ function mappress_get_marker_properties() {
 add_action('wp_ajax_nopriv_markers_geojson', 'mappress_get_markers_data');
 add_action('wp_ajax_markers_geojson', 'mappress_get_markers_data');
 function mappress_get_markers_data() {
-	$query = $_REQUEST['query'];
+	global $wp_query;
+	$query = $_REQUEST['query'] ? $_REQUEST['query'] : $wp_query->query;
 
 	$cache_key = 'markers_';
 
