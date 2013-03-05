@@ -46,11 +46,36 @@ function mappress_scripts() {
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'query' => mappress_get_marker_query_args()
 	));
+
+	/* geocode scripts */
+	$geocode_service = mappress_geocode_service();
+	$gmaps_key = mappress_gmaps_api_key();
+	if($geocode_service == 'gmaps' && $gmaps_key) {
+		wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=' . $gmaps_key . '&sensor=true');
+		wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-gmaps.js', array('jquery', 'google-maps-api'), '0.0.1');
+	} else {
+		wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-osm.js', array('jquery', 'mapbox-js'), '0.0.3.3');
+	}
+	wp_localize_script('mappress.geocode.box', 'geocode_labels', array(
+		'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
+		'results_found' => __('results found', 'mappress')
+	));
 }
 add_action('wp_enqueue_scripts', 'mappress_scripts');
 
 // Plugins implementations and fixes
 include(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
+
+// geocode service choice
+function mappress_geocode_service() {
+	// osm or gmaps (gmaps requires api key)
+	return apply_filters('mappress_geocode_service', 'osm');
+}
+
+// gmaps api
+function mappress_gmaps_api_key() {
+	return apply_filters('mappress_gmaps_api_key', false);
+}
 
 // marker query args
 

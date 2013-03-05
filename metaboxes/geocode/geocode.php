@@ -5,8 +5,11 @@ add_action('add_meta_boxes', 'geocoding_add_meta_box');
 add_action('save_post', 'geocoding_save_postdata');
 
 function geocoding_init() {
-	wp_enqueue_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAKPKeHezMTxwc8fyXpqWVBBAE5Wr5O7og&sensor=true');
-	wp_enqueue_script('geocoding-metabox', get_template_directory_uri() . '/metaboxes/geocode/geocode.js', array('jquery', 'google-maps-api'));
+	$geocode_service = mappress_geocode_service();
+	$gmaps_key = mappress_gmaps_api_key();
+	if($geocode_service == 'gmaps' && $gmaps_key)
+		wp_enqueue_script('google-maps-api');
+	wp_enqueue_script('mappress.geocode.box');
 }
 
 function geocoding_add_meta_box() {
@@ -33,7 +36,9 @@ function geocoding_inner_custom_box($post) {
 	    <a class="button" href="#" onclick="codeAddress();return false;"><?php _e('Geolocate', 'mappress'); ?></a>
 	</p>
 	<div class="results"></div>
-	<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
+	<?php if(mappress_geocode_service() == 'gmaps' && mappress_gmaps_api_key()) : ?>
+		<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
+	<?php endif; ?>
 	<div id="geolocate_canvas" style="width:500px;height:300px"></div>
 	<h4><?php _e('Result', 'mappress'); ?>:</h4>
 	<p>
