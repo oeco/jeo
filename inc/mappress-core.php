@@ -7,7 +7,7 @@
 global $map, $mapgroup_id;
 
 function mappress_map_global_setup($post) {
-	if(get_post_type($post->ID) == 'map' || get_post_type($post->ID) == 'map-group') {
+	if(mappress_is_map($post->ID)) {
 		$GLOBALS['map'] = $post;
 		if(get_post_type($post->ID) == 'map-group')
 			mappress_setup_mapgroupdata($post);
@@ -22,6 +22,15 @@ function mappress_reset_mapdata() {
 		$GLOBALS['post'] = $GLOBALS['map'] = $wp_query->post;
 		setup_postdata($wp_query->post);
 	}
+}
+
+function mappress_is_map($map_id = false) {
+	global $post;
+	$map_id = $map_id ? $map_id : $post->ID;
+	if(get_post_type($post->ID) == 'map' || get_post_type($post->ID) == 'map-group')
+		return true;
+
+	return false;
 }
 
 function mappress_is_map_query($query = false) {
