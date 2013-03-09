@@ -1,5 +1,49 @@
 <?php
 
+/*
+ * Map global vars and query settings
+ */
+
+global $map, $mapgroup_id;
+
+function mappress_map_global_setup($post) {
+	if(get_post_type($post->ID) == 'map' || get_post_type($post->ID) == 'map-group') {
+		$GLOBALS['map'] = $post;
+		if(get_post_type($post->ID) == 'map-group')
+			mappress_setup_mapgroupdata($post);
+		do_action_ref_array('mappress_the_map', array(&$map));
+	}
+}
+add_action('the_post', 'mappress_map_global_setup');
+
+function mappress_reset_mapdata() {
+	global $wp_query;
+	if(!empty($wp_query->post) && mappress_is_map_query($wp_query)) {
+		$GLOBALS['post'] = $GLOBALS['map'] = $wp_query->post;
+		setup_postdata($wp_query->post);
+	}
+}
+
+function mappress_is_map_query($query = false) {
+	global $wp_query;
+	$query = $query ? $query : $wp_query;
+	$post_type = $query->vars['post_type'];
+	if((is_array($post_type) && (in_array('map', $post_type) || in_array('map-group', $post_type))) || ($post_type == 'map' || $post_type == 'map-group')) 
+		return true;
+
+	return false;
+}
+
+function mappress_setup_mapgroupdata($mapgroup) {
+	global $mapgroup_id;
+	$mapgroup_id = $mapgroup->ID;
+	do_action_ref_array('mappress_the_mapgroup', array(&$mapgroup));
+	return true;
+}
+
+/*
+ * Theme setup
+ */
 function mappress_setup() {
 	// register map and map group post types
 	include(TEMPLATEPATH . '/inc/mappress-post-types.php');
@@ -63,12 +107,6 @@ function mappress_scripts() {
 }
 add_action('wp_enqueue_scripts', 'mappress_scripts');
 
-// Plugins implementations and fixes
-include(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
-
-// Rewrite stuff
-include(TEMPLATEPATH . '/inc/mappress-rewrite.php');
-
 // geocode service choice
 function mappress_geocode_service() {
 	// osm or gmaps (gmaps requires api key)
@@ -78,67 +116,6 @@ function mappress_geocode_service() {
 // gmaps api
 function mappress_gmaps_api_key() {
 	return apply_filters('mappress_gmaps_api_key', false);
-}
-
-// marker query args
-
-function mappress_get_marker_query_args($posts_per_page = -1) {
-	global $post;
-	if(is_singular(array('map', 'map-group'))) {
-		$query = array('post_type' => 'post');
-		// map exclusive post query
-		if(is_singular('map')) {
-			$query['meta_query'] = array(
-				'relation' => 'OR',
-				array(
-					'key' => 'maps',
-					'value' => $post->ID,
-					'compare' => 'LIKE'
-				),
-				array(
-					'key' => 'has_maps',
-					'value' => '',
-					'compare' => 'NOT EXISTS'
-				)
-			);
-		} else  {
-			$groupdata = get_post_meta($post->ID, 'mapgroup_data', true);
-			$meta_query = array('relation' => 'OR');
-			$i = 1;
-			foreach($groupdata['maps'] as $map) {
-				$meta_query[$i] = array(
-					'key' => 'maps',
-					'value' => intval($map['id']),
-					'compare' => 'LIKE'
-				);
-				$i++;
-			}
-			$meta_query[$i] = array(
-				'key' => 'has_maps',
-				'value' => '',
-				'compare' => 'NOT EXISTS'
-			);
-			$query['meta_query'] = $meta_query;
-		}
-	} else {
-		global $wp_query;
-		$query = $wp_query->query_vars;
-	}
-	$query['posts_per_page'] = $posts_per_page;
-	if($posts_per_page == -1 && isset($query['paged']))
-		unset($query['paged']);
-	else 
-		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
-	
-	$query = apply_filters('mappress_markers_query', $query);
-	return $query;
-}
-
-// disable canonical redirect on map/map-group post type for stories pagination
-add_filter('redirect_canonical', 'mappress_disable_canonical');
-function mappress_disable_canonical($redirect_url) {
-	if(is_singular('map') || is_singular('map-group'))
-		return false;
 }
 
 // get data
@@ -154,8 +131,8 @@ function mappress_get_mapgroup_json_data($group_id = false) {
 }
 
 function mappress_get_mapgroup_data($group_id) {
-	global $post;
-	$group_id = $group_id ? $group_id : $post->ID;
+	global $map;
+	$group_id = $group_id ? $group_id : $map->ID;
 	$data = array();
 	if(get_post_type($group_id) != 'map-group')
 		return;
@@ -178,8 +155,8 @@ function mappress_get_map_json_data($map_id = false) {
 }
 
 function mappress_get_map_data($map_id = false) {
-	global $post;
-	$map_id = $map_id ? $map_id : $post->ID;
+	global $map;
+	$map_id = $map_id ? $map_id : $map->ID;
 	if(get_post_type($map_id) != 'map')
 		return;
 	$post = get_post($map_id);
@@ -195,126 +172,16 @@ function mappress_get_map_data($map_id = false) {
 }
 
 function mappress_get_map_legend($map_id = false) {
-	global $post;
-	$map_id = $map_id ? $map_id : $post->ID;
+	global $map;
+	$map_id = $map_id ? $map_id : $map->ID;
 	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $post);
 }
 
-function mappress_get_marker_bubble($post_id = false) {
-	global $post;
-	$post_id = $post_id ? $post_id : $post->ID;
-	ob_start();
-	get_template_part('content', 'marker-bubble');
-	$bubble = ob_get_contents();
-	ob_end_clean();
-	return apply_filters('mappress_marker_bubble', $bubble, $post);
-}
-
-function mappress_get_marker_icon() {
-	global $post;
-	$marker = array(
-		'url' => get_template_directory_uri() . '/img/marker.png',
-		'width' => 26,
-		'height' => 30
-	);
-	return apply_filters('mappress_marker_icon', $marker, $post);
-}
-
-function mappress_get_marker_class() {
-	global $post;
-	$class = get_post_class();
-	return apply_filters('mappress_marker_class', $class, $post);
-}
-
-function mappress_get_marker_properties() {
-	global $post;
-	$properties = array();
-	$properties['id'] = 'post-' . $post->ID;
-	$properties['title'] = get_the_title();
-	$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'mappress'));
-	$properties['url'] = get_permalink();
-	$properties['bubble'] = mappress_get_marker_bubble();
-	$properties['marker'] = mappress_get_marker_icon();
-	$properties['class'] = implode(' ', mappress_get_marker_class());
-	return apply_filters('mappress_marker_data', $properties, $post);
-}
-
-/*
- * Markers in GeoJSON
- */
-
-add_action('wp_ajax_nopriv_markers_geojson', 'mappress_get_markers_data');
-add_action('wp_ajax_markers_geojson', 'mappress_get_markers_data');
-function mappress_get_markers_data($query = false) {
-	$query = $query ? $query : $_REQUEST['query'];
-
-	$cache_key = 'markers_';
-
-	if(function_exists('qtrans_getLanguage'))
-		$cache_key .= qtrans_getLanguage() . '_';
-
-	$query_id = md5(serialize($query));
-	$cache_key .= $query_id;
-
-	$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
-
-	$data = false;
-	//$data = get_transient($cache_key);
-
-	if($data === false) {
-
-		$data = array();
-
-		$posts = apply_filters('mappress_the_markers_posts', get_posts($query), $query);
-
-		$data['query_id'] = $cache_key;
-
-		if($posts) {
-			global $post;
-			$data['type'] = 'FeatureCollection';
-			$data['features'] = array();
-			$i = 0;
-			foreach($posts as $post) {
-
-				setup_postdata($post);
-
-				$data['features'][$i]['type'] = 'Feature';
-
-				$data['features'][$i]['geometry'] = array();
-				$data['features'][$i]['geometry']['type'] = 'Point';
-
-				$latitude = get_post_meta($post->ID, 'geocode_latitude', true);
-				$longitude = get_post_meta($post->ID, 'geocode_longitude', true);
-
-				if($latitude && $longitude)
-					$data['features'][$i]['geometry']['coordinates'] = array($longitude, $latitude);
-				else
-					$data['features'][$i]['geometry']['coordinates'] = array(0, 0);
-
-				// marker properties
-				$data['features'][$i]['properties'] = mappress_get_marker_properties();
-
-				$i++;
-
-				wp_reset_postdata();
-			}
-		}
-		$data = apply_filters('mappress_markers_data', $data);
-		$data = json_encode($data);
-		//set_transient($transient, $data, 60*60*1);
-	}
-
-	header('Content Type: application/json');
-
-	/* Browser caching */
-	$expires = 60 * 10; // 10 minutes of browser cache
-	header('Pragma: public');
-	header('Cache-Control: maxage=' . $expires);
-	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
-	/* --------------- */
-
-	echo $data;
-	exit;
+// disable canonical redirect on map/map-group post type for stories pagination
+add_filter('redirect_canonical', 'mappress_disable_canonical');
+function mappress_disable_canonical($redirect_url) {
+	if(is_singular('map') || is_singular('map-group'))
+		return false;
 }
 
 ?>

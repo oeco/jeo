@@ -1,11 +1,11 @@
 <?php
 
 /*
- * mappress rewrite rules
+ * MapPress API
  */
 
 
-// geojson api
+// geojson outputs
 function mappress_geojson_query_var($vars) {
 	$vars[] = 'geojson';
 	return $vars;
