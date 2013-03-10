@@ -90,7 +90,7 @@
 			var resultsContainer = widget.find('.geocode-results');
 			if(resultsContainer.length) {
 				resultsContainer.empty();
-				resultsContainer.append('<a href="#"" class="clear-search">' + mappress_labels.clear_search + '</a><span class="widget-title">' + mappress_labels.results_title + '</span><ul />');
+				resultsContainer.append('<a href="#" class="clear-search">' + mappress_labels.clear_search + '</a><span class="widget-title">' + mappress_labels.results_title + '</span><ul />');
 				var list = resultsContainer.find('ul');
 				var item;
 

@@ -97,6 +97,46 @@ function mappress_get_marker_properties() {
 	return apply_filters('mappress_marker_data', $properties, $post);
 }
 
+function mappress_get_marker_geometry() {
+	global $post;
+	$geometry = array();
+	$geometry['type'] = 'Point';
+	$geometry['coordinates'] = mappress_get_marker_coordinates();
+	return apply_filters('mappress_marker_geometry', $geometry, $post);
+}
+
+function mappress_get_marker_coordinates($post_id = false) {
+	global $post;
+	$post_id = $post_id ? $post_id : $post->ID;
+
+	$lat = get_post_meta($post_id, 'geocode_latitude', true);
+	$lon = get_post_meta($post_id, 'geocode_longitude', true);
+
+	if($lat && $lon)
+		$coordinates = array($lon, $lat);
+	else
+		$coordinates = array(0, 0);
+
+	return apply_filters('mappress_marker_coordinates', $coordinates);
+}
+
+function mappress_get_marker_conf_coordinates($post_id = false) {
+	global $post;
+	$post_id = $post_id ? $post_id : $post->ID;
+
+	$coordinates = mappress_get_marker_coordinates($post_id);
+	return array('lat' => $coordinates[1], 'lon' => $coordinates[0]);
+}
+
+function mappress_has_marker_location($post_id = false) {
+	global $post;
+	$post_id = $post_id ? $post_id : $post->ID;
+	$coordinates = mappress_get_marker_coordinates($post_id);
+	if($coordinates[0] !== 0)
+		return true;
+	return false;
+}
+
 /*
  * Markers in GeoJSON
  */
@@ -138,16 +178,8 @@ function mappress_get_markers_data($query = false) {
 
 				$data['features'][$i]['type'] = 'Feature';
 
-				$data['features'][$i]['geometry'] = array();
-				$data['features'][$i]['geometry']['type'] = 'Point';
-
-				$latitude = get_post_meta($post->ID, 'geocode_latitude', true);
-				$longitude = get_post_meta($post->ID, 'geocode_longitude', true);
-
-				if($latitude && $longitude)
-					$data['features'][$i]['geometry']['coordinates'] = array($longitude, $latitude);
-				else
-					$data['features'][$i]['geometry']['coordinates'] = array(0, 0);
+				// marker geometry
+				$data['features'][$i]['geometry'] = mappress_get_marker_geometry();
 
 				// marker properties
 				$data['features'][$i]['properties'] = mappress_get_marker_properties();
@@ -165,10 +197,10 @@ function mappress_get_markers_data($query = false) {
 	header('Content Type: application/json');
 
 	/* Browser caching */
-	$expires = 60 * 10; // 10 minutes of browser cache
-	header('Pragma: public');
-	header('Cache-Control: maxage=' . $expires);
-	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	//$expires = 60 * 10; // 10 minutes of browser cache
+	//header('Pragma: public');
+	//header('Cache-Control: maxage=' . $expires);
+	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
 	echo $data;
