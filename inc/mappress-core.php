@@ -173,7 +173,7 @@ function mappress_get_map_data($map_id = false) {
 	$data = get_post_meta($map_id, 'map_data', true);
 	$data['postID'] = $map_id;
 	$data['title'] = get_the_title($map_id);
-	$data['legend'] = mappress_get_map_legend();
+	$data['legend'] = mappress_get_map_legend($map_id);
 	if(get_the_content())
 		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
@@ -183,7 +183,7 @@ function mappress_get_map_data($map_id = false) {
 function mappress_get_map_legend($map_id = false) {
 	global $map;
 	$map_id = $map_id ? $map_id : $map->ID;
-	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $post);
+	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $map);
 }
 
 // disable canonical redirect on map/map-group post type for stories pagination
