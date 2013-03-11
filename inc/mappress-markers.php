@@ -48,15 +48,14 @@ function mappress_get_marker_query_vars($posts_per_page = -1) {
 		}
 	} else {
 		$query = $wp_query->query_vars;
-
 		$markers_limit = mappress_get_markers_limit();
 		if($markers_limit != -1) {
 			$amount = $wp_query->found_posts;
-			$per_page = get_query_var('posts_per_page');
 			$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
-			$offset = $per_page * ($page - 1);
+			$offset = get_query_var('posts_per_page') * ($page - 1);
 			if($offset <= ($amount - $markers_limit)) {
-				$query['offset'] = $offset - 1;
+				if($offset !== 0) $offset--;
+				$query['offset'] = $offset;
 			} else {
 				$query['offset'] = $amount - $markers_limit;
 			}
