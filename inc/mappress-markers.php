@@ -27,7 +27,7 @@ function mappress_get_marker_query_vars($posts_per_page = -1) {
 					'compare' => 'NOT EXISTS'
 				)
 			);
-		} else {
+		} elseif(is_singular('map-group')) {
 			$groupdata = get_post_meta($post->ID, 'mapgroup_data', true);
 			$meta_query = array('relation' => 'OR');
 			$i = 1;
