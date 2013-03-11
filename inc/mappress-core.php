@@ -95,10 +95,9 @@ function mappress_scripts() {
 		'more_label' => __('More', 'mappress')
 	));
 
-	global $markers_query;
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => $markers_query->query
+		'query' => mappress_get_marker_query_vars()
 	));
 
 	/* geocode scripts */
