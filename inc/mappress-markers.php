@@ -230,10 +230,10 @@ function mappress_get_markers_data($query = false) {
 	header('Content Type: application/json');
 
 	/* Browser caching */
-	//$expires = 60 * 10; // 10 minutes of browser cache
-	//header('Pragma: public');
-	//header('Cache-Control: maxage=' . $expires);
-	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	$expires = 60 * 10; // 10 minutes of browser cache
+	header('Pragma: public');
+	header('Cache-Control: maxage=' . $expires);
+	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
 	echo $data;
