@@ -8,8 +8,19 @@
 
 global $marker_query;
 
-function mappress_get_marker_query_vars($posts_per_page = -1) {
-	global $wp_query, $marker_query, $post;
+function mappress_setup_marker_query($query) {
+	if($query->is_main_query()) {
+		global $marker_query;
+		remove_action('pre_get_posts', 'mappress_setup_marker_query');
+		$marker_query = new WP_Query(mappress_get_marker_query_vars());
+		do_action('mappress_pre_get_markers', $marker_query);
+		add_action('pre_get_posts', 'mappress_setup_marker_query');
+	}
+}
+add_action('pre_get_posts', 'mappress_setup_marker_query');
+
+function mappress_get_marker_query_vars() {
+	global $wp_query, $post;
 	if(mappress_is_map()) {
 		$query = array('post_type' => 'post', 'singular_map' => true);
 		// map exclusive post query
@@ -47,29 +58,28 @@ function mappress_get_marker_query_vars($posts_per_page = -1) {
 			$query['meta_query'] = $meta_query;
 		}
 	} else {
-		$query = $wp_query->query_vars;
+		$query = $wp_query->query;
 		$markers_limit = mappress_get_markers_limit();
 		if($markers_limit != -1) {
 			$amount = $wp_query->found_posts;
-			$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
-			$offset = get_query_var('posts_per_page') * ($page - 1);
-			if($offset <= ($amount - $markers_limit)) {
-				if($offset !== 0) $offset--;
-				$query['offset'] = $offset;
+			if($markers_limit > $amount) {
+				$markers_limit = $amount;
 			} else {
-				$query['offset'] = $amount - $markers_limit;
+				$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
+				$offset = get_query_var('posts_per_page') * ($page - 1);
+				if($offset <= ($amount - $markers_limit)) {
+					if($offset !== 0) $offset = $offset - 1;
+					$query['offset'] = $offset;
+				} else {
+					$query['offset'] = $amount - $markers_limit;
+				}
 			}
 		}
 	}
 
-	$query['posts_per_page'] = $posts_per_page;
-	if($posts_per_page == -1 && isset($query['paged']))
-		unset($query['paged']);
-	else
-		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
+	$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
-	$map_query = apply_filters('mappress_markers_query', $query);
-	return $map_query;
+	return apply_filters('mappress_markers_query', $query);
 }
 
 function mappress_get_markers_limit() {
@@ -162,12 +172,12 @@ function mappress_has_marker_location($post_id = false) {
 add_action('wp_ajax_nopriv_markers_geojson', 'mappress_get_markers_data');
 add_action('wp_ajax_markers_geojson', 'mappress_get_markers_data');
 function mappress_get_markers_data($query = false) {
-	global $wp_query;
 	$query = $query ? $query : $_REQUEST['query'];
 
 	if(!isset($query['singular_map']) || $query['singular_map'] !== true) {
 		$query['posts_per_page'] = mappress_get_markers_limit();
 		$query['nopaging'] = false;
+		$query['paged'] = 0;
 	}
 
 	$cache_key = 'mp_';

@@ -14,9 +14,9 @@ add_filter('query_vars', 'mappress_geojson_query_var');
 
 function mappress_geojson_api() {
 	if(get_query_var('geojson')) {
-		$query = mappress_get_marker_query_args();
-		$query = apply_filters('mappress_geojson_api_query', $query);
-		mappress_get_markers_data($query);
+		global $marker_query;
+		$query = apply_filters('mappress_geojson_api_query', $marker_query->query);
+		mappress_get_markers_data($marker_query->query);
 		exit;
 	}
 }
