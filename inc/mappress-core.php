@@ -27,7 +27,7 @@ function mappress_reset_mapdata() {
 function mappress_is_map($map_id = false) {
 	global $post;
 	$map_id = $map_id ? $map_id : $post->ID;
-	if(get_post_type($post->ID) == 'map' || get_post_type($post->ID) == 'map-group')
+	if(get_post_type($map_id) == 'map' || get_post_type($map_id) == 'map-group')
 		return true;
 
 	return false;
@@ -86,7 +86,7 @@ function mappress_scripts() {
 	wp_localize_script('mappress.geocode', 'mappress_labels', array(
 		'search_placeholder' => __('Find a location', 'mappress'),
 		'results_title' => __('Results', 'mappress'),
-		'clear_search' => __('Clear search', 'mappress'),
+		'clear_search' => __('Close search', 'mappress'),
 		'not_found' => __('Nothing found, try something else.', 'mappress')
 	));
 
@@ -97,7 +97,7 @@ function mappress_scripts() {
 
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => mappress_get_marker_query_args()
+		'query' => mappress_get_marker_query_vars()
 	));
 
 	/* geocode scripts */
