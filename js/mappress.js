@@ -142,7 +142,6 @@ var mappress = {};
 		// bugfix fullscreen issue
 		$(document).ready(function() {
 			map.$.find('.map-fullscreen').click(function() {
-				console.log('hey');
 				map.draw();
 			});
 		});
