@@ -97,11 +97,6 @@ var mappress = {};
 			}
 		});
 
-		map.$.parents('.content-map').resize(function() {
-			map.dimensions = new MM.Point(map.parent.offsetWidth, map.parent.offsetHeight);
-			map.draw();
-		});
-
         // Enable zoom-level dependent design.
         map.$.addClass('zoom-' + map.getZoom());
         map.addCallback('drawn', _.throttle(function(map) {
@@ -143,6 +138,14 @@ var mappress = {};
 			map.ui.zoomer.add();
 			map.ui.fullscreen.add();
 		}
+
+		// bugfix fullscreen issue
+		$(document).ready(function() {
+			map.$.find('.map-fullscreen').click(function() {
+				console.log('hey');
+				map.draw();
+			});
+		});
 
 		if(((conf.minZoom && !isNaN(conf.minZoom)) || (conf.maxZoom && !isNaN(conf.maxZoom))) && !conf.preview)
 			map.setZoomRange(conf.minZoom, conf.maxZoom);
