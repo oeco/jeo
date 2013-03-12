@@ -4,28 +4,51 @@
  * MapPress markers functions and utilities
  */
 
-// Marker query
+$marker_the_query = new Marker_Query();
+$marker_query = $marker_the_query;
 
-global $marker_query;
+class Marker_Query extends WP_Query { }
 
+// Marker script
+
+function mappress_setup_marker_script() {
+	global $marker_query;
+	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.6');
+	wp_localize_script('mappress.markers', 'mappress_markers', array(
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'query' => $marker_query->query
+	));
+}
+add_action('wp_enqueue_scripts', 'mappress_setup_marker_script');
+
+// Set global $marker_query according to main WP_Query
 function mappress_setup_marker_query($query) {
 	if($query->is_main_query()) {
 		global $marker_query;
 		remove_action('pre_get_posts', 'mappress_setup_marker_query');
-		$marker_query = new WP_Query(mappress_get_marker_query_vars());
+		$marker_query = new Marker_Query(mappress_get_marker_query_vars());
 		do_action('mappress_pre_get_markers', $marker_query);
 		add_action('pre_get_posts', 'mappress_setup_marker_query');
 	}
 }
 add_action('pre_get_posts', 'mappress_setup_marker_query');
 
+// Setup marker query vars
 function mappress_get_marker_query_vars() {
-	global $wp_query, $post;
+	global $wp_query;
+	return apply_filters('mappress_markers_query', $wp_query->query);
+}
+
+// If accessing singular map, setup blank marker query
+function mappress_map_marker_query($marker_query) {
 	if(mappress_is_map()) {
-		$query = array('post_type' => 'post', 'singular_map' => true);
+		global $post;
+		$marker_query = new Marker_Query();
+		$marker_query->set('offset', 0);
+		$marker_query->set('singular_map', true);
 		// map exclusive post query
 		if(is_singular('map')) {
-			$query['meta_query'] = array(
+			$meta_query = array(
 				'relation' => 'OR',
 				array(
 					'key' => 'maps',
@@ -55,31 +78,37 @@ function mappress_get_marker_query_vars() {
 				'value' => '',
 				'compare' => 'NOT EXISTS'
 			);
-			$query['meta_query'] = $meta_query;
 		}
-	} else {
-		$query = $wp_query->query;
-		$markers_limit = mappress_get_markers_limit();
-		if($markers_limit != -1) {
-			$amount = $wp_query->found_posts;
-			if($markers_limit > $amount) {
-				$markers_limit = $amount;
+		$marker_query->set('meta_query', $meta_query);
+	}
+}
+add_action('mappress_pre_get_markers', 'mappress_map_marker_query');
+
+function mappress_set_marker_query_offset($marker_query) {
+	global $wp_query;
+	$marker_query->set('offset', mappress_get_marker_query_offset($wp_query));
+}
+add_action('mappress_pre_get_markers', 'mappress_set_marker_query_offset', 1);
+
+// Sync marker query offset to another WP_Query (eg. main query) according to limit
+function mappress_get_marker_query_offset($wp_query) {
+	$query = $wp_query->query;
+	$markers_limit = mappress_get_markers_limit();
+	if($markers_limit != -1) {
+		$amount = $wp_query->found_posts;
+		if($markers_limit > $amount) {
+			$markers_limit = $amount;
+		} else {
+			$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
+			$offset = get_query_var('posts_per_page') * ($page - 1);
+			if($offset <= ($amount - $markers_limit)) {
+				if($offset !== 0) $offset = $offset - 1;
 			} else {
-				$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
-				$offset = get_query_var('posts_per_page') * ($page - 1);
-				if($offset <= ($amount - $markers_limit)) {
-					if($offset !== 0) $offset = $offset - 1;
-					$query['offset'] = $offset;
-				} else {
-					$query['offset'] = $amount - $markers_limit;
-				}
+				$offset = $amount - $markers_limit;
 			}
 		}
 	}
-
-	$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
-
-	return apply_filters('mappress_markers_query', $query);
+	return $offset;
 }
 
 function mappress_get_markers_limit() {
@@ -196,7 +225,7 @@ function mappress_get_markers_data($query = false) {
 	if($data === false) {
 		$data = array();
 
-		$posts = apply_filters('mappress_the_markers_posts', get_posts($query), $query);
+		$posts = apply_filters('mappress_the_markers', get_posts($query), $query);
 
 		$data['query_id'] = $cache_key;
 

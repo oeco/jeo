@@ -2,9 +2,6 @@
 
 	mappress.markers = function(map) {
 
-		if(!mappress_markers.query)
-			return;
-
 		var markers = map.markers = mappress.markers;
 		var markersLayer = mapbox.markers.layer();
 		var features;
