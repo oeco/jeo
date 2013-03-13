@@ -4,22 +4,29 @@
  * Map global vars and query settings
  */
 
-global $map, $mapgroup_id;
+global $mappress_map, $mappress_mapgroup_id;
 
-function mappress_map_global_setup($post) {
+function mappress_setup_single_map($post) {
 	if(mappress_is_map($post->ID)) {
-		$GLOBALS['map'] = $post;
+		$GLOBALS['mappress_map'] = $post;
 		if(get_post_type($post->ID) == 'map-group')
 			mappress_setup_mapgroupdata($post);
-		do_action_ref_array('mappress_the_map', array(&$map));
 	}
 }
-add_action('the_post', 'mappress_map_global_setup');
+add_action('the_post', 'mappress_setup_single_map');
+
+function mappress_latest_map($post_type) {
+	$latest_map = get_posts(array('post_type' => $post_type, 'posts_per_page' => 1));
+	if($latest_map)
+		$map = array_shift($latest_map);
+
+	return $map;
+}
 
 function mappress_reset_mapdata() {
 	global $wp_query;
 	if(!empty($wp_query->post) && mappress_is_map_query($wp_query)) {
-		$GLOBALS['post'] = $GLOBALS['map'] = $wp_query->post;
+		$GLOBALS['post'] = $GLOBALS['mappress_map'] = $wp_query->post;
 		setup_postdata($wp_query->post);
 	}
 }
@@ -44,8 +51,8 @@ function mappress_is_map_query($query = false) {
 }
 
 function mappress_setup_mapgroupdata($mapgroup) {
-	global $mapgroup_id;
-	$mapgroup_id = $mapgroup->ID;
+	global $mappress_mapgroup_id;
+	$mappress_mapgroup_id = $mapgroup->ID;
 	do_action_ref_array('mappress_the_mapgroup', array(&$mapgroup));
 	return true;
 }
