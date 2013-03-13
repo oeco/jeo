@@ -4,91 +4,118 @@
  * MapPress markers functions and utilities
  */
 
-$marker_the_query = new Marker_Query();
-$marker_query = $marker_the_query;
+class Marker {
 
-class Marker_Query extends WP_Query { }
+	var $query = array();
 
-// Marker script
+	var $is_map_query = false;
 
-function mappress_setup_marker_script() {
-	global $marker_query;
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.6');
-	wp_localize_script('mappress.markers', 'mappress_markers', array(
-		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => $marker_query->query
-	));
-}
-add_action('wp_enqueue_scripts', 'mappress_setup_marker_script');
+	// Maybe do some more stuff here
 
-// Set global $marker_query according to main WP_Query
-function mappress_setup_marker_query($query) {
-	if($query->is_main_query()) {
-		global $marker_query;
-		remove_action('pre_get_posts', 'mappress_setup_marker_query');
-		$marker_query = new Marker_Query(mappress_get_marker_query_vars());
-		do_action('mappress_pre_get_markers', $marker_query);
-		add_action('pre_get_posts', 'mappress_setup_marker_query');
+	function __construct($query = array()) {
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+		$this->parse_query($query);
 	}
-}
-add_action('pre_get_posts', 'mappress_setup_marker_query');
 
-// Setup marker query vars
-function mappress_get_marker_query_vars() {
-	global $wp_query;
-	return apply_filters('mappress_markers_query', $wp_query->query);
-}
-
-// If accessing singular map, setup blank marker query
-function mappress_map_marker_query($marker_query) {
-	if(mappress_is_map()) {
-		global $post;
-		$marker_query = new Marker_Query();
-		$marker_query->set('offset', 0);
-		$marker_query->set('singular_map', true);
-		// map exclusive post query
-		if(is_singular('map')) {
-			$meta_query = array(
-				'relation' => 'OR',
-				array(
-					'key' => 'maps',
-					'value' => $post->ID,
-					'compare' => 'LIKE'
-				),
-				array(
+	function parse_query($query) {
+		/*
+		 * Get map and set query to posts assigned to it and not assigned
+		 */
+		global $map;
+		if($map) {
+			if(get_post_type($map->ID) == 'map') {
+				global $map;
+				$meta_query = array(
+					'relation' => 'OR',
+					array(
+						'key' => 'maps',
+						'value' => $map->ID,
+						'compare' => 'LIKE'
+					),
+					array(
+						'key' => 'has_maps',
+						'value' => '',
+						'compare' => 'NOT EXISTS'
+					)
+				);
+			} elseif(get_post_type($map->ID) == 'map-group') {
+				global $mapgroup_id;
+				$groupdata = get_post_meta($mapgroup_id, 'mapgroup_data', true);
+				$meta_query = array('relation' => 'OR');
+				$i = 1;
+				foreach($groupdata['maps'] as $map) {
+					$meta_query[$i] = array(
+						'key' => 'maps',
+						'value' => intval($map['id']),
+						'compare' => 'LIKE'
+					);
+					$i++;
+				}
+				$meta_query[$i] = array(
 					'key' => 'has_maps',
 					'value' => '',
 					'compare' => 'NOT EXISTS'
-				)
-			);
-		} elseif(is_singular('map-group')) {
-			$groupdata = get_post_meta($post->ID, 'mapgroup_data', true);
-			$meta_query = array('relation' => 'OR');
-			$i = 1;
-			foreach($groupdata['maps'] as $map) {
-				$meta_query[$i] = array(
-					'key' => 'maps',
-					'value' => intval($map['id']),
-					'compare' => 'LIKE'
 				);
-				$i++;
 			}
-			$meta_query[$i] = array(
-				'key' => 'has_maps',
-				'value' => '',
-				'compare' => 'NOT EXISTS'
-			);
+			$marker_query['meta_query'] = $meta_query;
 		}
-		$marker_query->set('meta_query', $meta_query);
+		$marker_query = array_merge($marker_query, $query);
+
+		$this->query = $marker_query;
+	}
+
+	function markers_limit() {
+		return apply_filters('mappress_markers_limit', 200);
+	}
+
+	function is_single_map() {
+		if(mappress_is_map())
+			$this->is_single_map = true;
+
+		return $this->is_single_map();
+	}
+
+	function enqueue_scripts() {
+		wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.6');
+		wp_localize_script('mappress.markers', 'mappress_markers', array(
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'query' => $this->query
+		));
+	}
+
+}
+
+$marker_query = new WP_Query();
+
+/*
+ * Create mappress_pre_get_markers hook
+ */
+function mappress_marker_query($wp_query) {
+	if($wp_query->is_main_query()) {
+		global $marker_query;
+		$query = new Marker($wp_query->query);
+		$marker_query = new WP_Query($query->query);
+		do_action_ref_array('mappress_pre_get_markers', array(&$marker_query));
 	}
 }
-add_action('mappress_pre_get_markers', 'mappress_map_marker_query');
+add_action('pre_get_posts', 'mappress_marker_query');
+
+
+/*
+ * Reset query if single map
+ */
+function mappress_map_marker_query($marker_query) {
+	if(mappress_is_map()) {
+		$marker_query = new Marker_Query();
+	}
+}
+//add_action('mappress_pre_get_markers', 'mappress_map_marker_query');
 
 function mappress_set_marker_query_offset($marker_query) {
 	global $wp_query;
 	$marker_query->set('offset', mappress_get_marker_query_offset($wp_query));
 }
-add_action('mappress_pre_get_markers', 'mappress_set_marker_query_offset', 1);
+//add_action('mappress_pre_get_markers', 'mappress_set_marker_query_offset', 1);
 
 // Sync marker query offset to another WP_Query (eg. main query) according to limit
 function mappress_get_marker_query_offset($wp_query) {
@@ -111,9 +138,6 @@ function mappress_get_marker_query_offset($wp_query) {
 	return $offset;
 }
 
-function mappress_get_markers_limit() {
-	return apply_filters('mappress_markers_limit', 200);
-}
 
 function mappress_get_marker_bubble($post_id = false) {
 	global $post;
@@ -204,7 +228,7 @@ function mappress_get_markers_data($query = false) {
 	$query = $query ? $query : $_REQUEST['query'];
 
 	if(!isset($query['singular_map']) || $query['singular_map'] !== true) {
-		$query['posts_per_page'] = mappress_get_markers_limit();
+//		$query['posts_per_page'] = mappress_get_markers_limit();
 		$query['nopaging'] = false;
 		$query['paged'] = 0;
 	}
@@ -259,10 +283,10 @@ function mappress_get_markers_data($query = false) {
 	header('Content Type: application/json');
 
 	/* Browser caching */
-	$expires = 60 * 10; // 10 minutes of browser cache
-	header('Pragma: public');
-	header('Cache-Control: maxage=' . $expires);
-	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	//$expires = 60 * 10; // 10 minutes of browser cache
+	//header('Pragma: public');
+	//header('Cache-Control: maxage=' . $expires);
+	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
 	echo $data;
