@@ -8,16 +8,19 @@ class Marker {
 
 	var $query = array();
 
+	var $wp_query = false;
+
 	var $is_map_query = false;
 
 	// Maybe do some more stuff here
 
 	function __construct($query = array()) {
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-		$this->parse_query($query);
+		$this->query($query);
+		$this->wp_query = new WP_Query($this->$query);
 	}
 
-	function parse_query($query) {
+	function query($query) {
 		/*
 		 * Get map and set query to posts assigned to it and not assigned
 		 */
@@ -85,17 +88,16 @@ class Marker {
 
 }
 
-$marker_query = new WP_Query();
+$marker = new Marker();
 
 /*
  * Create mappress_pre_get_markers hook
  */
 function mappress_marker_query($wp_query) {
 	if($wp_query->is_main_query()) {
-		global $marker_query;
-		$query = new Marker($wp_query->query);
-		$marker_query = new WP_Query($query->query);
-		do_action_ref_array('mappress_pre_get_markers', array(&$marker_query));
+		global $marker;
+		$marker = new Marker($wp_query->query);
+		do_action_ref_array('mappress_pre_get_markers', array(&$marker));
 	}
 }
 add_action('pre_get_posts', 'mappress_marker_query');
