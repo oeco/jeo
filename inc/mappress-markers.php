@@ -57,7 +57,7 @@ class Marker {
 					'compare' => 'NOT EXISTS'
 				);
 			}
-			$marker_query['meta_query'] = $meta_query;
+			$query['meta_query'] = $meta_query;
 		}
 		$marker_query = array_merge($marker_query, $query);
 
@@ -72,7 +72,7 @@ class Marker {
 		if(mappress_is_map())
 			$this->is_single_map = true;
 
-		return $this->is_single_map();
+		return $this->is_single_map;
 	}
 
 	function enqueue_scripts() {
