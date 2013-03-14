@@ -6,16 +6,31 @@
 
 global $mappress_map, $mappress_mapgroup_id;
 
-function mappress_setup_single_map($post) {
+function mappress_map_register_globals() {
+	$GLOBALS['mappress_map'] = mappress_map_featured();
+}
+add_action('wp', 'mappress_map_register_globals');
+
+function mappress_map_single($post) {
 	if(mappress_is_map($post->ID)) {
 		$GLOBALS['mappress_map'] = $post;
 		if(get_post_type($post->ID) == 'map-group')
 			mappress_setup_mapgroupdata($post);
 	}
 }
-add_action('the_post', 'mappress_setup_single_map');
+add_action('the_post', 'mappress_map_single');
 
-function mappress_latest_map($post_type) {
+function mappress_map_featured($post_type = array('map', 'map-group')) {
+	$featured_map_id = get_option('mappress_featured_map');
+	if(!$featured_map_id) {
+		$featured_map = mappress_map_latest($post_type);
+	} else {
+		$featured_map = get_post($featured_map_id);
+	}
+	return $featured_map;
+}
+
+function mappress_map_latest($post_type) {
 	$latest_map = get_posts(array('post_type' => $post_type, 'posts_per_page' => 1));
 	if($latest_map)
 		$map = array_shift($latest_map);
@@ -58,16 +73,29 @@ function mappress_setup_mapgroupdata($mapgroup) {
 }
 
 /*
- * Theme setup
+ * Featured map
  */
-function mappress_setup() {
-	// register map and map group post types
-	include(TEMPLATEPATH . '/inc/mappress-post-types.php');
+
+function mappress_get_map_featured($post_type = array('map', 'map-group')) {
+	$featured = mappress_map_featured($post_type);
+	mappress_map($featured->ID);
 }
-add_action('after_setup_theme', 'mappress_setup');
 
 /*
- * Register/enqueue scripts & styles
+ * Display maps
+ */
+
+function mappress_map($map_id = false) {
+	global $mappress_map;
+	$map_id = $map_id ? $map_id : $mappress_map->ID;
+	if(!$map_id)
+		return;
+	$mappress_map = get_post($map_id);
+	get_template_part('content', get_post_type($map_id));
+}
+
+/*
+ * Register/enqueue core scripts & styles
  */
 function mappress_scripts() {
 	wp_register_script('underscore', get_template_directory_uri() . '/lib/underscore-min.js', array(), '1.4.3');

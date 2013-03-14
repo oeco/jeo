@@ -1,5 +1,5 @@
 <?php get_header(); ?>
 
-<?php mappress_get_map_featured(); ?>
+<?php mappress_map(); ?>
 
 <?php get_footer(); ?>

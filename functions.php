@@ -12,30 +12,23 @@ require_once(TEMPLATEPATH . '/inc/mappress-api.php');
 // Plugins implementations and fixes
 require_once(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
 
-/*
- * Featured map
- */
-
-function mappress_featured_map($post_type = array('map', 'map-group')) {
-	$featured_map_id = get_option('mappress_featured_map');
-	if(!$featured_map_id) {
-		$latest_map = mappress_latest_map($post_type);
-		$featured_map_id = $latest_map->ID;
-	}
-	mappress_map($featured_map_id);
-}
 
 /*
- * Display maps
+ * Theme setup
  */
-
-function mappress_map($map_id = false) {
-	global $mappress_map;
-	$map_id = $map_id ? $map_id : $mappress_map->ID;
-	if(!$map_id)
-		return;
-	$mappress_map = get_post($map_id);
-	get_template_part('content', get_post_type($map_id));
+function mappress_setup() {
+	// register map and map group post types
+	include(TEMPLATEPATH . '/inc/mappress-post-types.php');
 }
+add_action('after_setup_theme', 'mappress_setup');
+
+function mappress_theme_scripts() {
+	// styles
+	wp_enqueue_style('mappress-base', get_stylesheet_directory_uri() . '/css/base.css', array(), '1.2');
+	wp_enqueue_style('mappress-skeleton', get_stylesheet_directory_uri() . '/css/skeleton.css', array('mappress-base'), '1.2');
+	wp_enqueue_style('font-opensans', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800');
+	wp_enqueue_style('mappress-main', get_stylesheet_directory_uri() . '/css/main.css', array('mappress-skeleton', 'font-opensans', 'font-blackops'), '0.0.1.1');
+}
+add_action('wp_enqueue_scripts', 'mappress_theme_scripts');
 
 ?>

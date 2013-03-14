@@ -10,39 +10,42 @@ global $marker_query;
 
 // Marker script
 
-function mappress_setup_marker_script() {
-	global $marker_query;
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.6');
-	wp_localize_script('mappress.markers', 'mappress_markers', array(
-		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => mappress_marker_query_vars()
-	));
-}
-add_action('wp_enqueue_scripts', 'mappress_setup_marker_script');
-
 function mappress_marker_query($query) {
 	global $mappress_map;
 	if($query->is_main_query() && $mappress_map) {
 		global $marker_query;
-		remove_action('pre_get_posts', 'mappress_marker_query');
 		do_action('mappress_pre_get_markers', array(&$marker_query));
-		add_action('pre_get_posts', 'mappress_marker_query');
 	}
 }
 add_action('pre_get_posts', 'mappress_marker_query');
 
+function mappress_setup_marker_script() {
+	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.0.6');
+	wp_localize_script('mappress.markers', 'mappress_markers', array(
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'query' => mappress_marker_get_query_vars()
+	));
+}
+add_action('wp_enqueue_scripts', 'mappress_setup_marker_script', 999);
+
+function mappress_marker_get_query_vars() {
+	$marker_query = mappress_marker_query_vars();
+	return $marker_query;
+}
+
 function mappress_marker_query_vars() {
 
-	global $wp_query, $mappress_map;
+	global $wp_the_query, $mappress_map;
 
-	$marker_query = $wp_query;
+	$marker_query = $wp_the_query;
 
 	$query = $marker_query->query;
 
 	if(mappress_is_map()) {
+		global $post;
+		$mappress_map = $post;
 		$marker_query = new WP_Query();
 		$query = $marker_query->query;
-
 	}
 
 	if(get_post_type($mappress_map->ID) == 'map') {
