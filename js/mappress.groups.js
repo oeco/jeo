@@ -6,6 +6,8 @@ var groups = {};
 
 		var group = {};
 
+		var fragment = mappress.fragment();
+
 		$.getJSON(mappress_groups.ajaxurl,
 		{
 			action: 'mapgroup_data',
@@ -30,6 +32,9 @@ var groups = {};
 
 			// prepare first map and group conf
 			var firstMapID = group.$.nav.find('li:first-child a').data('map');
+			if(fragment.get('map'))
+				firstMapID = fragment.get('map');
+
 			group.conf = mappress.convertMapConf(group.mapsData[firstMapID]);
 
 			// set mappress conf containerID to group id
@@ -42,34 +47,45 @@ var groups = {};
 			group.map = mappress(group.conf);
 			group.map.currentMapID = firstMapID;
 
-			// bind nav events
-			var moreLabel = group.$.nav.find('.more-tab > a').text(); // store more label
+			group.updateUI();
+
 			group.$.nav.find('li a').click(function() {
 
 				// disable "more" tab click
 				if($(this).hasClass('toggle-more'))
 					return false;
 
-				var mapID = $(this).data('map');
-
 				if($(this).hasClass('active'))
 					return false;
 
-				group.$.nav.find('li a').removeClass('active');
-				$(this).addClass('active');
-
-				// ui behaviour for more tab
-				if($(this).parent().hasClass('more-item')) {
-					group.$.nav.find('.more-tab > a').addClass('active').text($(this).text());
-				} else {
-					group.$.nav.find('.more-tab > a').removeClass('active').text(moreLabel);
-				}
+				var mapID = $(this).data('map');
 
 				// update layers
 				group.update(mapID);
 
+				// update ui
+				group.updateUI();
+
 				return false;
 			});
+
+		}
+
+		group.updateUI = function() {
+
+			var mapID = group.currentMapID;
+			var $navEl = group.$.nav.find('[data-map="' + mapID + '"]');
+			var moreLabel = group.$.nav.find('.more-tab > a').text(); // store more label
+
+			group.$.nav.find('li a').removeClass('active');
+			$navEl.addClass('active');
+
+			// ui behaviour for more tab
+			if($navEl.parent().hasClass('more-item')) {
+				group.$.nav.find('.more-tab > a').addClass('active').text($navEl.text());
+			} else {
+				group.$.nav.find('.more-tab > a').removeClass('active').text(moreLabel);
+			}
 
 		}
 
@@ -114,6 +130,10 @@ var groups = {};
 			// update current map id
 			group.currentMapID = mapID;
 			group.map.currentMapID = mapID;
+
+			var fragmentEnabled = mappress.fragmentEnabled;
+			if(fragmentEnabled)
+				fragment.set({'map': mapID});
 		}
 
 		groups[group.id] = group;

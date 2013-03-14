@@ -37,7 +37,11 @@
 
 	var fragment = mappress.fragment();
 
+	mappress.fragmentEnabled = false;
+
 	mappress.setupHash = function() {
+
+		mappress.fragmentEnabled = true;
 
 		var map = firstObject(mappress.maps);
 
@@ -71,7 +75,7 @@
 			} else {
 				fragment.rm('full');
 			}
-		})
+		});
 	}
 
 	function objectSize(obj) {
