@@ -63,8 +63,8 @@ function mappress_marker_query_vars() {
 			)
 		);
 	} elseif(get_post_type($mappress_map->ID) == 'map-group') {
-		global $mapgroup_id;
-		$groupdata = get_post_meta($mappress_map->ID, 'mapgroup_data', true);
+		global $mappress_mapgroup_id;
+		$groupdata = get_post_meta($mappress_mapgroup_id, 'mapgroup_data', true);
 		$meta_query = array('relation' => 'OR');
 		$i = 1;
 		foreach($groupdata['maps'] as $m) {
