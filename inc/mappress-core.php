@@ -9,7 +9,7 @@ global $mappress_map, $mappress_mapgroup_id;
 function mappress_map_register_globals() {
 	$GLOBALS['mappress_map'] = mappress_map_featured();
 }
-add_action('wp', 'mappress_map_register_globals');
+add_action('init', 'mappress_map_register_globals');
 
 function mappress_map_single($post) {
 	if(mappress_is_map($post->ID)) {
@@ -20,7 +20,12 @@ function mappress_map_single($post) {
 }
 add_action('the_post', 'mappress_map_single');
 
-function mappress_map_featured($post_type = array('map', 'map-group')) {
+function mappress_map_featured_type() {
+	return apply_filters('mappress_featured_map_type', array('map', 'map-group'));
+}
+
+function mappress_map_featured($post_type = false) {
+	$post_type = $post_type ? $post_type : mappress_map_featured_type();
 	$featured_map_id = get_option('mappress_featured_map');
 	if(!$featured_map_id) {
 		$featured_map = mappress_map_latest($post_type);
@@ -30,7 +35,8 @@ function mappress_map_featured($post_type = array('map', 'map-group')) {
 	return $featured_map;
 }
 
-function mappress_map_latest($post_type) {
+function mappress_map_latest($post_type = false) {
+	$post_type = $post_type ? $post_type : mappress_map_featured_type();
 	$latest_map = get_posts(array('post_type' => $post_type, 'posts_per_page' => 1));
 	if($latest_map)
 		$map = array_shift($latest_map);
@@ -76,8 +82,8 @@ function mappress_setup_mapgroupdata($mapgroup) {
  * Featured map
  */
 
-function mappress_get_map_featured($post_type = array('map', 'map-group')) {
-	$featured = mappress_map_featured($post_type);
+function mappress_get_map_featured() {
+	$featured = mappress_map_featured();
 	mappress_map($featured->ID);
 }
 

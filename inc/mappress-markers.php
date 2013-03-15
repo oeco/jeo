@@ -63,8 +63,10 @@ function mappress_marker_query_vars() {
 			)
 		);
 	} elseif(get_post_type($mappress_map->ID) == 'map-group') {
-		global $mappress_mapgroup_id;
-		$groupdata = get_post_meta($mappress_mapgroup_id, 'mapgroup_data', true);
+		/*
+		This can get really huge and crash, not using for now.
+		Plan to create a custom query var for the query string and try to create the query server-side.
+		$groupdata = get_post_meta($mappress_map->ID, 'mapgroup_data', true);
 		$meta_query = array('relation' => 'OR');
 		$i = 1;
 		foreach($groupdata['maps'] as $m) {
@@ -80,6 +82,7 @@ function mappress_marker_query_vars() {
 			'value' => '',
 			'compare' => 'NOT EXISTS'
 		);
+		*/
 	}
 
 	$query['meta_query'] = $meta_query;
