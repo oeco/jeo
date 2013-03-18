@@ -19,6 +19,9 @@ require_once(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
 function mappress_setup() {
 	// register map and map group post types
 	include(TEMPLATEPATH . '/inc/mappress-post-types.php');
+
+	// text domain
+	load_theme_textdomain('mappress', get_template_directory() . '/languages');
 }
 add_action('after_setup_theme', 'mappress_setup');
 
