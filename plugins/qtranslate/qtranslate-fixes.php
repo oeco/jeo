@@ -22,3 +22,7 @@ function mappress_qtrans_admin_ajax_url($url, $path) {
 	return $url;
 }
 add_filter('admin_url', 'mappress_qtrans_admin_ajax_url', 10, 2);
+
+// fix post type archive link url
+if(function_exists('qtrans_convertURL'))
+	add_action('post_type_archive_link', 'qtrans_convertURL');
