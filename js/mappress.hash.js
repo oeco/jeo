@@ -66,7 +66,7 @@
 				var zoom = parseInt(loc[2]);
 			}
 		}
-		map.centerzoom(center, zoom, true);
+		map.centerzoom(center, zoom, false);
 
 		// fullscreen hash
 		map.addCallback('drawn', function() {

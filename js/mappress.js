@@ -124,11 +124,6 @@ var mappress = {};
 				if(conf.filteringLayers)
 					mappress.filterLayers(map, conf.filteringLayers);
 			}
-			// setup center after layer is loaded (bugfix)
-			if(typeof conf.center === 'object' && conf.center.lat && !isNaN(conf.center.lat) && conf.center.lon && !isNaN(conf.center.lon))
-				map.center(conf.center);
-			else
-				map.center({lat: 0, lon: 0});
 		}));
 		
 		/*
@@ -154,6 +149,11 @@ var mappress = {};
 		else
 			map.zoom(2);
 
+		if(typeof conf.center === 'object' && conf.center.lat && !isNaN(conf.center.lat) && conf.center.lon && !isNaN(conf.center.lon))
+			map.centerzoom(conf.center, map.zoom(), false);
+		else
+			map.centerzoom({lat: 0, lon: 0}, map.zoom(), false);
+
 		if(conf.extent) {
 			if(typeof conf.extent === 'string')
 				conf.extent = new MM.Extent.fromString(conf.extent);
@@ -177,17 +177,17 @@ var mappress = {};
 			}
 		}
 
-		if(!conf.disableHash && !conf.admin)
-			mappress.setupHash();
-
-		if(!conf.disableMarkers && !conf.admin)
-			mappress.markers(map);
-
 		if(conf.legend && !conf.disableInteraction)
 			map.ui.legend.add().content(conf.legend);
 
 		if(conf.legend_full && !conf.disableInteraction)
 			mappress.enableDetails(map, conf.legend, conf.legend_full);
+
+		if(!conf.disableMarkers && !conf.admin)
+			mappress.markers(map);
+
+		if(!conf.disableHash && !conf.admin)
+			mappress.setupHash();
 
 		return map;
 	}
