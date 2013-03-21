@@ -41,7 +41,7 @@ function mappress_marker_query_vars() {
 
 	$marker_query = $wp_the_query;
 
-	$query = $marker_query->query;
+	$query = $marker_query->query_vars;
 
 	if(mappress_is_map()) {
 		global $post;
