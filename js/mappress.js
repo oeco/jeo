@@ -58,7 +58,7 @@ var mappress = {};
 
 		mappress.maps[map_id] = mapbox.map(map_id, null, null, handlers);
 
-		map = mappress.maps[map_id];
+		map = mappress.map = mappress.maps[map_id];
 
 		// store conf
 		map.conf = conf;
