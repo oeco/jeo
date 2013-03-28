@@ -294,7 +294,7 @@ var mappress = {};
 
 		newConf.containerID = 'map_' + conf.postID;
 		newConf.layers = [];
-		newConf.filteringLayers = [];
+		newConf.filteringLayers = {};
 		newConf.filteringLayers.switch = [];
 		newConf.filteringLayers.swap = [];
 
