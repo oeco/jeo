@@ -9,6 +9,9 @@ require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
 // API
 require_once(TEMPLATEPATH . '/inc/mappress-api.php');
 
+// Embed tool
+require_once(TEMPLATEPATH . '/inc/mappress-embed.php');
+
 // Plugins implementations and fixes
 require_once(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
 
