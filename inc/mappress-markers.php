@@ -106,6 +106,10 @@ function mappress_marker_query_vars() {
 		}
 	}
 
+	// add search
+	if(isset($_GET['s']))
+		$query['s'] = $_GET['s'];
+
 	$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 	return apply_filters('mappress_markers_query', $query);

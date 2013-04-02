@@ -21,6 +21,12 @@ function mappress_the_map($post) {
 }
 add_action('the_post', 'mappress_the_map');
 
+function mappress_pre_get_map($query) {
+	if(isset($_GET['s']) && $query->get('map'))
+		$query->set('s', null);
+}
+add_action('pre_get_posts', 'mappress_pre_get_map');
+
 function mappress_map_featured_type() {
 	return apply_filters('mappress_featured_map_type', array('map', 'map-group'));
 }
