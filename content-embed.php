@@ -1,4 +1,4 @@
-<html id="widget" <?php language_attributes(); ?>>
+<html id="map-embed" <?php language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo('charset'); ?>" />
 <title><?php
@@ -13,7 +13,7 @@
 		echo " | $site_description";
 
 	if ( $paged >= 2 || $page >= 2 )
-		echo ' | ' . __('Page', 'infoamazonia') . max($paged, $page);
+		echo ' | ' . __('Page', 'mappress') . max($paged, $page);
 
 	?></title>
 <link rel="profile" href="http://gmpg.org/xfn/11" />

@@ -27,7 +27,9 @@ class MapPress_Embed {
 	function template_redirect() {
 		if(get_query_var('embed')) {
 			add_filter('show_admin_bar', '__return_false');
+			do_action('mappress_before_embed');
 			$this->template();
+			do_action('mappress_after_embed');
 			exit;
 		}
 	}
