@@ -162,6 +162,7 @@ function mappress_get_marker_properties() {
 	global $post;
 	$properties = array();
 	$properties['id'] = 'post-' . $post->ID;
+	$properties['postID'] = $post->ID;
 	$properties['title'] = get_the_title();
 	$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'mappress'));
 	$properties['url'] = get_permalink();
