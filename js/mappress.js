@@ -113,6 +113,8 @@ var mappress = {};
 
 		// store map id
 		map.map_id = map_id;
+		if(conf.postID)
+			map.postID = conf.postID;
 
 		// layers
 		var layers = mappress.setupLayers(conf.layers);
