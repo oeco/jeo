@@ -1,7 +1,5 @@
 <?php get_header(); ?>
 
-<?php mappress_map(); ?>
-
 <?php if(have_posts()) : the_post(); ?>
 	<section id="content" class="single-post">
 		<header class="post-header">

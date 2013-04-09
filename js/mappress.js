@@ -191,6 +191,9 @@ var mappress = {};
 		if(!conf.disableHash && !conf.admin)
 			mappress.setupHash();
 
+		if(!$('body').hasClass('displaying-map'))
+			$('body').addClass('displaying-map');
+
 		return map;
 	}
 
@@ -241,6 +244,9 @@ var mappress = {};
 	 * Legend page (map details)
 	 */
 	mappress.enableDetails = function(map, legend, full) {
+		if(typeof legend === 'undefined')
+			legend = '';
+
 		map.ui.legend.add().content(legend + '<span class="map-details-link">' + mappress_localization.more_label + '</span>');
 
 		var isContentMap = map.$.parents('.content-map').length;

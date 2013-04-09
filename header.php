@@ -24,14 +24,23 @@
 </head>
 <body <?php body_class(get_bloginfo('language')); ?>>
 	<header id="masthead">
-		<h1>
-			<a href="<?php echo home_url('/'); ?>" title="<?php bloginfo('name'); ?>">
-				<?php bloginfo('name'); ?>
-			</a>
-		</h1>
-		<nav id="main-nav" class="clearfix">
-			<ul>
-				<?php wp_nav_menu(); ?>
-			</ul>
-		</nav>
+		<div class="container">
+			<div class="three columns">
+				<h1>
+					<a href="<?php echo home_url('/'); ?>" title="<?php bloginfo('name'); ?>">
+						<?php bloginfo('name'); ?>
+					</a>
+				</h1>
+			</div>
+			<div class="six columns">
+				<nav id="main-nav" class="clearfix">
+					<ul>
+						<?php wp_nav_menu(); ?>
+					</ul>
+				</nav>
+			</div>
+			<div class="three columns">
+				<?php get_search_form(); ?>
+			</div>
+		</div>
 	</header>
