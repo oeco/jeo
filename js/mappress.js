@@ -26,24 +26,28 @@ var mappress = {};
 
 	mappress = function(conf) {
 
-		if(conf.admin) { // is admin panel
-			return mappress.build(conf);
-		}
+		$(document).ready(function() {
 
-		if(!conf.postID && typeof conf === 'object') { // conf ready
-			return mappress.build(conf);
-		}
+			if(conf.admin) { // is admin panel
+				return mappress.build(conf);
+			}
 
-		return $.getJSON(mappress_localization.ajaxurl,
-			{
-				action: 'map_data',
-				map_id: conf.postID
-			},
-			function(map_data) {
-				mapConf = mappress.convertMapConf(map_data);
-				mapConf = _.extend(mapConf, conf);
-				return mappress.build(mapConf);
-			});
+			if(!conf.postID && typeof conf === 'object') { // conf ready
+				return mappress.build(conf);
+			}
+
+			return $.getJSON(mappress_localization.ajaxurl,
+				{
+					action: 'map_data',
+					map_id: conf.postID
+				},
+				function(map_data) {
+					mapConf = mappress.convertMapConf(map_data);
+					mapConf = _.extend(mapConf, conf);
+					return mappress.build(mapConf);
+				});
+			
+		});
 	};
 
 	mappress.maps = {};
@@ -65,12 +69,11 @@ var mappress = {};
 		map.conf.formattedLayers = layers;
 
 		// disable handlers
-		if(conf.disableHandlers.mousewheel)
+		if(conf.disableHandlers && conf.disableHandlers.mousewheel)
 			map.eventHandlers[3].remove();
-			
+
 		// store jquery node
 		map.$ = $('#' + map_id);
-
 		/*
 		 * Widgets (reset and add)
 		 */
@@ -78,9 +81,6 @@ var mappress = {};
 		map.$.parent().prepend('<div class="map-widgets"></div>');
 
 		map.$.widgets = map.$.parent().find('.map-widgets');
-
-		if(typeof conf.callbacks === 'function')
-			conf.callbacks();
 
 		// fullscreen widgets callback
 		map.addCallback('drawn', function(map) {
@@ -97,19 +97,30 @@ var mappress = {};
 			}
 		});
 
-        // Enable zoom-level dependent design.
-        map.$.addClass('zoom-' + map.getZoom());
-        map.addCallback('drawn', _.throttle(function(map) {
-        	if(!map.ease.running()) {
-        		var classes = map.$.attr('class');
-        		classes = classes.split(' ');
-        		$.each(classes, function(i, cl) {
-        			if(cl.indexOf('zoom') === 0)
+	    // Enable zoom-level dependent design.
+	    map.$.addClass('zoom-' + map.getZoom());
+	    map.addCallback('drawn', _.throttle(function(map) {
+	    	if(!map.ease.running()) {
+	    		var classes = map.$.attr('class');
+	    		classes = classes.split(' ');
+	    		$.each(classes, function(i, cl) {
+	    			if(cl.indexOf('zoom') === 0)
 			            map.$.removeClass(cl);
-        		});
+	    		});
 	            map.$.addClass('zoom-' + parseInt(map.getZoom()));
 	        }
-        }, 200));
+	    }, 200));
+
+		map.$.find('.map-fullscreen').click(function() {
+			map.draw();
+		});
+
+		if(!$('body').hasClass('displaying-map'))
+			$('body').addClass('displaying-map');
+
+
+		if(typeof conf.callbacks === 'function')
+			conf.callbacks();
 
 		// store map id
 		map.map_id = map_id;
@@ -135,13 +146,6 @@ var mappress = {};
 			map.ui.zoomer.add();
 			map.ui.fullscreen.add();
 		}
-
-		// bugfix fullscreen issue
-		$(document).ready(function() {
-			map.$.find('.map-fullscreen').click(function() {
-				map.draw();
-			});
-		});
 
 		if(((conf.minZoom && !isNaN(conf.minZoom)) || (conf.maxZoom && !isNaN(conf.maxZoom))) && !conf.preview)
 			map.setZoomRange(conf.minZoom, conf.maxZoom);
@@ -190,9 +194,6 @@ var mappress = {};
 
 		if(!conf.disableHash && !conf.admin)
 			mappress.setupHash();
-
-		if(!$('body').hasClass('displaying-map'))
-			$('body').addClass('displaying-map');
 
 		return map;
 	}
