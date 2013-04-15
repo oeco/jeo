@@ -134,6 +134,7 @@ function mappress_scripts() {
 	wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.8');
 	wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.7');
 	wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/js/mappress.groups.js', array('mappress', 'underscore'), '0.0.6');
+	wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/js/mappress.ui.js', array('mappress'), '0.0.3');
 
 	wp_enqueue_style('mappress', get_template_directory_uri() . '/css/mappress.css', array(), '0.0.1.2');
 
@@ -194,8 +195,8 @@ function mappress_get_mapgroup_json_data($group_id = false) {
 }
 
 function mappress_get_mapgroup_data($group_id) {
-	global $map;
-	$group_id = $group_id ? $group_id : $map->ID;
+	global $mappress_map;
+	$group_id = $group_id ? $group_id : $mappress_map->ID;
 	$data = array();
 	if(get_post_type($group_id) != 'map-group')
 		return;
@@ -218,8 +219,8 @@ function mappress_get_map_json_data($map_id = false) {
 }
 
 function mappress_get_map_data($map_id = false) {
-	global $map;
-	$map_id = $map_id ? $map_id : $map->ID;
+	global $mappress_map;
+	$map_id = $map_id ? $map_id : $mappress_map->ID;
 	if(get_post_type($map_id) != 'map')
 		return;
 	$post = get_post($map_id);
@@ -229,14 +230,14 @@ function mappress_get_map_data($map_id = false) {
 	$data['title'] = get_the_title($map_id);
 	$data['legend'] = mappress_get_map_legend($map_id);
 	if(get_the_content())
-		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' .  apply_filters('the_content', get_the_content());
+		$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', get_the_content());
 	wp_reset_postdata();
 	return apply_filters('mappress_map_data', $data, $post);
 }
 
 function mappress_get_map_legend($map_id = false) {
-	global $map;
-	$map_id = $map_id ? $map_id : $map->ID;
+	global $mappress_map;
+	$map_id = $map_id ? $map_id : $mappress_map->ID;
 	return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $map);
 }
 
