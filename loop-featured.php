@@ -16,7 +16,7 @@
 								</div>
 							</div>
 							<aside class="actions">
-								<a href="#"><?php _e('Locate on map', 'mappress'); ?></a>
+								<?php echo mappress_find_post_on_map_button(); ?>
 								<a href="<?php the_permalink(); ?>"><?php _e('Read more', 'mappress'); ?></a>
 							</aside>
 						</article>

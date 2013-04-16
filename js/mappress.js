@@ -28,6 +28,8 @@ var mappress = {};
 
 		$(document).ready(function() {
 
+			$('body').addClass('loading-map');
+
 			if(conf.admin) { // is admin panel
 				return mappress.build(conf);
 			}
@@ -115,6 +117,7 @@ var mappress = {};
 			map.draw();
 		});
 
+		$('body').removeClass('loading-map');
 		if(!$('body').hasClass('displaying-map'))
 			$('body').addClass('displaying-map');
 

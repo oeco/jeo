@@ -32,15 +32,15 @@
 					</a>
 				</h1>
 			</div>
-			<div class="six columns">
-				<nav id="main-nav" class="clearfix">
-					<ul>
-						<?php wp_nav_menu(); ?>
-					</ul>
-				</nav>
-			</div>
-			<div class="three columns">
-				<?php get_search_form(); ?>
+			<div class="eight columns offset-by-one">
+				<div id="masthead-nav">
+					<div class="clearfix">
+						<nav id="main-nav">
+							<?php wp_nav_menu(array('theme_location' => 'header_menu')); ?>
+						</nav>
+						<?php get_search_form(); ?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</header>

@@ -3,6 +3,7 @@
 require_once(TEMPLATEPATH . '/inc/mappress-core.php');
 require_once(TEMPLATEPATH . '/inc/mappress-markers.php');
 require_once(TEMPLATEPATH . '/inc/mappress-ui.php');
+require_once(TEMPLATEPATH . '/inc/mappress-markericons.php');
 
 // Metaboxes
 require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
@@ -26,6 +27,11 @@ function mappress_setup() {
 
 	// text domain
 	load_theme_textdomain('mappress', get_template_directory() . '/languages');
+
+	register_nav_menus(array(
+		'header_menu' => __('Header menu', 'mappress'),
+		'footer_menu' => __('Footer menu', 'mappress')
+	));
 }
 add_action('after_setup_theme', 'mappress_setup');
 

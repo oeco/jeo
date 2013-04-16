@@ -105,7 +105,18 @@ h3,h4,h5,h6 {
 		position: absolute;
 		width: 100%;
 		z-index: 1;
-		.gradient(rgba(0,0,0,0.7), transparent, rgba(0,0,0,0.8));
+		.gradient(rgba(0,0,0,0.7), transparent, rgba(0,0,0,0.5));
+		height: 100px;
+		#masthead-nav {
+			position: relative;
+		}
+	}
+}
+
+.loading-map {
+	#masthead {
+		opacity: 0;
+		display: none;
 	}
 }
 
@@ -114,69 +125,140 @@ h3,h4,h5,h6 {
  */
 
 #masthead {
-	padding: 30px 0;
+	position: relative;
 	background: rgba(0,0,0,0.7);
+	opacity: 1;
+	.transition(opacity .2s ease-in-out);
 	h1 {
+		margin: 30px 0;
 		font-weight: 800;
 		font-family: "Open Sans";
-		font-size: 32px;
-		line-height: 32px;
+		font-size: 28px;
+		line-height: 28px;
 		a {
 			color: #fff;
 			text-decoration: none;
 			text-shadow: 1px 1px 1px #000;
 		}
 	}
-	nav {
-		ul {
-			margin: 0;
-			padding: 0;
-			float: right;
-			li {
-				margin: 0 10px 0 0;
+	#masthead-nav {
+		float: right;
+		position: absolute;
+		z-index: 100;
+		bottom: 0;
+		right: 0;
+		nav {
+			float: left;
+			ul.menu {
+				margin: 0;
 				padding: 0;
-				float: left;
-				a {
-					display: block;
-					color: #f0f0f0;
-					text-decoration: none;
-					padding: 5px 8px;
-					text-transform: lowercase;
-					font-weight: 800;
-					text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-					background: rgba(0,0,0,0.3);
-					.border-radius(3px);
+				> li {
+					margin: 0 1px 0 0;
+					padding: 0;
+					float: left;
+					position: relative;
 					&:hover {
-						color: #fff;
-						text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-						background: rgba(0,0,0,0.4);
+						> a {
+							color: #333;
+							text-shadow: 0 0 0;
+							background: #f0f0f0;
+						}
+						> ul {
+							display: block;
+							opacity: 1;
+							.transition(opacity .2s ease-in-out);
+						}
+					}
+					> a {
+						display: block;
+						color: #f0f0f0;
+						text-decoration: none;
+						padding: 10px 10px;
+						text-transform: lowercase;
+						font-weight: 800;
+						font-size: 12px;
+						text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+						background: rgba(60,60,60,0.7);
+					}
+					> ul {
+						position: absolute;
+						top: 38px;
+						width: 200px;
+						display: none;
+						opacity: 0;
+						margin: 0;
+						> li {
+							margin: 0;
+							padding: 0;
+							position: relative;
+							a {
+								border-bottom: 1px solid #e0e0e0;
+								background: #f0f0f0;
+								display: block;
+								padding: 8px 10px;
+								color: #555;
+								text-decoration: none;
+								font-weight: 600;
+								&:hover {
+									color: #222;
+									padding-left: 14px;
+								}
+							}
+							&:hover {
+								ul {
+									display: block;
+									opacity: 1;
+								}
+							}
+							ul {
+								position: absolute;
+								display: none;
+								opacity: 0;
+								top: 0;
+								left: 200px;
+								width: 150px;
+								margin: 0;
+								padding: 0;
+								border-left: 1px solid #e0e0e0;
+								.transition(opacity .2s ease-in-out);
+								li {
+									margin: 0;
+									padding: 0;
+								}
+							}
+						}
 					}
 				}
 			}
 		}
-	}
-	#searchform {
-		input#s {
-			width: 100%;
-			.box-sizing(border-box);
-			padding: 5px 8px;
+		#searchform {
 			margin: 0;
-			border: 0;
-			background: rgba(0,0,0,0.3);
-			.box-shadow(0);
-			.transition(all .2s ease-in-out);
-			text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-			color: #fff;
-			font-size: 12px;
-			line-height: 18px;
-			font-weight: 600;
-			font-family: "Open Sans";
-			&:hover,
-			&:focus {
-				background: rgba(0,0,0,0.4);
+			float: right;
+			input#s {
+				.box-sizing(border-box);
+				padding: 10px;
+				display: block;
+				margin: 0;
+				border: 0;
+				background: rgba(0,0,0,0.3);
+				.box-shadow(0);
+				.transition(all .2s ease-in-out);
+				.border-radius(0);
+				text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+				color: #fff;
+				font-size: 12px;
+				line-height: 18px;
+				font-weight: 600;
+				font-family: "Open Sans";
+				width: 60px;
+				&:hover,
+				&:focus {
+					background: rgba(0,0,0,0.4);
+					width: 200px;
+				}
 			}
+			.placeholder(#f0f0f0);
 		}
-		.placeholder(#f0f0f0);
 	}
 }
 
@@ -206,7 +288,8 @@ h3,h4,h5,h6 {
 		bottom: 0;
 		.box-sizing(border-box);
 		background: #333;
-		padding: 10% 5%;
+		padding: 8% 10%;
+		min-width: 400px;
 		.inner {
 			height: 95%;
 			color: #f0f0f0;
@@ -336,7 +419,7 @@ h3,h4,h5,h6 {
 .single {
 	.map-container {
 		.map {
-			height: 400px;
+			height: 45%;
 		}
 	}
 }
