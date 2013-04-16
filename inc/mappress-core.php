@@ -103,7 +103,7 @@ function mappress_get_map_featured() {
 
 function mappress_map($map_id = false) {
 	global $mappress_map, $post;
-	if(is_single() && !mappress_has_marker_location())
+	if(is_single() && !mappress_is_map() && !mappress_has_marker_location())
 		return;
 	$map_id = $map_id ? $map_id : $mappress_map->ID;
 	$mappress_map = get_post($map_id);
