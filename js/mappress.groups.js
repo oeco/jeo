@@ -45,6 +45,8 @@ var groups = {};
 
 			// build group
 			group.map = mappress(group.conf);
+			console.log(group.map);
+			console.log(group.conf);
 			group.map.currentMapID = firstMapID;
 
 			group.updateUI();

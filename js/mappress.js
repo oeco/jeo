@@ -26,30 +26,27 @@ var mappress = {};
 
 	mappress = function(conf) {
 
-		$(document).ready(function() {
+		$('body').addClass('loading-map');
 
-			$('body').addClass('loading-map');
+		if(conf.admin) { // is admin panel
+			return mappress.build(conf);
+		}
 
-			if(conf.admin) { // is admin panel
-				return mappress.build(conf);
-			}
+		if(!conf.postID && typeof conf === 'object') { // conf ready
+			return mappress.build(conf);
+		}
 
-			if(!conf.postID && typeof conf === 'object') { // conf ready
-				return mappress.build(conf);
-			}
-
-			return $.getJSON(mappress_localization.ajaxurl,
-				{
-					action: 'map_data',
-					map_id: conf.postID
-				},
-				function(map_data) {
-					mapConf = mappress.convertMapConf(map_data);
-					mapConf = _.extend(mapConf, conf);
-					return mappress.build(mapConf);
-				});
-			
-		});
+		return $.getJSON(mappress_localization.ajaxurl,
+			{
+				action: 'map_data',
+				map_id: conf.postID
+			},
+			function(map_data) {
+				mapConf = mappress.convertMapConf(map_data);
+				mapConf = _.extend(mapConf, conf);
+				return mappress.build(mapConf);
+			});
+		
 	};
 
 	mappress.maps = {};
@@ -74,52 +71,56 @@ var mappress = {};
 		if(conf.disableHandlers && conf.disableHandlers.mousewheel)
 			map.eventHandlers[3].remove();
 
-		// store jquery node
-		map.$ = $('#' + map_id);
-		/*
-		 * Widgets (reset and add)
-		 */
-		map.$.empty().parent().find('.map-widgets').remove();
-		map.$.parent().prepend('<div class="map-widgets"></div>');
+		$(document).ready(function() {
 
-		map.$.widgets = map.$.parent().find('.map-widgets');
+			// store jquery node
+			map.$ = $('#' + map_id);
+			/*
+			 * Widgets (reset and add)
+			 */
+			map.$.empty().parent().find('.map-widgets').remove();
+			map.$.parent().prepend('<div class="map-widgets"></div>');
 
-		// fullscreen widgets callback
-		map.addCallback('drawn', function(map) {
-			if(map.$.hasClass('map-fullscreen-map')) {
-				if(map.$.parents('.content-map').length)
-					map.$.parents('.content-map').addClass('fullscreen');
-				map.$.widgets.addClass('fullscreen');
-				// temporary fix scrollTop
-				document.body.scrollTop = 0;
-				map.dimensions = new MM.Point(map.parent.offsetWidth, map.parent.offsetHeight);
-			} else {
-				map.$.parents('.content-map').removeClass('fullscreen');
-				map.$.widgets.removeClass('fullscreen');
-			}
+			map.$.widgets = map.$.parent().find('.map-widgets');
+
+			// fullscreen widgets callback
+			map.addCallback('drawn', function(map) {
+				if(map.$.hasClass('map-fullscreen-map')) {
+					if(map.$.parents('.content-map').length)
+						map.$.parents('.content-map').addClass('fullscreen');
+					map.$.widgets.addClass('fullscreen');
+					// temporary fix scrollTop
+					document.body.scrollTop = 0;
+					map.dimensions = new MM.Point(map.parent.offsetWidth, map.parent.offsetHeight);
+				} else {
+					map.$.parents('.content-map').removeClass('fullscreen');
+					map.$.widgets.removeClass('fullscreen');
+				}
+			});
+
+		    // Enable zoom-level dependent design.
+		    map.$.addClass('zoom-' + map.getZoom());
+		    map.addCallback('drawn', _.throttle(function(map) {
+		    	if(!map.ease.running()) {
+		    		var classes = map.$.attr('class');
+		    		classes = classes.split(' ');
+		    		$.each(classes, function(i, cl) {
+		    			if(cl.indexOf('zoom') === 0)
+				            map.$.removeClass(cl);
+		    		});
+		            map.$.addClass('zoom-' + parseInt(map.getZoom()));
+		        }
+		    }, 200));
+
+			map.$.find('.map-fullscreen').click(function() {
+				map.draw();
+			});
+
+			$('body').removeClass('loading-map');
+			if(!$('body').hasClass('displaying-map'))
+				$('body').addClass('displaying-map');
+			
 		});
-
-	    // Enable zoom-level dependent design.
-	    map.$.addClass('zoom-' + map.getZoom());
-	    map.addCallback('drawn', _.throttle(function(map) {
-	    	if(!map.ease.running()) {
-	    		var classes = map.$.attr('class');
-	    		classes = classes.split(' ');
-	    		$.each(classes, function(i, cl) {
-	    			if(cl.indexOf('zoom') === 0)
-			            map.$.removeClass(cl);
-	    		});
-	            map.$.addClass('zoom-' + parseInt(map.getZoom()));
-	        }
-	    }, 200));
-
-		map.$.find('.map-fullscreen').click(function() {
-			map.draw();
-		});
-
-		$('body').removeClass('loading-map');
-		if(!$('body').hasClass('displaying-map'))
-			$('body').addClass('displaying-map');
 
 
 		if(typeof conf.callbacks === 'function')
