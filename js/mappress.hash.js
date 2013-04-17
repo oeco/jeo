@@ -43,7 +43,7 @@
 
 		mappress.fragmentEnabled = true;
 
-		var map = firstObject(mappress.maps);
+		var map = mappress.map;
 
 		var track = _.debounce(function(m) {
 			var c = m.center();
@@ -76,27 +76,6 @@
 				fragment.rm('full');
 			}
 		});
-	}
-
-	function objectSize(obj) {
-		var size = 0;
-		for (key in obj){
-			if (obj.hasOwnProperty(key)) {
-				size++;
-			}
-		}
-		return size;
-	}
-
-	function firstObject(obj) {
-		var first;
-		for(key in obj) {
-			if(obj.hasOwnProperty(key)) {
-				first = obj[key];
-				break;
-			}
-		}
-		return first;
 	}
 
 	function isNumber(n) {

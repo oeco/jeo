@@ -19,6 +19,22 @@
 		}
 	}
 
+	mappress.ui.highlightCenter = function() {
+		var $endEl = $('.transition.has-end');
+		if($endEl.length) {
+			setTimeout(function() {
+				$endEl.each(function() {
+					$(this).hover(function() {
+						var $el = $(this);
+						var end = parseInt($el.data('end'));
+						$el.addClass('animate');
+						setTimeout(function() { $el.hide(); }, end);
+					});
+				});
+			}, 3000);
+		}
+	}
+
 	$(document).ready(function() {
 		$('.center-map').click(function() {
 			if($(this).data('lat') && $(this).data('lon')) {
@@ -26,6 +42,8 @@
 			}
 			return false;
 		});
+
+		mappress.ui.highlightCenter();
 	});
 
 })(jQuery);

@@ -4,7 +4,7 @@
 
 <?php if(have_posts()) : the_post(); ?>
 	<section id="content" class="single-post">
-		<header class="post-header">
+		<header class="single-post-header">
 			<div class="container">
 				<div class="twelve columns">
 					<h1><?php the_title(); ?></h1>

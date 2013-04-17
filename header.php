@@ -25,14 +25,17 @@
 <body <?php body_class(get_bloginfo('language')); ?>>
 	<header id="masthead">
 		<div class="container">
-			<div class="three columns">
-				<h1>
-					<a href="<?php echo home_url('/'); ?>" title="<?php bloginfo('name'); ?>">
-						<?php bloginfo('name'); ?>
-					</a>
-				</h1>
+			<div class="four columns">
+				<div class="site-meta">
+					<h1>
+						<a href="<?php echo home_url('/'); ?>" title="<?php bloginfo('name'); ?>">
+							<?php bloginfo('name'); ?>
+						</a>
+					</h1>
+					<h2><?php bloginfo('description'); ?></h2>
+				</div>
 			</div>
-			<div class="eight columns offset-by-one">
+			<div class="eight columns">
 				<div id="masthead-nav">
 					<div class="clearfix">
 						<nav id="main-nav">

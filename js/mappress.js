@@ -26,7 +26,8 @@ var mappress = {};
 
 	mappress = function(conf) {
 
-		$('body').addClass('loading-map');
+		if(conf.mainMap)
+			$('body').addClass('loading-map');
 
 		if(conf.admin) { // is admin panel
 			return mappress.build(conf);
@@ -53,6 +54,9 @@ var mappress = {};
 
 	mappress.build = function(conf) {
 
+		// add container id
+		conf.containerID = 'map_' + conf.postID + '_' + conf.count;
+
 		var map_id = conf.containerID;
 
 		var handlers = null;
@@ -61,7 +65,10 @@ var mappress = {};
 
 		mappress.maps[map_id] = mapbox.map(map_id, null, null, handlers);
 
-		map = mappress.map = mappress.maps[map_id];
+		map = mappress.maps[map_id];
+
+		if(conf.mainMap)
+			mappress.map = map;
 
 		// store conf
 		map.conf = conf;
@@ -116,9 +123,11 @@ var mappress = {};
 				map.draw();
 			});
 
-			$('body').removeClass('loading-map');
-			if(!$('body').hasClass('displaying-map'))
-				$('body').addClass('displaying-map');
+			if(conf.mainMap) {
+				$('body').removeClass('loading-map');
+				if(!$('body').hasClass('displaying-map'))
+					$('body').addClass('displaying-map');
+			}
 			
 		});
 
@@ -196,7 +205,7 @@ var mappress = {};
 		if(!conf.disableMarkers && !conf.admin)
 			mappress.markers(map);
 
-		if(!conf.disableHash && !conf.admin)
+		if(!conf.disableHash && !conf.admin && conf.mainMap)
 			mappress.setupHash();
 
 		return map;
@@ -305,7 +314,6 @@ var mappress = {};
 		if(conf.server != 'mapbox')
 			newConf.server = conf.server;
 
-		newConf.containerID = 'map_' + conf.postID;
 		newConf.layers = [];
 		newConf.filteringLayers = {};
 		newConf.filteringLayers.switch = [];
