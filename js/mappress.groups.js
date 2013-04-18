@@ -19,7 +19,7 @@ var groups = {};
 
 		group.build = function(data) {
 
-			group.$ = $('#mapgroup-' + groupID);
+			group.$ = $('#mapgroup_' + groupID);
 
 			// store maps data
 			group.mapsData = data.maps;
@@ -45,8 +45,6 @@ var groups = {};
 
 			// build group
 			group.map = mappress(group.conf);
-			console.log(group.map);
-			console.log(group.conf);
 			group.map.currentMapID = firstMapID;
 
 			group.updateUI();

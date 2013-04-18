@@ -54,8 +54,8 @@ var mappress = {};
 
 	mappress.build = function(conf) {
 
-		// add container id
-		conf.containerID = 'map_' + conf.postID + '_' + conf.count;
+		if(!conf.containerID)
+			conf.containerID = 'map_' + conf.postID + '_' + conf.count;
 
 		var map_id = conf.containerID;
 
@@ -127,6 +127,15 @@ var mappress = {};
 				$('body').removeClass('loading-map');
 				if(!$('body').hasClass('displaying-map'))
 					$('body').addClass('displaying-map');
+			}
+
+			// run callbacks
+			if(mappress.callbacks[map_id]) {
+				_.each(mappress.callbacks[map_id], function(callback, i) {
+					if(callback instanceof Function) {
+						callback();
+					}
+				});
 			}
 			
 		});
@@ -363,6 +372,21 @@ var mappress = {};
 			newConf.legend_full = conf.legend_full;
 
 		return newConf;
+	}
+
+	/*
+	 * Callback manager
+	 */
+
+	mappress.callbacks = {};
+
+	mappress.mapReady = function(map_id, callback) {
+		var callbacks = mappress.callbacks;
+
+		if(!callbacks[map_id])
+			callbacks[map_id] = [];
+
+		callbacks[map_id].push(callback);
 	}
 
 })(jQuery);

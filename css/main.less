@@ -464,13 +464,13 @@ h3,h4,h5,h6 {
 			margin-bottom: 20px;
 		}
 		article {
-			background: rgba(255,255,255,.6);
-			.box-shadow(0 1px 3px rgba(0,0,0,0.1));
+			background: rgba(255,255,255,.9);
+			.box-shadow(0 2px 3px rgba(0,0,0,0.2));
+			.border-radius(5px);
 			min-height: 256px;
 			position: relative;
 			.post-header {
-				padding: 20px;
-				background: #fff;
+				padding: 20px 20px 0;
 				h3 {
 					font-size: 18px;
 					line-height: 22px;
@@ -515,11 +515,12 @@ h3,h4,h5,h6 {
 				right: 0;
 				padding: 15px 20px;
 				height: 10px;
-				background: #fff;
+				.gradient(@maincolor, @maincolor, darken(@maincolor, 5%));
+				.border-radius(0 0 5px 5px);
 				a {
 					text-transform: uppercase;
 					font-weight: 800;
-					color: rgba(0,0,0,0.2);
+					color: rgba(255,255,255,0.2);
 					text-decoration: none;
 					font-size: 10px;
 					line-height: 10px;
@@ -530,9 +531,9 @@ h3,h4,h5,h6 {
 				}
 				&:hover {
 					a {
-						color: rgba(0,0,0,0.6);
+						color: rgba(255,255,255,0.6);
 						&:hover {
-							color: rgba(0,0,0,0.8);
+							color: rgba(255,255,255,0.8);
 						}
 					}
 				}
@@ -557,8 +558,8 @@ h3,h4,h5,h6 {
 			position: absolute;
 			top: 0;
 			bottom: 0;
-			left: -50%;
-			width: 200%;
+			//left: -5%;
+			width: 125%;
 			height: auto;
 		}
 	}
@@ -580,11 +581,22 @@ h3,h4,h5,h6 {
 		.featured-content {
 			position: relative;
 			z-index: 3;
-			padding: 20px;
 			background: rgba(255,255,255,0.85);
 			.box-shadow(0 0 30px 0 rgba(0,0,0,0.3));
 			.border-radius(3px);
+			padding: 20px;
+			overflow: hidden;
 			li {
+				position: relative;
+				top: 0;
+				left: -800px;
+				.transition(left .2s ease-in-out);
+				height: 0;
+				margin: 0;
+				&.active {
+					left: 0;
+					height: auto;
+				}
 				.post-header {
 					h3 {
 						font-size: 38px;
@@ -635,6 +647,37 @@ h3,h4,h5,h6 {
 						&:hover {
 							.gradient(@maincolor, darken(@maincolor, 5%), darken(@maincolor, 10%));
 						}
+					}
+				}
+			}
+		}
+		.slider-controllers {
+			position: relative;
+			z-index: 3;
+			margin: 20px 0;
+			float: right;
+			ul {
+				margin: 0;
+				padding: 0;
+				li {
+					width: 10px;
+					height: 10px;
+					.border-radius(5px);
+					float: left;
+					margin: 0 0 0 10px;
+					text-indent: -9999px;
+					overflow: hidden;
+					background: rgba(255,255,255,0.8);
+					.box-shadow(0 0 10px 0 rgba(0,0,0,0.5));
+					cursor: pointer;
+					.transition(all .2s ease-in-out);
+					&.active {
+						background: @maincolor;
+						.transform(scale(1.5));
+					}
+					&:hover {
+						.transform(scale(1.25));
+						background: lighten(@maincolor, 50%);
 					}
 				}
 			}

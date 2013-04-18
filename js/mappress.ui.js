@@ -35,6 +35,65 @@
 		}
 	}
 
+	mappress.ui.featuredSlider = function(elementID, mapID) {
+
+		var	$container,
+			$items,
+			$controllers,
+			$activeItem,
+			$nextItem,
+			map;
+
+		mappress.mapReady(mapID, function() {
+			$container = $('#' + elementID);
+			map = mappress.maps[mapID];
+			$items = $container.find('.slider-item');
+			$controllers = $container.find('.slider-controllers');
+			$activeItem = $container.find('.active');
+
+			lockMap();
+
+			openItem($activeItem, false);
+
+			$controllers.find('li').click(function() {
+				openItem($container.find('#' + $(this).data('postid')), true);
+				clearInterval(update);
+				update = setInterval(function() {
+					openItem($next, true);
+				}, 6000);
+			});
+
+			var update = setInterval(function() {
+				openItem($next, true);
+			}, 6000);
+		});
+
+		var openItem = function($item, animate) {
+			if(!$item || !$item.length)
+				return false;
+
+			$items.removeClass('active');
+			$item.addClass('active');
+
+			$controllers.find('li').removeClass('active');
+			$controllers.find('[data-postid="' + $item.attr('id') + '"]').addClass('active');
+
+			$next = $item.next();
+
+			if(!$next.length)
+				$next = $container.find('.slider-item:nth-child(1)');
+
+			map.centerzoom({lat: $item.data('lat'), lon: $item.data('lon')}, $item.data('zoom'), animate);
+		}
+
+		var lockMap = function() {
+			map.ui.zoomer.remove();
+			map.ui.fullscreen.remove();
+			map.eventHandlers[1].remove();
+		}
+
+	}
+
 	$(document).ready(function() {
 		$('.center-map').click(function() {
 			if($(this).data('lat') && $(this).data('lon')) {
