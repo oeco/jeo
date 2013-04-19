@@ -6,7 +6,7 @@ add_action('save_post', 'mapbox_save_postdata');
 
 function mapbox_metabox_init() {
 	// javascript stuff for the metabox
-	wp_enqueue_script('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'mappress', 'jquery-ui-sortable'), '0.4.24');
+	wp_enqueue_script('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'mappress', 'jquery-ui-sortable'), '0.4.26');
 	wp_enqueue_style('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.css', array(), '0.0.9.1');
 
 	wp_localize_script('mapbox-metabox', 'mapbox_metabox_localization', array(
@@ -174,7 +174,7 @@ function mapbox_inner_custom_box($post) {
 		</div>
 		<h3><?php _e('Preview map', 'mappress'); ?></h3>
 		<div class="map-container">
-			<div id="map_<?php echo $post->ID; ?>" class="map"></div>
+			<div id="map_preview" class="map"></div>
 		</div>
 		<div class="map-settings clearfix">
 			<h3><?php _e('Map settings', 'mappress'); ?></h3>

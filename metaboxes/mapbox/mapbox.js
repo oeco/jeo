@@ -134,22 +134,14 @@
 		var layersList = $('#mapbox-metabox .layers-list');
 		layersList.sortable();
 
-		mappress(updateMapConf());
+		updateMapConf();
 
-		/*
-		 * Custom server setup
-		 */
-		var toggleCustomServer = function() {
-			var $mapServerInput = $('input[name="map_data[server]"]:checked');
-			var $mapCustomServerInput = $('input[name="map_data[custom_server]"]');
-			if($mapServerInput.val() === 'mapbox')
-				$mapCustomServerInput.attr('disabled', 'disabled');
-			else
-				$mapCustomServerInput.attr('disabled', false);
-		}
+		mappress(mapConf);
+		
 		$('input[name="map_data[server]"]').change(function() {
 			toggleCustomServer();
 		});
+
 		toggleCustomServer();
 
 		/*
@@ -336,6 +328,18 @@
 			}
 		});
 		return filtering;
+	}
+
+	/*
+	 * Custom server setup
+	 */
+	var toggleCustomServer = function() {
+		var $mapServerInput = $('input[name="map_data[server]"]:checked');
+		var $mapCustomServerInput = $('input[name="map_data[custom_server]"]');
+		if($mapServerInput.val() === 'mapbox')
+			$mapCustomServerInput.attr('disabled', 'disabled');
+		else
+			$mapCustomServerInput.attr('disabled', false);
 	}
 
 })(jQuery);

@@ -78,8 +78,7 @@ var mappress = {};
 		if(conf.disableHandlers && conf.disableHandlers.mousewheel)
 			map.eventHandlers[3].remove();
 
-		$(document).ready(function() {
-
+		var domFunctions = function() {
 			// store jquery node
 			map.$ = $('#' + map_id);
 			/*
@@ -137,8 +136,18 @@ var mappress = {};
 					}
 				});
 			}
-			
-		});
+		}
+
+		/*
+		 * Check if DOM is ready to perform DOM actions
+		 */
+		if($.isReady) {
+			domFunctions();
+		} else {
+			$(document).ready(function() {
+				domFunctions();
+			});
+		}
 
 
 		if(typeof conf.callbacks === 'function')
