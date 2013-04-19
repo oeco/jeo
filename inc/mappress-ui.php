@@ -44,7 +44,8 @@ function mappress_element_max_zoom($post_id = false) {
 	global $mappress_map;
 
 	$map_data = mappress_get_map_data();
-	$zoom = $map_data['max_zoom'];
+
+	$zoom = $map_data['max_zoom'] ? $map_data['max_zoom'] : 18;
 
 	return 'data-zoom="' . $zoom . '"';
 

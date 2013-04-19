@@ -95,7 +95,6 @@
 				if(extent[0].lat !== 0 && extent[0].lon !== 0) {
 					if(extent[1].lat !== 0 && extent[1].lon !== 0) {
 						map.setExtent(extent);
-						map.zoom(map.zoom()-1);
 					} else {
 						map.center(extent[0]);
 					}

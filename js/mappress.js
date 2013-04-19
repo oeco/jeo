@@ -75,10 +75,10 @@ var mappress = {};
 		map.conf.formattedLayers = layers;
 
 		// disable handlers
-		if(conf.disableHandlers && conf.disableHandlers.mousewheel)
+		if((conf.disableHandlers && conf.disableHandlers.mousewheel) || conf.mainMap)
 			map.eventHandlers[3].remove();
 
-		var domFunctions = function() {
+		var domReady = function() {
 			// store jquery node
 			map.$ = $('#' + map_id);
 			/*
@@ -142,10 +142,10 @@ var mappress = {};
 		 * Check if DOM is ready to perform DOM actions
 		 */
 		if($.isReady) {
-			domFunctions();
+			domReady();
 		} else {
 			$(document).ready(function() {
-				domFunctions();
+				domReady();
 			});
 		}
 
@@ -178,18 +178,22 @@ var mappress = {};
 			map.ui.fullscreen.add();
 		}
 
-		if(((conf.minZoom && !isNaN(conf.minZoom)) || (conf.maxZoom && !isNaN(conf.maxZoom))) && !conf.preview)
+		if((conf.maxZoom && isNaN(conf.maxZoom)) || !conf.maxZoom)
+			conf.maxZoom = 17;
+
+		if((conf.minZoom && isNaN(conf.minZoom)) || !conf.minZoom)
+			conf.minZoom = 0;
+
+		if((conf.zoom && isNaN(conf.zoom)) || !conf.zoom)
+			conf.zoom = 2;
+
+		if(!conf.preview)
 			map.setZoomRange(conf.minZoom, conf.maxZoom);
 
-		if(conf.zoom && !isNaN(conf.zoom))
-			map.zoom(conf.zoom);
-		else
-			map.zoom(2);
-
 		if(typeof conf.center === 'object' && conf.center.lat && !isNaN(conf.center.lat) && conf.center.lon && !isNaN(conf.center.lon))
-			map.centerzoom(conf.center, map.zoom(), false);
+			map.centerzoom(conf.center, conf.zoom, false);
 		else
-			map.centerzoom({lat: 0, lon: 0}, map.zoom(), false);
+			map.centerzoom({lat: 0, lon: 0}, conf.zoom, false);
 
 		if(conf.extent) {
 			if(typeof conf.extent === 'string')

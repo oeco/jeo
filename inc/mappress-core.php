@@ -6,23 +6,87 @@
 
 global $mappress_map, $mappress_mapgroup_id, $mappress_map_count;
 
+$mappress_map = false;
 $mappress_map_count = 0;
 
-function mappress_map_register_globals() {
-	$GLOBALS['mappress_map'] = mappress_map_featured();
-}
-add_action('init', 'mappress_map_register_globals');
+function mappress_the_query($query) {
 
-function mappress_the_map($post) {
-	if(mappress_is_map($post->ID)) {
-		$GLOBALS['mappress_map'] = $post;
-		if(get_post_type($post->ID) == 'map-group')
-			mappress_setup_mapgroupdata($post);
-		do_action('mappress_the_map', $post);
+	global $mappress_map;
+
+	remove_action('pre_get_posts', 'mappress_the_query');
+
+	if(is_home() && !$mappress_map) {
+		$mappress_map = mappress_map_featured();
+	} elseif($query->get('map') || $query->get('map-group')) {
+		if($query->get('map'))
+			$type = 'map';
+		elseif($query->get('map-group'))
+			$type = 'map-group';
+		$mappress_map = get_page_by_path($query->get($type), 'OBJECT', $type);
+	}
+
+	add_action('pre_get_posts', 'mappress_the_query');
+
+	if(!$mappress_map || is_admin())
+		return;
+
+	if(get_post_type($mappress_map->ID) == 'map') {
+		$meta_query = array(
+			'relation' => 'OR',
+			array(
+				'key' => 'maps',
+				'value' => $mappress_map->ID,
+				'compare' => 'LIKE'
+			),
+			array(
+				'key' => 'has_maps',
+				'value' => '',
+				'compare' => 'NOT EXISTS'
+			)
+		);
+	} elseif(get_post_type($mappress_map->ID) == 'map-group') {
+		/*
+		This can get really huge and crash, not using for now.
+		Plan to create a custom query var for the query string and try to create the query server-side.
+		$groupdata = get_post_meta($mappress_map->ID, 'mapgroup_data', true);
+		$meta_query = array('relation' => 'OR');
+		$i = 1;
+		foreach($groupdata['maps'] as $m) {
+			$meta_query[$i] = array(
+				'key' => 'maps',
+				'value' => intval($m['id']),
+				'compare' => 'LIKE'
+			);
+			$i++;
+		}
+		$meta_query[$i] = array(
+			'key' => 'has_maps',
+			'value' => '',
+			'compare' => 'NOT EXISTS'
+		);
+		*/
+	}
+	$query->set('meta_query', $meta_query);
+
+}
+add_action('pre_get_posts', 'mappress_the_query');
+
+function mappress_the_post($post) {
+	if(mappress_has_marker_location()) {
+		global $mappress_map;
+		$post_maps = get_post_meta($post_id, 'maps');
+		if(!$post_maps) {
+			$mappress_map = mappress_map_featured();
+		} else {
+			$mappress_map = get_post(array_shift($post_maps));
+		}
 	}
 }
-add_action('the_post', 'mappress_the_map');
+add_action('the_post', 'mappress_the_post');
 
+/*
+ * Allow search box inside map page (disable `s` argument for the map query)
+ */
 function mappress_pre_get_map($query) {
 	if($query->get('map')) {
 		if(isset($_GET['s']))
@@ -56,28 +120,10 @@ function mappress_map_latest($post_type = false) {
 	return $map;
 }
 
-function mappress_reset_mapdata() {
-	global $wp_query;
-	if(!empty($wp_query->post) && mappress_is_map_query($wp_query)) {
-		$GLOBALS['post'] = $GLOBALS['mappress_map'] = $wp_query->post;
-		setup_postdata($wp_query->post);
-	}
-}
-
 function mappress_is_map($map_id = false) {
 	global $post;
 	$map_id = $map_id ? $map_id : $post->ID;
 	if(get_post_type($map_id) == 'map' || get_post_type($map_id) == 'map-group')
-		return true;
-
-	return false;
-}
-
-function mappress_is_map_query($query = false) {
-	global $wp_query;
-	$query = $query ? $query : $wp_query;
-	$post_type = $query->vars['post_type'];
-	if((is_array($post_type) && (in_array('map', $post_type) || in_array('map-group', $post_type))) || ($post_type == 'map' || $post_type == 'map-group')) 
 		return true;
 
 	return false;
@@ -105,16 +151,30 @@ function mappress_get_map_featured() {
 
 function mappress_map($map_id = false, $main_map = true) {
 	global $mappress_map, $post, $mappress_map_count;
-	if(is_single() && !mappress_is_map() && !mappress_has_marker_location())
-		return;
-	$map_id = $map_id ? $map_id : $mappress_map->ID;
-	$mappress_map = get_post($map_id);
+	if(is_single()) {
+		if(!mappress_is_map() && !mappress_has_marker_location()) {
+			return;
+		} else {
+			$single_post_maps_id = get_post_meta($post->ID, 'maps');
+			if($single_post_maps_id && !$map_id)
+				$map_id = array_shift($single_post_maps_id);
+		}
+	}
+
+	if($map_id)
+		$mappress_map = get_post($map_id);
+	else
+		$map_id = $mappress_map->ID;
+
 	if($main_map) add_filter('mappress_map_conf', 'mappress_map_set_main');
 	do_action('mappress_pre_display_map', $mappress_map);
 	get_template_part('content', get_post_type($map_id));
 	if($main_map) remove_filter('mappress_map_conf', 'mappress_map_set_main');
+
 	$map_js_id = 'map_' . $map_id . '_' . $mappress_map_count;
+
 	$mappress_map_count++;
+
 	return $map_js_id;
 }
 
@@ -157,7 +217,7 @@ function mappress_scripts() {
 
 	wp_register_script('d3js', get_template_directory_uri() . '/lib/d3.v2.min.js', array('jquery'), '3.0.5');
 
-	wp_enqueue_script('mappress', get_template_directory_uri() . '/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.14.3');
+	wp_enqueue_script('mappress', get_template_directory_uri() . '/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.14.9');
 	wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/js/mappress.hash.js', array('mappress', 'underscore'), '0.0.2');
 	wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/js/mappress.geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.2.8');
 	wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/js/mappress.filterLayers.js', array('mappress', 'underscore'), '0.0.8');

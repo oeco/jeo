@@ -6,88 +6,16 @@
 
 // Marker query
 
-global $marker_query;
+function mappress_marker_query() {
 
-// Marker script
+	global $wp_query;
 
-function mappress_marker_query($query) {
-	global $mappress_map;
-	if($query->is_main_query() && $mappress_map) {
-		global $marker_query;
-		do_action('mappress_pre_get_markers', array(&$marker_query));
-	}
-}
-add_action('pre_get_posts', 'mappress_marker_query');
+	$query = $wp_query->query_vars;
 
-function mappress_setup_marker_script() {
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.1.4');
-	wp_localize_script('mappress.markers', 'mappress_markers', array(
-		'ajaxurl' => admin_url('admin-ajax.php'),
-		'query' => mappress_marker_get_query_vars(),
-		'markerextent' => mappress_use_marker_extent(),
-		'markerextent_defaultzoom' => mappress_marker_extent_default_zoom()
-	));
-}
-add_action('wp_enqueue_scripts', 'mappress_setup_marker_script', 999);
-
-function mappress_marker_get_query_vars() {
-	$marker_query = mappress_marker_query_vars();
-	return $marker_query;
-}
-
-function mappress_marker_query_vars() {
-
-	global $wp_the_query, $mappress_map;
-
-	$marker_query = $wp_the_query;
-
-	$query = $marker_query->query_vars;
-
-	if(mappress_is_map()) {
-		global $post;
-		$mappress_map = $post;
+	if(is_singular(array('map', 'map-group'))) {
 		$marker_query = new WP_Query();
-		$query = $marker_query->query;
+		$query = $marker_query->query_vars;
 	}
-
-	if(get_post_type($mappress_map->ID) == 'map') {
-		$meta_query = array(
-			'relation' => 'OR',
-			array(
-				'key' => 'maps',
-				'value' => $mappress_map->ID,
-				'compare' => 'LIKE'
-			),
-			array(
-				'key' => 'has_maps',
-				'value' => '',
-				'compare' => 'NOT EXISTS'
-			)
-		);
-	} elseif(get_post_type($mappress_map->ID) == 'map-group') {
-		/*
-		This can get really huge and crash, not using for now.
-		Plan to create a custom query var for the query string and try to create the query server-side.
-		$groupdata = get_post_meta($mappress_map->ID, 'mapgroup_data', true);
-		$meta_query = array('relation' => 'OR');
-		$i = 1;
-		foreach($groupdata['maps'] as $m) {
-			$meta_query[$i] = array(
-				'key' => 'maps',
-				'value' => intval($m['id']),
-				'compare' => 'LIKE'
-			);
-			$i++;
-		}
-		$meta_query[$i] = array(
-			'key' => 'has_maps',
-			'value' => '',
-			'compare' => 'NOT EXISTS'
-		);
-		*/
-	}
-
-	$query['meta_query'] = $meta_query;
 
 	$markers_limit = mappress_get_markers_limit();
 	if($markers_limit != -1) {
@@ -112,13 +40,23 @@ function mappress_marker_query_vars() {
 
 	$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
-	return apply_filters('mappress_markers_query', $query);
+	return apply_filters('mappress_marker_query', $query);
 }
-add_action('mappress_pre_get_markers', 'mappress_marker_query_vars', 1);
+
+function mappress_setup_marker_script() {
+	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.1.7');
+	wp_localize_script('mappress.markers', 'mappress_markers', array(
+		'ajaxurl' => admin_url('admin-ajax.php'),
+		'query' => mappress_marker_query(),
+		'markerextent' => mappress_use_marker_extent(),
+		'markerextent_defaultzoom' => mappress_marker_extent_default_zoom()
+	));
+}
+add_action('wp_footer', 'mappress_setup_marker_script');
 
 function mappress_use_marker_extent() {
 	$extent = true;
-	if(is_front_page())
+	if(is_front_page() || is_singular(array('map', 'map-group')))
 		$extent = false;
 
 	return apply_filters('mappress_use_marker_extent', $extent);
@@ -277,10 +215,10 @@ function mappress_get_markers_data($query = false) {
 	header('Content Type: application/json');
 
 	/* Browser caching */
-	$expires = 60 * 10; // 10 minutes of browser cache
-	header('Pragma: public');
-	header('Cache-Control: maxage=' . $expires);
-	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	//$expires = 60 * 10; // 10 minutes of browser cache
+	//header('Pragma: public');
+	//header('Cache-Control: maxage=' . $expires);
+	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
 	echo $data;
