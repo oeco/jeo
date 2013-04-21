@@ -9,15 +9,20 @@
 function mappress_marker_query() {
 
 	global $wp_query;
+	$marker_query = $wp_query;
 
-	$query = $wp_query->query_vars;
+	$query = $marker_query->query_vars;
 
 	if(is_singular(array('map', 'map-group'))) {
+		global $mappress_map;
 		$marker_query = new WP_Query();
+		$marker_query->parse_query();
 		$query = $marker_query->query_vars;
 	}
 
+
 	$markers_limit = mappress_get_markers_limit();
+	$query['posts_per_page'] = $markers_limit;
 	if($markers_limit != -1) {
 		$amount = $marker_query->found_posts;
 		if($markers_limit > $amount) {
@@ -43,8 +48,8 @@ function mappress_marker_query() {
 	return apply_filters('mappress_marker_query', $query);
 }
 
-function mappress_setup_marker_script() {
-	wp_enqueue_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.1.7');
+function mappress_register_marker_script() {
+	wp_register_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.1.9');
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'query' => mappress_marker_query(),
@@ -52,7 +57,13 @@ function mappress_setup_marker_script() {
 		'markerextent_defaultzoom' => mappress_marker_extent_default_zoom()
 	));
 }
-add_action('wp_footer', 'mappress_setup_marker_script');
+add_action('wp_enqueue_scripts', 'mappress_register_marker_script');
+
+function mappress_enqueue_marker_script() {
+	if(wp_script_is('mappress.markers', 'registered'))
+		wp_enqueue_script('mappress.markers');
+}
+add_action('wp_footer', 'mappress_enqueue_marker_script');
 
 function mappress_use_marker_extent() {
 	$extent = true;
@@ -181,7 +192,7 @@ function mappress_get_markers_data($query = false) {
 	if($data === false) {
 		$data = array();
 
-		$posts = apply_filters('mappress_the_markers_posts', get_posts($query), $query);
+		$posts = apply_filters('mappress_the_markers', get_posts($query), $query);
 
 		$data['query_id'] = $cache_key;
 
@@ -215,10 +226,10 @@ function mappress_get_markers_data($query = false) {
 	header('Content Type: application/json');
 
 	/* Browser caching */
-	//$expires = 60 * 10; // 10 minutes of browser cache
-	//header('Pragma: public');
-	//header('Cache-Control: maxage=' . $expires);
-	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	$expires = 60 * 10; // 10 minutes of browser cache
+	header('Pragma: public');
+	header('Cache-Control: maxage=' . $expires);
+	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 	/* --------------- */
 
 	echo $data;

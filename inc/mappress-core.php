@@ -1,5 +1,8 @@
 <?php
 
+// register map and map group post types
+require_once(TEMPLATEPATH . '/inc/mappress-post-types.php');
+
 /*
  * Map global vars and query settings
  */
@@ -11,23 +14,28 @@ $mappress_map_count = 0;
 
 function mappress_the_query($query) {
 
+	if(is_admin())
+		return;
+
 	global $mappress_map;
 
 	remove_action('pre_get_posts', 'mappress_the_query');
 
-	if(is_home() && !$mappress_map) {
-		$mappress_map = mappress_map_featured();
-	} elseif($query->get('map') || $query->get('map-group')) {
-		if($query->get('map'))
-			$type = 'map';
-		elseif($query->get('map-group'))
-			$type = 'map-group';
-		$mappress_map = get_page_by_path($query->get($type), 'OBJECT', $type);
+	if($query->is_main_query()) {
+		if(is_home() && !$mappress_map) {
+			$mappress_map = mappress_map_featured();
+		} elseif($query->get('map') || $query->get('map-group')) {
+			if($query->get('map'))
+				$type = 'map';
+			elseif($query->get('map-group'))
+				$type = 'map-group';
+			$mappress_map = get_page_by_path($query->get($type), 'OBJECT', $type);
+		}
 	}
 
 	add_action('pre_get_posts', 'mappress_the_query');
 
-	if(!$mappress_map || is_admin())
+	if(!$mappress_map)
 		return;
 
 	if(get_post_type($mappress_map->ID) == 'map') {
@@ -69,10 +77,10 @@ function mappress_the_query($query) {
 	$query->set('meta_query', $meta_query);
 
 }
-add_action('pre_get_posts', 'mappress_the_query');
+add_action('parse_query', 'mappress_the_query');
 
 function mappress_the_post($post) {
-	if(mappress_has_marker_location()) {
+	if(is_single() && mappress_has_marker_location() && !is_singular(array('map', 'map-group'))) {
 		global $mappress_map;
 		$post_maps = get_post_meta($post_id, 'maps');
 		if(!$post_maps) {
@@ -167,7 +175,6 @@ function mappress_map($map_id = false, $main_map = true) {
 		$map_id = $mappress_map->ID;
 
 	if($main_map) add_filter('mappress_map_conf', 'mappress_map_set_main');
-	do_action('mappress_pre_display_map', $mappress_map);
 	get_template_part('content', get_post_type($map_id));
 	if($main_map) remove_filter('mappress_map_conf', 'mappress_map_set_main');
 

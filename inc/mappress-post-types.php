@@ -4,8 +4,6 @@
 REGISTER POST TYPES
 */
 
-add_action( 'init', 'register_cpt_map' );
-
 function register_cpt_map() {
     $labels = array( 
         'name' => __('Maps', 'mappress'),
@@ -21,31 +19,23 @@ function register_cpt_map() {
         'menu_name' => __('Maps', 'mappress')
     );
 
-    $args = array( 
+    $args = array(
         'labels' => $labels,
-        'hierarchical' => false,
-        'description' => __('MapBox Maps', 'mappress'),
-        'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail'),
-
+        'hierarchical' => true,
+        'description' => __('MapPress Maps', 'mappress'),
+        'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'),
+        'rewrite' => array('slug' => 'maps'),
         'public' => true,
-        'show_ui' => true,
         'show_in_menu' => true,
         'menu_position' => 4,
-
-        'show_in_nav_menus' => true,
-        'publicly_queryable' => true,
-        'exclude_from_search' => false,
-        'has_archive' => 'maps',
-        'query_var' => true,
-        'can_export' => true,
-        'rewrite' => array('slug' => 'maps', 'with_front' => false),
-        'capability_type' => 'post'
+        'has_archive' => true,
+        'exclude_from_search' => true,
+        'capability_type' => 'page'
     );
 
-    register_post_type( 'map', $args );
+    register_post_type('map', $args);
 }
-
-add_action( 'init', 'register_cpt_map_group' );
+add_action('init', 'register_cpt_map');
 
 function register_cpt_map_group() {
     $labels = array( 
@@ -64,26 +54,20 @@ function register_cpt_map_group() {
 
     $args = array( 
         'labels' => $labels,
-        'hierarchical' => false,
-        'description' => __('MapBox maps agroupment', 'mappress'),
+        'hierarchical' => true,
+        'description' => __('MapPress maps group', 'mappress'),
         'supports' => array( 'title'),
-
         'public' => true,
         'show_ui' => true,
         'show_in_menu' => false,
-
-        'show_in_nav_menus' => true,
-        'publicly_queryable' => true,
         'exclude_from_search' => true,
-        'has_archive' => true,
-        'query_var' => true,
-        'can_export' => true,
         'rewrite' => array('slug' => 'mapgroup', 'with_front' => false),
-        'capability_type' => 'post'
+        'capability_type' => 'page'
     );
 
-    register_post_type( 'map-group', $args );
+    register_post_type('map-group', $args);
 }
+add_action('init', 'register_cpt_map_group');
 
 function map_group_menu() {
     add_submenu_page('edit.php?post_type=map', __('Map groups', 'mappress'), __('Map groups', 'mappress'), 'edit_posts', 'edit.php?post_type=map-group');
