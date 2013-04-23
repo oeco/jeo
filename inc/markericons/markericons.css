@@ -1,6 +1,8 @@
 #marker-icon-metabox .marker-icon-container {
 	float: left;
-	width: 300px;
+	width: 33%;
+	position: relative;
+	height: 300px;
 }
 
 #marker-icon-metabox .marker-icon-container .tip {
@@ -8,10 +10,11 @@
 }
 
 #marker-icon-metabox .marker-icon-selector {
-	width: 300px;
+	position: absolute;
+	left: 0;
+	right: 0;
 	height: 300px;
 	background: #ccc;
-	position: relative;
 	margin-bottom: 10px;
 	overflow: hidden;
 }
@@ -80,9 +83,11 @@
 }
 
 #marker-icon-metabox .marker-icon-setting {
-	width: 20%;
+	width: 33%;
 	float: left;
-	margin: 0 0 0 30px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	padding: 0 40px 0 0;
 }
 
 #marker-icon-metabox .marker-icon-selector .console {
