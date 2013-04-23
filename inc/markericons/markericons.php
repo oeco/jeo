@@ -3,9 +3,9 @@
 class MapPress_MarkerIcons {
 
 	function __construct() {
-		$this::setup_post_type();
-		$this::setup_menu();
-		$this::setup_metabox();
+		self::setup_post_type();
+		self::setup_menu();
+		self::setup_metabox();
 	}
 
 	/*
