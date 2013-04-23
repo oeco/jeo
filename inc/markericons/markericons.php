@@ -38,7 +38,8 @@ class MapPress_MarkerIcons {
 			'description' => __('MapPress marker icons', 'mappress'),
 			'supports' => array('title'),
 			'public' => false,
-			'show_ui' => true
+			'show_ui' => true,
+			'show_in_menu' => false
 		);
 
 		register_post_type('marker-icon', $args);

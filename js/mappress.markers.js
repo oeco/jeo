@@ -1,5 +1,10 @@
 (function($) {
 
+	mappress.mapReady('all', function(map, conf) {
+		if(!conf.disableMarkers && !conf.admin)
+			mappress.markers(map);
+	});
+
 	mappress.markers = function(map) {
 
 		var markers = map.markers = mappress.markers;

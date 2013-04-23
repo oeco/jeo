@@ -56,6 +56,23 @@
 		});
 	}
 
+	var parseIcon = function() {
+		$container.imagesLoaded(function() {
+			// set position inside container
+			$icon.css({
+				'margin-top': $icon.height() / -2,
+				'margin-left': $icon.width() / -2
+			});
+			// default positions
+			defaultAnchor = function(type) {
+				if(type == 'icon')
+					return [parseInt($icon.width()/2), $icon.height()];
+				if(type == 'popup')
+					return [parseInt($icon.width()/2), -10];
+			}
+		});
+	};
+
 	var pointEdit = function() {
 		
 		$pointSelector.addClass('editing');
@@ -82,6 +99,43 @@
 		$pointSelector.find('.save').show().bind('click', bindSaveButton);
 		$pointSelector.find('.cancel').show().bind('click', bindCancelButton);
 		$pointSelector.find('.use-default').show().bind('click', bindSetDefaultValues);
+	}
+
+	var disablePointEdit = function() {
+		$pointSelector.removeClass('editing');
+
+		// unbind events
+		$(document).unbind('keydown', bindPositionWithArrows);
+		$pointSelector.unbind('click', bindPointSelectorClick);
+		$pointSelector.find('.save').hide().unbind('click', bindSaveButton);
+		$pointSelector.find('.cancel').hide().unbind('click', bindCancelButton);
+		$pointSelector.find('.use-default').hide().unbind('click', bindSetDefaultValues);
+
+		$pointSelector.find('.point').remove();
+		$container.find('.tip').hide();
+	}
+
+	var getPosition = function(e) {
+		var clientX = e.clientX + $(window).scrollLeft();
+		var clientY = e.clientY + $(window).scrollTop();
+		return [clientX - $icon.offset().left, clientY - $icon.offset().top];
+	}
+
+	var storePosition = function() {
+		$xinput.val(position[0]);
+		$yinput.val(position[1]);
+	}
+
+	var updatePoint = function() {
+		$point.css({
+			top: $icon.position().top + position[1] - ($icon.height()/2),
+			left: $icon.position().left + position[0] - ($icon.width()/2)
+		});
+		var $console = $pointSelector.find('.console.position');
+		var $x = $console.find('.x');
+		var $y = $console.find('.y');
+		$x.text(position[0]);
+		$y.text(position[1]);
 	}
 
 	var bindPointSelectorClick = function(e) {
@@ -140,59 +194,5 @@
 		updatePoint($point, position);
 		return false;
 	}
-
-	var disablePointEdit = function() {
-		$pointSelector.removeClass('editing');
-
-		// unbind events
-		$(document).unbind('keydown', bindPositionWithArrows);
-		$pointSelector.unbind('click', bindPointSelectorClick);
-		$pointSelector.find('.save').hide().unbind('click', bindSaveButton);
-		$pointSelector.find('.cancel').hide().unbind('click', bindCancelButton);
-		$pointSelector.find('.use-default').hide().unbind('click', bindSetDefaultValues);
-
-		$pointSelector.find('.point').remove();
-		$container.find('.tip').hide();
-	}
-
-	var getPosition = function(e) {
-		var clientX = e.clientX + $(window).scrollLeft();
-		var clientY = e.clientY + $(window).scrollTop();
-		return [clientX - $icon.offset().left, clientY - $icon.offset().top];
-	}
-
-	var storePosition = function() {
-		$xinput.val(position[0]);
-		$yinput.val(position[1]);
-	}
-
-	var updatePoint = function() {
-		$point.css({
-			top: $icon.position().top + position[1] - ($icon.height()/2),
-			left: $icon.position().left + position[0] - ($icon.width()/2)
-		});
-		var $console = $pointSelector.find('.console.position');
-		var $x = $console.find('.x');
-		var $y = $console.find('.y');
-		$x.text(position[0]);
-		$y.text(position[1]);
-	}
-
-	var parseIcon = function() {
-		$container.imagesLoaded(function() {
-			// set position inside container
-			$icon.css({
-				'margin-top': $icon.height() / -2,
-				'margin-left': $icon.width() / -2
-			});
-			// default positions
-			defaultAnchor = function(type) {
-				if(type == 'icon')
-					return [parseInt($icon.width()/2), $icon.height()];
-				if(type == 'popup')
-					return [parseInt($icon.width()/2), -10];
-			}
-		});
-	};
 
 })(jQuery);

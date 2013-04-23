@@ -132,7 +132,14 @@ var mappress = {};
 			if(mappress.callbacks[map_id]) {
 				_.each(mappress.callbacks[map_id], function(callback, i) {
 					if(callback instanceof Function) {
-						callback();
+						callback(map, conf);
+					}
+				});
+			}
+			if(mappress.callbacks.all) {
+				_.each(mappress.callbacks.all, function(callback, i) {
+					if(callback instanceof Function) {
+						callback(map, conf);
 					}
 				});
 			}
@@ -224,38 +231,8 @@ var mappress = {};
 		if(conf.legend_full && !conf.disableInteraction)
 			mappress.enableDetails(map, conf.legend, conf.legend_full);
 
-		if(!conf.disableMarkers && !conf.admin)
-			mappress.markers(map);
-
-		if(!conf.disableHash && !conf.admin && conf.mainMap)
-			mappress.setupHash();
-
 		return map;
 	}
-
-	mappress.setupLayers = function(layers) {
-
-		// separate layers
-		var tileLayers = [];
-		var mapboxLayers = [];
-		var customServerLayers = [];
-
-		$.each(layers, function(i, layer) {
-			if(layer.indexOf('http') !== -1) {
-				tileLayers.push(layer);
-			} else {
-				mapboxLayers.push(layer);
-			}
-		});
-
-		/*
-		 * Currently only working with mapbox layers
-		 */
-
-		mapboxLayers = mapboxLayers.join();
-		return mapboxLayers;
-	};
-
 	/*
 	 * Map widgets
 	 */
