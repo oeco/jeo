@@ -1,5 +1,10 @@
 (function($) {
 
+	mappress.layersReady('all', function(map, conf) {
+		if(conf.geocode)
+			mappress.geocode(map);
+	});
+
 	mappress.geocode = function(map) {
 
 		var map_id = map.map_id;

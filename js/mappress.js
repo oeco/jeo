@@ -129,20 +129,7 @@ var mappress = {};
 			}
 
 			// run callbacks
-			if(mappress.callbacks[map_id]) {
-				_.each(mappress.callbacks[map_id], function(callback, i) {
-					if(callback instanceof Function) {
-						callback(map, conf);
-					}
-				});
-			}
-			if(mappress.callbacks.all) {
-				_.each(mappress.callbacks.all, function(callback, i) {
-					if(callback instanceof Function) {
-						callback(map, conf);
-					}
-				});
-			}
+			runCallbacks('mapReady', map_id, [map, conf]);
 		}
 
 		/*
@@ -170,10 +157,7 @@ var mappress = {};
 		map.addLayer(mapbox.layer().id(layers, function() {
 			if(!conf.disableInteraction) {
 				map.interaction.auto();
-				if(conf.geocode)
-					mappress.geocode(map);
-				if(conf.filteringLayers)
-					mappress.filterLayers(map, conf.filteringLayers);
+				runCallbacks('layersReady', map_id, [map, conf]);
 			}
 		}));
 		
@@ -370,13 +354,37 @@ var mappress = {};
 
 	mappress.callbacks = {};
 
-	mappress.mapReady = function(map_id, callback) {
-		var callbacks = mappress.callbacks;
-
-		if(!callbacks[map_id])
-			callbacks[map_id] = [];
-
-		callbacks[map_id].push(callback);
+	var createCallback = function(name) {
+		mappress.callbacks[name] = {};
+		mappress[name] = function(map_id, callback) {
+			var callbacks = mappress.callbacks[name];
+			if(!callbacks[map_id])
+				callbacks[map_id] = [];
+			callbacks[map_id].push(callback);
+		}
 	}
+
+	var runCallbacks = function(name, map_id, args) {
+		if(!mappress.callbacks[name])
+			return false;
+
+		var run = function(callback) {
+			if(callback) {
+				_.each(callback, function(c, i) {
+					c.apply(this, args);
+				});
+			}
+		}
+
+		var callbacks = mappress.callbacks[name];
+
+		if(callbacks[map_id])
+			run(callbacks[map_id]);
+		if(callbacks.all)
+			run(callbacks.all);
+	}
+
+	createCallback('mapReady');
+	createCallback('layersReady');
 
 })(jQuery);

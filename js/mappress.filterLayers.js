@@ -1,5 +1,10 @@
 (function($) {
 
+	mappress.layersReady('all', function(map, conf) {
+		if(conf.filteringLayers)
+			mappress.filterLayers(map, conf.filteringLayers);
+	});
+
 	mappress.filterLayers = function(map, layers) {
 
 		var map_id = map.map_id;
