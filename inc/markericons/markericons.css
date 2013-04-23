@@ -2,11 +2,9 @@
 	float: left;
 	width: 33%;
 	position: relative;
-	height: 300px;
+	padding-top: 310px;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	border: 1px solid #cfcfcf;
-	border-radius: 3px;
 }
 
 #marker-icon-metabox .marker-icon-container .tip {
@@ -15,40 +13,40 @@
 
 #marker-icon-metabox .marker-icon-selector {
 	position: absolute;
+	top: 0;
 	left: 0;
 	right: 0;
 	height: 300px;
-	margin-bottom: 10px;
 	overflow: hidden;
+	border: 1px solid #cfcfcf;
+	background: #fefefe;
+	border-radius: 3px;
 }
 
 #marker-icon-metabox .marker-icon-selector.editing {
 	cursor: crosshair;
-	background: #ccc;
+	background: #eee;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQXAS03w2/5YAAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAVSURBVAjXY2DAAu7evft/4AQZGBgATWoVhQLfozMAAAAASUVORK5CYII=);
 }
 
 #marker-icon-metabox .marker-icon-selector .point {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 4px;
-	height: 4px;
-	margin-top: -2px;
-	margin-left: -2px;
-	background: rgba(0,0,0,0.5);
+	width: 20px;
+	height: 20px;
+	margin-top: -10px;
+	margin-left: -10px;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAYAAACpF6WWAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QQXATU2NnNRrwAAABl0RVh0Q29tbWVudABDcmVhdGVkIHdpdGggR0lNUFeBDhcAAAAsSURBVDjLY2AgEhgbG/8nVi0TAw3AqKGjhg4FQxlJySlUB6PZdNTQUUOJAAA0EgTuMnmHIQAAAABJRU5ErkJggg==);
 }
 
 #marker-icon-metabox .marker-icon-selector .console {
+	font-size: 9px;
+	line-height: 9px;
 	display: none;
-	margin: 0;
-}
-
-#marker-icon-metabox .marker-icon-selector .console .x-console,
-#marker-icon-metabox .marker-icon-selector .console .y-console {
-	font-size: 10px;
-	line-height: 12px;
-	padding: 0 1px;
-	background: #eee;
+	margin: 5px;
+	text-transform: uppercase;
+	font-family: monospace;
 }
 
 #marker-icon-metabox .marker-icon-selector button.use-default {
@@ -92,10 +90,4 @@
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	padding: 0 0 0 40px;
-}
-
-#marker-icon-metabox .marker-icon-selector .console {
-	font-size: 12px;
-	line-height: 12px;
-	padding: 2px;
 }

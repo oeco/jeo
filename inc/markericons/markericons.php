@@ -110,7 +110,7 @@ class MapPress_MarkerIcons {
 							<span class="y-console">Y: <span class="y">0</span></span>
 						</p>
 					</div>
-					<small class="tip"><strong><?php _e('Tip:', 'mappress'); ?></strong> <?php _e('Use arrows to move the pointer and enter to save.', 'mappress'); ?></small>
+					<small class="tip"><strong><?php _e('Tip:', 'mappress'); ?></strong> <?php _e('Use ARROWS to move the pointer, press ENTER to save or ESC to cancel.', 'mappress'); ?></small>
 				</div>
 				<div class="marker-icon-settings">
 					<div class="marker-icon-anchor marker-icon-setting">

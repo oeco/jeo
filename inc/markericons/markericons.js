@@ -91,21 +91,26 @@
 	}
 
 	var bindPositionWithArrows = function(e) {
+		var amount;
+		if(e.shiftKey)
+			amount = 10;
+		else
+			amount = 1;
 		if(e.keyCode == 37) {
 			e.preventDefault();
-			position[0] -= 1;
+			position[0] -= amount;
 		}
 		if(e.keyCode == 39) {
 			e.preventDefault();
-			position[0] += 1;
+			position[0] += amount;
 		}
 		if(e.keyCode == 38) {
 			e.preventDefault();
-			position[1] -= 1;
+			position[1] -= amount;
 		}
 		if(e.keyCode == 40) {
 			e.preventDefault();
-			position[1] += 1;
+			position[1] += amount;
 		}
 		updatePoint($point, position);
 		if(e.keyCode == 13) {
