@@ -3,7 +3,7 @@
 require_once(TEMPLATEPATH . '/inc/mappress-core.php');
 require_once(TEMPLATEPATH . '/inc/mappress-markers.php');
 require_once(TEMPLATEPATH . '/inc/mappress-ui.php');
-require_once(TEMPLATEPATH . '/inc/mappress-markericons.php');
+require_once(TEMPLATEPATH . '/inc/markericons/markericons.php');
 
 // Metaboxes
 require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
