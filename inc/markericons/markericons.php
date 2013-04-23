@@ -93,6 +93,25 @@ class MapPress_MarkerIcons {
 				<input type="file" name="marker_icon_image" id="marker_icon_image" />
 			</p>
 			<div class="clearfix">
+				<div class="marker-icon-container">
+					<div class="marker-icon-selector">
+						<img src="http://leafletjs.com/dist/images/marker-icon.png" />
+						<button class="button use-default"><?php _e('Use default', 'mappress'); ?></button>
+						<button class="button cancel"><?php _e('Cancel', 'mappress'); ?></button>
+						<button class="button-primary save"><?php _e('Save', 'mappress'); ?></button>
+						<p class="console mouse">
+							<strong><?php _e('Mouse', 'mappress'); ?></strong>
+							<span class="x-console">X: <span class="x">0</span></span>
+							<span class="y-console">Y: <span class="y">0</span></span>
+						</p>
+						<p class="console position">
+							<strong><?php _e('Point', 'mappress'); ?></strong>
+							<span class="x-console">X: <span class="x">0</span></span>
+							<span class="y-console">Y: <span class="y">0</span></span>
+						</p>
+					</div>
+					<small class="tip"><strong><?php _e('Tip:', 'mappress'); ?></strong> <?php _e('Use arrows to move the pointer and enter to save.', 'mappress'); ?></small>
+				</div>
 				<div class="marker-icon-settings">
 					<div class="marker-icon-anchor marker-icon-setting">
 						<h4><?php _e('Icon anchor', 'mappress'); ?></h4>
@@ -116,25 +135,6 @@ class MapPress_MarkerIcons {
 							<input type="text" size="3" name="marker_icon_popup_anchor_y" id="marker_icon_popup_anchor_y" /> <label for="marker_icon_popup_anchor_y">Y</label>
 						</p>
 					</div>
-				</div>
-				<div class="marker-icon-container">
-					<div class="marker-icon-selector">
-						<img src="http://leafletjs.com/dist/images/marker-icon.png" />
-						<button class="button use-default"><?php _e('Use default', 'mappress'); ?></button>
-						<button class="button cancel"><?php _e('Cancel', 'mappress'); ?></button>
-						<button class="button-primary save"><?php _e('Save', 'mappress'); ?></button>
-						<p class="console mouse">
-							<strong><?php _e('Mouse', 'mappress'); ?></strong>
-							<span class="x-console">X: <span class="x">0</span></span>
-							<span class="y-console">Y: <span class="y">0</span></span>
-						</p>
-						<p class="console position">
-							<strong><?php _e('Point', 'mappress'); ?></strong>
-							<span class="x-console">X: <span class="x">0</span></span>
-							<span class="y-console">Y: <span class="y">0</span></span>
-						</p>
-					</div>
-					<small class="tip"><strong><?php _e('Tip:', 'mappress'); ?></strong> <?php _e('Use arrows to move the pointer and enter to save.', 'mappress'); ?></small>
 				</div>
 			</div>
 		</div>
