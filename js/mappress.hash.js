@@ -1,8 +1,8 @@
 (function($) {
 
-	mappress.mapReady('all', function(map, conf) {
-		if(!conf.disableHash && !conf.admin && conf.mainMap)
-			mappress.setupHash();
+	mappress.mapReady(function(map) {
+		if(!map.conf.disableHash && !map.conf.admin && map.conf.mainMap)
+			setupHash(map);
 	});
 
 	mappress.fragment = function() {
@@ -44,11 +44,9 @@
 
 	mappress.fragmentEnabled = false;
 
-	mappress.setupHash = function() {
+	var setupHash = function(map) {
 
 		mappress.fragmentEnabled = true;
-
-		var map = mappress.map;
 
 		var track = _.debounce(function(m) {
 			var c = m.center();

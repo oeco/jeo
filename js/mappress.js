@@ -138,7 +138,7 @@ var mappress = {};
 			if(!conf.disableInteraction)
 				map.interaction.auto();
 
-			runCallbacks('layersReady', map_id, [map, conf]);
+			runCallbacks('layersReady', [map]);
 
 		}));
 
@@ -199,7 +199,7 @@ var mappress = {};
 			conf.callbacks();
 
 		// map is ready, do callbacks
-		runCallbacks('mapReady', map_id, [map, conf]);
+		runCallbacks('mapReady', [map]);
 
 		return map;
 	}
@@ -366,33 +366,25 @@ var mappress = {};
 	mappress.callbacks = {};
 
 	var createCallback = function(name) {
-		mappress.callbacks[name] = {};
-		mappress[name] = function(map_id, callback) {
-			var callbacks = mappress.callbacks[name];
-			if(!callbacks[map_id])
-				callbacks[map_id] = [];
-			callbacks[map_id].push(callback);
+		mappress.callbacks[name] = [];
+		mappress[name] = function(callback) {
+			mappress.callbacks[name].push(callback);
 		}
 	}
 
-	var runCallbacks = function(name, map_id, args) {
-		if(!mappress.callbacks[name])
+	var runCallbacks = function(name, args) {
+		if(!mappress.callbacks[name].length)
 			return false;
 
-		var run = function(callback) {
-			if(callback) {
-				_.each(callback, function(c, i) {
-					c.apply(this, args);
+		var _run = function(callbacks) {
+			if(callbacks) {
+				_.each(callbacks, function(c, i) {
+					if(c instanceof Function)
+						c.apply(this, args);
 				});
 			}
 		}
-
-		var callbacks = mappress.callbacks[name];
-
-		if(callbacks[map_id])
-			run(callbacks[map_id]);
-		if(callbacks.all)
-			run(callbacks.all);
+		_run(mappress.callbacks[name]);
 	}
 
 	createCallback('mapReady');

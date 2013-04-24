@@ -1,7 +1,7 @@
 (function($) {
 
-	mappress.layersReady('all', function(map, conf) {
-		if(conf.geocode && !conf.disableInteraction)
+	mappress.layersReady(function(map) {
+		if(map.conf.geocode && !map.conf.disableInteraction)
 			mappress.geocode(map);
 	});
 

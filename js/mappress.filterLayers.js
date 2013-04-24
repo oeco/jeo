@@ -1,8 +1,8 @@
 (function($) {
 
-	mappress.layersReady('all', function(map, conf) {
-		if(conf.filteringLayers && !conf.disableInteraction)
-			mappress.filterLayers(map, conf.filteringLayers);
+	mappress.layersReady(function(map) {
+		if(map.conf.filteringLayers && !map.conf.disableInteraction)
+			mappress.filterLayers(map, map.conf.filteringLayers);
 	});
 
 	mappress.filterLayers = function(map, layers) {

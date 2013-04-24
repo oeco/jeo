@@ -41,56 +41,56 @@
 			$items,
 			$controllers,
 			$activeItem,
-			$nextItem,
-			map;
+			$nextItem;
 
-		mappress.mapReady(mapID, function() {
+		mappress.mapReady(function(map) {
+
+			if(map.map_id != mapID)
+				return false;
+
 			$container = $('#' + elementID);
-			map = mappress.maps[mapID];
 			$items = $container.find('.slider-item');
 			$controllers = $container.find('.slider-controllers');
 			$activeItem = $container.find('.active');
 
-			lockMap();
+			var _lockMap = function() {
+				map.ui.zoomer.remove();
+				map.ui.fullscreen.remove();
+				map.eventHandlers[1].remove();
+			}
+			_lockMap();
 
-			openItem($activeItem, false);
+			var _openItem = function($item, animate) {
+				if(!$item || !$item.length)
+					return false;
+
+				$items.removeClass('active');
+				$item.addClass('active');
+
+				$controllers.find('li').removeClass('active');
+				$controllers.find('[data-postid="' + $item.attr('id') + '"]').addClass('active');
+
+				$next = $item.next();
+
+				if(!$next.length)
+					$next = $container.find('.slider-item:nth-child(1)');
+
+				map.centerzoom({lat: $item.data('lat'), lon: $item.data('lon')}, $item.data('zoom'), animate);
+			}
+			_openItem($activeItem, false);
+
+			var _update = setInterval(function() {
+				_openItem($next, true);
+			}, 6000);
 
 			$controllers.find('li').click(function() {
-				openItem($container.find('#' + $(this).data('postid')), true);
-				clearInterval(update);
-				update = setInterval(function() {
-					openItem($next, true);
+				_openItem($container.find('#' + $(this).data('postid')), true);
+				clearInterval(_update);
+				_update = setInterval(function() {
+					_openItem($next, true);
 				}, 6000);
 			});
-
-			var update = setInterval(function() {
-				openItem($next, true);
-			}, 6000);
 		});
-
-		var openItem = function($item, animate) {
-			if(!$item || !$item.length)
-				return false;
-
-			$items.removeClass('active');
-			$item.addClass('active');
-
-			$controllers.find('li').removeClass('active');
-			$controllers.find('[data-postid="' + $item.attr('id') + '"]').addClass('active');
-
-			$next = $item.next();
-
-			if(!$next.length)
-				$next = $container.find('.slider-item:nth-child(1)');
-
-			map.centerzoom({lat: $item.data('lat'), lon: $item.data('lon')}, $item.data('zoom'), animate);
-		}
-
-		var lockMap = function() {
-			map.ui.zoomer.remove();
-			map.ui.fullscreen.remove();
-			map.eventHandlers[1].remove();
-		}
 
 	}
 

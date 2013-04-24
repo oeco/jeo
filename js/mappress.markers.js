@@ -1,15 +1,13 @@
 (function($) {
 
-	mappress.mapReady('all', function(map, conf) {
-		if(!conf.disableMarkers && !conf.admin)
-			mappress.markers(map);
-	});
-
 	mappress.markers = function(map) {
 
-		var markers = map.markers = mappress.markers;
-		var markersLayer = mapbox.markers.layer();
-		var features;
+		if(map.conf.disableMarkers || map.conf.admin)
+			return false;
+
+		var	markers = map.markers = mappress.markers,
+			markersLayer = mapbox.markers.layer(),
+			features;
 
 		$.getJSON(mappress_markers.ajaxurl,
 		{
@@ -107,9 +105,8 @@
 			}
 
 		};
-
-		return map;
-
 	}
+
+	mappress.mapReady(mappress.markers);
 
 })(jQuery);
