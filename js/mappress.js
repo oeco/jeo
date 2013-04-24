@@ -31,11 +31,9 @@ var mappress = {};
 		}
 
 		if($.isReady) {
-			_init();
+			return _init();
 		} else {
-			$(document).ready(function() {
-				_init();
-			});
+			return $(document).ready(_init);
 		}
 		
 	};
@@ -63,9 +61,6 @@ var mappress = {};
 
 		// store conf
 		map.conf = conf;
-
-		if(typeof conf.callbacks === 'function')
-			conf.callbacks();
 
 		// store map id
 		map.map_id = map_id;
@@ -199,7 +194,11 @@ var mappress = {};
 			}
 		});
 
-		// run callbacks
+		// conf passed callbacks
+		if(typeof conf.callbacks === 'function')
+			conf.callbacks();
+
+		// map is ready, do callbacks
 		runCallbacks('mapReady', map_id, [map, conf]);
 
 		return map;
