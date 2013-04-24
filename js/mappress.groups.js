@@ -98,7 +98,7 @@ var groups = {};
 			var layers = mappress.setupLayers(conf.layers);
 
 			// store new conf
-			mappress.maps[group.id].conf = conf;
+			group.map.conf = conf;
 
 			mapbox.load(layers, function(data) {
 
@@ -113,7 +113,7 @@ var groups = {};
 					mappress.geocode(group.map);
 
 				if(conf.filteringLayers)
-					mappress.filterLayers(group.map, conf.filteringLayers);
+					mappress.filterLayers(group.map);
 
 				group.map.ui.legend.remove();
 
@@ -122,8 +122,6 @@ var groups = {};
 
 				if(conf.legend_full)
 					mappress.enableDetails(group.map, conf.legend, conf.legend_full);
-
-				//group.map.markersLayer.features(group.map.features);
 
 			});
 

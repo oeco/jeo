@@ -1,12 +1,11 @@
 (function($) {
 
-	mappress.markers = function(map) {
+	markers = function(map) {
 
 		if(map.conf.disableMarkers || map.conf.admin)
 			return false;
 
-		var	markers = map.markers = mappress.markers,
-			markersLayer = mapbox.markers.layer(),
+		var	markersLayer = mapbox.markers.layer(),
 			features;
 
 		$.getJSON(mappress_markers.ajaxurl,
@@ -17,7 +16,7 @@
 		function(geojson) {
 			if(geojson === 0)
 				return;
-			build(geojson);
+			_build(geojson);
 		});
 
 		markers.getMarker = function(id) {
@@ -36,7 +35,7 @@
 				return true;
 		}
 
-		var build = function(geojson) {
+		var _build = function(geojson) {
 
 			map.addLayer(markersLayer);
 
@@ -104,9 +103,11 @@
 				}
 			}
 
+			return markers;
+
 		};
 	}
 
-	mappress.mapReady(mappress.markers);
+	mappress.mapReady(markers);
 
 })(jQuery);

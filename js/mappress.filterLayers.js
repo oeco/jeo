@@ -1,14 +1,14 @@
 (function($) {
 
-	mappress.layersReady(function(map) {
-		if(map.conf.filteringLayers && !map.conf.disableInteraction)
-			mappress.filterLayers(map, map.conf.filteringLayers);
-	});
+	var filter = function(map) {
 
-	mappress.filterLayers = function(map, layers) {
+		if(!map.conf.filteringLayers || map.conf.disableInteraction)
+			return false;
 
-		var map_id = map.map_id;
-		var filter = map.filterLayers = mappress.filterLayers;
+		var	map_id = map.map_id,
+			layers = map.conf.filteringLayers,
+			swapWidget,
+			switchWidget;
 
 		layers.status = [];
 		_.each(map.conf.layers, function(layerID) {
@@ -19,10 +19,7 @@
 			layers.status.push(layer);
 		});
 
-		var	swapWidget,
-			switchWidget;
-
-		filter.prepare = function() {
+		var _build = function() {
 			/*
 			 * Swapables
 			 */
@@ -175,10 +172,14 @@
 			return activeLayers;
 		}
 
-		filter.prepare();
+		_build();
 
 		return filter;
 
 	};
+
+	mappress.filterLayers = filter;
+
+	mappress.mapReady(filter);
 
 })(jQuery);
