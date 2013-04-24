@@ -1,7 +1,7 @@
 (function($) {
 
 	mappress.layersReady('all', function(map, conf) {
-		if(conf.filteringLayers)
+		if(conf.filteringLayers && !conf.disableInteraction)
 			mappress.filterLayers(map, conf.filteringLayers);
 	});
 
@@ -22,7 +22,7 @@
 		var	swapWidget,
 			switchWidget;
 
-		mappress.filterLayers.prepare = function() {
+		filter.prepare = function() {
 			/*
 			 * Swapables
 			 */
@@ -68,7 +68,7 @@
 			filter.update();
 		}
 
-		mappress.filterLayers.switch = function(layer) {
+		filter.switch = function(layer) {
 
 			var widget = switchWidget;
 
@@ -91,7 +91,7 @@
 			filter.update();
 		};
 
-		mappress.filterLayers.swap = function(layer) {
+		filter.swap = function(layer) {
 
 			var widget = swapWidget;
 
@@ -124,7 +124,7 @@
 			filter.update();
 		};
 
-		mappress.filterLayers.disableLayer = function(layer) {
+		filter.disableLayer = function(layer) {
 
 			layers.status[filter.getStatusIndex(layer)] = {
 				id: layer,
@@ -133,7 +133,7 @@
 
 		};
 
-		mappress.filterLayers.enableLayer = function(layer) {
+		filter.enableLayer = function(layer) {
 
 			layers.status[filter.getStatusIndex(layer)] = {
 				id: layer,
@@ -142,7 +142,7 @@
 
 		};
 
-		mappress.filterLayers.update = function() {
+		filter.update = function() {
 
 			var layers = mappress.setupLayers(filter.getActiveLayers());
 
@@ -153,11 +153,11 @@
 
 		};
 
-		mappress.filterLayers.getStatus = function(layer) {
+		filter.getStatus = function(layer) {
 			return _.find(layers.status, function(l) { return layer == l.id; });
 		}
 
-		mappress.filterLayers.getStatusIndex = function(layer) {
+		filter.getStatusIndex = function(layer) {
 			var index;
 			_.each(layers.status, function(l, i) {
 				if(layer == l.id)
@@ -166,7 +166,7 @@
 			return index;
 		}
 
-		mappress.filterLayers.getActiveLayers = function() {
+		filter.getActiveLayers = function() {
 			var activeLayers = [];
 			_.each(layers.status, function(layer) {
 				if(layer.on)
@@ -175,9 +175,7 @@
 			return activeLayers;
 		}
 
-		$(document).ready(function() {
-			filter.prepare();
-		});
+		filter.prepare();
 
 		return filter;
 

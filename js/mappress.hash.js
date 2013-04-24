@@ -5,29 +5,6 @@
 			mappress.setupHash();
 	});
 
-	mappress.setupLayers = function(layers) {
-
-		// separate layers
-		var tileLayers = [];
-		var mapboxLayers = [];
-		var customServerLayers = [];
-
-		$.each(layers, function(i, layer) {
-			if(layer.indexOf('http') !== -1) {
-				tileLayers.push(layer);
-			} else {
-				mapboxLayers.push(layer);
-			}
-		});
-
-		/*
-		 * Currently only working with mapbox layers
-		 */
-
-		mapboxLayers = mapboxLayers.join();
-		return mapboxLayers;
-	};
-
 	mappress.fragment = function() {
 
         var f = {};

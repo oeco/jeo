@@ -2,51 +2,41 @@ var mappress = {};
 
 (function($) {
 
-	/*
-	 * MAP BUILD
-	 * conf:
-	 * - postID
-	 * - containerID (string)
-	 * - server (string)
-	 * - layers (array (layer))
-	 * - filterLayers (array (layer))
-	 * - center (array (lat,lon))
-	 * - zoom (int)
-	 * - extent (MM.Extent)
-	 * - panLimits (MM.Extent)
-	 * - minZoom (int)
-	 * - maxZoom (int)
-	 * - geocode (bool)
-	 * - disableHash (bool)
-	 * - disableMarkers (bool)
-	 * - disableInteraction (bool)
-	 */
-
 	var map;
 
 	mappress = function(conf) {
 
-		if(conf.mainMap)
-			$('body').addClass('loading-map');
+		var init = function() {
+			if(conf.mainMap)
+				$('body').addClass('loading-map');
 
-		if(conf.admin) { // is admin panel
-			return mappress.build(conf);
+			if(conf.admin) { // is admin panel
+				return mappress.build(conf);
+			}
+
+			if(!conf.postID && typeof conf === 'object') { // conf ready
+				return mappress.build(conf);
+			}
+
+			return $.getJSON(mappress_localization.ajaxurl,
+				{
+					action: 'map_data',
+					map_id: conf.postID
+				},
+				function(map_data) {
+					mapConf = mappress.convertMapConf(map_data);
+					mapConf = _.extend(mapConf, conf);
+					return mappress.build(mapConf);
+				});
 		}
 
-		if(!conf.postID && typeof conf === 'object') { // conf ready
-			return mappress.build(conf);
-		}
-
-		return $.getJSON(mappress_localization.ajaxurl,
-			{
-				action: 'map_data',
-				map_id: conf.postID
-			},
-			function(map_data) {
-				mapConf = mappress.convertMapConf(map_data);
-				mapConf = _.extend(mapConf, conf);
-				return mappress.build(mapConf);
+		if($.isReady) {
+			init();
+		} else {
+			$(document).ready(function() {
+				init();
 			});
+		}
 		
 	};
 
@@ -67,82 +57,12 @@ var mappress = {};
 
 		map = mappress.maps[map_id];
 
-		if(conf.mainMap)
+		// store main map
+		if(conf.mainMap || !mappress.map)
 			mappress.map = map;
 
 		// store conf
 		map.conf = conf;
-		map.conf.formattedLayers = layers;
-
-		// disable handlers
-		if((conf.disableHandlers && conf.disableHandlers.mousewheel) || conf.mainMap)
-			map.eventHandlers[3].remove();
-
-		var domReady = function() {
-			// store jquery node
-			map.$ = $('#' + map_id);
-			/*
-			 * Widgets (reset and add)
-			 */
-			map.$.empty().parent().find('.map-widgets').remove();
-			map.$.parent().prepend('<div class="map-widgets"></div>');
-
-			map.$.widgets = map.$.parent().find('.map-widgets');
-
-			// fullscreen widgets callback
-			map.addCallback('drawn', function(map) {
-				if(map.$.hasClass('map-fullscreen-map')) {
-					if(map.$.parents('.content-map').length)
-						map.$.parents('.content-map').addClass('fullscreen');
-					map.$.widgets.addClass('fullscreen');
-					// temporary fix scrollTop
-					document.body.scrollTop = 0;
-					map.dimensions = new MM.Point(map.parent.offsetWidth, map.parent.offsetHeight);
-				} else {
-					map.$.parents('.content-map').removeClass('fullscreen');
-					map.$.widgets.removeClass('fullscreen');
-				}
-			});
-
-		    // Enable zoom-level dependent design.
-		    map.$.addClass('zoom-' + map.getZoom());
-		    map.addCallback('drawn', _.throttle(function(map) {
-		    	if(!map.ease.running()) {
-		    		var classes = map.$.attr('class');
-		    		classes = classes.split(' ');
-		    		$.each(classes, function(i, cl) {
-		    			if(cl.indexOf('zoom') === 0)
-				            map.$.removeClass(cl);
-		    		});
-		            map.$.addClass('zoom-' + parseInt(map.getZoom()));
-		        }
-		    }, 200));
-
-			map.$.find('.map-fullscreen').click(function() {
-				map.draw();
-			});
-
-			if(conf.mainMap) {
-				$('body').removeClass('loading-map');
-				if(!$('body').hasClass('displaying-map'))
-					$('body').addClass('displaying-map');
-			}
-
-			// run callbacks
-			runCallbacks('mapReady', map_id, [map, conf]);
-		}
-
-		/*
-		 * Check if DOM is ready to perform DOM actions
-		 */
-		if($.isReady) {
-			domReady();
-		} else {
-			$(document).ready(function() {
-				domReady();
-			});
-		}
-
 
 		if(typeof conf.callbacks === 'function')
 			conf.callbacks();
@@ -151,23 +71,10 @@ var mappress = {};
 		map.map_id = map_id;
 		if(conf.postID)
 			map.postID = conf.postID;
-
-		// layers
-		var layers = mappress.setupLayers(conf.layers);
-		map.addLayer(mapbox.layer().id(layers, function() {
-			if(!conf.disableInteraction) {
-				map.interaction.auto();
-				runCallbacks('layersReady', map_id, [map, conf]);
-			}
-		}));
 		
 		/*
-		 * CONFS
+		 * Map settings
 		 */
-		if(!conf.disableInteraction) {
-			map.ui.zoomer.add();
-			map.ui.fullscreen.add();
-		}
 
 		if((conf.maxZoom && isNaN(conf.maxZoom)) || !conf.maxZoom)
 			conf.maxZoom = 17;
@@ -178,6 +85,73 @@ var mappress = {};
 		if((conf.zoom && isNaN(conf.zoom)) || !conf.zoom)
 			conf.zoom = 2;
 
+		if(conf.extent) {
+			if(typeof conf.extent === 'string')
+				conf.extent = new MM.Extent.fromString(conf.extent);
+			else if(typeof conf.extent === 'array')
+				conf.extent = new MM.Extent.fromArray(conf.extent);
+
+		}
+		if(conf.panLimits) {
+			if(typeof conf.panLimits === 'string')
+				conf.panLimits = new MM.Extent.fromString(conf.panLimits);
+			else if(typeof conf.panLimits === 'array')
+				conf.panLimits = new MM.Extent.fromArray(conf.panLimits);
+		}
+
+		/*
+		 * DOM settings
+		 */
+		// store jquery node
+		map.$ = $('#' + map_id);
+		/*
+		 * Widgets (reset and add)
+		 */
+		map.$.empty().parent().find('.map-widgets').remove();
+		map.$.parent().prepend('<div class="map-widgets"></div>');
+
+		map.$.widgets = map.$.parent().find('.map-widgets');
+
+		if(conf.mainMap) {
+			$('body').removeClass('loading-map');
+			if(!$('body').hasClass('displaying-map'))
+				$('body').addClass('displaying-map');
+		}
+
+		/*
+		 * MapBox API
+		 */
+
+	    // Enable zoom-level dependent design.
+	    map.$.addClass('zoom-' + map.getZoom());
+
+		map.$.find('.map-fullscreen').click(function() {
+			map.draw();
+		});
+
+		if(conf.legend_full && !conf.disableInteraction)
+			mappress.enableDetails(map, conf.legend, conf.legend_full);
+
+		// disable handlers
+		if((conf.disableHandlers && conf.disableHandlers.mousewheel) || conf.mainMap)
+			map.eventHandlers[3].remove();
+
+		// layers
+		var layers = mappress.setupLayers(conf.layers);
+		map.addLayer(mapbox.layer().id(layers, function() {
+
+			if(!conf.disableInteraction)
+				map.interaction.auto();
+
+			runCallbacks('layersReady', map_id, [map, conf]);
+
+		}));
+
+		if(!conf.disableInteraction) {
+			map.ui.zoomer.add();
+			map.ui.fullscreen.add();
+		}
+
 		if(!conf.preview)
 			map.setZoomRange(conf.minZoom, conf.maxZoom);
 
@@ -186,37 +160,52 @@ var mappress = {};
 		else
 			map.centerzoom({lat: 0, lon: 0}, conf.zoom, false);
 
-		if(conf.extent) {
-			if(typeof conf.extent === 'string')
-				conf.extent = new MM.Extent.fromString(conf.extent);
-			else if(typeof conf.extent === 'array')
-				conf.extent = new MM.Extent.fromArray(conf.extent);
-
-			if(conf.extent instanceof MM.Extent)
-				map.setExtent(conf.extent);
+		if(conf.panLimits instanceof MM.Extent) {
+			map.panLimits = conf.panLimits;
+			if(!conf.preview)
+				map.setPanLimits(conf.panLimits);
 		}
-
-		if(conf.panLimits) {
-			if(typeof conf.panLimits === 'string')
-				conf.panLimits = new MM.Extent.fromString(conf.panLimits);
-			else if(typeof conf.panLimits === 'array')
-				conf.panLimits = new MM.Extent.fromArray(conf.panLimits);
-
-			if(conf.panLimits instanceof MM.Extent) {
-				map.panLimits = conf.panLimits;
-				if(!conf.preview)
-					map.setPanLimits(conf.panLimits);
-			}
-		}
+		if(conf.extent instanceof MM.Extent)
+			map.setExtent(conf.extent);
 
 		if(conf.legend && !conf.disableInteraction)
 			map.ui.legend.add().content(conf.legend);
 
-		if(conf.legend_full && !conf.disableInteraction)
-			mappress.enableDetails(map, conf.legend, conf.legend_full);
+		// Enable zoom-level dependent design.
+	    map.addCallback('drawn', _.throttle(function(map) {
+	    	if(!map.ease.running()) {
+	    		var classes = map.$.attr('class');
+	    		classes = classes.split(' ');
+	    		$.each(classes, function(i, cl) {
+	    			if(cl.indexOf('zoom') === 0)
+			            map.$.removeClass(cl);
+	    		});
+	            map.$.addClass('zoom-' + parseInt(map.getZoom()));
+	        }
+	    }, 200));
+
+		// fullscreen widgets callback
+		map.addCallback('drawn', function(map) {
+			if(map.$.hasClass('map-fullscreen-map')) {
+				if(map.$.parents('.content-map').length)
+					map.$.parents('.content-map').addClass('fullscreen');
+				map.$.widgets.addClass('fullscreen');
+				// temporary fix scrollTop
+				document.body.scrollTop = 0;
+				map.dimensions = new MM.Point(map.parent.offsetWidth, map.parent.offsetHeight);
+			} else {
+				map.$.parents('.content-map').removeClass('fullscreen');
+				map.$.widgets.removeClass('fullscreen');
+			}
+		});
+
+		// run callbacks
+		runCallbacks('mapReady', map_id, [map, conf]);
 
 		return map;
 	}
+
+
 	/*
 	 * Map widgets
 	 */
@@ -289,6 +278,29 @@ var mappress = {};
 	/*
 	 * Utils
 	 */
+
+	mappress.setupLayers = function(layers) {
+
+		// separate layers
+		var tileLayers = [];
+		var mapboxLayers = [];
+		var customServerLayers = [];
+
+		$.each(layers, function(i, layer) {
+			if(layer.indexOf('http') !== -1) {
+				tileLayers.push(layer);
+			} else {
+				mapboxLayers.push(layer);
+			}
+		});
+
+		/*
+		 * Currently only working with mapbox layers
+		 */
+
+		mapboxLayers = mapboxLayers.join();
+		return mapboxLayers;
+	};
 
 	mappress.convertMapConf = function(conf) {
 
