@@ -6,7 +6,7 @@ var mappress = {};
 
 	mappress = function(conf) {
 
-		var init = function() {
+		var _init = function() {
 			if(conf.mainMap)
 				$('body').addClass('loading-map');
 
@@ -31,10 +31,10 @@ var mappress = {};
 		}
 
 		if($.isReady) {
-			init();
+			_init();
 		} else {
 			$(document).ready(function() {
-				init();
+				_init();
 			});
 		}
 		
