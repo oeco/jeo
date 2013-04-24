@@ -40,6 +40,9 @@ var groups = {};
 			// set mappress conf containerID to group id
 			group.conf.containerID = group.id;
 
+			// force main map
+			group.conf.mainMap = true;
+
 			// store current map id
 			group.currentMapID = firstMapID;
 

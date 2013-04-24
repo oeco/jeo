@@ -1,10 +1,5 @@
 (function($) {
 
-	mappress.mapReady(function(map) {
-		if(!map.conf.disableHash && !map.conf.admin && map.conf.mainMap)
-			setupHash(map);
-	});
-
 	mappress.fragment = function() {
 
         var f = {};
@@ -46,6 +41,9 @@
 
 	var setupHash = function(map) {
 
+		if(map.conf.disableHash || map.conf.admin || !map.conf.mainMap)
+			return false;
+
 		mappress.fragmentEnabled = true;
 
 		var track = _.debounce(function(m) {
@@ -84,5 +82,7 @@
 	function isNumber(n) {
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
+
+	mappress.mapReady(setupHash);
 
 })(jQuery);
