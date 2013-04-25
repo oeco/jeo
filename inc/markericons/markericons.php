@@ -3,9 +3,13 @@
 class MapPress_MarkerIcons {
 
 	function __construct() {
+		// basic setup
 		self::setup_post_type();
+		self::setup_custom_columns();
 		self::setup_menu();
 		self::setup_metabox();
+
+		// relationships
 	}
 
 	/*
@@ -47,6 +51,48 @@ class MapPress_MarkerIcons {
 	}
 
 	/*
+	 * Admin listing custom columns
+	 */
+
+	function setup_custom_columns() {
+		add_filter('manage_marker-icon_posts_columns', array($this, 'posts_columns'));
+		add_filter('manage_marker-icon_posts_custom_column', array($this, 'posts_custom_column'), 10, 2);
+		add_action('admin_head', array($this, 'posts_custom_column_styles'));
+	}
+
+	function posts_columns($column) {
+		$i = 0;
+		foreach($column as $k => $v) {
+			$new_column[$k] = $v;
+			if($i == 0) {
+				$new_column['marker'] = __('Marker', 'mappress');
+			}
+			$i++;
+		}
+		return $new_column;
+	}
+
+	function posts_custom_column($column_name, $post_id) {
+		switch($column_name) {
+			case 'marker' :
+				$marker_image_id = get_post_meta($post_id, '_marker_image_attachment', true);
+				if($marker_image_id) {
+					$marker_image = get_post($marker_image_id);
+					echo '<img src="' . $marker_image->guid . '" />';
+				}
+				break;
+			default:
+		}
+	}
+
+	function posts_custom_column_styles() {
+		echo '<style type="text/css">';
+		echo '.wp-list-table #marker { width: 150px; }';
+		echo '#the-list .marker img { display: block; margin: 10px auto; }';
+		echo '</style>';
+	}
+
+	/*
 	 * Menu
 	 */
 
@@ -71,7 +117,7 @@ class MapPress_MarkerIcons {
 
 	function init_meta_box() {
 		wp_enqueue_style('mappress-markericons', get_template_directory_uri() . '/inc/markericons/markericons.css');
-		wp_enqueue_script('mappress-markericons', get_template_directory_uri() . '/inc/markericons/markericons.js', array('jquery', 'imagesloaded'), '0.0.2');
+		wp_enqueue_script('mappress-markericons', get_template_directory_uri() . '/inc/markericons/markericons.js', array('jquery', 'imagesloaded'), '0.0.3');
 	}
 
 	function add_meta_box() {
@@ -86,17 +132,27 @@ class MapPress_MarkerIcons {
 	}
 
 	function inner_meta_box($post) {
+		$marker_image_id = get_post_meta($post->ID, '_marker_image_attachment', true);
+		if($marker_image_id)
+			$marker_image = get_post($marker_image_id);
+		$icon_x = get_post_meta($post->ID, '_icon_anchor_x', true);
+		$icon_y = get_post_meta($post->ID, '_icon_anchor_y', true);
+		$popup_x = get_post_meta($post->ID, '_popup_anchor_x', true);
+		$popup_y = get_post_meta($post->ID, '_popup_anchor_y', true);
 		?>
 		<div id="marker-icon-metabox">
 			<p>
 				<label for="marker_icon_image"><strong><?php _e('Choose image to use as marker icon', 'mappress'); ?></strong></label><br/>
 				<small><?php _e('PNG image format is recomended', 'mappress'); ?></small><br/>
-				<input type="file" name="marker_icon_image" id="marker_icon_image" />
+				<input type="file" name="marker_image" id="marker_icon_image" />
+				<button class="button-primary"><?php _e('Upload image', 'mappress'); ?></button>
 			</p>
 			<div class="clearfix">
 				<div class="marker-icon-container">
 					<div class="marker-icon-selector">
-						<img src="http://leafletjs.com/dist/images/marker-icon.png" />
+						<?php if($marker_image_id) : ?>
+							<img src="<?php echo $marker_image->guid; ?>" />
+						<?php endif; ?>
 						<button class="button use-default"><?php _e('Use default', 'mappress'); ?></button>
 						<button class="button cancel"><?php _e('Cancel', 'mappress'); ?></button>
 						<button class="button-primary save"><?php _e('Save', 'mappress'); ?></button>
@@ -121,8 +177,8 @@ class MapPress_MarkerIcons {
 							<button class="button enable-point-edit" data-xinput="marker_icon_anchor_x" data-yinput="marker_icon_anchor_y" data-anchortype="icon"><?php _e('Find coordinates'); ?></button>
 						</p>
 						<p>
-							<input type="text" size="3" name="marker_icon_anchor_x" id="marker_icon_anchor_x" /> <label for="marker_icon_anchor_x"><?php _e('X'); ?></label><br/>
-							<input type="text" size="3" name="marker_icon_anchor_y" id="marker_icon_anchor_y" /> <label for="marker_icon_anchor_y"><?php _e('Y'); ?></label>
+							<input type="text" size="3" name="marker_icon_anchor_x" id="marker_icon_anchor_x" value="<?php echo $icon_x; ?>" /> <label for="marker_icon_anchor_x"><?php _e('X'); ?></label><br/>
+							<input type="text" size="3" name="marker_icon_anchor_y" id="marker_icon_anchor_y" value="<?php echo $icon_y; ?>" /> <label for="marker_icon_anchor_y"><?php _e('Y'); ?></label>
 						</p>
 					</div>
 					<div class="marker-icon-popup-anchor marker-icon-setting">
@@ -132,8 +188,8 @@ class MapPress_MarkerIcons {
 							<button class="button enable-point-edit" data-xinput="marker_icon_popup_anchor_x" data-yinput="marker_icon_popup_anchor_y" data-anchortype="popup"><?php _e('Find coordinates'); ?></button>
 						</p>
 						<p>
-							<input type="text" size="3" name="marker_icon_popup_anchor_x" id="marker_icon_popup_anchor_x" /> <label for="marker_icon_popup_anchor_x">X</label><br/>
-							<input type="text" size="3" name="marker_icon_popup_anchor_y" id="marker_icon_popup_anchor_y" /> <label for="marker_icon_popup_anchor_y">Y</label>
+							<input type="text" size="3" name="marker_icon_popup_anchor_x" id="marker_icon_popup_anchor_x" value="<?php echo $popup_x; ?>" /> <label for="marker_icon_popup_anchor_x">X</label><br/>
+							<input type="text" size="3" name="marker_icon_popup_anchor_y" id="marker_icon_popup_anchor_y" value="<?php echo $popup_y; ?>" /> <label for="marker_icon_popup_anchor_y">Y</label>
 						</p>
 					</div>
 				</div>
@@ -151,7 +207,38 @@ class MapPress_MarkerIcons {
 
 		if (false !== wp_is_post_revision($post_id))
 			return;
+
+		if(isset($_FILES['marker_image']) && $_FILES['marker_image']['size'] > 0) {
+			$marker_image = media_handle_upload('marker_image', $post_id);
+			if(is_wp_error($marker_image)) {
+				function save_marker_image_error_notice() {
+					echo '<div class="error"><p>' . __('Could not save image file', 'mappress') . '</p></div>';
+				}
+				add_action('all_admin_notices', array($this, 'save_marker_image_error_notice'));
+			} else {
+				update_post_meta($post_id, '_marker_image_attachment', $marker_image);
+				update_post_meta($post_id, '_icon_anchor_x', 0);
+				update_post_meta($post_id, '_icon_anchor_y', 0);
+				update_post_meta($post_id, '_popup_anchor_x', 0);
+				update_post_meta($post_id, '_popup_anchor_y', 0);
+			}
+		} else {
+			if(isset($_POST['marker_icon_anchor_x']))
+				update_post_meta($post_id, '_icon_anchor_x', $_POST['marker_icon_anchor_x']);
+			if(isset($_POST['marker_icon_anchor_y']))
+				update_post_meta($post_id, '_icon_anchor_y', $_POST['marker_icon_anchor_y']);
+			if(isset($_POST['marker_icon_popup_anchor_x']))
+				update_post_meta($post_id, '_popup_anchor_x', $_POST['marker_icon_popup_anchor_x']);
+			if(isset($_POST['marker_icon_popup_anchor_y']))
+				update_post_meta($post_id, '_popup_anchor_y', $_POST['marker_icon_popup_anchor_y']);
+		}
 	}
+
+	/*
+	 * Relationships
+	 */
+
+	
 
 }
 

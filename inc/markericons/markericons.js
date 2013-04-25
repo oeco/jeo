@@ -17,16 +17,22 @@
 	var setup = function() {
 
 		$container = $('#marker-icon-metabox');
+
+		$container.parents('form').attr('enctype', 'multipart/form-data');
+
 		if(!$container.length)
 			return false;
 
 		$pointSelector = $container.find('.marker-icon-selector');
+		$pointSelector.find('button').hide();
 
 		$icon = $pointSelector.find('img');
 		if($icon.length)
 			parseIcon();
-		else
+		else {
+			$pointSelector.parent().hide();
 			return false;
+		}
 
 		$container.find('.marker-icon-settings').show();
 
@@ -41,8 +47,6 @@
 			pointEdit($(this).data('anchortype'));
 			return false;
 		});
-
-		$pointSelector.find('button').hide();
 
 		// mousehover log selector position
 		$pointSelector.bind('mousemove', function(ev) {
