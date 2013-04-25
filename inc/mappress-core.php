@@ -82,6 +82,8 @@ add_action('parse_query', 'mappress_the_query');
 function mappress_get_mapped_post_types() {
 	$custom = get_post_types(array('public' => true, '_builtin' => false));
 	$post_types = $custom + array('post');
+	unset($post_types['map']);
+	unset($post_types['map-group']);
 	return apply_filters('mappress_mapped_post_types', $post_types);
 }
 

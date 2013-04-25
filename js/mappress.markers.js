@@ -71,12 +71,14 @@
 						'margin-left': -(x.properties.marker.width/2)
 					});
 
+					console.log(x.properties.marker);
+
 					// POPUP
 
 					var o = document.createElement('div');
 					o.className = 'popup clearfix';
 					$(o).css({
-						'bottom': x.properties.marker.height + 11
+						'bottom': parseInt(x.properties.marker.height) + 11
 					});
 					e.appendChild(o);
 					var content = document.createElement('div');

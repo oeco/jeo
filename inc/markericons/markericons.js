@@ -74,6 +74,8 @@
 				if(type == 'popup')
 					return [parseInt($icon.width()/2), -10];
 			}
+			$container.find('input#marker_icon_width').val($icon.width());
+			$container.find('input#marker_icon_height').val($icon.height());
 		});
 	};
 

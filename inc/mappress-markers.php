@@ -49,7 +49,7 @@ function mappress_marker_query() {
 }
 
 function mappress_register_marker_script() {
-	wp_register_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.2.2');
+	wp_register_script('mappress.markers', get_template_directory_uri() . '/js/mappress.markers.js', array('mappress', 'underscore'), '0.2.3');
 	wp_localize_script('mappress.markers', 'mappress_markers', array(
 		'ajaxurl' => admin_url('admin-ajax.php'),
 		'query' => mappress_marker_query(),
