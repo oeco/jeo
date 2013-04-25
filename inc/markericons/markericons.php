@@ -5,7 +5,7 @@ class MapPress_MarkerIcons {
 	function __construct() {
 		// basic setup
 		self::setup_post_type();
-		self::setup_custom_columns();
+		self::setup_custom_table();
 		self::setup_menu();
 		self::setup_metabox();
 
@@ -51,13 +51,16 @@ class MapPress_MarkerIcons {
 	}
 
 	/*
-	 * Admin listing custom columns
+	 * Admin listing custom columns and action rows
 	 */
 
-	function setup_custom_columns() {
+	function setup_custom_table() {
 		add_filter('manage_marker-icon_posts_columns', array($this, 'posts_columns'));
-		add_filter('manage_marker-icon_posts_custom_column', array($this, 'posts_custom_column'), 10, 2);
+		add_action('manage_marker-icon_posts_custom_column', array($this, 'posts_custom_column'), 10, 2);
 		add_action('admin_head', array($this, 'posts_custom_column_styles'));
+		add_filter('post_row_actions', array($this, 'action_row'), 10, 2);
+		add_filter('admin_footer', array($this, 'action_row_js'));
+		add_action('admin_init', array($this, 'save_default_marker'));
 	}
 
 	function posts_columns($column) {
@@ -80,16 +83,67 @@ class MapPress_MarkerIcons {
 					$marker_image = get_post($marker_image_id);
 					echo '<img src="' . $marker_image->guid . '" />';
 				}
+				$default_marker = get_option('mappress_default_marker_id');
+				if($default_marker == $post_id)
+					echo '(default)';
 				break;
 			default:
 		}
 	}
 
 	function posts_custom_column_styles() {
-		echo '<style type="text/css">';
-		echo '.wp-list-table #marker { width: 150px; }';
-		echo '#the-list .marker img { display: block; margin: 10px auto; }';
-		echo '</style>';
+		?>
+		<style type="text/css">
+			.wp-list-table #marker { width: 150px; }
+			#the-list .marker { text-align: center; font-weight: bold; padding-bottom: 10px; }
+			#the-list .marker img { display: block; margin: 10px auto; }
+		</style>
+		<?php
+	}
+
+	function action_row($actions, $post) {
+		if($post->post_type == 'marker-icon') {
+			unset($actions['inline hide-if-no-js']); // unset inline edition
+			$default_marker = get_option('mappress_default_marker_id');
+			if(current_user_can('manage_options') && $default_marker != $post->ID) {
+				$i = 0;
+				foreach($actions as $a => $v) {
+					if($i == 0) {
+						$new_actions['set_default'] .= '<input type="submit" class="button set_default_marker" data-marker="' . $post->ID . '" value="' . __('Set as default marker ', 'mappress') . '" />';
+					}
+					$new_actions[$a] = $v;
+					$i++;
+				}
+				return $new_actions;
+			}
+		}
+		return $actions;
+	}
+
+	function action_row_js() {
+		$screen = get_current_screen();
+		if($screen->parent_base == 'edit' && $screen->post_type == 'marker-icon') {
+			?>
+			<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$('.set_default_marker').click(function() {
+						$(this).parents('form').append($('<input name="default_marker" value="' + $(this).data('marker') + '" type="hidden" />'));
+					});
+				});
+			</script>
+			<?php
+		}
+	}
+
+	function save_default_marker() {
+		if(isset($_REQUEST['default_marker']) && current_user_can('manage_options')) {
+			update_option('mappress_default_marker_id', $_REQUEST['default_marker']);
+			add_action('all_admin_notices', array($this, 'save_default_marker_notice'));
+			error_log(get_option('mappress_default_marker_id'));
+		}
+	}
+	function save_default_marker_notice() {
+		echo '<div class="updated"><p>' . __('Default marker updated', 'mappress') . '</p></div>';
 	}
 
 	/*
@@ -211,9 +265,6 @@ class MapPress_MarkerIcons {
 		if(isset($_FILES['marker_image']) && $_FILES['marker_image']['size'] > 0) {
 			$marker_image = media_handle_upload('marker_image', $post_id);
 			if(is_wp_error($marker_image)) {
-				function save_marker_image_error_notice() {
-					echo '<div class="error"><p>' . __('Could not save image file', 'mappress') . '</p></div>';
-				}
 				add_action('all_admin_notices', array($this, 'save_marker_image_error_notice'));
 			} else {
 				update_post_meta($post_id, '_marker_image_attachment', $marker_image);
@@ -233,12 +284,15 @@ class MapPress_MarkerIcons {
 				update_post_meta($post_id, '_popup_anchor_y', $_POST['marker_icon_popup_anchor_y']);
 		}
 	}
+	function save_marker_image_error_notice() {
+		echo '<div class="error"><p>' . __('Could not save image file', 'mappress') . '</p></div>';
+	}
 
 	/*
 	 * Relationships
 	 */
 
-	
+
 
 }
 
