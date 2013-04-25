@@ -79,6 +79,12 @@ function mappress_the_query($query) {
 }
 add_action('parse_query', 'mappress_the_query');
 
+function mappress_get_mapped_post_types() {
+	$custom = get_post_types(array('public' => true, '_builtin' => false));
+	$post_types = $custom + array('post');
+	return apply_filters('mappress_mapped_post_types', $post_types);
+}
+
 function mappress_the_post($post) {
 	if(is_single() && mappress_has_marker_location() && !is_singular(array('map', 'map-group'))) {
 		global $mappress_map;

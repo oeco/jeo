@@ -13,14 +13,17 @@ function geocoding_init() {
 }
 
 function geocoding_add_meta_box() {
-	add_meta_box(
-		'geocoding-address',
-		__('Address and geolocation', 'mappress'),
-		'geocoding_inner_custom_box',
-		'post',
-		'advanced',
-		'high'
-	);
+	$post_types = mappress_get_mapped_post_types();
+	foreach($post_types as $post_type) {
+		add_meta_box(
+			'geocoding-address',
+			__('Address and geolocation', 'mappress'),
+			'geocoding_inner_custom_box',
+			$post_type,
+			'advanced',
+			'high'
+		);
+	}
 }
 
 function geocoding_inner_custom_box($post) {

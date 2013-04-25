@@ -3,16 +3,19 @@
 class MapPress_MarkerIcons {
 
 	var $post_type = 'marker-icon';
+	var $connected_taxonomies = false;
+	var $connected_post_types = false;
 
 	function __construct() {
 		// basic setup
-		self::setup_post_type();
-		self::setup_marker_custom_table();
-		self::setup_menu();
-		self::setup_metabox();
+		$this->setup_post_type();
+		$this->setup_marker_custom_table();
+		$this->setup_menu();
+		$this->setup_metabox();
 
 		// relationships
-		self::setup_taxonomy_relationship();
+		$this->setup_taxonomy_relationship();
+		$this->setup_post_type_relationship();
 	}
 
 	/*
@@ -23,12 +26,39 @@ class MapPress_MarkerIcons {
 		return get_posts(array('post_type' => $this->post_type, 'posts_per_page' => -1));
 	}
 
+	function get_marker($marker_id) {
+		if(!$marker_id)
+			return false;
+
+		return get_post($marker_id);
+	}
+
+	function get_marker_image_url($marker_id) {
+		$marker_image_id = get_post_meta($marker_id, '_marker_image_attachment', true);
+		if($marker_image_id) {
+			$marker_image = get_post($marker_image_id);
+			return $marker_image->guid;
+		}
+		return false;
+	}
+
+	function get_default_marker() {
+		$marker_id = get_option('mappress_default_marker_id');
+		if($marker_id)
+			return get_post($marker_id);
+		return false;
+	}
+
+	function set_default_marker($marker_id) {
+		return update_option('mappress_default_marker_id');
+	}
+
 	/*
-	 * Post type
+	 * Setup post type
 	 */
 
 	function setup_post_type() {
-		add_action('after_setup_theme', array($this, 'register_post_type'));
+		add_action('init', array($this, 'register_post_type'));
 	}
 
 	function register_post_type() {
@@ -89,14 +119,12 @@ class MapPress_MarkerIcons {
 	function marker_custom_column($column_name, $post_id) {
 		switch($column_name) {
 			case 'marker' :
-				$marker_image_id = get_post_meta($post_id, '_marker_image_attachment', true);
-				if($marker_image_id) {
-					$marker_image = get_post($marker_image_id);
-					echo '<img src="' . $marker_image->guid . '" />';
-				}
-				$default_marker = get_option('mappress_default_marker_id');
-				if($default_marker == $post_id)
-					echo '(default)';
+				$image = $this->get_marker_image_url($post_id);
+				if($image)
+					echo '<img src="' . $image . '" />';
+				$default_marker = $this->get_default_marker();
+				if($default_marker->ID == $post_id)
+					echo '(' . __('default', 'mappress') . ')';
 				break;
 			default:
 		}
@@ -115,8 +143,8 @@ class MapPress_MarkerIcons {
 	function action_row($actions, $post) {
 		if($post->post_type == $this->post_type) {
 			unset($actions['inline hide-if-no-js']); // unset inline edition
-			$default_marker = get_option('mappress_default_marker_id');
-			if(current_user_can('manage_options') && $default_marker != $post->ID) {
+			$default_marker = $this->get_default_marker();
+			if(current_user_can('manage_options') && $default_marker->ID != $post->ID) {
 				$i = 0;
 				foreach($actions as $a => $v) {
 					if($i == 0) {
@@ -148,7 +176,7 @@ class MapPress_MarkerIcons {
 
 	function save_default_marker() {
 		if(isset($_REQUEST['default_marker']) && current_user_can('manage_options')) {
-			update_option('mappress_default_marker_id', $_REQUEST['default_marker']);
+			$this->set_default_marker($_REQUEST['default_marker']);
 			add_action('all_admin_notices', array($this, 'save_default_marker_notice'));
 		}
 	}
@@ -157,7 +185,7 @@ class MapPress_MarkerIcons {
 	}
 
 	/*
-	 * Menu
+	 * Setup menu
 	 */
 
 	function setup_menu() {
@@ -170,7 +198,7 @@ class MapPress_MarkerIcons {
 	}
 
 	/*
-	 * Metabox
+	 * Setup marker editor metabox
 	 */
 
 	function setup_metabox() {
@@ -305,20 +333,22 @@ class MapPress_MarkerIcons {
 	/*
 	 * Taxonomy relationship
 	 */
-	function setup_taxonomy_relationship() {
-		$taxonomies = apply_filters('mappress_marker_taxonomies', array('category', 'post_tag'));
-		foreach($taxonomies as $tax) {
-			$this->add_marker_to_taxonomy_form($tax);
-		}
+
+	function connected_taxonomies() {
+		$this->connected_taxonomies = apply_filters('mappress_marker_taxonomies', array('category', 'post_tag'));
+		return $this->connected_taxonomies;
 	}
 
-	function add_marker_to_taxonomy_form($taxonomy) {
-		add_action("{$taxonomy}_edit_form_fields", array($this, 'taxonomy_form_custom_field'));
-		add_action("{$taxonomy}_add_form_fields", array($this, 'taxonomy_form_custom_field'));
-		add_action("edited_{$taxonomy}", array($this, 'taxonomy_form_save'));
-		// custom taxonomy columns
-		add_filter("manage_edit-{$taxonomy}_columns", array($this, 'marker_columns'));
-		add_action("manage_{$taxonomy}_custom_column", array($this, 'taxonomy_custom_column'), 10, 3);
+	function setup_taxonomy_relationship() {
+		$taxonomies = $this->connected_taxonomies();
+		foreach($taxonomies as $taxonomy) {
+			add_action("{$taxonomy}_edit_form_fields", array($this, 'taxonomy_form_custom_field'));
+			add_action("{$taxonomy}_add_form_fields", array($this, 'taxonomy_form_custom_field'));
+			add_action("edited_{$taxonomy}", array($this, 'taxonomy_form_save'));
+			// custom taxonomy columns
+			add_filter("manage_edit-{$taxonomy}_columns", array($this, 'marker_columns'));
+			add_action("manage_{$taxonomy}_custom_column", array($this, 'taxonomy_custom_column'), 10, 3);
+		}
 	}
 
 	function taxonomy_form_custom_field($term) {
@@ -372,13 +402,11 @@ class MapPress_MarkerIcons {
 				} else {
 					$marker_id = $default_marker;
 				}
-				$marker_image_id = get_post_meta($marker_id, '_marker_image_attachment', true);
-				if($marker_image_id) {
-					$marker_image = get_post($marker_image_id);
-					echo '<img src="' . $marker_image->guid . '" />';
-				}
+				$image = get_marker_image_url($marker_id);
+				if($image)
+					echo '<img src="' . $image . '" />';
 				if($default_marker == $marker_id)
-					echo '(default)';
+					echo '(' . __('default', 'mappress') . ')';
 				break;
 			default:
 		}
@@ -388,7 +416,78 @@ class MapPress_MarkerIcons {
 	 * Post relationship
 	 */
 
+	function connected_post_types() {
+		$this->connected_post_types = mappress_get_mapped_post_types();
+		return $this->connected_post_types;
+	}
+
+	function setup_post_type_relationship() {
+		add_action('admin_footer', array($this, 'relationship_init_meta_box'));
+		add_action('add_meta_boxes', array($this, 'relationship_add_meta_box'));
+		add_action('save_post', array($this, 'relationship_save_post_data'));
+	}
+
+	function relationship_init_meta_box() {
+		wp_enqueue_style('mappress-markericons', get_template_directory_uri() . '/inc/markericons/markericons.css');
+	}
+
+	function relationship_add_meta_box() {
+		$markers = $this->get_markers();
+		if(!$markers)
+			return false;
+		$post_types = $this->connected_post_types();
+		foreach($post_types as $post_type) {
+			add_meta_box(
+				'mappress_markericon_relationship',
+				__('Custom marker', 'mappress'),
+				array($this, 'relationship_inner_meta_box'),
+				$post_type,
+				'advanced',
+				'high'
+			);
+		}
+	}
+
+	function relationship_inner_meta_box($post) {
+		$markers = $this->get_markers();
+		$post_marker_id = get_post_meta($post->ID, 'marker_id', true);
+		?>
+		<div id="marker-icon-relationship-metabox">
+			<h4><?php _e('Choose a custom marker for your content. If it\'s set to <em>auto</em> we\'ll try to find the marker based on categories or map markers.'); ?></h4>
+			<?php if($markers) : ?>
+				<ul id="markers-list" class="clearfix">
+					<li>
+						<label for="marker_0"><strong><?php _e('Auto', 'mappress'); ?></strong></label>
+						<input type="radio" name="marker_id" id="marker_0" value="0" <?php if(!$post_marker_id) echo 'checked'; ?> />
+					</li>
+					<?php foreach($markers as $marker) : ?>
+						<li>
+							<label for="marker_<?php echo $marker->ID; ?>"><img src="<?php echo $this->get_marker_image_url($marker->ID); ?>" /></label>
+							<input type="radio" name="marker_id" id="marker_<?php echo $marker->ID; ?>" value="<?php echo $marker->ID; ?>" <?php if($post_marker_id == $marker->ID) echo 'checked'; ?> />
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	function relationship_save_post_data($post_id) {
+		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+			return;
+
+		if (defined('DOING_AJAX') && DOING_AJAX)
+			return;
+
+		if (false !== wp_is_post_revision($post_id))
+			return;
+
+		if(isset($_POST['marker_id']) && $_POST['marker_id'])
+			update_post_meta($post_id, 'marker_id', $_POST['marker_id']);
+		else
+			delete_post_meta($post_id, 'marker_id');
+	}
 
 }
 
-new MapPress_MarkerIcons;
+$marker_icons = new MapPress_MarkerIcons();

@@ -91,3 +91,22 @@
 	-moz-box-sizing: border-box;
 	padding: 0 0 0 40px;
 }
+
+/*
+ * Relationship metabox
+ */
+
+#marker-icon-relationship-metabox ul li {
+	float: left;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	text-align: center;
+	margin: 0 10px 0 0;
+}
+
+#marker-icon-relationship-metabox ul li label {
+	display: block;
+	margin-bottom: 5px;
+}
