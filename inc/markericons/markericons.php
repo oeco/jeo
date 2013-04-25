@@ -2,14 +2,25 @@
 
 class MapPress_MarkerIcons {
 
+	var $post_type = 'marker-icon';
+
 	function __construct() {
 		// basic setup
 		self::setup_post_type();
-		self::setup_custom_table();
+		self::setup_marker_custom_table();
 		self::setup_menu();
 		self::setup_metabox();
 
 		// relationships
+		self::setup_taxonomy_relationship();
+	}
+
+	/*
+	 * Functions
+	 */
+
+	function get_markers() {
+		return get_posts(array('post_type' => $this->post_type, 'posts_per_page' => -1));
 	}
 
 	/*
@@ -46,7 +57,7 @@ class MapPress_MarkerIcons {
 			'show_in_menu' => false
 		);
 
-		register_post_type('marker-icon', $args);
+		register_post_type($this->post_type, $args);
 
 	}
 
@@ -54,16 +65,16 @@ class MapPress_MarkerIcons {
 	 * Admin listing custom columns and action rows
 	 */
 
-	function setup_custom_table() {
-		add_filter('manage_marker-icon_posts_columns', array($this, 'posts_columns'));
-		add_action('manage_marker-icon_posts_custom_column', array($this, 'posts_custom_column'), 10, 2);
-		add_action('admin_head', array($this, 'posts_custom_column_styles'));
+	function setup_marker_custom_table() {
+		add_filter("manage_{$this->post_type}_posts_columns", array($this, 'marker_columns'));
+		add_action("manage_{$this->post_type}_posts_custom_column", array($this, 'marker_custom_column'), 10, 2);
+		add_action('admin_head', array($this, 'marker_custom_column_styles'));
 		add_filter('post_row_actions', array($this, 'action_row'), 10, 2);
 		add_filter('admin_footer', array($this, 'action_row_js'));
 		add_action('admin_init', array($this, 'save_default_marker'));
 	}
 
-	function posts_columns($column) {
+	function marker_columns($column) {
 		$i = 0;
 		foreach($column as $k => $v) {
 			$new_column[$k] = $v;
@@ -75,7 +86,7 @@ class MapPress_MarkerIcons {
 		return $new_column;
 	}
 
-	function posts_custom_column($column_name, $post_id) {
+	function marker_custom_column($column_name, $post_id) {
 		switch($column_name) {
 			case 'marker' :
 				$marker_image_id = get_post_meta($post_id, '_marker_image_attachment', true);
@@ -91,7 +102,7 @@ class MapPress_MarkerIcons {
 		}
 	}
 
-	function posts_custom_column_styles() {
+	function marker_custom_column_styles() {
 		?>
 		<style type="text/css">
 			.wp-list-table #marker { width: 150px; }
@@ -102,7 +113,7 @@ class MapPress_MarkerIcons {
 	}
 
 	function action_row($actions, $post) {
-		if($post->post_type == 'marker-icon') {
+		if($post->post_type == $this->post_type) {
 			unset($actions['inline hide-if-no-js']); // unset inline edition
 			$default_marker = get_option('mappress_default_marker_id');
 			if(current_user_can('manage_options') && $default_marker != $post->ID) {
@@ -139,7 +150,6 @@ class MapPress_MarkerIcons {
 		if(isset($_REQUEST['default_marker']) && current_user_can('manage_options')) {
 			update_option('mappress_default_marker_id', $_REQUEST['default_marker']);
 			add_action('all_admin_notices', array($this, 'save_default_marker_notice'));
-			error_log(get_option('mappress_default_marker_id'));
 		}
 	}
 	function save_default_marker_notice() {
@@ -166,7 +176,7 @@ class MapPress_MarkerIcons {
 	function setup_metabox() {
 		add_action('admin_footer', array($this, 'init_meta_box'));
 		add_action('add_meta_boxes', array($this, 'add_meta_box'));
-		add_action('save_post', array($this, 'save_postdata'));
+		add_action('save_post', array($this, 'save_marker_data'));
 	}
 
 	function init_meta_box() {
@@ -179,7 +189,7 @@ class MapPress_MarkerIcons {
 			'mappress_markericon',
 			__('Setup marker icon', 'mappress'),
 			array($this, 'inner_meta_box'),
-			'marker-icon',
+			$this->post_type,
 			'advanced',
 			'high'
 		);
@@ -252,7 +262,7 @@ class MapPress_MarkerIcons {
 		<?php
 	}
 
-	function save_postdata($post_id) {
+	function save_marker_data($post_id) {
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
 
@@ -292,6 +302,91 @@ class MapPress_MarkerIcons {
 	 * Relationships
 	 */
 
+	/*
+	 * Taxonomy relationship
+	 */
+	function setup_taxonomy_relationship() {
+		$taxonomies = apply_filters('mappress_marker_taxonomies', array('category', 'post_tag'));
+		foreach($taxonomies as $tax) {
+			$this->add_marker_to_taxonomy_form($tax);
+		}
+	}
+
+	function add_marker_to_taxonomy_form($taxonomy) {
+		add_action("{$taxonomy}_edit_form_fields", array($this, 'taxonomy_form_custom_field'));
+		add_action("{$taxonomy}_add_form_fields", array($this, 'taxonomy_form_custom_field'));
+		add_action("edited_{$taxonomy}", array($this, 'taxonomy_form_save'));
+		// custom taxonomy columns
+		add_filter("manage_edit-{$taxonomy}_columns", array($this, 'marker_columns'));
+		add_action("manage_{$taxonomy}_custom_column", array($this, 'taxonomy_custom_column'), 10, 3);
+	}
+
+	function taxonomy_form_custom_field($term) {
+		$t_id = $term->term_id;
+		$term_meta = get_option("taxonomy_term_$t_id");
+		?>
+		<tr class="form-field">
+			<th scope="row" valign="top">
+				<label for="marker_id"><?php _e('Marker', 'mappress'); ?></label>
+			</th>
+			<td>
+				<?php
+				$markers = $this->get_markers();
+				if($markers) : ?>
+					<select name="term_meta[marker_id]" id="marker_id">
+						<option value=""><?php _e('Default', 'mappress'); ?></option>
+						<?php foreach($markers as $marker) : ?>
+							<option value="<?php echo $marker->ID; ?>" <?php if($term_meta && $term_meta['marker_id'] == $marker->ID) echo 'selected'; ?>><?php echo apply_filters('post_title', $marker->post_title); ?></option>
+						<?php endforeach; ?>
+					</select> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create a new marker', 'mappress'); ?></a><br />
+					<span class="description"><?php _e('Select a marker', 'mappress'); ?></span>
+				<?php else : ?>
+					<span class="description"><?php _e('You don\'t have custom markers yet.', 'mappress'); ?> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create your first here!', 'mappress'); ?></a></span>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php
+	}
+
+	function taxonomy_form_save($term_id) {
+		if (isset($_POST['term_meta'])) {
+			$t_id = $term_id;
+			$term_meta = get_option( "taxonomy_term_$t_id" );
+			$cat_keys = array_keys( $_POST['term_meta'] );
+			foreach ($cat_keys as $key){
+				if (isset($_POST['term_meta'][$key])){
+					$term_meta[$key] = $_POST['term_meta'][$key];
+				}
+			}
+			update_option("taxonomy_term_$t_id", $term_meta);
+		}
+	}
+
+	function taxonomy_custom_column($out, $column_name, $term_id) {
+		switch($column_name) {
+			case 'marker' :
+				$term_meta = get_option("taxonomy_term_$term_id");
+				$default_marker = get_option('mappress_default_marker_id');
+				if($term_meta && $term_meta['marker_id']) {
+					$marker_id = $term_meta['marker_id'];
+				} else {
+					$marker_id = $default_marker;
+				}
+				$marker_image_id = get_post_meta($marker_id, '_marker_image_attachment', true);
+				if($marker_image_id) {
+					$marker_image = get_post($marker_image_id);
+					echo '<img src="' . $marker_image->guid . '" />';
+				}
+				if($default_marker == $marker_id)
+					echo '(default)';
+				break;
+			default:
+		}
+	}
+
+	/*
+	 * Post relationship
+	 */
 
 
 }
