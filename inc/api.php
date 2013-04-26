@@ -20,9 +20,10 @@ class MapPress_API {
 
 	function template_redirect() {
 		if(get_query_var('geojson')) {
-			$marker_query = mappress_marker_query();
+			global $mappress_markers;
+			$marker_query = $mappress_markers->query();
 			$query = apply_filters('mappress_geojson_api_query', $marker_query);
-			mappress_get_markers_data($marker_query);
+			$mappress_markers->get_data($marker_query);
 			exit;
 		}
 	}
