@@ -49,7 +49,7 @@ class MapPress {
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.3');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
 			.js', array('mappress', 'underscore'), '0.0.8.1');
-		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.0.9.2');
+		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.0.9.12');
 		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.7');
 		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.2');
 
@@ -252,6 +252,14 @@ class MapPress {
 		}
 	}
 
+	function map_id() {
+		return $this->map->ID . '_' . $this->map_count;
+	}
+
+	function the_ID() {
+		return $this->map->ID;
+	}
+
 	function featured_map_type() {
 		return apply_filters('mappress_featured_map_type', array('map', 'map-group'));
 	}
@@ -283,19 +291,6 @@ class MapPress {
 			return true;
 
 		return false;
-	}
-
-	function setup_mapgroupdata($mapgroup) {
-		$this->mapgroup_id = $mapgroup->ID;
-		do_action('mappress_the_mapgroup', $mapgroup);
-	}
-
-	/*
-	 * Featured map
-	 */
-
-	function get_featured() {
-		return $this->get_map($this->featured()->ID);
 	}
 
 	/*
@@ -330,6 +325,14 @@ class MapPress {
 		return $map_js_id;
 	}
 
+	/*
+	 * Dsiplay featured map
+	 */
+
+	function get_featured() {
+		return $this->get_map($this->featured()->ID);
+	}
+
 	function set_main($conf) {
 		$conf['mainMap'] = true;
 		return $conf;
@@ -353,10 +356,6 @@ class MapPress {
 		return apply_filters('mappress_map_conf', $conf, $this->map, $post);
 	}
 
-	function map_id() {
-		return $this->map->ID . '_' . $this->map_count;
-	}
-
 	// get data
 	function setup_ajax() {
 		add_action('wp_ajax_nopriv_mapgroup_data', array($this, 'get_mapgroup_json_data'));
@@ -367,21 +366,22 @@ class MapPress {
 
 	function get_mapgroup_json_data($group_id = false) {
 		$group_id = $group_id ? $group_id : $_REQUEST['group_id'];
-		$data = json_encode(mappress_get_mapgroup_data($group_id));
+		$data = json_encode($this->get_mapgroup_data($group_id));
 		header('Content Type: application/json');
 		echo $data;
 		exit;
 	}
 
 	function get_mapgroup_data($group_id) {
-		$group_id = $group_id ? $group_id : $this->map->ID;
+		$group_id = $group_id ? $group_id : $this->the_ID();
 		$data = array();
 		if(get_post_type($group_id) != 'map-group')
 			return;
 		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
 		foreach($group_data['maps'] as $map) {
 			$map_id = $map['id'];
-			$data['maps'][$map_id] = $this->get_map_data($map['id']);
+			$data['maps'][$map_id] = $map;
+			$data['maps'][$map_id] += $this->get_map_data($map['id']);
 		}
 		return apply_filters('mappress_mapgroup_data', $data, $post);
 	}
@@ -434,8 +434,8 @@ class MapPress {
 
 	function fix_qtranslate() {
 		if(function_exists('qtrans_getLanguage')) {
-			add_filter('get_the_date', array($this, 'qtranslate_enable_custom_format_date'));
-			add_filter('admin_url', array($this, 'qtranslate_ajax_url'), 10, 2);
+			add_filter('get_the_date', array($this, 'qtranslate_get_the_date'), 10, 2);
+			add_filter('admin_url', array($this, 'qtranslate_admin_url'), 10, 2);
 			add_action('post_type_archive_link', 'qtrans_convertURL');
 		}
 	}
@@ -510,12 +510,6 @@ function mappress_is_map($map_id = false) {
 	return $mappress->is_map($map_id);
 }
 
-// setup mapgroup data
-function mappress_setup_mapgroupdata($mapgroup) {
-	global $mappress;
-	return $mappress->setup_mapgroupdata($mapgroup);
-}
-
 // display the featured map
 function mappress_featured() {
 	global $mappress;
@@ -538,6 +532,17 @@ function mappress_map_conf() {
 function mappress_map_id() {
 	global $mappress;
 	return $mappress->map_id();
+}
+
+// get the main map id
+function mappress_the_ID() {
+	global $mappress;
+	return $mappress->the_ID();
+}
+
+function mappress_get_mapgroup_data($map_id = false) {
+	global $mappress;
+	return $mappress->get_mapgroup_data($map_id);
 }
 
 // get the map formatted data

@@ -28,7 +28,7 @@ var groups = {};
 			group.$.nav = group.$.find('.map-nav');
 			group.$.map = group.$.find('.map');
 
-			group.id = group.$.map.attr('id');
+			group.containerID = group.$.map.attr('id');
 
 			// prepare first map and group conf
 			var firstMapID = group.$.nav.find('li:first-child a').data('map');
@@ -38,7 +38,7 @@ var groups = {};
 			group.conf = mappress.convertMapConf(group.mapsData[firstMapID]);
 
 			// set mappress conf containerID to group id
-			group.conf.containerID = group.id;
+			group.conf.containerID = group.containerID;
 
 			// force main map
 			group.conf.mainMap = true;
@@ -94,7 +94,7 @@ var groups = {};
 
 		group.update = function(mapID) {
 
-			group.map = mappress.maps[group.id];
+			group.map = mappress.maps[group.containerID];
 
 			// prepare new conf and layers
 			var conf = mappress.convertMapConf(group.mapsData[mapID]);

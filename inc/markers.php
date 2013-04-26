@@ -249,7 +249,7 @@ class MapPress_Markers {
 		return apply_filters('mappress_marker_geometry', $geometry, $post);
 	}
 
-	function get_coordinates($post_id) {
+	function get_coordinates($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
@@ -264,7 +264,7 @@ class MapPress_Markers {
 		return apply_filters('mappress_marker_coordinates', $coordinates, $post);
 	}
 
-	function get_conf_coordinates($post_id) {
+	function get_conf_coordinates($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
@@ -272,7 +272,7 @@ class MapPress_Markers {
 		return array('lat' => $coordinates[1], 'lon' => $coordinates[0]);
 	}
 
-	function has_location($post_id) {
+	function has_location($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 		$coordinates = $this->get_coordinates($post_id);
