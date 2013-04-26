@@ -73,6 +73,7 @@ class MapPress {
 
 	function setup_post_types() {
 		add_action('init', array($this, 'register_post_types'));
+		add_action('admin_menu', array($this, 'admin_menu'));
 		add_action('init', array($this, 'mapped_post_types'));
 	}
 
@@ -111,7 +112,7 @@ class MapPress {
 		register_post_type('map', $args);
 
 		/*
-		 * Mapgroup
+		 * Map group
 		 */
 		$labels = array( 
 			'name' => __('Map groups', 'mappress'),
@@ -141,6 +142,11 @@ class MapPress {
 		);
 
 		register_post_type('map-group', $args);
+	}
+
+	function admin_menu() {
+		add_submenu_page('edit.php?post_type=map', __('Map groups', 'mappress'), __('Map groups', 'mappress'), 'edit_posts', 'edit.php?post_type=map-group');
+		add_submenu_page('edit.php?post_type=map', __('Add new group', 'mappress'), __('Add new map group', 'mappress'), 'edit_posts', 'post-new.php?post_type=map-group');
 	}
 
 	function mapped_post_types() {
