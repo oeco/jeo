@@ -116,7 +116,7 @@ class MapPress_MarkerIcons {
 	}
 
 	function set_default_marker($marker_id) {
-		return update_option('mappress_default_marker_id');
+		return update_option('mappress_default_marker_id', $marker_id);
 	}
 
 	/*
