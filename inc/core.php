@@ -28,6 +28,7 @@ class MapPress {
 
 	function setup_scripts() {
 		add_action('wp_enqueue_scripts', array($this, 'scripts'));
+		add_action('admin_footer', array($this, 'scripts'));
 	}
 
 	function scripts() {	
@@ -67,20 +68,6 @@ class MapPress {
 		wp_localize_script('mappress.groups', 'mappress_groups', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'more_label' => __('More', 'mappress')
-		));
-
-		/* geocode scripts */
-		$geocode_service = $this->geocode_service();
-		$gmaps_key = $this->gmaps_api_key();
-		if($geocode_service == 'gmaps' && $gmaps_key) {
-			wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=' . $gmaps_key . '&sensor=true');
-			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-gmaps.js', array('jquery', 'google-maps-api'), '0.0.1');
-		} else {
-			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-osm.js', array('jquery', 'mapbox-js'), '0.0.3.3');
-		}
-		wp_localize_script('mappress.geocode.box', 'geocode_labels', array(
-			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
-			'results_found' => __('results found', 'mappress')
 		));
 	}
 
@@ -161,7 +148,7 @@ class MapPress {
 		$this->mapped_post_types = $custom + array('post');
 		unset($this->mapped_post_types['map']);
 		unset($this->mapped_post_types['map-group']);
-		return apply_filters('mappress_mapped_post_types', $post_types);
+		return apply_filters('mappress_mapped_post_types', $this->mapped_post_types);
 	}
 
 	function setup_query() {
@@ -364,17 +351,6 @@ class MapPress {
 		return $this->map->ID . '_' . $this->map_count;
 	}
 
-	// geocode service choice
-	function geocode_service() {
-		// osm or gmaps (gmaps requires api key)
-		return apply_filters('mappress_geocode_service', 'osm');
-	}
-
-	// gmaps api
-	function gmaps_api_key() {
-		return apply_filters('mappress_gmaps_api_key', false);
-	}
-
 	// get data
 	function setup_ajax() {
 		add_action('wp_ajax_nopriv_mapgroup_data', array($this, 'get_mapgroup_json_data'));
@@ -495,6 +471,12 @@ require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
 /*
  * MapPress functions api
  */
+
+// mapped post types
+function mappress_get_mapped_post_types() {
+	global $mappress;
+	return $mappress->mapped_post_types();
+}
 
 // get the main map post
 function mappress_the_map() {

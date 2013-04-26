@@ -1,8 +1,5 @@
 <?php
 
-// enqueue mapbox scripts and styles
-add_action('admin_footer', 'mappress_scripts');
-
 /* gather metaboxes */
 
 include(TEMPLATEPATH .  '/metaboxes/map-relation/map-relation.php');

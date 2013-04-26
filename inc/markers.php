@@ -12,8 +12,21 @@ class MapPress_Markers {
 		$this->setup_cache_flush();
 	}
 
+	// geocode service choice
+	function geocode_service() {
+		// osm or gmaps (gmaps requires api key)
+		return apply_filters('mappress_geocode_service', 'osm');
+	}
+
+	// gmaps api
+	function gmaps_api_key() {
+		return apply_filters('mappress_gmaps_api_key', false);
+	}
+
 	function setup_scripts() {
 		add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
+		add_action('wp_enqueue_scripts', array($this, 'geocode_scripts'));
+		add_action('admin_footer', array($this, 'geocode_scripts'));
 		add_action('wp_footer', array($this, 'enqueue_scripts'));
 	}
 
@@ -29,6 +42,23 @@ class MapPress_Markers {
 			'query' => $this->query(),
 			'markerextent' => mappress_use_marker_extent(),
 			'markerextent_defaultzoom' => mappress_marker_extent_default_zoom()
+		));
+	}
+
+	function geocode_scripts() {
+		/* geocode scripts */
+		$geocode_service = $this->geocode_service();
+		$gmaps_key = $this->gmaps_api_key();
+
+		if($geocode_service == 'gmaps' && $gmaps_key) {
+			wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=' . $gmaps_key . '&sensor=true');
+			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-gmaps.js', array('jquery', 'google-maps-api'), '0.0.1');
+		} else {
+			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-osm.js', array('jquery', 'mapbox-js'), '0.0.3.3');
+		}
+		wp_localize_script('mappress.geocode.box', 'geocode_labels', array(
+			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
+			'results_found' => __('results found', 'mappress')
 		));
 	}
 
