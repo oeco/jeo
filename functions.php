@@ -1,22 +1,6 @@
 <?php
 
-require_once(TEMPLATEPATH . '/inc/mappress-core.php');
-require_once(TEMPLATEPATH . '/inc/mappress-markers.php');
-require_once(TEMPLATEPATH . '/inc/mappress-ui.php');
-require_once(TEMPLATEPATH . '/inc/markericons/markericons.php');
-
-// Metaboxes
-require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
-
-// API
-require_once(TEMPLATEPATH . '/inc/mappress-api.php');
-
-// Embed tool
-require_once(TEMPLATEPATH . '/inc/mappress-embed.php');
-
-// Plugins implementations and fixes
-require_once(TEMPLATEPATH  . '/plugins/mappress-plugins.php');
-
+require_once(TEMPLATEPATH . '/inc/core.php');
 
 /*
  * Theme setup

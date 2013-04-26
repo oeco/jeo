@@ -6,7 +6,7 @@
  */
 
 function mappress_find_post_on_map_button($zoom = null, $text = false, $post_id = false) {
-	global $post, $mappress_map;
+	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 
 	$text = $text ? $text : __('Locate on map', 'mappress');
