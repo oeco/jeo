@@ -1,6 +1,6 @@
 <?php if(have_posts()) : ?>
 	<section id="featured-content" class="posts-section featured">
-		<?php $map_id = mappress_map(null, false); ?>
+		<?php $map_id = mappress_map(null, false, true); ?>
 		<div class="container">
 			<div class="eleven columns">
 				<h2><?php _e('Featured', 'mappress'); ?></h2>

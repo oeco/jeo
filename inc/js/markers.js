@@ -71,8 +71,6 @@
 						'margin-left': -(x.properties.marker.width/2)
 					});
 
-					console.log(x.properties.marker);
-
 					// POPUP
 
 					var o = document.createElement('div');

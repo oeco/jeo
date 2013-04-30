@@ -124,11 +124,8 @@ var mappress = {};
 			map.draw();
 		});
 
-		if(conf.legend_full && !conf.disableInteraction)
-			mappress.enableDetails(map, conf.legend, conf.legend_full);
-
 		// disable handlers
-		if((conf.disableHandlers && conf.disableHandlers.mousewheel) || conf.mainMap)
+		if((conf.disableHandlers && conf.disableHandlers.mousewheel))
 			map.eventHandlers[3].remove();
 
 		// layers
@@ -165,6 +162,9 @@ var mappress = {};
 
 		if(conf.legend && !conf.disableInteraction)
 			map.ui.legend.add().content(conf.legend);
+
+		if(conf.legend_full && !conf.disableInteraction)
+			mappress.enableDetails(map, conf.legend, conf.legend_full);
 
 		// Enable zoom-level dependent design.
 	    map.addCallback('drawn', _.throttle(function(map) {

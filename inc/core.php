@@ -44,7 +44,7 @@ class MapPress {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.16.9');
+		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.17');
 		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.2.5');
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.3');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
@@ -297,10 +297,10 @@ class MapPress {
 	 * Display maps
 	 */
 
-	function get_map($map_id = false, $main_map = true) {
+	function get_map($map_id = false, $main_map = true, $force = false) {
 		global $post;
 		if(is_single()) {
-			if(!$this->is_map() && !mappress_has_marker_location()) {
+			if(!$this->is_map() && !mappress_has_marker_location() && !$force) {
 				return;
 			} else {
 				$single_post_maps_id = get_post_meta($post->ID, 'maps');
@@ -329,8 +329,8 @@ class MapPress {
 	 * Dsiplay featured map
 	 */
 
-	function get_featured() {
-		return $this->get_map($this->featured()->ID);
+	function get_featured($main_map = true, $force = false) {
+		return $this->get_map($this->featured()->ID, $main_map, $force);
 	}
 
 	function set_main($conf) {
@@ -511,15 +511,15 @@ function mappress_is_map($map_id = false) {
 }
 
 // display the featured map
-function mappress_featured() {
+function mappress_featured($main_map = true, $force = false) {
 	global $mappress;
-	return $mappress->get_featured();
+	return $mappress->get_featured($main_map, $force);
 }
 
 // display map
-function mappress_map($map_id = false, $main_map = true) {
+function mappress_map($map_id = false, $main_map = true, $force = false) {
 	global $mappress;
-	return $mappress->get_map($map_id, $main_map);
+	return $mappress->get_map($map_id, $main_map, $force = false);
 }
 
 // get the map conf
