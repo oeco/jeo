@@ -17,7 +17,7 @@
 									<?php the_excerpt(); ?>
 								</div>
 							</section>
-							<aside class="actions">
+							<aside class="actions clearfix">
 								<?php echo mappress_find_post_on_map_button(); ?>
 								<a href="<?php the_permalink(); ?>"><?php _e('Read more', 'mappress'); ?></a>
 							</aside>

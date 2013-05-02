@@ -6,21 +6,44 @@
 
 class MapPress_Markers {
 
+	var $directory = '';
+
+	var $directory_uri = '';
+
+	var $geocode_service = '';
+
+	var $gmaps_api_key = false;
+
 	function __construct() {
+		$this->setup_directories();
+		$this->setup();
 		$this->setup_scripts();
 		$this->setup_ajax();
 		$this->setup_cache_flush();
+		$this->includes();
 	}
 
-	// geocode service choice
+	function setup() {
+		$this->geocode_service();
+		$this->gmaps_api_key();
+	}
+
 	function geocode_service() {
-		// osm or gmaps (gmaps requires api key)
-		return apply_filters('mappress_geocode_service', 'osm');
+		$this->geocode_service = apply_filters('mappress_geocode_service', 'osm');
+		return $this->geocode_service;
 	}
 
-	// gmaps api
 	function gmaps_api_key() {
-		return apply_filters('mappress_gmaps_api_key', false);
+		$this->gmaps_api_key = apply_filters('mappress_gmaps_api_key', false);
+		return $this->gmaps_api_key;
+	}
+
+	function setup_directories() {
+		$this->directory = apply_filters('mappress_directory', TEMPLATEPATH . '/inc');
+		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri());
+	}
+
+	function includes() {
 	}
 
 	function setup_scripts() {
@@ -46,12 +69,8 @@ class MapPress_Markers {
 	}
 
 	function geocode_scripts() {
-		/* geocode scripts */
-		$geocode_service = $this->geocode_service();
-		$gmaps_key = $this->gmaps_api_key();
-
-		if($geocode_service == 'gmaps' && $gmaps_key) {
-			wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?key=' . $gmaps_key . '&sensor=true');
+		if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) {
+			wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?v=3&key=' . $this->gmaps_api_key . '&sensor=true');
 			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-gmaps.js', array('jquery', 'google-maps-api'), '0.0.1');
 		} else {
 			wp_register_script('mappress.geocode.box', get_template_directory_uri() . '/metaboxes/geocode/geocode-osm.js', array('jquery', 'mapbox-js'), '0.0.3.3');
@@ -249,6 +268,14 @@ class MapPress_Markers {
 		return apply_filters('mappress_marker_geometry', $geometry, $post);
 	}
 
+	function get_conf_coordinates($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$coordinates = $this->get_coordinates($post_id);
+		return array('lat' => $coordinates[1], 'lon' => $coordinates[0]);
+	}
+
 	function get_coordinates($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
@@ -264,12 +291,18 @@ class MapPress_Markers {
 		return apply_filters('mappress_marker_coordinates', $coordinates, $post);
 	}
 
-	function get_conf_coordinates($post_id = false) {
+	function get_latitude($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
-		$coordinates = $this->get_coordinates($post_id);
-		return array('lat' => $coordinates[1], 'lon' => $coordinates[0]);
+		return get_post_meta($post_id, 'geocode_latitude', true);
+	}
+
+	function get_longitude($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		return get_post_meta($post_id, 'geocode_longitude', true);
 	}
 
 	function has_location($post_id = false) {
@@ -284,6 +317,14 @@ class MapPress_Markers {
 }
 
 $mappress_markers = new MapPress_Markers();
+
+require_once($mappress_markers->directory . '/streetview.php');
+require_once($mappress_markers->directory . '/marker-icons.php');
+
+function mappress_get_geocode_service() {
+	global $mappress_markers;
+	return $mappress_markers->geocode_service;
+}
 
 function mappress_use_marker_extent() {
 	global $mappress_markers;

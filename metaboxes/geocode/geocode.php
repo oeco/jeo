@@ -6,8 +6,8 @@ add_action('save_post', 'geocoding_save_postdata');
 
 function geocoding_init() {
 	global $mappress_markers;
-	$geocode_service = $mappress_markers->geocode_service();
-	$gmaps_key = $mappress_markers->gmaps_api_key();
+	$geocode_service = mappress_get_geocode_service();
+	$gmaps_key = $mappress_markers->gmaps_api_key;
 	if($geocode_service == 'gmaps' && $gmaps_key)
 		wp_enqueue_script('google-maps-api');
 	wp_enqueue_script('mappress.geocode.box');
@@ -41,7 +41,7 @@ function geocoding_inner_custom_box($post) {
 	    <a class="button" href="#" onclick="codeAddress();return false;"><?php _e('Geolocate', 'mappress'); ?></a>
 	</p>
 	<div class="results"></div>
-	<?php if($mappress_markers->geocode_service() == 'gmaps' && $mappress_markers->gmaps_api_key()) : ?>
+	<?php if($mappress_markers->geocode_service == 'gmaps' && $mappress_markers->gmaps_api_key) : ?>
 		<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
 	<?php endif; ?>
 	<div id="geolocate_canvas" style="width:500px;height:300px"></div>
@@ -71,6 +71,7 @@ function geocoding_inner_custom_box($post) {
 	    }
 	</style>
 	<?php
+	do_action('mappress_geocode_box', $post);
 }
 
 function geocoding_save_postdata($post_id) {
@@ -97,6 +98,8 @@ function geocoding_save_postdata($post_id) {
 
 	if(isset($_POST['geocode_viewport']))
 		update_post_meta($post_id, 'geocode_viewport', $_POST['geocode_viewport']);
+
+	do_action('mappress_geocode_box_save', $post_id);
 
 }
 

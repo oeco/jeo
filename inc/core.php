@@ -6,9 +6,16 @@
 
 class MapPress {
 
+	var $directory = '';
+
+	var $directory_uri = '';
+
 	var $map = false;
+
 	var $mapgroup_id = false;
+
 	var $map_count = 0;
+
 	var $mapped_post_types = false;
 
 	function __construct() {
@@ -17,6 +24,7 @@ class MapPress {
 	}
 
 	function setup() {
+		$this->setup_directories();
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
@@ -24,6 +32,15 @@ class MapPress {
 		$this->setup_pre_get_map();
 		$this->setup_ajax();
 		$this->setup_canonical();
+		$this->includes();
+	}
+
+	function setup_directories() {
+		$this->directory = apply_filters('mappress_directory', TEMPLATEPATH . '/inc');
+		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri());
+	}
+
+	function includes() {
 	}
 
 	function setup_scripts() {
@@ -298,6 +315,7 @@ class MapPress {
 	 */
 
 	function get_map($map_id = false, $main_map = true, $force = false) {
+
 		global $post;
 		if(is_single()) {
 			if(!$this->is_map() && !mappress_has_marker_location() && !$force) {
@@ -460,17 +478,12 @@ class MapPress {
 
 $mappress = new MapPress();
 
-/*
- * Includes
- */
-
-require_once(TEMPLATEPATH . '/inc/markers.php');
-require_once(TEMPLATEPATH . '/inc/marker-icons.php');
-require_once(TEMPLATEPATH . '/inc/ui.php');
+require_once(TEMPLATEPATH . '/inc' . '/markers.php');
+require_once(TEMPLATEPATH . '/inc' . '/ui.php');
 // GeoJSON API
-require_once(TEMPLATEPATH . '/inc/api.php');
+require_once(TEMPLATEPATH . '/inc' . '/api.php');
 // Embed functionality
-require_once(TEMPLATEPATH . '/inc/embed.php');
+require_once(TEMPLATEPATH . '/inc' . '/embed.php');
 // Metaboxes
 require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
 

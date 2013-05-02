@@ -5,5 +5,6 @@
 			<div class="highlight-point transition has-end" data-end="1300"></div>
 		<?php endif; ?>
 	<?php endif; ?>
+	<?php do_action('mappress_map'); ?>
 </div>
 <script type="text/javascript">mappress(<?php echo mappress_map_conf(); ?>);</script>
