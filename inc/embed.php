@@ -38,6 +38,16 @@ class MapPress_Embed {
 		get_template_part('content', 'embed');
 		exit;
 	}
+
+	function get_embed_url($vars = array()) {
+		$query = http_build_query($vars);
+		return home_url('/embed/?' . $query);
+	}
 }
 
-new MapPress_Embed;
+$mappress_embed = new MapPress_Embed();
+
+function mappress_get_embed_url($vars = array()) {
+	global $mappress_embed;
+	return $mappress_embed->get_embed_url($vars);
+}
