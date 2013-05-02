@@ -61,12 +61,12 @@ class MapPress {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.0.17');
+		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.1.8');
+		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.9');
 		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.2.5');
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.3');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
 			.js', array('mappress', 'underscore'), '0.0.8.1');
-		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.0.9.12');
 		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.7');
 		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.2');
 
@@ -358,7 +358,7 @@ class MapPress {
 	}
 
 	function get_map_conf() {
-		global $$post;
+		global $post;
 		$conf = array(
 			'postID' => $this->map->ID,
 			'count' => $this->map_count
@@ -371,27 +371,22 @@ class MapPress {
 		return apply_filters('mappress_map_conf', $conf, $this->map, $post);
 	}
 
-	function setup_ajax() {
-		add_action('wp_ajax_nopriv_mapgroup_data', array($this, 'get_mapgroup_json_data'));
-		add_action('wp_ajax_mapgroup_data', array($this, 'get_mapgroup_json_data'));
-		add_action('wp_ajax_nopriv_map_data', array($this, 'get_map_json_data'));
-		add_action('wp_ajax_map_data', array($this, 'get_map_json_data'));
+	function mapgroup_conf() {
+		return json_encode($this->get_mapgroup_conf());
 	}
 
-	function get_mapgroup_json_data($group_id = false) {
-		$group_id = $group_id ? $group_id : $_REQUEST['group_id'];
-		$data = json_encode($this->get_mapgroup_data($group_id));
-		header('Content Type: application/json');
-		echo $data;
-		exit;
-	}
-
-	function get_map_json_data($map_id = false) {
-		$map_id = $map_id ? $map_id : $_REQUEST['map_id'];
-		$data = json_encode($this->get_map_data($map_id));
-		header('Content Type: application/json');
-		echo $data;
-		exit;
+	function get_mapgroup_conf() {
+		global $post;
+		$conf = array(
+			'postID' => $this->map->ID,
+			'count' => $this->map_count
+		); // default
+		if(is_post_type_archive('map-group')) {
+			$conf['disableMarkers'] = true;
+			$conf['disableHash'] = true;
+			$conf['disableInteraction'] = true;
+		}
+		return apply_filters('mappress_mapgroup_conf', $conf, $this->map, $post);
 	}
 
 	function get_map_layers($map_id = false) {
@@ -416,8 +411,8 @@ class MapPress {
 		return apply_filters('mappress_map_data', $data, $post);
 	}
 
-	function get_mapgroup_data($group_id) {
-		$group_id = $group_id ? $group_id : $this->get_the_ID();
+	function get_mapgroup_data($group_id = false) {
+		$group_id = $group_id ? $group_id : $this->map->ID;
 		$data = array();
 		if(get_post_type($group_id) != 'map-group')
 			return;
@@ -435,7 +430,36 @@ class MapPress {
 		return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $map);
 	}
 
-	// disable canonical redirect on map/map-group post type for stories pagination
+	/*
+	 * Ajax
+	 */
+
+	function setup_ajax() {
+		add_action('wp_ajax_nopriv_mapgroup_data', array($this, 'get_mapgroup_json_data'));
+		add_action('wp_ajax_mapgroup_data', array($this, 'get_mapgroup_json_data'));
+		add_action('wp_ajax_nopriv_map_data', array($this, 'get_map_json_data'));
+		add_action('wp_ajax_map_data', array($this, 'get_map_json_data'));
+	}
+
+	function get_mapgroup_json_data($group_id = false) {
+		$group_id = $group_id ? $group_id : $_REQUEST['group_id'];
+		$data = json_encode($this->get_mapgroup_data($group_id));
+		header('Content Type: application/json');
+		echo $data;
+		exit;
+	}
+
+	function get_map_json_data($map_id = false) {
+		$map_id = $map_id ? $map_id : $_REQUEST['map_id'];
+		$data = json_encode($this->get_map_data($map_id));
+		header('Content Type: application/json');
+		echo $data;
+		exit;
+	}
+
+	/*
+	 * Disable canonical redirect on map/map-group post type for stories pagination
+	 */
 	function setup_canonical() {
 		add_filter('redirect_canonical', array($this, 'disable_canonical'));
 	}
@@ -541,6 +565,12 @@ function mappress_map($map_id = false, $main_map = true, $force = false) {
 function mappress_map_conf() {
 	global $mappress;
 	return $mappress->map_conf();
+}
+
+// get the map conf
+function mappress_mapgroup_conf() {
+	global $mappress;
+	return $mappress->mapgroup_conf();
 }
 
 // get the main map id

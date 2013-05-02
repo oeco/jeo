@@ -45,5 +45,5 @@ foreach($mapgroup['maps'] as $map) {
 	</div>
 </div>
 <script type="text/javascript">
-	var group = mappress.group(<?php echo mappress_get_the_ID(); ?>);
+	var group = mappress.group(<?php echo mappress_mapgroup_conf(); ?>);
 </script>

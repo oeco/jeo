@@ -135,7 +135,7 @@ var mappress = {};
 			if(!conf.disableInteraction)
 				map.interaction.auto();
 
-			runCallbacks('layersReady', [map]);
+			mappress.runCallbacks('layersReady', [map]);
 
 		}));
 
@@ -199,7 +199,7 @@ var mappress = {};
 			conf.callbacks();
 
 		// map is ready, do callbacks
-		runCallbacks('mapReady', [map]);
+		mappress.runCallbacks('mapReady', [map]);
 
 		return map;
 	}
@@ -355,7 +355,7 @@ var mappress = {};
 
 		if(conf.legend_full)
 			newConf.legend_full = conf.legend_full;
-
+		
 		return newConf;
 	}
 
@@ -365,14 +365,18 @@ var mappress = {};
 
 	mappress.callbacks = {};
 
-	var createCallback = function(name) {
+	mappress.createCallback = function(name) {
 		mappress.callbacks[name] = [];
 		mappress[name] = function(callback) {
 			mappress.callbacks[name].push(callback);
 		}
 	}
 
-	var runCallbacks = function(name, args) {
+	mappress.runCallbacks = function(name, args) {
+		if(!mappress.callbacks[name]) {
+			console.log('A MapPress callback tried to run, but wasn\'t initialized');
+			return false;
+		}
 		if(!mappress.callbacks[name].length)
 			return false;
 
@@ -387,7 +391,7 @@ var mappress = {};
 		_run(mappress.callbacks[name]);
 	}
 
-	createCallback('mapReady');
-	createCallback('layersReady');
+	mappress.createCallback('mapReady');
+	mappress.createCallback('layersReady');
 
 })(jQuery);

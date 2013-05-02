@@ -2,24 +2,42 @@ var groups = {};
 
 (function($) {
 
-	mappress.group = function(groupID) {
+	mappress.group = function(conf) {
 
 		var group = {};
 
 		var fragment = mappress.fragment();
 
-		$.getJSON(mappress_groups.ajaxurl,
-		{
-			action: 'mapgroup_data',
-			group_id: groupID
-		},
-		function(data) {
-			group.build(data);
-		});
+		var _init = function() {
+
+			if(conf.mainMap)
+				$('body').addClass('loading-map');
+
+			if(!conf.postID && typeof conf === 'object') { // conf ready
+				return group.build(conf);
+			}
+
+			$.getJSON(mappress_groups.ajaxurl,
+				{
+					action: 'mapgroup_data',
+					group_id: conf.postID
+				},
+				function(mapConf) {
+					mapConf = _.extend(mapConf, conf);
+					group.build(mapConf);
+				});
+
+		}
+
+		if($.isReady) {
+			_init();
+		} else {
+			$(document).ready(_init);
+		}
 
 		group.build = function(data) {
 
-			group.$ = $('#mapgroup_' + groupID);
+			group.$ = $('#mapgroup_' + data.postID);
 
 			// store maps data
 			group.mapsData = data.maps;
@@ -35,7 +53,8 @@ var groups = {};
 			if(fragment.get('map'))
 				firstMapID = fragment.get('map');
 
-			group.conf = mappress.convertMapConf(group.mapsData[firstMapID]);
+			group.conf = _.extend(data, mappress.convertMapConf(group.mapsData[firstMapID]));
+			delete group.conf.postID;
 
 			// set mappress conf containerID to group id
 			group.conf.containerID = group.containerID;
@@ -72,6 +91,8 @@ var groups = {};
 				return false;
 			});
 
+			mappress.runCallbacks('groupReady', [group]);
+
 		}
 
 		group.updateUI = function() {
@@ -103,6 +124,14 @@ var groups = {};
 			// store new conf
 			group.map.conf = conf;
 
+			// update current map id
+			group.currentMapID = mapID;
+			group.map.currentMapID = mapID;
+
+			var fragmentEnabled = mappress.fragmentEnabled;
+			if(fragmentEnabled)
+				fragment.set({'map': mapID});
+
 			mapbox.load(layers, function(data) {
 
 				group.map.setLayerAt(0, data.layer);
@@ -126,19 +155,16 @@ var groups = {};
 				if(conf.legend_full)
 					mappress.enableDetails(group.map, conf.legend, conf.legend_full);
 
+				mappress.runCallbacks('groupChanged', [mapID, group]);
+
 			});
-
-			// update current map id
-			group.currentMapID = mapID;
-			group.map.currentMapID = mapID;
-
-			var fragmentEnabled = mappress.fragmentEnabled;
-			if(fragmentEnabled)
-				fragment.set({'map': mapID});
 		}
 
 		groups[group.id] = group;
 		return group;
 	}
+
+	mappress.createCallback('groupReady');
+	mappress.createCallback('groupChanged');
 
 })(jQuery);
