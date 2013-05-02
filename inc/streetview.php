@@ -74,21 +74,21 @@ class MapPress_StreetView extends MapPress_Markers {
 		endif;
 	}
 
-	function is_streetview($post_id) {
+	function is_streetview($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
 		return get_post_meta($post_id, '_streetview', true);
 	}
 
-	function get_pitch($post_id) {
+	function get_pitch($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
 		return get_post_meta($post_id, '_streetview_pitch', true);
 	}
 
-	function get_heading($post_id) {
+	function get_heading($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 

@@ -10,7 +10,7 @@ foreach($mapgroup['maps'] as $map) {
 }
 ?>
 <div class="mapgroup-container">
-	<div id="mapgroup_<?php echo mappress_the_ID(); ?>" class="mapgroup">
+	<div id="mapgroup_<?php echo mappress_get_the_ID(); ?>" class="mapgroup">
 		<ul class="map-nav">
 			<?php
 			foreach($main_maps as $map) :
@@ -39,11 +39,11 @@ foreach($mapgroup['maps'] as $map) {
 			<?php endif; ?>
 		</ul>
 		<div class="map-container">
-			<div id="mapgroup_<?php echo mappress_the_ID(); ?>_map" class="map">
+			<div id="mapgroup_<?php echo mappress_get_the_ID(); ?>_map" class="map">
 			</div>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
-	var group = mappress.group(<?php echo mappress_the_ID(); ?>);
+	var group = mappress.group(<?php echo mappress_get_the_ID(); ?>);
 </script>

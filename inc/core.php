@@ -269,11 +269,11 @@ class MapPress {
 		}
 	}
 
-	function map_id() {
+	function get_id() {
 		return $this->map->ID . '_' . $this->map_count;
 	}
 
-	function the_ID() {
+	function get_the_ID() {
 		return $this->map->ID;
 	}
 
@@ -343,10 +343,7 @@ class MapPress {
 		return $map_js_id;
 	}
 
-	/*
-	 * Dsiplay featured map
-	 */
-
+	// display featured map
 	function get_featured($main_map = true, $force = false) {
 		return $this->get_map($this->featured()->ID, $main_map, $force);
 	}
@@ -374,7 +371,6 @@ class MapPress {
 		return apply_filters('mappress_map_conf', $conf, $this->map, $post);
 	}
 
-	// get data
 	function setup_ajax() {
 		add_action('wp_ajax_nopriv_mapgroup_data', array($this, 'get_mapgroup_json_data'));
 		add_action('wp_ajax_mapgroup_data', array($this, 'get_mapgroup_json_data'));
@@ -390,26 +386,18 @@ class MapPress {
 		exit;
 	}
 
-	function get_mapgroup_data($group_id) {
-		$group_id = $group_id ? $group_id : $this->the_ID();
-		$data = array();
-		if(get_post_type($group_id) != 'map-group')
-			return;
-		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
-		foreach($group_data['maps'] as $map) {
-			$map_id = $map['id'];
-			$data['maps'][$map_id] = $map;
-			$data['maps'][$map_id] += $this->get_map_data($map['id']);
-		}
-		return apply_filters('mappress_mapgroup_data', $data, $post);
-	}
-
 	function get_map_json_data($map_id = false) {
 		$map_id = $map_id ? $map_id : $_REQUEST['map_id'];
 		$data = json_encode($this->get_map_data($map_id));
 		header('Content Type: application/json');
 		echo $data;
 		exit;
+	}
+
+	function get_map_layers($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data = $this->get_map_data($map_id);
+		return $map_data['layers'];
 	}
 
 	function get_map_data($map_id = false) {
@@ -426,6 +414,20 @@ class MapPress {
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', get_the_content());
 		wp_reset_postdata();
 		return apply_filters('mappress_map_data', $data, $post);
+	}
+
+	function get_mapgroup_data($group_id) {
+		$group_id = $group_id ? $group_id : $this->get_the_ID();
+		$data = array();
+		if(get_post_type($group_id) != 'map-group')
+			return;
+		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
+		foreach($group_data['maps'] as $map) {
+			$map_id = $map['id'];
+			$data['maps'][$map_id] = $map;
+			$data['maps'][$map_id] += $this->get_map_data($map['id']);
+		}
+		return apply_filters('mappress_mapgroup_data', $data, $post);
 	}
 
 	function get_map_legend($map_id = false) {
@@ -542,15 +544,15 @@ function mappress_map_conf() {
 }
 
 // get the main map id
-function mappress_map_id() {
+function mappress_get_map_id() {
 	global $mappress;
-	return $mappress->map_id();
+	return $mappress->get_id();
 }
 
 // get the main map id
-function mappress_the_ID() {
+function mappress_get_the_ID() {
 	global $mappress;
-	return $mappress->the_ID();
+	return $mappress->get_the_ID();
 }
 
 function mappress_get_mapgroup_data($map_id = false) {
@@ -562,6 +564,11 @@ function mappress_get_mapgroup_data($map_id = false) {
 function mappress_get_map_data($map_id = false) {
 	global $mappress;
 	return $mappress->get_map_data($map_id);
+}
+
+function mappress_get_map_layers($map_id = false) {
+	global $mappress;
+	return $mappress->get_map_layers($map_id);
 }
 
 ?>
