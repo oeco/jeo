@@ -12,14 +12,14 @@ class MapPress_StreetView extends MapPress_Markers {
 
 	function setup() {
 		add_action('admin_footer', array($this, 'scripts'));
-		add_action('wp_enqueue_scripts', array($this, 'scripts'));
+		add_action('mappress_geocode_scripts', array($this, 'scripts'));
 		add_action('mappress_geocode_box', array($this, 'editor'));
 		add_action('mappress_geocode_box_save', array($this, 'save'));
 		add_action('mappress_map', array($this, 'apply'));
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery'), '0.0.7');
+		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.2.14');
 	}
 
 	function editor($post) {
@@ -31,7 +31,7 @@ class MapPress_StreetView extends MapPress_Markers {
 		if(!$heading)
 			$heading = 0;
 		?>
-		<div id="mappress_streetview" class="clearfix">
+		<div id="mappress_streetview">
 			<p><input type="checkbox" name="enable_streetview" id="enable_streetview" <?php if($streetview) echo 'checked'; ?> /> <label for="enable_streetview"><?php _e('Use Google Street View', 'mappress'); ?></label></p>
 			<div id="streetview_canvas" style="width:60%;height:400px;float:left;">
 			</div>

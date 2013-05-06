@@ -4,17 +4,7 @@ var geocodeBox;
 
 	geocodeBox = function(options) {
 
-		var settings = {
-			containerID: 	'geocode_box',
-			service: 		 geocode_localization.service
-		}
-
-		if(typeof options === 'undefined');
-			options = {};
-
-		settings = $.extend(settings, options);
-
-		var box,
+		var box = {},
 			latInput,
 			lngInput,
 			boundsInput,
@@ -23,9 +13,81 @@ var geocodeBox;
 			resultsContainer,
 			mapCanvasID = 'map_canvas';
 
+		var settings = {
+			containerID: 	'geocode_box',
+			service: 		 geocode_localization.service
+		}
+
+		if(typeof options === 'undefined');
+			options = {};
+
+		settings = box.settings = $.extend(settings, options);
+
+		box.clearResults = function() {
+			resultsContainer.empty();
+		}
+
+		box.geocode = function() {
+			box._getAddress(addressInput.val());
+		};
+
+		box.address = function() {
+			f = {
+				set: function(address) {
+					addressInput.val(address);
+					runCallbacks('addressChanged', [box]);
+				},
+				get: function() {
+					return addressInput.val();
+				}
+			}
+			return f;
+		}
+
+		box.location = function() {
+			f = {
+				set: function(lat, lng) {
+					latInput.val(lat);
+					lngInput.val(lng);
+					runCallbacks('locationChanged', [box]);
+				},
+				setLat: function(lat) {
+					latInput.val(lat);
+					runCallbacks('locationChanged', [box]);
+				},
+				setLng: function(lng) {
+					lngInput.val(lng);
+					runCallbacks('locationChanged', [box]);
+				},
+				get: function() {
+					return [latInput.val(), lngInput.val()];
+				},
+				getLat: function() {
+					return latInput.val();
+				},
+				getLng: function() {
+					return lngInput.val();
+				}
+			}
+			return f;
+		}
+
+		box.bounds = function() {
+			f = {
+				set: function(bounds) {
+					boundsInput.val(bounds);
+					runCallbacks('boundsChanged', [box]);
+				},
+				get: function() {
+					return boundsInput.val();
+				}
+			}
+			return f;
+		}
+
 		function _init() {
 
-			box 				= $('#' + settings.containerID);
+			box 				= $.extend(box, $('#' + settings.containerID));
 
 			if(!box.length)
 				return false;
@@ -43,81 +105,21 @@ var geocodeBox;
 				box = $.extend(box, gmaps);
 			}
 
-			createCallback('ready');
-			createCallback('queried');
-			createCallback('addressChanged');
-			createCallback('locationChanged');
-			createCallback('boundsChanged');
-
-			box.geocode = function() {
-				box._getAddress(addressInput.val());
-			};
-
-			box.address = function() {
-				f = {
-					set: function(address) {
-						addressInput.val(address);
-						runCallbacks('addressChanged', [box]);
-					},
-					get: function() {
-						return addressInput.val();
-					}
-				}
-				return f;
-			}
-
-			box.location = function() {
-				f = {
-					set: function(lat, lng) {
-						latInput.val(lat);
-						lngInput.val(lng);
-						runCallbacks('locationChanged', [box]);
-					},
-					setLat: function(lat) {
-						latInput.val(lat);
-						runCallbacks('locationChanged', [box]);
-					},
-					setLng: function(lng) {
-						lngInput.val(lng);
-						runCallbacks('locationChanged', [box]);
-					},
-					get: function() {
-						return [latInput.val(lat), lngInput.val(lng)];
-					},
-					getLat: function() {
-						return latInput.val();
-					},
-					getLng: function() {
-						return lngInput.val();
-					}
-				}
-				return f;
-			}
-
-			box.bounds = function() {
-				f = {
-					set: function(bounds) {
-						boundsInput.val(bounds);
-						runCallbacks('boundsChanged', [box]);
-					},
-					get: function() {
-						return boundsInput.val();
-					}
-				}
-				return f;
-			}
-
-			bindEvents();
-
 			var lat 	= box.location().getLat();
 			var lng 	= box.location().getLng();
 			var bounds 	= box.bounds().get();
 
-			box._map(lat, lng, bounds);
+			bindEvents();
 
 			runCallbacks('ready', [box]);
 
+			box.update(lat, lng, bounds);
+
 		}
+
+		/*
+		 * UI events
+		 */
 
 		function bindEvents() {
 			addressInput.keyup(function(e) {
@@ -132,31 +134,25 @@ var geocodeBox;
 			});
 		};
 
-		if($.isReady)
-			_init();
-		else
-			$(document).ready(_init);
+		/*
+		 * Services
+		 */
 
 		var gmaps = {
 
 			isGoogleMaps: true,
 
-			_map: function(lat, lng, bounds) {
-
-				var position = new google.maps.LatLng(lat, lng);
+			_map: function(position) {
 
 				var options = {
-					center: position,
-					zoom: 1,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					streetViewControl: false
 				};
 
-				box.map = new google.maps.Map(document.getElementById(mapCanvasID), options);
-				box.geocoder = new google.maps.Geocoder();
+				if(typeof position !== 'undefined')
+					options.center = position;
 
-				if(lat && lng) {
-					box.update(lat, lng, box._convertToViewport(bounds));
-				}
+				box.map = new google.maps.Map(document.getElementById(mapCanvasID), options);
 
 				// events
 
@@ -164,9 +160,17 @@ var geocodeBox;
 					box.bounds().set(box.map.getBounds());
 				});
 
+				box.isMapReady = true;
+				runCallbacks('mapReady', [box]);
+
+				return box.map;
+
 			},
 
 			_getAddress: function(address) {
+
+				if(!box.geocoder)
+					box.geocoder = new google.maps.Geocoder();
 
 				box.geocoder.geocode({ address: address }, function(results, status) {
 
@@ -199,6 +203,9 @@ var geocodeBox;
 
 			_convertToViewport: function(bounds) {
 
+				if(typeof bounds !== 'string')
+					return bounds;
+
 				var viewport = bounds.split('), (');
 
 				var viewportSW = viewport[0];
@@ -228,7 +235,6 @@ var geocodeBox;
 					if(!box.marker) {
 
 						box.marker = new google.maps.Marker({
-							map: 		box.map,
 							draggable: 	true,
 							position: 	position
 						});
@@ -243,10 +249,24 @@ var geocodeBox;
 
 					}
 
+					if(!box.isMapReady)
+						box._map(position);
+
+					box.map.setCenter(position);
+					box.marker.setMap(box.map);
+
+					if(typeof bounds !== 'undefined')
+						box.map.fitBounds(box._convertToViewport(bounds));
+
 				}
 
-				if(typeof bounds !== 'undefined')
-					box.map.fitBounds(bounds);
+			},
+
+			clearMarkers: function() {
+
+				box.marker.setMap(null);
+				box.map.setCenter(new google.maps.LatLng(0,0));
+				box.map.setZoom(1);
 
 			}
 
@@ -265,9 +285,8 @@ var geocodeBox;
 				box.map.zoom(1);
 				box.map.addLayer(box.markerLayer);
 
-				if(lat && lng) {
-					box.update(lat, lng);
-				}
+				box.isMapReady = true;
+				runCallbacks('mapReady', [box]);
 
 			},
 
@@ -290,6 +309,13 @@ var geocodeBox;
 			},
 
 			update: function(lat, lng, bounds) {
+
+				if(!box.isMapReady)
+					box._map();
+
+				box.clearMarkers();
+
+				box.map.addLayer(box.markerLayer);
 
 				var position = {
 					lat: lat,
@@ -319,6 +345,12 @@ var geocodeBox;
 				];
 
 				box.markerLayer.features(features);
+
+			},
+
+			clearMarkers: function() {
+
+				box.map.removeLayer(box.markerLayer);
 
 			}
 
@@ -415,10 +447,12 @@ var geocodeBox;
 		}
 
 		var runCallbacks = function(name, args) {
-			if(!callbacks[name])
+			if(!callbacks[name]) {
 				return false;
-			if(!callbacks[name].length)
-				return false;
+			}
+			if(!callbacks[name].length) {
+				return false;	
+			}
 
 			var _run = function(callbacks) {
 				if(callbacks) {
@@ -430,6 +464,18 @@ var geocodeBox;
 			}
 			_run(callbacks[name]);
 		}
+
+		createCallback('ready');
+		createCallback('mapReady');
+		createCallback('queried');
+		createCallback('addressChanged');
+		createCallback('locationChanged');
+		createCallback('boundsChanged');
+
+		if($.isReady)
+			_init();
+		else
+			$(document).ready(_init);
 
 		return box;
 

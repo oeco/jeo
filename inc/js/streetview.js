@@ -1,98 +1,199 @@
-(function($) {
+var streetviewBox;
 
-	var $container,
-		$toggle,
-		$canvas,
-		panorama,
-		lat,
-		lng,
-		pitch,
-		heading;
+(function($) {
 
 	mappress.streetview = function(options) {
 		$(document).ready(function() {
-			$canvas = $('#' + options.containerID);
-			lat = options.lat;
-			lng = options.lng;
-			pitch = options.pitch;
-			heading = options.heading;
+			options.canvas = $('#' + options.containerID);
 			$('body').addClass('displaying-map');
-			enableStreetView();
+			enable(options);
 		});
 	}
 
-	function enableStreetView() {
-		$canvas.show();
-		var options = {
-			position: new google.maps.LatLng(lat, lng),
+	function enable(options) {
+
+		var settings = {
+			canvas: false,
+			lat: 0,
+			lng: 0,
+			heading: 0,
+			pitch: 0,
+			callback: false
+		};
+
+		$.extend(settings, options);
+
+		var panOptions = {
+			position: new google.maps.LatLng(settings.lat, settings.lng),
 			pov: {
-				heading: heading,
-				pitch: pitch
+				heading: settings.heading,
+				pitch: settings.pitch
 			},
 			visible: true
 		};
-		panorama = new google.maps.StreetViewPanorama($canvas[0], options);
 
-		if($('#streetview_pitch').length) {
-			google.maps.event.addListener(panorama, 'pov_changed', function() {
-				$('#streetview_pitch').val(panorama.getPov().pitch);
-				$('#streetview_heading').val(panorama.getPov().heading);
-			});
-		}
+		panorama = new google.maps.StreetViewPanorama(settings.canvas[0], panOptions);
+
+		if(typeof settings.callback === 'function')
+			settings.callback(panorama);
+
+		return panorama;
 	}
 
 	/*
 	 * Editor settings
 	 */
 
-	$(document).ready(function() {
-		$container = $('#mappress_streetview');
+	streetviewBox = function(options) {
 
-		if(!$container.length)
-			return false;
+		var settings = {
+			geocoder: false,
+			containerID: 'mappress_streetview',
+			force: false
+		};
 
-		$toggle = $container.find('#enable_streetview');
-		$canvas = $container.find('#streetview_canvas');
+		if(typeof options === 'undefined')
+			options = {};
 
-		updateSettings();
-		checkLatLng();
+		settings = $.extend(settings, options);
 
-		$('#geocode_lat, #geocode_lon').bind('change', function() {
-			checkLatLng();
+		var box = {};
+
+		$.extend(box, {
+
+			_init: function() {
+
+				if(!box.geocoder.isGoogleMaps)
+					return false;
+
+				$.extend(box, $('#' + settings.containerID));
+
+				if(!box.length)
+					return false;
+
+				box.canvas = box.find('#streetview_canvas');
+				box.toggler = box.find('#enable_streetview');
+
+				box.toggler.parent().hide();
+				box.disable();
+
+				box.geocoder.mapReady(box._initPanorama);
+
+			},
+
+			_initPanorama: function() {
+
+				box.loadPanorama();
+
+				var loc = box.geocoder.location().get();
+				box.updatePosition(loc[0], loc[1]);
+
+				box.updatePov(box.pitch.get(), box.heading.get());
+
+				if(settings.force) {
+					box.enable();
+				} else {
+					box.toggler.parent().show();
+				}
+
+				box.geocoder.locationChanged(function() {
+					var loc = box.geocoder.location().get();
+					box.updatePosition(loc[0], loc[1]);
+				});
+
+				box.toggler.change(function() {
+					if($(this).is(':checked'))
+						box.enable();
+					else
+						box.disable();
+				});
+
+			},
+
+			loadPanorama: function() {
+
+				box.panorama = enable({
+					canvas: box.canvas,
+					heading: 0,
+					pitch: 0,
+					callback: function(pan) {
+
+						google.maps.event.addListener(pan, 'pov_changed', function() {
+
+							box.pitch.set(pan.getPov().pitch);
+							box.heading.set(pan.getPov().heading);
+
+						});
+
+					}
+				});
+
+				box.disable();
+
+			},
+
+			enable: function() {
+
+				box.canvas.show();
+
+			},
+
+			disable: function() {
+
+				box.canvas.hide();
+
+			},
+
+			updatePosition: function(lat, lng) {
+
+				box.panorama.setPosition(new google.maps.LatLng(lat, lng));
+
+				box.enable();
+
+			},
+
+			updatePov: function(pitch, heading) {
+
+				box.panorama.setPov({
+					heading: heading,
+					pitch: pitch,
+					zoom: 1
+				});
+
+				box.enable();
+
+			},
+
+			geocoder: settings.geocoder,
+
+			pitch: {
+
+				set: function(pitch) {
+					box.find('#streetview_pitch').val(pitch);
+				},
+
+				get: function() {
+					return parseFloat(box.find('#streetview_pitch').val());
+				}
+			},
+
+			heading: {
+
+				set: function(heading) {
+					box.find('#streetview_heading').val(heading);
+				},
+
+				get: function() {
+					return parseFloat(box.find('#streetview_heading').val());
+				}
+			}
+
 		});
 
-		$toggle.change(function() {
-			if($(this).is(':checked'))
-				enableStreetView();
-			else
-				disableStreetView();
-		});
-	});
+		box.geocoder.ready(box._init);
 
-	function checkLatLng() {
-		if($('#geocode_lat').val() && $('#geocode_lon').val()) {
-			$toggle.show();
-			lat = $('#geocode_lat').val();
-			lng = $('#geocode_lon').val();
-		} else {
-			disableStreetView();
-			$toggle.hide();
-			lat = false;
-			lng = false;
-			return false;
-		}
-		if($toggle.is(':checked'))
-			enableStreetView();
-	}
+		return box;
 
-	function updateSettings() {
-		pitch = parseFloat($('#streetview_pitch').val());
-		heading = parseFloat($('#streetview_heading').val());
-	}
-
-	function disableStreetView() {
-		$canvas.hide();
-		$toggle.attr('checked', false);
 	}
 
 })(jQuery);

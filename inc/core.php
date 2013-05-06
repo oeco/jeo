@@ -32,15 +32,11 @@ class MapPress {
 		$this->setup_pre_get_map();
 		$this->setup_ajax();
 		$this->setup_canonical();
-		$this->includes();
 	}
 
 	function setup_directories() {
 		$this->directory = apply_filters('mappress_directory', TEMPLATEPATH . '/inc');
 		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri());
-	}
-
-	function includes() {
 	}
 
 	function setup_scripts() {

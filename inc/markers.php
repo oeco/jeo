@@ -222,20 +222,19 @@ class MapPress_Markers {
 
 	function geocode_register_scripts() {
 
-		$geocode_dependencies = array('jquery');
+		$dependencies = array('jquery');
 
 		if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) {
 			wp_register_script('google-maps-api', 'http://maps.googleapis.com/maps/api/js?v=3&key=' . $this->gmaps_api_key . '&sensor=true');
-			$geocode_dependencies[] = 'google-maps-api';
+			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $geocode_dependencies, '0.0.12');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.2.15');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'service' => $this->geocode_service,
 			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
-			'results_found' => __('results found', 'mappress'),
-			'autorun' => is_admin()
+			'results_found' => __('results found', 'mappress')
 		));
 
 		do_action('mappress_geocode_scripts');
@@ -263,46 +262,60 @@ class MapPress_Markers {
 
 	function geocode_box($post = false) {
 
-		$geocode_latitude = $this->get_latitude();
-		$geocode_longitude = $this->get_longitude();
-
-		$geocode_address = get_post_meta($post->ID, 'geocode_address', true);
-		$geocode_viewport = get_post_meta($post->ID, 'geocode_viewport', true);
+		if($post) {
+			$geocode_latitude = $this->get_latitude();
+			$geocode_longitude = $this->get_longitude();
+			$geocode_address = get_post_meta($post->ID, 'geocode_address', true);
+			$geocode_viewport = get_post_meta($post->ID, 'geocode_viewport', true);
+		}
 
 		?>
-		<div id="geocode_box">
-			<h4><?php _e('Write an address', 'mappress'); ?></h4>
-			<p>
-				<input type="text" size="80" id="geocode_address" name="geocode_address" value="<?php if($geocode_address) echo $geocode_address; ?>" />
-			    <a class="button geocode_address" href="#"><?php _e('Geolocate', 'mappress'); ?></a>
+		<div id="geocode_box" class="clearfix">
+			<h4><?php _e('Find the location', 'mappress'); ?></h4>
+			<p class="clearfix">
+				<input type="text" size="80" id="geocode_address" name="geocode_address" placeholder="<?php _e('Full address', 'mappress'); ?>" value="<?php if($geocode_address) echo $geocode_address; ?>" />
+				<a class="button geocode_address" href="#"><?php _e('Find', 'mappress'); ?></a>
 			</p>
 			<div class="results"></div>
 			<?php if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) : ?>
 				<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
 			<?php endif; ?>
 			<div id="map_canvas" style="width:500px;height:300px"></div>
-			<h4><?php _e('Result', 'mappress'); ?>:</h4>
-			<p>
-			    <?php _e('Latitude', 'mappress'); ?>:
-			    <input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
+			<div class="latlng-container">
+				<h4><?php _e('Result', 'mappress'); ?>:</h4>
+				<p>
+					<?php _e('Latitude', 'mappress'); ?>:
+					<input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
 
-			    <?php _e('Longitude', 'mappress'); ?>:
-			    <input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
-			</p>
-			<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
+					<?php _e('Longitude', 'mappress'); ?>:
+					<input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
+				</p>
+				<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
+			</div>
+			<?php do_action('mappress_geocode_box', $post); ?>
 		</div>
-		<style>
-		    #geocoding-address .results ul li {
-		        cursor: pointer;
-		        text-decoration: underline;
-		    }
-		    #geocoding-address .results ul li.active {
-		        cursor: default;
-		        text-decoration: none;
-		    }
-		</style>
+		<?php if(is_admin()) : ?>
+			<script type="text/javascript">
+				jQuery(document).ready(function() {
+					<?php if($this->geocode_service == 'gmaps') : ?>
+						streetviewBox({geocoder: geocodeBox() });
+					<?php else : ?>
+						geocodeBox();
+					<?php endif; ?>
+				});
+			</script>
+			<style>
+				#geocoding-address .results ul li {
+					cursor: pointer;
+					text-decoration: underline;
+				}
+				#geocoding-address .results ul li.active {
+					cursor: default;
+					text-decoration: none;
+				}
+			</style>
+		<?php endif; ?>
 		<?php
-		do_action('mappress_geocode_box', $post);
 	}
 
 	function geocode_save($post_id) {
@@ -470,6 +483,16 @@ function mappress_marker_extent_default_zoom() {
 function mappress_get_markers_limit() {
 	global $mappress_markers;
 	return $mappress_markers->get_limit();
+}
+
+function mappress_get_marker_latitude($post_id = false) {
+	global $mappress_markers;
+	return $mappress_markers->get_latitude($post_id);
+}
+
+function mappress_get_marker_longitude($post_id = false) {
+	global $mappress_markers;
+	return $mappress_markers->get_longitude($post_id);
 }
 
 function mappress_get_marker_bubble($post_id = false) {
