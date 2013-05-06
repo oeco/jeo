@@ -407,6 +407,12 @@ class MapPress {
 		return $map_data['center'];
 	}
 
+	function get_map_zoom($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data = $this->get_map_data($map_id);
+		return $map_data['zoom'];
+	}
+
 	function get_mapgroup_data($group_id = false) {
 		$group_id = $group_id ? $group_id : $this->map->ID;
 		$data = array();
