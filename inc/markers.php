@@ -22,6 +22,7 @@ class MapPress_Markers {
 		$this->setup_directories();
 		$this->setup();
 		$this->setup_scripts();
+		$this->setup_post_map();
 		$this->setup_ajax();
 		$this->setup_cache_flush();
 		$this->geocode_setup();
@@ -123,6 +124,25 @@ class MapPress_Markers {
 		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
 		return apply_filters('mappress_marker_query', $query);
+	}
+
+	function setup_post_map() {
+		add_action('the_post', array($this, 'the_post_map'));
+		add_action('wp_head', array($this, 'the_post_map'), 2);
+	}
+
+	function the_post_map($p = false) {
+		global $post;
+		$p = $p ? $p : $post;
+		if(is_single() && $this->has_location($p->ID) && !is_singular(array('map', 'map-group'))) {
+			$post_maps = get_post_meta($p->ID, 'maps');
+			if(!$post_maps) {
+				mappress_set_map(mappress_map_featured());
+			} else {
+				mappress_set_map(get_post(array_shift($post_maps)));
+			}
+		}
+		return mappress_the_map();
 	}
 
 	function setup_ajax() {

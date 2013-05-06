@@ -28,7 +28,6 @@ class MapPress {
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
-		$this->setup_the_post();
 		$this->setup_pre_get_map();
 		$this->setup_ajax();
 		$this->setup_canonical();
@@ -183,13 +182,16 @@ class MapPress {
 
 		if($query->is_main_query()) {
 			if(is_home() && !$this->map) {
-				$this->map = mappress_map_featured();
+				$this->set_map($this->featured());
 			} elseif($query->get('map') || $query->get('map-group')) {
 				if($query->get('map'))
 					$type = 'map';
 				elseif($query->get('map-group'))
 					$type = 'map-group';
-				$this->map = get_page_by_path($query->get($type), 'OBJECT', $type);
+				$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
+			} elseif(is_single()) {
+				//$post = array_shift(get_posts(array('name' => $query->query['name'])));
+				//$this->the_post($post);
 			}
 		}
 
@@ -237,23 +239,15 @@ class MapPress {
 		$query->set('meta_query', $meta_query);
 	}
 
-	function setup_the_post() {
-		add_action('the_post', array($this, 'the_post'));
-	}
-	function the_post($post) {
-		if(is_single() && mappress_has_marker_location() && !is_singular(array('map', 'map-group'))) {
-			$post_maps = get_post_meta($post_id, 'maps');
-			if(!$post_maps) {
-				$this->map = $this->featured();
-			} else {
-				$this->map = get_post(array_shift($post_maps));
-			}
-		}
-	}
-
 	/*
 	 * Allow search box inside map page (disable `s` argument for the map query)
 	 */
+
+	function set_map($post) {
+		$this->map = $post;
+		return $this->map;
+	}
+
 	function setup_pre_get_map() {
 		add_action('pre_get_posts', array($this, 'pre_get_map'));
 	}
@@ -324,7 +318,7 @@ class MapPress {
 		}
 
 		if($map_id)
-			$this->map = get_post($map_id);
+			$this->set_map(get_post($map_id));
 		else
 			$map_id = $this->map->ID;
 
@@ -517,6 +511,11 @@ require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
 function mappress_get_mapped_post_types() {
 	global $mappress;
 	return $mappress->mapped_post_types();
+}
+
+function mappress_set_map($post) {
+	global $mappress;
+	return $mappress->set_map($post);
 }
 
 // get the main map post
