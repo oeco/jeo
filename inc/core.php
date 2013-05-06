@@ -413,6 +413,34 @@ class MapPress {
 		return $map_data['zoom'];
 	}
 
+	function get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+
+		$layers = $this->get_map_layers($map_id);
+		$layers_ids = array();
+		foreach($layers as $layer) {
+			if($layer['opts']['filtering'] == 'fixed') {
+				$layers_ids[] = $layer['id'];
+			}
+		}
+
+		$zoom = $zoom ? $zoom : $this->get_map_zoom($map_id);
+		
+		if(!$zoom)
+			$zoom = 1;
+
+		$center = $this->get_map_center($map_id);
+		$lat = $lat ? $lat : $center['lat'];
+		$lng = $lng ? $lng : $center['lon'];
+
+		if(!$lat)
+			$lat = 0;
+		if(!$lng)
+			$lng = 0;
+
+		return 'http://api.tiles.mapbox.com/v3/' . implode(',', $layers_ids) . '/' . $lng . ',' . $lat . ',' . $zoom . '/' . $width . 'x' . $height . '.png';
+	}
+
 	function get_mapgroup_data($group_id = false) {
 		$group_id = $group_id ? $group_id : $this->map->ID;
 		$data = array();
@@ -611,6 +639,11 @@ function mappress_get_map_layers($map_id = false) {
 function mappress_get_map_center($map_id = false) {
 	global $mappress;
 	return $mappress->get_map_center($map_id);
+}
+
+function mappress_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
+	global $mappress;
+	return $mappress->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
 }
 
 function mappress_get_map_zoom($map_id = false) {
