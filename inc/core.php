@@ -379,12 +379,6 @@ class MapPress {
 		return apply_filters('mappress_mapgroup_conf', $conf, $this->map, $post);
 	}
 
-	function get_map_layers($map_id = false) {
-		$map_id = $map_id ? $map_id : $this->map->ID;
-		$map_data = $this->get_map_data($map_id);
-		return $map_data['layers'];
-	}
-
 	function get_map_data($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
 		if(get_post_type($map_id) != 'map')
@@ -399,6 +393,18 @@ class MapPress {
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', get_the_content());
 		wp_reset_postdata();
 		return apply_filters('mappress_map_data', $data, $post);
+	}
+
+	function get_map_layers($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data = $this->get_map_data($map_id);
+		return $map_data['layers'];
+	}
+
+	function get_map_center($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data = $this->get_map_data($map_id);
+		return $map_data['center'];
 	}
 
 	function get_mapgroup_data($group_id = false) {
@@ -594,6 +600,11 @@ function mappress_get_map_data($map_id = false) {
 function mappress_get_map_layers($map_id = false) {
 	global $mappress;
 	return $mappress->get_map_layers($map_id);
+}
+
+function mappress_get_map_center($map_id = false) {
+	global $mappress;
+	return $mappress->get_map_center($map_id);
 }
 
 ?>
