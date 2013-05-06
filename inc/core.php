@@ -613,4 +613,9 @@ function mappress_get_map_center($map_id = false) {
 	return $mappress->get_map_center($map_id);
 }
 
+function mappress_get_map_zoom($map_id = false) {
+	global $mappress;
+	return $mappress->get_map_zoom($map_id);
+}
+
 ?>
