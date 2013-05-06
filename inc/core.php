@@ -414,6 +414,7 @@ class MapPress {
 	}
 
 	function get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
+		
 		$map_id = $map_id ? $map_id : $this->map->ID;
 
 		$layers = $this->get_map_layers($map_id);
@@ -425,7 +426,7 @@ class MapPress {
 		}
 
 		$zoom = $zoom ? $zoom : $this->get_map_zoom($map_id);
-		
+
 		if(!$zoom)
 			$zoom = 1;
 
