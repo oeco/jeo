@@ -57,8 +57,8 @@ class MapPress {
 		 * Local
 		 */
 		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.1.8');
-		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.12');
-		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.2.5');
+		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.16');
+		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.2.8');
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.3');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
 			.js', array('mappress', 'underscore'), '0.0.8.1');
@@ -414,7 +414,7 @@ class MapPress {
 	}
 
 	function get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
-		
+
 		$map_id = $map_id ? $map_id : $this->map->ID;
 
 		$layers = $this->get_map_layers($map_id);

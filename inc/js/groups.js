@@ -70,6 +70,9 @@ var groups = {};
 			group.map.isGroup = true;
 			group.map.currentMapID = firstMapID;
 
+			if(mappress.fragmentEnabled)
+				fragment.set({'map': firstMapID});
+
 			group.updateUI();
 
 			group.$.nav.find('li a').click(function() {
