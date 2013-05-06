@@ -8,23 +8,13 @@
             _.each(query, function(v, k) {
                 hash.push(k + '=' + v);
             });
-            document.location.hash = '!/' + hash.join('|||');
+            document.location.hash = '!/' + hash.join('&');
         };
-        var _replaceAll = function(string, token, newtoken) {
-			var p = new RegExp(eval("/" + token + "/g"));
-			return string.replace(p, newtoken);
-		}
         f.set = function(options) {
             _set(_.extend(f.get(), options));
         };
         f.get = function(key, defaultVal) {
-        	var vars = document.location.hash.substring(3);
-
-        	// safe fallback
-        	if(vars.indexOf('&') != -1)
-        		vars = _replaceAll(vars, '&', '|||');
-
-       		vars = vars.split('|||');
+        	var vars = document.location.hash.substring(3).split('&');
             var hash = {};
             _.each(vars, function(v) {
                 var pair = v.split("=");
