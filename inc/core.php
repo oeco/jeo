@@ -417,6 +417,13 @@ class MapPress {
 
 		$map_id = $map_id ? $map_id : $this->map->ID;
 
+		if(get_post_type($map_id) == 'map-group') {
+			$mapgroup = $this->get_mapgroup_data($map_id);
+			$map = array_shift($mapgroup['maps']);
+			$map_id = $map['postID'];
+			error_log($map_id);
+		}
+
 		$layers = $this->get_map_layers($map_id);
 		$layers_ids = array();
 		foreach($layers as $layer) {
