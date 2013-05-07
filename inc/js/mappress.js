@@ -4,18 +4,18 @@ var mappress = {};
 
 	var map;
 
-	mappress = function(conf) {
+	mappress = function(conf, callback) {
 
 		var _init = function() {
 			if(conf.mainMap)
 				$('body').addClass('loading-map');
 
 			if(conf.admin) { // is admin panel
-				return mappress.build(conf);
+				return mappress.build(conf, callback);
 			}
 
 			if(!conf.postID && typeof conf === 'object') { // conf ready
-				return mappress.build(conf);
+				return mappress.build(conf, callback);
 			}
 
 			return $.getJSON(mappress_localization.ajaxurl,
@@ -26,7 +26,7 @@ var mappress = {};
 				function(map_data) {
 					mapConf = mappress.convertMapConf(map_data);
 					mapConf = _.extend(mapConf, conf);
-					return mappress.build(mapConf);
+					return mappress.build(mapConf, callback);
 				});
 		}
 
@@ -40,7 +40,7 @@ var mappress = {};
 
 	mappress.maps = {};
 
-	mappress.build = function(conf) {
+	mappress.build = function(conf, callback) {
 
 		if(!conf.containerID)
 			conf.containerID = 'map_' + conf.postID + '_' + conf.count;
@@ -200,6 +200,9 @@ var mappress = {};
 
 		// map is ready, do callbacks
 		mappress.runCallbacks('mapReady', [map]);
+
+		if(typeof callback === 'function')
+			callback(map);
 
 		return map;
 	}

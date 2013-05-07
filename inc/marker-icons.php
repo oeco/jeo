@@ -579,7 +579,7 @@ class MapPress_Marker_Icons {
 	 * Send filter to mappress markers
 	 */
 	function setup_post_marker_icon() {
-		add_filter('mappress_marker_icon', array($this, 'post_marker_icon'), 10, 2);
+		add_filter('mappress_marker_icon', array($this, 'post_marker_icon'), 1, 2);
 	}
 
 	function post_marker_icon($marker, $post) {

@@ -24,6 +24,6 @@ function mappress_theme_scripts() {
 	wp_enqueue_style('font-opensans', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800');
 	wp_enqueue_style('mappress-main', get_template_directory_uri() . '/css/main.css', array('mappress-skeleton', 'font-opensans'), '0.0.1.1');
 }
-add_action('wp_enqueue_scripts', 'mappress_theme_scripts');
+add_action('wp_enqueue_scripts', 'mappress_theme_scripts', 2);
 
 ?>
