@@ -19,7 +19,7 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.2.14');
+		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.6');
 	}
 
 	function editor($post) {
@@ -32,9 +32,11 @@ class MapPress_StreetView extends MapPress_Markers {
 			$heading = 0;
 		?>
 		<div id="mappress_streetview">
-			<p><input type="checkbox" name="enable_streetview" id="enable_streetview" <?php if($streetview) echo 'checked'; ?> /> <label for="enable_streetview"><?php _e('Use Google Street View', 'mappress'); ?></label></p>
-			<div id="streetview_canvas" style="width:60%;height:400px;float:left;">
-			</div>
+			<p class="streetview-toggler">
+				<input type="checkbox" name="enable_streetview" id="enable_streetview" <?php if($streetview) echo 'checked'; ?> />
+				<label for="enable_streetview"><?php _e('Use Google Street View', 'mappress'); ?></label>
+			</p>
+			<div id="streetview_canvas" style="width:60%;height:400px;float:left;"></div>
 			<input type="hidden" name="streetview_pitch" id="streetview_pitch" value="<?php echo $pitch; ?>" />
 			<input type="hidden" name="streetview_heading" id="streetview_heading" value="<?php echo $heading; ?>" />
 		</div>

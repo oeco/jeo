@@ -249,7 +249,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.2.15');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.5');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'service' => $this->geocode_service,
@@ -296,21 +296,23 @@ class MapPress_Markers {
 				<input type="text" size="80" id="geocode_address" name="geocode_address" placeholder="<?php _e('Full address', 'mappress'); ?>" value="<?php if($geocode_address) echo $geocode_address; ?>" />
 				<a class="button geocode_address" href="#"><?php _e('Find', 'mappress'); ?></a>
 			</p>
-			<div class="results"></div>
-			<?php if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) : ?>
-				<p><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
-			<?php endif; ?>
-			<div id="map_canvas" style="width:500px;height:300px"></div>
-			<div class="latlng-container">
-				<h4><?php _e('Result', 'mappress'); ?>:</h4>
-				<p>
-					<?php _e('Latitude', 'mappress'); ?>:
-					<input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
+			<div class="geocode-map-container">
+				<div class="results"></div>
+				<?php if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) : ?>
+					<p class="draggable-tip"><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
+				<?php endif; ?>
+				<div id="map_canvas" style="width:500px;height:300px"></div>
+				<div class="latlng-container">
+					<h4><?php _e('Result', 'mappress'); ?>:</h4>
+					<p>
+						<?php _e('Latitude', 'mappress'); ?>:
+						<input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
 
-					<?php _e('Longitude', 'mappress'); ?>:
-					<input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
-				</p>
-				<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
+						<?php _e('Longitude', 'mappress'); ?>:
+						<input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
+					</p>
+					<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
+				</div>
 			</div>
 			<?php do_action('mappress_geocode_box', $post); ?>
 		</div>

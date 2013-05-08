@@ -11,6 +11,7 @@ var geocodeBox;
 			addressInput,
 			geocodeButton,
 			resultsContainer,
+			mapContainer,
 			mapCanvasID = 'map_canvas';
 
 		var settings = {
@@ -25,9 +26,21 @@ var geocodeBox;
 
 		box.clearResults = function() {
 			resultsContainer.empty();
+			box.close();
+		}
+
+		box.close = function() {
+			mapContainer.hide();
+			runCallbacks('closed');
+		}
+
+		box.open = function() {
+			mapContainer.show();
+			runCallbacks('opened');
 		}
 
 		box.geocode = function() {
+			box.open();
 			box._getAddress(addressInput.val());
 		};
 
@@ -97,6 +110,9 @@ var geocodeBox;
 			boundsInput 		= box.find('#geocode_viewport');
 			addressInput 		= box.find('#geocode_address');
 			resultsContainer 	= box.find('.results');
+			mapContainer		= box.find('.geocode-map-container');
+
+			mapContainer.hide();
 
 			if(settings.service == 'osm') {
 				box = $.extend(box, osm);
@@ -122,8 +138,9 @@ var geocodeBox;
 		 */
 
 		function bindEvents() {
-			addressInput.keyup(function(e) {
-				if(e.keyCode === 13) {
+			addressInput.bind('keypress', function(e) {
+				var code = (e.keyCode ? e.keyCode : e.which);
+				if(code === 13) {
 					box.geocode();
 					return false;
 				}
@@ -144,24 +161,32 @@ var geocodeBox;
 
 			_map: function(position) {
 
-				var options = {
-					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					streetViewControl: false
-				};
+				mapContainer.show();
 
-				if(typeof position !== 'undefined')
-					options.center = position;
+				if(!box.isMapReady) {
 
-				box.map = new google.maps.Map(document.getElementById(mapCanvasID), options);
+					var options = {
+						mapTypeId: google.maps.MapTypeId.ROADMAP,
+						streetViewControl: false
+					};
 
-				// events
+					if(typeof position !== 'undefined')
+						options.center = position;
 
-				google.maps.event.addListener(box.map, 'bounds_changed', function() {
-					box.bounds().set(box.map.getBounds());
-				});
+					box.map = new google.maps.Map(document.getElementById(mapCanvasID), options);
 
-				box.isMapReady = true;
-				runCallbacks('mapReady', [box]);
+					// events
+
+					google.maps.event.addListener(box.map, 'bounds_changed', function() {
+						box.bounds().set(box.map.getBounds());
+					});
+
+					box.isMapReady = true;
+					setTimeout(function() {
+						runCallbacks('mapReady', [box]);
+					}, 500);
+
+				}
 
 				return box.map;
 
@@ -253,7 +278,9 @@ var geocodeBox;
 						box._map(position);
 
 					box.map.setCenter(position);
-					box.marker.setMap(box.map);
+
+					if(box.marker)
+						box.marker.setMap(box.map);
 
 					if(typeof bounds !== 'undefined')
 						box.map.fitBounds(box._convertToViewport(bounds));
@@ -264,9 +291,13 @@ var geocodeBox;
 
 			clearMarkers: function() {
 
-				box.marker.setMap(null);
-				box.map.setCenter(new google.maps.LatLng(0,0));
-				box.map.setZoom(1);
+				if(box.marker)
+					box.marker.setMap(null);
+
+				if(box.isMapReady) {
+					box.map.setCenter(new google.maps.LatLng(0,0));
+					box.map.setZoom(1);
+				}
 
 			}
 
@@ -389,8 +420,6 @@ var geocodeBox;
 				resultsList.on('click', 'li', function() {
 
 					resultsList.find('li').removeClass('active');
-					$(this).addClass('active');
-
 					_updateFromItem($(this));
 
 				});
@@ -420,6 +449,8 @@ var geocodeBox;
 		}
 
 		function _updateFromItem(el) {
+
+			el.addClass('active');
 
 			var address 	= el.text(),
 				lat 		= parseFloat(el.data('lat')),
@@ -467,6 +498,8 @@ var geocodeBox;
 
 		createCallback('ready');
 		createCallback('mapReady');
+		createCallback('opened');
+		createCallback('closed');
 		createCallback('queried');
 		createCallback('addressChanged');
 		createCallback('locationChanged');

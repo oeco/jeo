@@ -6,7 +6,10 @@ var streetviewBox;
 		$(document).ready(function() {
 			options.canvas = $('#' + options.containerID);
 			$('body').addClass('displaying-map');
-			enable(options);
+			var panorama = enable(options);
+			setTimeout(function() {
+				panorama.setVisible(true);
+			}, 500);
 		});
 	}
 
@@ -74,10 +77,21 @@ var streetviewBox;
 				box.canvas = box.find('#streetview_canvas');
 				box.toggler = box.find('#enable_streetview');
 
-				box.toggler.parent().hide();
-				box.disable();
+				box.disableAll();
 
 				box.geocoder.mapReady(box._initPanorama);
+
+				box.geocoder.closed(box.disableAll);
+				box.geocoder.opened(function() {
+
+					box.checkToggler();
+
+					if(settings.force)
+						box.enable();
+
+				});
+
+				return box;
 
 			},
 
@@ -90,11 +104,10 @@ var streetviewBox;
 
 				box.updatePov(box.pitch.get(), box.heading.get());
 
-				if(settings.force) {
+				box.checkToggler();
+
+				if(settings.force)
 					box.enable();
-				} else {
-					box.toggler.parent().show();
-				}
 
 				box.geocoder.locationChanged(function() {
 					var loc = box.geocoder.location().get();
@@ -102,11 +115,10 @@ var streetviewBox;
 				});
 
 				box.toggler.change(function() {
-					if($(this).is(':checked'))
-						box.enable();
-					else
-						box.disable();
+					box.checkToggler();
 				});
+
+				return box;
 
 			},
 
@@ -130,11 +142,34 @@ var streetviewBox;
 
 				box.disable();
 
+				return box;
+
 			},
 
 			enable: function() {
 
 				box.canvas.show();
+				if(box.panorama) {
+					box.panorama.setVisible(true);
+				}
+
+				return box;
+
+			},
+
+			enableToggler: function() {
+
+				box.toggler.parent().show();
+
+				return box;
+
+			},
+
+			enableAll: function() {
+
+				box.enable().enableToggler();
+
+				return box;
 
 			},
 
@@ -142,13 +177,42 @@ var streetviewBox;
 
 				box.canvas.hide();
 
+				return box;
+
+			},
+
+			disableToggler: function() {
+
+				box.toggler.parent().hide();
+
+				return box;
+
+			},
+
+			checkToggler: function() {
+
+				if(box.toggler.is(':checked'))
+					box.enable();
+				else
+					box.disable();
+
+				return box;
+
+			},
+
+			disableAll: function() {
+
+				box.disable().disableToggler();
+
+				return box;
+
 			},
 
 			updatePosition: function(lat, lng) {
 
 				box.panorama.setPosition(new google.maps.LatLng(lat, lng));
 
-				box.enable();
+				return box;
 
 			},
 
@@ -160,7 +224,7 @@ var streetviewBox;
 					zoom: 1
 				});
 
-				box.enable();
+				return box;
 
 			},
 
@@ -170,6 +234,7 @@ var streetviewBox;
 
 				set: function(pitch) {
 					box.find('#streetview_pitch').val(pitch);
+					return box;
 				},
 
 				get: function() {
@@ -181,6 +246,7 @@ var streetviewBox;
 
 				set: function(heading) {
 					box.find('#streetview_heading').val(heading);
+					return box;
 				},
 
 				get: function() {
