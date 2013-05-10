@@ -3,13 +3,13 @@ var streetviewBox;
 (function($) {
 
 	mappress.streetview = function(options) {
-		$(document).ready(function() {
+		mappress.mapReady(function() {
 			options.canvas = $('#' + options.containerID);
 			$('body').addClass('displaying-map');
 			var panorama = enable(options);
-			setTimeout(function() {
+			//setTimeout(function() {
 				panorama.setVisible(true);
-			}, 500);
+			//}, 500);
 		});
 	}
 

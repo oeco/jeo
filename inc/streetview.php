@@ -19,7 +19,7 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.7');
+		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.8');
 	}
 
 	function editor($post) {
