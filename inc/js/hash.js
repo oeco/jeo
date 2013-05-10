@@ -83,6 +83,7 @@
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
 
-	mappress.mapReady(setupHash);
+	if(mappress_hash.enable)
+		mappress.mapReady(setupHash);
 
 })(jQuery);

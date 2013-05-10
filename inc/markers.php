@@ -77,7 +77,7 @@ class MapPress_Markers {
 	}
 
 	function register_scripts() {
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.3');
+		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.4');
 		wp_localize_script('mappress.markers', 'mappress_markers', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'query' => $this->query(),
@@ -98,6 +98,8 @@ class MapPress_Markers {
 			$query = $marker_query->query_vars;
 		}
 
+		if(!$query['post_type'])
+			$query['post_type'] = mappress_get_mapped_post_types();
 
 		$markers_limit = $this->get_limit();
 		$query['posts_per_page'] = $markers_limit;
@@ -249,7 +251,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.5');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.6');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'service' => $this->geocode_service,
@@ -285,6 +287,8 @@ class MapPress_Markers {
 		if($post) {
 			$geocode_latitude = $this->get_latitude();
 			$geocode_longitude = $this->get_longitude();
+			$geocode_city = $this->get_city();
+			$geocode_country = $this->get_country();
 			$geocode_address = get_post_meta($post->ID, 'geocode_address', true);
 			$geocode_viewport = get_post_meta($post->ID, 'geocode_viewport', true);
 		}
@@ -311,6 +315,8 @@ class MapPress_Markers {
 						<?php _e('Longitude', 'mappress'); ?>:
 						<input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
 					</p>
+					<input type="hidden" id="geocode_city" name="geocode_city" value="<?php if($geocode_city) echo $geocode_city; ?>" />
+					<input type="hidden" id="geocode_country" name="geocode_country" value="<?php if($geocode_country) echo $geocode_country; ?>" />
 					<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
 				</div>
 			</div>
@@ -353,14 +359,17 @@ class MapPress_Markers {
 		if(isset($_POST['geocode_address']))
 			update_post_meta($post_id, 'geocode_address', $_POST['geocode_address']);
 
-
 		if(isset($_POST['geocode_latitude']))
 			update_post_meta($post_id, 'geocode_latitude', $_POST['geocode_latitude']);
-
 
 		if(isset($_POST['geocode_longitude']))
 			update_post_meta($post_id, 'geocode_longitude', $_POST['geocode_longitude']);
 
+		if(isset($_POST['geocode_city']))
+			update_post_meta($post_id, '_geocode_city', $_POST['geocode_city']);
+
+		if(isset($_POST['geocode_country']))
+			update_post_meta($post_id, '_geocode_country', $_POST['geocode_country']);
 
 		if(isset($_POST['geocode_viewport']))
 			update_post_meta($post_id, 'geocode_viewport', $_POST['geocode_viewport']);
@@ -468,6 +477,20 @@ class MapPress_Markers {
 		if($coordinates[0] !== 0)
 			return true;
 		return false;
+	}
+
+	function get_city($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		return get_post_meta($post_id, '_geocode_city', true);
+	}
+
+	function get_country($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		return get_post_meta($post_id, '_geocode_country', true);
 	}
 
 }

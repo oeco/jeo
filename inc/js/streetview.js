@@ -181,6 +181,14 @@ var streetviewBox;
 
 			},
 
+			enableToggler: function() {
+
+				box.toggler.parent().show();
+
+				return box;
+
+			},
+
 			disableToggler: function() {
 
 				box.toggler.parent().hide();
@@ -190,6 +198,9 @@ var streetviewBox;
 			},
 
 			checkToggler: function() {
+
+				if(!settings.force)
+					box.enableToggler();
 
 				if(box.toggler.is(':checked'))
 					box.enable();

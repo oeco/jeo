@@ -7,6 +7,8 @@ var geocodeBox;
 		var box = {},
 			latInput,
 			lngInput,
+			cityInput,
+			countryInput,
 			boundsInput,
 			addressInput,
 			geocodeButton,
@@ -85,6 +87,30 @@ var geocodeBox;
 			return f;
 		}
 
+		box.city = function() {
+			f = {
+				set: function(city) {
+					cityInput.val(city);
+				},
+				get: function() {
+					return cityInput.val();
+				}
+			}
+			return f;
+		}
+
+		box.country = function() {
+			f = {
+				set: function(country) {
+					countryInput.val(country);
+				},
+				get: function() {
+					return countryInput.val();
+				}
+			}
+			return f;
+		}
+
 		box.bounds = function() {
 			f = {
 				set: function(bounds) {
@@ -107,6 +133,8 @@ var geocodeBox;
 
 			latInput 			= box.find('#geocode_lat');
 			lngInput 			= box.find('#geocode_lon');
+			cityInput 			= box.find('#geocode_city');
+			countryInput 		= box.find('#geocode_country');
 			boundsInput 		= box.find('#geocode_viewport');
 			addressInput 		= box.find('#geocode_address');
 			resultsContainer 	= box.find('.results');
@@ -201,7 +229,7 @@ var geocodeBox;
 
 					if(status == google.maps.GeocoderStatus.OK) {
 
-						_results(box._formatResults(results), 'address', 'lat', 'lng', 'bounds');
+						_results(box._formatResults(results), 'address', 'lat', 'lng', 'bounds', 'city', 'country');
 
 						runCallbacks('queried', [box, results]);
 
@@ -219,11 +247,24 @@ var geocodeBox;
 						address: result.formatted_address,
 						lat: result.geometry.location.lat(),
 						lng: result.geometry.location.lng(),
-						bounds: result.geometry.viewport
+						bounds: result.geometry.viewport,
+						city: box._getAddressComponent(result, 'locality', 'long_name'),
+						country: box._getAddressComponent(result, 'country', 'long_name')
 					});
 				});
 				return formattedResults;
 
+			},
+
+			_getAddressComponent: function(result, c, nameType) {
+				var val;
+				$.each(result.address_components, function(i, component) {
+					if(component.types[0] == c) {
+						val = component[nameType];
+						return false;
+					}
+				});
+				return val;
 			},
 
 			_convertToViewport: function(bounds) {
@@ -387,7 +428,7 @@ var geocodeBox;
 
 		};
 
-		function _results(results, addressKey, latKey, lngKey, boundsKey) {
+		function _results(results, addressKey, latKey, lngKey, boundsKey, cityKey, countryKey) {
 
 			var resultsList = $('<ul />');
 
@@ -406,6 +447,12 @@ var geocodeBox;
 					.data('lat', data[latKey])
 					.data('lng', data[lngKey])
 					.data('bounds', data[boundsKey]);
+
+				if(typeof cityKey !== 'undefined')
+					result.data('city', data[cityKey]);
+
+				if(typeof countryKey !== 'undefined')
+					result.data('country', data[countryKey]);
 
 				if(i === 0) {
 					_updateFromItem(result);
@@ -459,6 +506,12 @@ var geocodeBox;
 
 			box.address().set(address);
 			box.location().set(lat, lng);
+
+			if(el.data('city'))
+				box.city().set(el.data('city'));
+
+			if(el.data('country'))
+				box.country().set(el.data('country'));
 
 			box.update(lat, lng, bounds);
 
