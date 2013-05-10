@@ -12,6 +12,8 @@ class MapPress_Markers {
 
 	var $geocode_service = '';
 
+	var $geocode_type = 'default';
+
 	var $gmaps_api_key = false;
 
 	var $use_extent = false;
@@ -33,9 +35,15 @@ class MapPress_Markers {
 	 */
 
 	function setup() {
+		$this->geocode_type();
 		$this->geocode_service();
 		$this->gmaps_api_key();
 		$this->use_extent();
+	}
+
+	function geocode_type() {
+		$this->geocode_type = apply_filters('mappress_geocode_type', 'default');
+		return $this->geocode_type;
 	}
 
 	function geocode_service() {
@@ -251,9 +259,10 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.6');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.9');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
+			'type' => $this->geocode_type,
 			'service' => $this->geocode_service,
 			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
 			'results_found' => __('results found', 'mappress')

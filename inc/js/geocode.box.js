@@ -140,6 +140,14 @@ var geocodeBox;
 			resultsContainer 	= box.find('.results');
 			mapContainer		= box.find('.geocode-map-container');
 
+			console.log(geocode_localization);
+
+			if(geocode_localization.type == 'latlng') {
+				var latLngInputs = $('.latlng-container').clone(true);
+				box.empty().append(latLngInputs);
+				return box;
+			}
+
 			mapContainer.hide();
 
 			if(settings.service == 'osm') {
