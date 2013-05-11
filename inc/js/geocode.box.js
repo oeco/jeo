@@ -140,8 +140,6 @@ var geocodeBox;
 			resultsContainer 	= box.find('.results');
 			mapContainer		= box.find('.geocode-map-container');
 
-			console.log(geocode_localization);
-
 			if(geocode_localization.type == 'latlng') {
 				var latLngInputs = $('.latlng-container').clone(true);
 				box.empty().append(latLngInputs);
@@ -228,12 +226,23 @@ var geocodeBox;
 
 			},
 
-			_getAddress: function(address) {
+			_geocode: function(args, callback) {
 
 				if(!box.geocoder)
 					box.geocoder = new google.maps.Geocoder();
 
-				box.geocoder.geocode({ address: address }, function(results, status) {
+				box.geocoder.geocode(args, callback);
+			},
+
+			_getAddress: function(address, reversed) {
+
+				var args = { address: address };
+
+				if(reversed) {
+					args = { location: new google.maps.LatLng(address[0], address[1]) };
+				}
+
+				box._geocode(args, function(results, status) {
 
 					if(status == google.maps.GeocoderStatus.OK) {
 
@@ -315,6 +324,10 @@ var geocodeBox;
 
 						google.maps.event.addListener(box.marker, 'position_changed', function() {
 							box.location().set(box.marker.position.lat(), box.marker.position.lng());
+						});
+
+						google.maps.event.addListener(box.marker, 'dragend', function() {
+							box._getAddress([ box.marker.position.lat(), box.marker.position.lng() ], true);
 						});
 
 					} else {

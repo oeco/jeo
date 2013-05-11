@@ -259,7 +259,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.3.9');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.4');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'type' => $this->geocode_type,
@@ -307,7 +307,7 @@ class MapPress_Markers {
 			<h4><?php _e('Find the location', 'mappress'); ?></h4>
 			<p class="clearfix">
 				<input type="text" size="80" id="geocode_address" name="geocode_address" placeholder="<?php _e('Full address', 'mappress'); ?>" value="<?php if($geocode_address) echo $geocode_address; ?>" />
-				<a class="button geocode_address" href="#"><?php _e('Find', 'mappress'); ?></a>
+				<a class="button geocode_address secondary" href="#"><?php _e('Find', 'mappress'); ?></a>
 			</p>
 			<div class="geocode-map-container">
 				<div class="results"></div>
