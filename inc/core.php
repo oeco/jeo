@@ -397,8 +397,6 @@ class MapPress {
 		$featured_id = $this->featured()->ID;
 		if(!$featured_id && current_user_can('edit_posts')) {
 			return $this->create_map_message();
-		} else {
-			return;
 		}
 		return $this->get_map($this->featured()->ID, $main_map, $force);
 	}
