@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-13 09:35-0300\n"
-"PO-Revision-Date: 2013-05-13 10:08-0300\n"
+"POT-Creation-Date: 2013-05-13 15:29-0300\n"
+"PO-Revision-Date: 2013-05-13 15:29-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -132,52 +132,52 @@ msgid "Latest articles"
 msgstr "Últimos artigos"
 
 #: ../metaboxes/mapbox/mapbox.php:17
-#: ../metaboxes/mapbox/mapbox.php:80
-#: ../metaboxes/mapbox/mapbox.php:143
+#: ../metaboxes/mapbox/mapbox.php:82
+#: ../metaboxes/mapbox/mapbox.php:145
 #: ../metaboxes/mapgroup/mapgroup.php:18
 #: ../metaboxes/mapgroup/mapgroup.php:67
 msgid "Remove"
 msgstr "Remover"
 
 #: ../metaboxes/mapbox/mapbox.php:21
-#: ../metaboxes/mapbox/mapbox.php:84
-#: ../metaboxes/mapbox/mapbox.php:147
+#: ../metaboxes/mapbox/mapbox.php:86
+#: ../metaboxes/mapbox/mapbox.php:149
 msgid "Layer options"
 msgstr "Opções de layer"
 
 #: ../metaboxes/mapbox/mapbox.php:24
-#: ../metaboxes/mapbox/mapbox.php:87
-#: ../metaboxes/mapbox/mapbox.php:150
+#: ../metaboxes/mapbox/mapbox.php:89
+#: ../metaboxes/mapbox/mapbox.php:152
 msgid "Fixed"
 msgstr "Fixa"
 
 #: ../metaboxes/mapbox/mapbox.php:26
-#: ../metaboxes/mapbox/mapbox.php:89
-#: ../metaboxes/mapbox/mapbox.php:152
+#: ../metaboxes/mapbox/mapbox.php:91
+#: ../metaboxes/mapbox/mapbox.php:154
 msgid "Switchable"
 msgstr ""
 
 #: ../metaboxes/mapbox/mapbox.php:28
-#: ../metaboxes/mapbox/mapbox.php:91
-#: ../metaboxes/mapbox/mapbox.php:154
+#: ../metaboxes/mapbox/mapbox.php:93
+#: ../metaboxes/mapbox/mapbox.php:156
 msgid "Swapable"
 msgstr ""
 
 #: ../metaboxes/mapbox/mapbox.php:31
-#: ../metaboxes/mapbox/mapbox.php:94
-#: ../metaboxes/mapbox/mapbox.php:157
+#: ../metaboxes/mapbox/mapbox.php:96
+#: ../metaboxes/mapbox/mapbox.php:159
 msgid "Layer title"
 msgstr "Título da layer"
 
 #: ../metaboxes/mapbox/mapbox.php:33
-#: ../metaboxes/mapbox/mapbox.php:96
-#: ../metaboxes/mapbox/mapbox.php:159
+#: ../metaboxes/mapbox/mapbox.php:98
+#: ../metaboxes/mapbox/mapbox.php:161
 msgid "Hidden"
 msgstr "Oculto"
 
 #: ../metaboxes/mapbox/mapbox.php:36
-#: ../metaboxes/mapbox/mapbox.php:99
-#: ../metaboxes/mapbox/mapbox.php:162
+#: ../metaboxes/mapbox/mapbox.php:101
+#: ../metaboxes/mapbox/mapbox.php:164
 msgid "Default swap option"
 msgstr ""
 
@@ -185,127 +185,127 @@ msgstr ""
 msgid "MapBox Setup"
 msgstr "Configurações do MapBox"
 
-#: ../metaboxes/mapbox/mapbox.php:68
+#: ../metaboxes/mapbox/mapbox.php:69
 msgid "First, define your map server. Most likely you will be using the MapBox default servers. If not and you know what you are doing, feel free to type your own TileStream server url below."
 msgstr ""
 
-#: ../metaboxes/mapbox/mapbox.php:70
+#: ../metaboxes/mapbox/mapbox.php:71
 msgid "Use MapBox servers"
 msgstr ""
 
-#: ../metaboxes/mapbox/mapbox.php:70
+#: ../metaboxes/mapbox/mapbox.php:71
 msgid "(default)"
 msgstr "(padrão)"
 
-#: ../metaboxes/mapbox/mapbox.php:71
+#: ../metaboxes/mapbox/mapbox.php:72
 msgid "Use custom TileStream server"
 msgstr ""
 
-#: ../metaboxes/mapbox/mapbox.php:73
+#: ../metaboxes/mapbox/mapbox.php:75
 msgid "Edit the default layer and fill the IDs of the maps to overlay layers of your map, in order of appearance"
 msgstr "Altere a camada padrão e preencha os IDs dos mapas para sobrepor camadas no seu mapa, em ordem de aparição"
 
-#: ../metaboxes/mapbox/mapbox.php:172
+#: ../metaboxes/mapbox/mapbox.php:174
 msgid "Add new layer"
 msgstr "Adicionar nova camada"
 
-#: ../metaboxes/mapbox/mapbox.php:173
-#: ../metaboxes/mapbox/mapbox.php:283
+#: ../metaboxes/mapbox/mapbox.php:175
+#: ../metaboxes/mapbox/mapbox.php:285
 msgid "Update preview"
 msgstr "Atualizar pré-visualização"
 
-#: ../metaboxes/mapbox/mapbox.php:175
+#: ../metaboxes/mapbox/mapbox.php:177
 msgid "Preview map"
 msgstr "Pré-visualizar"
 
-#: ../metaboxes/mapbox/mapbox.php:180
+#: ../metaboxes/mapbox/mapbox.php:182
 msgid "Map settings"
 msgstr "Configurações do mapa"
 
-#: ../metaboxes/mapbox/mapbox.php:182
+#: ../metaboxes/mapbox/mapbox.php:184
 msgid "Currently viewing"
 msgstr "Visualizando"
 
-#: ../metaboxes/mapbox/mapbox.php:185
-#: ../metaboxes/mapbox/mapbox.php:215
+#: ../metaboxes/mapbox/mapbox.php:187
+#: ../metaboxes/mapbox/mapbox.php:217
 msgid "Center"
 msgstr "Centro"
 
-#: ../metaboxes/mapbox/mapbox.php:189
-#: ../metaboxes/mapbox/mapbox.php:219
+#: ../metaboxes/mapbox/mapbox.php:191
+#: ../metaboxes/mapbox/mapbox.php:221
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../metaboxes/mapbox/mapbox.php:193
-#: ../metaboxes/mapbox/mapbox.php:246
+#: ../metaboxes/mapbox/mapbox.php:195
+#: ../metaboxes/mapbox/mapbox.php:248
 msgid "East"
 msgstr "Leste"
 
-#: ../metaboxes/mapbox/mapbox.php:197
-#: ../metaboxes/mapbox/mapbox.php:250
+#: ../metaboxes/mapbox/mapbox.php:199
+#: ../metaboxes/mapbox/mapbox.php:252
 msgid "North"
 msgstr "Norte"
 
-#: ../metaboxes/mapbox/mapbox.php:201
-#: ../metaboxes/mapbox/mapbox.php:254
+#: ../metaboxes/mapbox/mapbox.php:203
+#: ../metaboxes/mapbox/mapbox.php:256
 msgid "South"
 msgstr "Sul"
 
-#: ../metaboxes/mapbox/mapbox.php:205
-#: ../metaboxes/mapbox/mapbox.php:258
+#: ../metaboxes/mapbox/mapbox.php:207
+#: ../metaboxes/mapbox/mapbox.php:260
 msgid "West"
 msgstr "Oeste"
 
-#: ../metaboxes/mapbox/mapbox.php:211
+#: ../metaboxes/mapbox/mapbox.php:213
 msgid "Map center & zoom"
 msgstr "Centro e zoom"
 
-#: ../metaboxes/mapbox/mapbox.php:212
+#: ../metaboxes/mapbox/mapbox.php:214
 msgid "Set current as map center & zoom"
 msgstr "Definir atual como centro e zoom"
 
-#: ../metaboxes/mapbox/mapbox.php:223
+#: ../metaboxes/mapbox/mapbox.php:225
 msgid "Min zoom"
 msgstr "Zoom mín."
 
-#: ../metaboxes/mapbox/mapbox.php:226
-#: ../metaboxes/mapbox/mapbox.php:233
+#: ../metaboxes/mapbox/mapbox.php:228
+#: ../metaboxes/mapbox/mapbox.php:235
 msgid "Current"
 msgstr "Atual"
 
-#: ../metaboxes/mapbox/mapbox.php:230
+#: ../metaboxes/mapbox/mapbox.php:232
 msgid "Max zoom"
 msgstr "Zoom máx."
 
-#: ../metaboxes/mapbox/mapbox.php:242
+#: ../metaboxes/mapbox/mapbox.php:244
 msgid "Pan limits"
 msgstr "Limites de navegação"
 
-#: ../metaboxes/mapbox/mapbox.php:243
+#: ../metaboxes/mapbox/mapbox.php:245
 msgid "Set current as map panning limits"
 msgstr "Definir atual como limites de navegação"
 
-#: ../metaboxes/mapbox/mapbox.php:268
+#: ../metaboxes/mapbox/mapbox.php:270
 msgid "Enable geocoding service"
 msgstr "Ativar serviço de geocodificação"
 
-#: ../metaboxes/mapbox/mapbox.php:271
+#: ../metaboxes/mapbox/mapbox.php:273
 msgid "Enable geocode search service"
 msgstr "Ativar serviço de busca de localização"
 
-#: ../metaboxes/mapbox/mapbox.php:275
+#: ../metaboxes/mapbox/mapbox.php:277
 msgid "Map handlers"
 msgstr "Controles do mapa"
 
-#: ../metaboxes/mapbox/mapbox.php:278
+#: ../metaboxes/mapbox/mapbox.php:280
 msgid "Disable mousewheel zooming"
 msgstr "Desabilitar zoom com mousewheel"
 
-#: ../metaboxes/mapbox/mapbox.php:284
+#: ../metaboxes/mapbox/mapbox.php:286
 msgid "Preview mode"
 msgstr "Modo de pré-visualização"
 
-#: ../metaboxes/mapbox/mapbox.php:285
+#: ../metaboxes/mapbox/mapbox.php:287
 msgid "(preview mode doesn't apply zoom range nor pan limits setup)"
 msgstr "(modo de pré-visualização não aplica limites de zoom ou navegação configurados)"
 
@@ -327,7 +327,7 @@ msgstr "Selecione a que mapas este post pertence. Caso nenhum seja marcado, ele 
 
 #: ../metaboxes/map-relation/map-relation.php:32
 msgid "You haven't created any map, yet!"
-msgstr "Você ainda não criou um mapa, ainda!"
+msgstr "Você não criou um mapa, ainda!"
 
 #: ../metaboxes/mapgroup/mapgroup.php:15
 #: ../metaboxes/mapgroup/mapgroup.php:64
@@ -511,177 +511,185 @@ msgstr "Grupos de mapa do MapPress"
 msgid "Add new group"
 msgstr "Adicionar novo grupo"
 
-#: ../inc/marker-icons.php:149
-#: ../inc/marker-icons.php:159
-#: ../inc/marker-icons.php:278
+#: ../inc/core.php:409
+msgid "You haven't created any maps!"
+msgstr "Você ainda não criou um mapa!"
+
+#: ../inc/core.php:410
+msgid "Click here to create your first"
+msgstr "Clique aqui para criar o seu primeiro"
+
+#: ../inc/marker-icons.php:157
+#: ../inc/marker-icons.php:167
+#: ../inc/marker-icons.php:286
 msgid "Marker icons"
 msgstr "Ícones"
 
-#: ../inc/marker-icons.php:150
+#: ../inc/marker-icons.php:158
 msgid "Marker icon"
 msgstr "Ícone"
 
-#: ../inc/marker-icons.php:151
+#: ../inc/marker-icons.php:159
 msgid "Add marker icon"
 msgstr "Adicionar ícone"
 
-#: ../inc/marker-icons.php:152
-#: ../inc/marker-icons.php:279
+#: ../inc/marker-icons.php:160
+#: ../inc/marker-icons.php:287
 msgid "Add new marker icon"
 msgstr "Adicionar novo ícone"
 
-#: ../inc/marker-icons.php:153
+#: ../inc/marker-icons.php:161
 msgid "Edit marker icon"
 msgstr "Editar ícone"
 
-#: ../inc/marker-icons.php:154
+#: ../inc/marker-icons.php:162
 msgid "New marker icon"
 msgstr "Novo ícone"
 
-#: ../inc/marker-icons.php:155
+#: ../inc/marker-icons.php:163
 msgid "View marker icon"
 msgstr "Ver ícone"
 
-#: ../inc/marker-icons.php:156
+#: ../inc/marker-icons.php:164
 msgid "Search marker icons"
 msgstr "Buscar ícones"
 
-#: ../inc/marker-icons.php:157
+#: ../inc/marker-icons.php:165
 msgid "No marker icon found"
 msgstr "Nenhum ícone foi encontrado"
 
-#: ../inc/marker-icons.php:158
+#: ../inc/marker-icons.php:166
 msgid "No marker icon found in the trash"
 msgstr "Nenhum ícone foi encontrado na lixeira"
 
-#: ../inc/marker-icons.php:165
+#: ../inc/marker-icons.php:173
 msgid "MapPress marker icons"
 msgstr "Ícones de marcadores do MapPress"
 
-#: ../inc/marker-icons.php:194
-#: ../inc/marker-icons.php:447
+#: ../inc/marker-icons.php:202
+#: ../inc/marker-icons.php:455
 msgid "Marker"
 msgstr "Marcador"
 
-#: ../inc/marker-icons.php:209
-#: ../inc/marker-icons.php:496
+#: ../inc/marker-icons.php:217
+#: ../inc/marker-icons.php:504
 msgid "default"
 msgstr "padrão"
 
-#: ../inc/marker-icons.php:233
+#: ../inc/marker-icons.php:241
 msgid "Set as default marker "
 msgstr "Definir como ícone padrão"
 
-#: ../inc/marker-icons.php:266
+#: ../inc/marker-icons.php:274
 msgid "Default marker updated"
 msgstr "Ícone padrão atualizado"
 
-#: ../inc/marker-icons.php:300
+#: ../inc/marker-icons.php:308
 msgid "Setup marker icon"
 msgstr "Configurar ícone de marcador"
 
-#: ../inc/marker-icons.php:319
+#: ../inc/marker-icons.php:327
 msgid "Choose image to use as marker icon"
 msgstr "Escolha uma imagem para usar como ícone"
 
-#: ../inc/marker-icons.php:320
+#: ../inc/marker-icons.php:328
 msgid "PNG image format is recomended"
 msgstr "Formato de imagem PNG é recomendado"
 
-#: ../inc/marker-icons.php:324
+#: ../inc/marker-icons.php:332
 msgid "Upload image"
 msgstr "Enviar imagem"
 
-#: ../inc/marker-icons.php:332
+#: ../inc/marker-icons.php:340
 msgid "Use default"
 msgstr "Utilizar padrão"
 
-#: ../inc/marker-icons.php:333
+#: ../inc/marker-icons.php:341
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../inc/marker-icons.php:334
+#: ../inc/marker-icons.php:342
 msgid "Save"
 msgstr "Salvar"
 
-#: ../inc/marker-icons.php:336
+#: ../inc/marker-icons.php:344
 msgid "Mouse"
 msgstr "Mouse"
 
-#: ../inc/marker-icons.php:341
+#: ../inc/marker-icons.php:349
 msgid "Point"
 msgstr "Ponto"
 
-#: ../inc/marker-icons.php:346
+#: ../inc/marker-icons.php:354
 msgid "Tip:"
 msgstr "Dica:"
 
-#: ../inc/marker-icons.php:346
+#: ../inc/marker-icons.php:354
 msgid "Use ARROWS to move the pointer, press ENTER to save or ESC to cancel."
 msgstr "Utilize as SETAS do teclado para mover o ponto, pressione ENTER para salvar ou ESC para cancelar."
 
-#: ../inc/marker-icons.php:350
+#: ../inc/marker-icons.php:358
 msgid "Icon anchor"
 msgstr "Âncora do ícone"
 
-#: ../inc/marker-icons.php:351
+#: ../inc/marker-icons.php:359
 msgid "Coordinates to correctly position the marker on the map"
 msgstr "Coordenadas para posicionar o marcador corretamente no mapa"
 
-#: ../inc/marker-icons.php:353
-#: ../inc/marker-icons.php:364
+#: ../inc/marker-icons.php:361
+#: ../inc/marker-icons.php:372
 msgid "Find coordinates"
 msgstr "Encontrar coordenadas"
 
-#: ../inc/marker-icons.php:356
+#: ../inc/marker-icons.php:364
 msgid "X"
 msgstr "X"
 
-#: ../inc/marker-icons.php:357
+#: ../inc/marker-icons.php:365
 msgid "Y"
 msgstr "Y"
 
-#: ../inc/marker-icons.php:361
+#: ../inc/marker-icons.php:369
 msgid "Popup anchor"
 msgstr "Âncora do popup"
 
-#: ../inc/marker-icons.php:362
+#: ../inc/marker-icons.php:370
 msgid "Coordinates to correctly position the marker's popup"
 msgstr "Coordenadas para posicionar corretamente o popup do marcador"
 
-#: ../inc/marker-icons.php:412
+#: ../inc/marker-icons.php:420
 msgid "Could not save image file"
 msgstr "Não pôde salvar o arquivo de imagem"
 
-#: ../inc/marker-icons.php:454
+#: ../inc/marker-icons.php:462
 msgid "Default"
 msgstr "Padrão"
 
-#: ../inc/marker-icons.php:458
+#: ../inc/marker-icons.php:466
 msgid "Create a new marker"
 msgstr "Criar novo marcador"
 
-#: ../inc/marker-icons.php:459
+#: ../inc/marker-icons.php:467
 msgid "Select a marker"
 msgstr "Selecione um marcador"
 
-#: ../inc/marker-icons.php:461
+#: ../inc/marker-icons.php:469
 msgid "You don't have custom markers yet."
 msgstr "Você ainda não tem marcadores customizados."
 
-#: ../inc/marker-icons.php:461
+#: ../inc/marker-icons.php:469
 msgid "Create your first here!"
 msgstr "Crie seu primeiro aqui!"
 
-#: ../inc/marker-icons.php:529
+#: ../inc/marker-icons.php:537
 msgid "Custom marker"
 msgstr "Marcador customizado"
 
-#: ../inc/marker-icons.php:543
+#: ../inc/marker-icons.php:551
 msgid "Choose a custom marker for your content. If it's set to <em>auto</em> we'll try to find the marker based on categories or map markers."
 msgstr "Defina um marcador customizado para seu conteúdo. Caso esteja marcado como <em>auto</em>, vamos buscar baseados nas categorias e mapas."
 
-#: ../inc/marker-icons.php:547
+#: ../inc/marker-icons.php:555
 msgid "Auto"
 msgstr "Auto"
 

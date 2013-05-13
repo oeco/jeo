@@ -394,7 +394,22 @@ class MapPress {
 
 	// display featured map
 	function get_featured($main_map = true, $force = false) {
+		$featured_id = $this->featured()->ID;
+		if(!$featured_id && current_user_can('edit_posts')) {
+			return $this->create_map_message();
+		} else {
+			return;
+		}
 		return $this->get_map($this->featured()->ID, $main_map, $force);
+	}
+
+	function create_map_message() {
+		?>
+		<div id="first-map-message">
+			<h2><?php _e('You haven\'t created any maps!', 'mappress'); ?></h2>
+			<h3><a href="<?php echo admin_url('/post-new.php?post_type=map'); ?>"><?php _e('Click here to create your first', 'mappress'); ?></a></h3>
+		</div>
+		<?php
 	}
 
 	function set_main($conf) {

@@ -14,6 +14,8 @@ h3,h4,h5,h6{font-weight:600;}
 .displaying-map #masthead #masthead-nav nav ul>li>a{background:transparent;-webkit-border-radius:0 0 3px 3px;-khtml-border-radius:0 0 3px 3px;-moz-border-radius:0 0 3px 3px;-o-border-radius:0 0 3px 3px;border-radius:0 0 3px 3px;}
 .displaying-map #masthead #masthead-nav #searchform input#s{background:transparent;}
 .loading-map #masthead{opacity:0;display:none;}
+#first-map-message{padding:10% 0;text-align:center;background:#111;color:#f0f0f0;-webkit-box-shadow:inset 0 20px 40px #0f0f0f;-khtml-box-shadow:inset 0 20px 40px #0f0f0f;-moz-box-shadow:inset 0 20px 40px #0f0f0f;-o-box-shadow:inset 0 20px 40px #0f0f0f;box-shadow:inset 0 20px 40px #0f0f0f;}#first-map-message h2,#first-map-message h3{color:#f0f0f0;}
+#first-map-message a{color:#77a832;text-decoration:none;}
 #masthead{position:relative;background:#1f1f1f;opacity:1;-webkit-transition:opacity 0.2s ease-in-out;-khtml-transition:opacity 0.2s ease-in-out;-moz-transition:opacity 0.2s ease-in-out;-o-transition:opacity 0.2s ease-in-out;transition:opacity 0.2s ease-in-out;}#masthead .site-meta{margin:40px 0;}
 #masthead h1{margin:0 0 5px;font-weight:800;font-family:"Open Sans";font-size:28px;line-height:28px;}#masthead h1 a{color:#77a832;text-decoration:none;text-shadow:0px 0px 7px rgba(0, 0, 0, 0.4);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}#masthead h1 a:hover{color:#fff;}
 #masthead h2{font-size:14px;line-height:20px;margin:0;color:#fff;text-shadow:0px 0px 4px rgba(0, 0, 0, 0.6);text-transform:lowercase;font-weight:200;}
