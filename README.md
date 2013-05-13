@@ -24,6 +24,7 @@ After setting the files, go to **Appearance > Themes** and activate **mappress**
 
 ### Features to come
  - Leaflet map library for more map features
+ - Custom map tiles, such as [stamen maps](http://maps.stamen.com/), [MapQuest](http://developer.mapquest.com/web/products/open/map) and [OpenStreetMap](http://wiki.openstreetmap.org/wiki/Tiles)
  - CartoDB integration
 
 ## Using mappress
