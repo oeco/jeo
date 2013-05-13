@@ -1,5 +1,5 @@
 #mappress
-v0.7.5beta
+v0.7.6beta
 
 ## Mix and visualize your MapBox maps with WordPress
 Download the file and upload to your `wp-content/themes/` directory, on your [self-hosted WordPress installation](http://codex.wordpress.org/WordPress_Quick_Start_Guide).
