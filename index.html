@@ -4,11 +4,11 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Mappress : WordPress + MapBox = MapPress" />
+    <meta name="description" content="mappress : A WordPress parent theme for interactive maps and journalism" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Mappress</title>
+    <title>mappress</title>
   </head>
 
   <body>
@@ -18,8 +18,8 @@
         <header class="inner">
           <a id="forkme_banner" href="https://github.com/cardume/mappress">View on GitHub</a>
 
-          <h1 id="project_title">Mappress</h1>
-          <h2 id="project_tagline">WordPress + MapBox = MapPress</h2>
+          <h1 id="project_title">mappress</h1>
+          <h2 id="project_tagline">A WordPress parent theme for interactive maps and journalism</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/cardume/mappress/zipball/master">Download this project as a .zip file</a>
@@ -31,39 +31,60 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+        <h3>Mix and visualize your MapBox maps with WordPress</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>Download the file and upload to your <code>wp-content/themes/</code> directory, on your <a href="http://codex.wordpress.org/WordPress_Quick_Start_Guide">self-hosted WordPress installation</a>.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<p>Or you can use git:</p>
+
+<pre><code>$ cd wp-content/themes
+$ git clone git://github.com/cardume/mappress.git
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>After setting the files, go to <strong>Appearance &gt; Themes</strong> and activate <strong>mappress</strong>.</p>
 
-<h3>Designer Templates</h3>
+<h2>Features</h2>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<ul>
+<li>MapBox maps integration with filtering layers tools.</li>
+<li>Geocoding WordPress posts using OpenStreetMaps or Google Maps supporting custom post types.</li>
+<li>Google Street View support for Google Maps geocoding.</li>
+<li>Customizable marker icons that can be associated to categories, custom taxonomies or posts directly.</li>
+<li>Map markers query integrated to posts query.</li>
+<li>GeoJSON API (any content <code>/?geojson</code> gives the geojson output). <em>E.g.: yourwebsite.com/category/one/?geojson</em>
+</li>
+<li>Extensive hooks and filters with documentation yet to come</li>
+</ul><h3>Features to come</h3>
 
-<h3>Rather Drive Stick?</h3>
+<ul>
+<li>Leaflet map library for more map features</li>
+<li>CartoDB integration</li>
+</ul><h2>Using mappress</h2>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h3>First map</h3>
+
+<p>After activating your theme, you'll see a big message on your homepage to create your first map. Do it! We have a MapBox example if you still don't have your own maps. But we <a href="http://mapbox.com/">recommend you start doing it</a></p>
+
+<h3>Settings, configurations and contents</h3>
+
+<p>After setting your first map, go to the bottom of your dashboard's menu and click on MapPress Settings to change website styles, map behaviours and basic settings to set it up the way you need it.</p>
+
+<p>Now you can go manage your posts, geolocate them and add custom marker icons!</p>
 
 <h3>Authors and Contributors</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>MapPress is a collaboration between <a href="https://github.com/oeco" class="user-mention">@oeco</a>, <a href="https://github.com/cardume" class="user-mention">@cardume</a>, <a href="https://github.com/memelab" class="user-mention">@memelab</a> and <a href="https://github.com/icfjknight" class="user-mention">@icfjknight</a>.</p>
 
 <h3>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>Having trouble with mappress? Go to our <a href="https://github.com/cardume/mappress/issues">issues page</a> and we'll help you there!</p>
       </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Mappress maintained by <a href="https://github.com/cardume">cardume</a></p>
+        <p class="copyright">mappress maintained by <a href="https://github.com/cardume">cardume</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
