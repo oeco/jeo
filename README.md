@@ -1,6 +1,12 @@
 #mappress
 v0.7.7beta
 
+MapPress WordPress Theme acts as a geojournalism platform which allows news organizations, bloggers and NGOs to publish news stories as layers of information on digital maps. With MapPress, creating the interaction between data layers and contextual information is much more intuitive and interactive. The theme is ready for multilingual content and facilitates the publishing tasks.
+
+You can post geotagged stories and create richly designed pages for each one of the featured stories. At same time, by simply imputing the ids of layers hosted on MapBox, you can manage sophisticated maps without loosing perfomance, add legends directly with HTML and set the map paramethers. All direct at the WordPress dashboard.
+
+MapPress wants to help journalists and NGOs to improve storytelling with maps. Creating a child theme with all its functionality is easy since it contains all the necessary hooks to customize layouts and data visualization.
+
 ## Mix and visualize your MapBox maps with WordPress
 Download the file and upload to your `wp-content/themes/` directory, on your [self-hosted WordPress installation](http://codex.wordpress.org/WordPress_Quick_Start_Guide).
 
@@ -20,7 +26,8 @@ After setting the files, go to **Appearance > Themes** and activate **mappress**
  - Customizable marker icons that can be associated to categories, custom taxonomies or posts directly.
  - Map markers query integrated to posts query.
  - GeoJSON API (any content `/?geojson` gives the geojson output). *E.g.: yourwebsite.com/category/one/?geojson*
- - Extensive hooks and filters with documentation yet to come
+ - Extensive hooks with documentation yet to come
+ - Support [qTranslate](http://wordpress.org/extend/plugins/qtranslate/) multilanguage plugin
 
 ### Features to come
  - Leaflet map library for more map features
