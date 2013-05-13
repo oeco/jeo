@@ -59,7 +59,7 @@ class MapPress_Markers {
 	}
 
 	function geocode_service() {
-		if($this->options['geocode'])
+		if($this->options && $this->options['geocode'])
 			$service = $this->options['geocode']['service'];
 		else
 			$service = 'osm';
@@ -68,7 +68,7 @@ class MapPress_Markers {
 	}
 
 	function gmaps_api_key() {
-		if($this->options['geocode'])
+		if($this->options && $this->options['geocode'])
 			$key = $this->options['geocode']['gmaps_api_key'];
 		else
 			$key = false;

@@ -59,6 +59,14 @@ class MapPress_Marker_Icons {
 
 		$post_marker_id = $this->get_post_marker_id($marker_id);
 
+		if(!$post_marker_id) {
+			return array(
+				'url' => get_template_directory_uri() . '/img/marker.png',
+				'width' => 26,
+				'height' => 30
+			);
+		}
+
 		return array(
 			'url' => $this->get_marker_image_url($post_marker_id),
 			'width' => $this->get_marker_width($post_marker_id),

@@ -9,7 +9,7 @@ class MapPress_StreetView extends MapPress_Markers {
 
 	function setup() {
 
-		if(mappress_get_geocode_service() !== 'gmaps' && mappress_get_gmaps_api_key())
+		if(mappress_get_geocode_service() !== 'gmaps' && !mappress_get_gmaps_api_key())
 			return;
 
 		add_action('admin_footer', array($this, 'scripts'));
