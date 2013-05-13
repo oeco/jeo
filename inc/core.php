@@ -16,7 +16,11 @@ class MapPress {
 
 	var $map_count = 0;
 
+	var $has_main_map = false;
+
 	var $mapped_post_types = false;
+
+	var $options = array();
 
 	function __construct() {
 		$this->setup();
@@ -25,6 +29,7 @@ class MapPress {
 
 	function setup() {
 		$this->setup_directories();
+		$this->setup_options();
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
@@ -36,6 +41,16 @@ class MapPress {
 	function setup_directories() {
 		$this->directory = apply_filters('mappress_directory', TEMPLATEPATH . '/inc');
 		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri());
+	}
+
+	function setup_options() {
+		$options = get_option('mappress_settings');
+		if($options && isset($options['mappress_settings'])) {
+			$this->options = $options['mappress_settings'];
+		} else {
+			$this->options = false;
+		}
+		return $this->options;
 	}
 
 	function setup_scripts() {
@@ -176,24 +191,68 @@ class MapPress {
 	}
 
 	function setup_query() {
-		if($this->use_the_query())
-			add_action('parse_query', array($this, 'the_query'));
+		if($this->use_the_query()) {
+			add_filter('posts_clauses', array($this, 'posts_clauses'));
+			add_action('parse_query', array($this, 'parse_query'));
+		}
 	}
 
 	function use_the_query() {
-		return apply_filters('mappress_use_map_query', true);
+		$options = $this->get_options();
+		if(isset($options['map']['use_map_query']))
+			$use_query = $options['map']['use_map_query'];
+		else
+			$use_query = true;
+		return apply_filters('mappress_use_map_query', $use_query);
 	}
 
 	function use_hash() {
-		return apply_filters('mappress_use_hash', true);
+		$options = $this->get_options();
+		if(isset($options['map']['use_hash']))
+			$use_hash = $options['map']['use_hash'];
+		else
+			$use_hash = true;
+		return apply_filters('mappress_use_hash', $use_hash);
 	}
 
-	function the_query($query) {
+	function posts_clauses($clauses) {
 
 		if(is_admin())
-			return;
+			return $clauses;
 
-		remove_action('pre_get_posts', array($this, 'the_query'));
+		global $wpdb;
+
+		if($this->map) {
+
+			$map_id = $this->map->ID;
+
+			$join = "
+				LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
+				INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
+				";
+
+			$where = "
+				AND (
+					(
+						m_maps.meta_key = 'maps'
+						AND CAST(m_maps.meta_value AS CHAR) = '{$map_id}'
+					)
+					OR m_has_maps.post_id IS NULL
+				) ";
+
+			$clauses['join'] .= $join;
+			$clauses['where'] .= $where;
+			$clauses['groupby'] = "{$wpdb->posts}.ID";
+
+		}
+
+		return $clauses;
+	}
+
+	function parse_query($query) {
+
+		if(is_admin())
+			return $query;
 
 		if($query->is_main_query()) {
 			if(is_home() && !$this->map) {
@@ -204,32 +263,13 @@ class MapPress {
 				elseif($query->get('map-group'))
 					$type = 'map-group';
 				$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
-			} elseif(is_single()) {
-				//$post = array_shift(get_posts(array('name' => $query->query['name'])));
-				//$this->the_post($post);
 			}
 		}
 
-		add_action('pre_get_posts', array($this, 'the_query'));
-
 		if(!$this->map)
-			return;
+			return $query;
 
-		if(get_post_type($this->map->ID) == 'map') {
-			$meta_query = array(
-				'relation' => 'OR',
-				array(
-					'key' => 'maps',
-					'value' => $this->map->ID,
-					'compare' => 'LIKE'
-				),
-				array(
-					'key' => 'has_maps',
-					'value' => '',
-					'compare' => 'NOT EXISTS'
-				)
-			);
-		} elseif(get_post_type($this->map->ID) == 'map-group') {
+		if(get_post_type($this->map->ID) == 'map-group') {
 			/*
 			This can get really huge and crash, not using for now.
 			Plan to create a custom query var for the query string and try to create the query server-side.
@@ -251,11 +291,8 @@ class MapPress {
 			);
 			*/
 		}
-		if($query->get('meta_query')) {
-			$query->query['meta_query'] = $query->get('meta_query') + $meta_query;
-		} else {
-			$query->set('meta_query', $meta_query);
-		}
+
+		return $query;
 	}
 
 	/*
@@ -292,7 +329,10 @@ class MapPress {
 
 	function featured($post_type = false) {
 		$post_type = $post_type ? $post_type : $this->featured_map_type();
-		$featured_id = get_option('mappress_featured_map');
+
+		if(isset($this->options['front_page']) && $this->options['front_page']['featured_map'])
+			$featured_id = $this->options['front_page']['featured_map'];
+
 		if(!$featured_id) {
 			$featured = $this->latest($post_type);
 		} else {
@@ -358,6 +398,7 @@ class MapPress {
 	}
 
 	function set_main($conf) {
+		$this->has_main_map = true;
 		$conf['mainMap'] = true;
 		return $conf;
 	}
@@ -486,6 +527,10 @@ class MapPress {
 		return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $map);
 	}
 
+	function get_options() {
+		return $this->options;
+	}
+
 	/*
 	 * Ajax
 	 */
@@ -568,6 +613,7 @@ require_once(TEMPLATEPATH . '/inc' . '/api.php');
 require_once(TEMPLATEPATH . '/inc' . '/embed.php');
 // Metaboxes
 require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
+require_once(TEMPLATEPATH . '/inc' . '/featured.php');
 
 /*
  * MapPress functions api
@@ -680,6 +726,16 @@ function mappress_get_mapbox_image($map_id = false, $width = 200, $height = 200,
 function mappress_get_map_zoom($map_id = false) {
 	global $mappress;
 	return $mappress->get_map_zoom($map_id);
+}
+
+function mappress_get_options() {
+	global $mappress;
+	return $mappress->get_options();
+}
+
+function mappress_has_main_map() {
+	global $mappress;
+	return $mappress->has_main_map;
 }
 
 ?>

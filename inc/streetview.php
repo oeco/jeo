@@ -4,13 +4,14 @@ class MapPress_StreetView extends MapPress_Markers {
 
 	function __construct() {
 
-		if($this->geocode_service() !== 'gmaps' && !$this->gmaps_api_key())
-			return false;
-
-		$this->setup();
+		add_action('init', array($this, 'setup'));
 	}
 
 	function setup() {
+
+		if(mappress_get_geocode_service() !== 'gmaps' && mappress_get_gmaps_api_key())
+			return;
+
 		add_action('admin_footer', array($this, 'scripts'));
 		add_action('mappress_geocode_scripts', array($this, 'scripts'));
 		add_action('mappress_geocode_box', array($this, 'editor'));

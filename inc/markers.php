@@ -10,6 +10,8 @@ class MapPress_Markers {
 
 	var $directory_uri = '';
 
+	var $options = array();
+
 	var $geocode_service = '';
 
 	var $geocode_type = 'default';
@@ -35,24 +37,42 @@ class MapPress_Markers {
 	 */
 
 	function setup() {
+		$this->get_options();
 		$this->geocode_type();
 		$this->geocode_service();
 		$this->gmaps_api_key();
 		$this->use_extent();
 	}
 
+	function get_options() {
+		$this->options = mappress_get_options();
+		return $this->options;
+	}
+
 	function geocode_type() {
-		$this->geocode_type = apply_filters('mappress_geocode_type', 'default');
+		if($this->options['geocode'])
+			$type = $this->options['geocode']['type'];
+		else
+			$type = 'default';
+		$this->geocode_type = apply_filters('mappress_geocode_type', $type);
 		return $this->geocode_type;
 	}
 
 	function geocode_service() {
-		$this->geocode_service = apply_filters('mappress_geocode_service', 'osm');
+		if($this->options['geocode'])
+			$service = $this->options['geocode']['service'];
+		else
+			$service = 'osm';
+		$this->geocode_service = apply_filters('mappress_geocode_service', $service);
 		return $this->geocode_service;
 	}
 
 	function gmaps_api_key() {
-		$this->gmaps_api_key = apply_filters('mappress_gmaps_api_key', false);
+		if($this->options['geocode'])
+			$key = $this->options['geocode']['gmaps_api_key'];
+		else
+			$key = false;
+		$this->gmaps_api_key = apply_filters('mappress_gmaps_api_key', $key);
 		return $this->gmaps_api_key;
 	}
 

@@ -6,6 +6,10 @@
  */
 
 function mappress_find_post_on_map_button($zoom = null, $text = false, $post_id = false) {
+
+	if(!mappress_has_main_map())
+		return false;
+
 	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 

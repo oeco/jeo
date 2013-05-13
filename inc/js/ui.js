@@ -56,7 +56,9 @@
 			var _lockMap = function() {
 				map.ui.zoomer.remove();
 				map.ui.fullscreen.remove();
-				map.eventHandlers[1].remove();
+				if(map.eventHandlers.length && map.eventHandlers[3].length)
+					map.eventHandlers[3].remove();
+				map.$.widgets.remove();
 			}
 			_lockMap();
 

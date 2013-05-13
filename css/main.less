@@ -100,6 +100,60 @@ h3,h4,h5,h6 {
 	font-weight: 600;
 }
 
+.alignleft {
+	float: left;
+	margin: 0 20px 20px 0;
+}
+
+.alignright {
+	float: right;
+	margin: 0 0 20px 20px;
+}
+
+/*
+ * LigatureSymbols font
+ */
+
+@font-face {
+    font-family: 'LigatureSymbols';
+    src: url('../fonts/LigatureSymbols-2.11.eot');
+    src: url('../fonts/LigatureSymbols-2.11.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/LigatureSymbols-2.11.woff') format('woff'),
+         url('../fonts/LigatureSymbols-2.11.ttf') format('truetype'),
+         url('../fonts/LigatureSymbols-2.11.svg#LigatureSymbols') format('svg');
+    src: url('../fonts/LigatureSymbols-2.11.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.lsf, .lsf-icon:before {
+  font-family: 'LigatureSymbols';
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  -ms-text-rendering: optimizeLegibility;
+  -o-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-weight: normal !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  font-size: 150%;
+}
+
+.lsf-icon:before {
+  content:attr(title);
+  margin-right:0.3em;
+  font-size:130%;
+}
+
+.lsf-icon.amazon:before {
+  content: '\E007';
+}
+
 @maincolor: #77a832;
 
 .displaying-map {
@@ -337,12 +391,29 @@ h3,h4,h5,h6 {
 	}
 }
 
+.map-fullscreen-view {
+	.mapgroup-container,
+	.mapgroup-container .mapgroup,
+	.map-container {
+		background: #fff;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+		.map-nav-container,
+		.map-widgets {
+			z-index: 9999;
+		}
+	}
+}
+
 .map-container {
 	position: relative;
 	z-index: 5;
 	.map {
 		position: relative;
-		height: 45%;
+		height: 55%;
 		z-index: 2;
 		.zoomer {
 			top: 50%;
@@ -454,6 +525,58 @@ h3,h4,h5,h6 {
 	}
 }
 
+.mapgroup {
+	position: relative;
+	width: 100%;
+	.map-nav-container {
+		position: absolute;
+		bottom: 0;
+		z-index: 6;
+		left: 20%;
+		right: 20%;
+		.map-nav {
+			display: table;
+			padding: 0;
+			margin: 0 auto;
+			position: relative;
+			li {
+				margin: 0;
+				padding: 0;
+				display: table-cell;
+				text-align: center;
+				a {
+					margin: 0 1px 0 0;
+					display: block;
+					text-decoration: none;
+					background: #fefefe;
+					.gradient(#fefefe, #fefefe, darken(#fefefe, 10%));
+					border: 1px solid #fefefe;
+					padding: 10px;
+					position: relative;
+					font-weight: 600;
+					&.active {
+						.gradient(@maincolor, @maincolor, darken(@maincolor, 10%));
+						border-color: @maincolor;
+						color: #fff;
+						&:after {
+							content: '';
+							width: 0;
+							height: 0;
+							border-left: 10px solid transparent;
+							border-right: 10px solid transparent;
+							border-bottom: 10px solid darken(@maincolor, 10%);
+							position: absolute;
+							top: -10px;
+							left: 15px;
+							z-index: 1000;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 @-webkit-keyframes map-point-highlight {
 	0% {
 		margin-top: -2020px;
@@ -470,15 +593,76 @@ h3,h4,h5,h6 {
 
 .section-title,
 .single-post-header {
-	background: rgba(255,255,255,.6);
+	background: #fefefe;
 	.box-shadow(0 0 3px rgba(0,0,0,0.1));
 	padding: 40px 0 20px;
 	margin: 0 0 20px;
+	position: relative;
 	h1 {
 		color: #333;
 	}
 	h2 {
 		color: #333;
+	}
+	.post-meta {
+		margin: 30px 0 0;
+		p {
+			margin: 0 0 10px;
+			color: #666;
+			.lsf {
+				margin-right: 10px;
+			}
+		}
+	}
+	.post-categories {
+		margin: 0;
+		padding: 0;
+		height: 30px;
+		li {
+			margin: 0;
+			padding: 0;
+			float: left;
+			a {
+				display: block;
+				font-weight: 800;
+				padding: 5px;
+				background: #eee;
+				.border-radius(3px);
+				margin: 0 5px 0 0;
+				font-size: 11px;
+				line-height: 11px;
+				text-decoration: none;
+				color: #333;
+				text-transform: uppercase;
+			}
+		}
+	}
+}
+
+#sidebar {
+	.widgets {
+		margin: 0;
+		padding: 0;
+		.widget {
+			margin: 0 0 40px;
+			padding: 0;
+			.widget-title {
+				font-size: 16px;
+				line-height: 20px;
+				margin: 0 0 10px;
+				font-weight: 800;
+				color: #333;
+			}
+			ul {
+				margin: 0;
+				padding: 0;
+				li {
+					margin: 0;
+					padding: 5px 0;
+					border-bottom: 1px dotted #ccc;
+				}
+			}
+		}
 	}
 }
 
@@ -492,7 +676,6 @@ h3,h4,h5,h6 {
 			background: rgba(255,255,255,.9);
 			.box-shadow(0 2px 3px rgba(0,0,0,0.2));
 			.border-radius(5px);
-			min-height: 256px;
 			position: relative;
 			.post-header {
 				padding: 20px 20px 0;
@@ -515,7 +698,7 @@ h3,h4,h5,h6 {
 				}
 			}
 			.post-content {
-				padding: 20px;
+				padding: 0 20px 20px;
 				h3 {
 					font-size: 18px;
 					line-height: 22px;
@@ -535,7 +718,7 @@ h3,h4,h5,h6 {
 			}
 			.actions {
 				padding: 0 20px 15px;
-				.gradient(@maincolor, @maincolor, darken(@maincolor, 5%));
+				.gradient(@maincolor, darken(@maincolor, 5%), @maincolor);
 				.border-radius(0 0 5px 5px);
 				form {
 					display: inline;
@@ -724,6 +907,49 @@ h3,h4,h5,h6 {
 
 #colophon {
 	background: rgba(0, 0, 0, 0.7);
-	height: 500px;
 	width: 100%;
+	color: #f0f0f0;
+	padding: 20px 0 15px 0;
+	margin-top: 40px;
+	a {
+		color: #fff;
+		text-decoration: none;
+		font-weight: 600;
+		&:hover {
+			color: #eee;
+		}
+	}
+	#footer-nav {
+		.menu {
+			margin: 0;
+			padding: 0;
+			font-size: 12px;
+			> li {
+				float: left;
+				margin: 0 40px 0 0;
+				> a {
+					font-weight: 800;
+					text-transform: uppercase;
+					margin-bottom: 5px;
+					display: block;
+				}
+				ul {
+					margin: 0;
+					padding: 0;
+					li {
+						margin: 0;
+						padding: 0;
+						font-size: 11px;
+					}
+				}
+			}
+		}
+	}
+	.credits {
+		font-size: 11px;
+		text-align: right;
+		p {
+			margin: 0;
+		}
+	}
 }

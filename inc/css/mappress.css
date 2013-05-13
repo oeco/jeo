@@ -99,6 +99,7 @@ body.es-ES .map-container .lang-es {
 	padding: 5px;
 	display: block;
 	outline: none;
+	margin: 0;
 }
 
 .map-container .map-widgets .geocode-results .widget-title {

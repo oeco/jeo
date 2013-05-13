@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-18 12:35-0300\n"
-"PO-Revision-Date: 2013-03-18 12:48-0300\n"
+"POT-Creation-Date: 2013-05-13 09:35-0300\n"
+"PO-Revision-Date: 2013-05-13 10:08-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -17,14 +17,119 @@ msgstr ""
 "X-Poedit-Country: UNITED STATES\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../content-map-group.php:28
+#: ../single.php:16
+#: ../loop.php:12
+#: ../content-featured.php:23
+msgid "by"
+msgstr "por"
+
+#: ../content-map-group.php:27
 msgid "More..."
 msgstr "Mais..."
+
+#: ../content-map-group.php:37
+msgid "View all maps"
+msgstr "Ver todos os mapas"
+
+#: ../functions.php:15
+msgid "Header menu"
+msgstr "Menu do cabeçalho"
+
+#: ../functions.php:16
+msgid "Footer menu"
+msgstr "Menu do rodapé"
+
+#: ../functions.php:21
+msgid "Post sidebar"
+msgstr "Barra lateral do post"
+
+#: ../functions.php:27
+msgid "General sidebar"
+msgstr "Barra lateral genérica"
+
+#: ../functions.php:33
+msgid "Front page"
+msgstr "Página inicial"
+
+#: ../content-embed.php:16
+msgid "Page"
+msgstr "Página"
+
+#: ../footer.php:10
+#, php-format
+msgid "This website is built on <a href=\"%s\" target=\"_blank\" rel=\"external\">WordPress</a> using the <a href=\"%s\" target=\"_blank\" rel=\"external\">MapPress Beta</a> theme"
+msgstr "Este site foi feito em <a href=\"%s\" target=\"_blank\" rel=\"external\">WordPress</a>, utilizando o tema <a href=\"%s\" target=\"_blank\" rel=\"external\">MapPress Beta</a>"
+
+#: ../search.php:8
+msgid "Search results for:"
+msgstr "Resultados da busca por:"
+
+#: ../single-map.php:9
+msgid "Latest articles on"
+msgstr "Últimos artigos em"
+
+#: ../loop.php:22
+#: ../content-featured.php:32
+msgid "Read more"
+msgstr "Leia mais"
+
+#: ../content-featured.php:7
+msgid "Featured"
+msgstr "Destaque"
+
+#: ../content-featured.php:43
+msgid "Go to"
+msgstr "Ir para"
+
+#: ../archive.php:10
+#, php-format
+msgid "Daily Archives: %s"
+msgstr "Arquivos do dia: %s"
+
+#: ../archive.php:12
+#, php-format
+msgid "Monthly Archives: %s"
+msgstr "Arquivos do mês: %s"
+
+#: ../archive.php:12
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: ../archive.php:14
+#, php-format
+msgid "Yearly Archives: %s"
+msgstr "Arquivos do ano: %s"
+
+#: ../archive.php:14
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: ../archive.php:16
+msgid "Archives"
+msgstr "Arquivos"
+
+#: ../404.php:7
+msgid "404 - Page not found"
+msgstr "404 - Página não encontrada"
+
+#: ../404.php:13
+msgid "Trying searching:"
+msgstr "Tente uma busca:"
 
 #: ../content-marker-bubble.php:7
 msgctxt "map bubble date format"
 msgid "m/d/Y"
 msgstr "d/m/Y"
+
+#: ../searchform.php:3
+msgid "Search and hit enter"
+msgstr "Busque e pressione enter"
+
+#: ../index.php:18
+msgid "Latest articles"
+msgstr "Últimos artigos"
 
 #: ../metaboxes/mapbox/mapbox.php:17
 #: ../metaboxes/mapbox/mapbox.php:80
@@ -68,7 +173,7 @@ msgstr "Título da layer"
 #: ../metaboxes/mapbox/mapbox.php:96
 #: ../metaboxes/mapbox/mapbox.php:159
 msgid "Hidden"
-msgstr ""
+msgstr "Oculto"
 
 #: ../metaboxes/mapbox/mapbox.php:36
 #: ../metaboxes/mapbox/mapbox.php:99
@@ -78,7 +183,7 @@ msgstr ""
 
 #: ../metaboxes/mapbox/mapbox.php:50
 msgid "MapBox Setup"
-msgstr ""
+msgstr "Configurações do MapBox"
 
 #: ../metaboxes/mapbox/mapbox.php:68
 msgid "First, define your map server. Most likely you will be using the MapBox default servers. If not and you know what you are doing, feel free to type your own TileStream server url below."
@@ -90,7 +195,7 @@ msgstr ""
 
 #: ../metaboxes/mapbox/mapbox.php:70
 msgid "(default)"
-msgstr ""
+msgstr "(padrão)"
 
 #: ../metaboxes/mapbox/mapbox.php:71
 msgid "Use custom TileStream server"
@@ -98,294 +203,695 @@ msgstr ""
 
 #: ../metaboxes/mapbox/mapbox.php:73
 msgid "Edit the default layer and fill the IDs of the maps to overlay layers of your map, in order of appearance"
-msgstr ""
+msgstr "Altere a camada padrão e preencha os IDs dos mapas para sobrepor camadas no seu mapa, em ordem de aparição"
 
 #: ../metaboxes/mapbox/mapbox.php:172
 msgid "Add new layer"
-msgstr ""
+msgstr "Adicionar nova camada"
 
 #: ../metaboxes/mapbox/mapbox.php:173
 #: ../metaboxes/mapbox/mapbox.php:283
 msgid "Update preview"
-msgstr ""
+msgstr "Atualizar pré-visualização"
 
 #: ../metaboxes/mapbox/mapbox.php:175
 msgid "Preview map"
-msgstr ""
+msgstr "Pré-visualizar"
 
 #: ../metaboxes/mapbox/mapbox.php:180
 msgid "Map settings"
-msgstr ""
+msgstr "Configurações do mapa"
 
 #: ../metaboxes/mapbox/mapbox.php:182
 msgid "Currently viewing"
-msgstr ""
+msgstr "Visualizando"
 
 #: ../metaboxes/mapbox/mapbox.php:185
 #: ../metaboxes/mapbox/mapbox.php:215
 msgid "Center"
-msgstr ""
+msgstr "Centro"
 
 #: ../metaboxes/mapbox/mapbox.php:189
 #: ../metaboxes/mapbox/mapbox.php:219
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: ../metaboxes/mapbox/mapbox.php:193
 #: ../metaboxes/mapbox/mapbox.php:246
 msgid "East"
-msgstr ""
+msgstr "Leste"
 
 #: ../metaboxes/mapbox/mapbox.php:197
 #: ../metaboxes/mapbox/mapbox.php:250
 msgid "North"
-msgstr ""
+msgstr "Norte"
 
 #: ../metaboxes/mapbox/mapbox.php:201
 #: ../metaboxes/mapbox/mapbox.php:254
 msgid "South"
-msgstr ""
+msgstr "Sul"
 
 #: ../metaboxes/mapbox/mapbox.php:205
 #: ../metaboxes/mapbox/mapbox.php:258
 msgid "West"
-msgstr ""
+msgstr "Oeste"
 
 #: ../metaboxes/mapbox/mapbox.php:211
 msgid "Map center & zoom"
-msgstr ""
+msgstr "Centro e zoom"
 
 #: ../metaboxes/mapbox/mapbox.php:212
 msgid "Set current as map center & zoom"
-msgstr ""
+msgstr "Definir atual como centro e zoom"
 
 #: ../metaboxes/mapbox/mapbox.php:223
 msgid "Min zoom"
-msgstr ""
+msgstr "Zoom mín."
 
 #: ../metaboxes/mapbox/mapbox.php:226
 #: ../metaboxes/mapbox/mapbox.php:233
 msgid "Current"
-msgstr ""
+msgstr "Atual"
 
 #: ../metaboxes/mapbox/mapbox.php:230
 msgid "Max zoom"
-msgstr ""
+msgstr "Zoom máx."
 
 #: ../metaboxes/mapbox/mapbox.php:242
 msgid "Pan limits"
-msgstr ""
+msgstr "Limites de navegação"
 
 #: ../metaboxes/mapbox/mapbox.php:243
 msgid "Set current as map panning limits"
-msgstr ""
+msgstr "Definir atual como limites de navegação"
 
 #: ../metaboxes/mapbox/mapbox.php:268
 msgid "Enable geocoding service"
-msgstr ""
+msgstr "Ativar serviço de geocodificação"
 
 #: ../metaboxes/mapbox/mapbox.php:271
 msgid "Enable geocode search service"
-msgstr ""
+msgstr "Ativar serviço de busca de localização"
 
 #: ../metaboxes/mapbox/mapbox.php:275
 msgid "Map handlers"
-msgstr ""
+msgstr "Controles do mapa"
 
 #: ../metaboxes/mapbox/mapbox.php:278
 msgid "Disable mousewheel zooming"
-msgstr ""
+msgstr "Desabilitar zoom com mousewheel"
 
 #: ../metaboxes/mapbox/mapbox.php:284
 msgid "Preview mode"
-msgstr ""
+msgstr "Modo de pré-visualização"
 
 #: ../metaboxes/mapbox/mapbox.php:285
 msgid "(preview mode doesn't apply zoom range nor pan limits setup)"
-msgstr ""
+msgstr "(modo de pré-visualização não aplica limites de zoom ou navegação configurados)"
 
 #: ../metaboxes/mapbox/legend.php:13
 msgid "Map legend"
-msgstr ""
+msgstr "Legenda do mapa"
 
 #: ../metaboxes/mapbox/legend.php:25
 msgid "Enter your HTML code to use as legend on the map"
-msgstr ""
+msgstr "Entre com seu código HTML para usar como legenda do mapa"
 
 #: ../metaboxes/map-relation/map-relation.php:9
 msgid "Set maps for this post"
-msgstr ""
+msgstr "Configurar mapas para este post"
 
 #: ../metaboxes/map-relation/map-relation.php:23
 msgid "Select which maps this post belongs to. If you don't mark any they will appear in all maps."
-msgstr ""
+msgstr "Selecione a que mapas este post pertence. Caso nenhum seja marcado, ele irá aparecer em todos os mapas."
 
 #: ../metaboxes/map-relation/map-relation.php:32
 msgid "You haven't created any map, yet!"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:18
-msgid "Address and geolocation"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:33
-msgid "Write an address"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:36
-msgid "Geolocate"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:40
-msgid "Drag the marker for a more precise result"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:43
-msgid "Result"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:45
-msgid "Latitude"
-msgstr ""
-
-#: ../metaboxes/geocode/geocode.php:48
-msgid "Longitude"
-msgstr ""
+msgstr "Você ainda não criou um mapa, ainda!"
 
 #: ../metaboxes/mapgroup/mapgroup.php:15
 #: ../metaboxes/mapgroup/mapgroup.php:64
 msgid "Add to \"more\" tab"
-msgstr ""
+msgstr "Adicionar a aba \"mais\""
 
 #: ../metaboxes/mapgroup/mapgroup.php:30
+#: ../inc/core.php:152
 msgid "Map group"
-msgstr ""
+msgstr "Grupo de mapas"
 
 #: ../metaboxes/mapgroup/mapgroup.php:45
 msgid "Select a map to add to your map group"
-msgstr ""
+msgstr "Selecione um mapa para adicionar ao seu grupo de mapas"
 
 #: ../metaboxes/mapgroup/mapgroup.php:54
 msgid "Add map"
-msgstr ""
+msgstr "Adicionar mapa"
 
-#: ../inc/mappress-post-types.php:11
-#: ../inc/mappress-post-types.php:21
-msgid "Maps"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:12
-msgid "Map"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:13
-#: ../inc/mappress-post-types.php:14
-msgid "Add new map"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:15
-msgid "Edit map"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:16
-msgid "New map"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:17
-msgid "View map"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:18
-msgid "Search maps"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:19
-msgid "No map found"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:20
-msgid "No map found in the trash"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:27
-msgid "MapBox Maps"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:52
-#: ../inc/mappress-post-types.php:62
-#: ../inc/mappress-post-types.php:89
-msgid "Map groups"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:54
-#: ../inc/mappress-post-types.php:55
-#: ../inc/mappress-post-types.php:90
-msgid "Add new map group"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:56
-msgid "Edit map group"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:57
-msgid "New map group"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:58
-msgid "View map group"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:59
-msgid "Search map group"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:60
-msgid "No map group found"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:61
-msgid "No map group found in the trash"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:68
-msgid "MapBox maps agroupment"
-msgstr ""
-
-#: ../inc/mappress-post-types.php:90
-msgid "Add new group"
-msgstr ""
-
-#: ../inc/mappress-core.php:123
-#: ../inc/mappress-core.php:135
-msgid "More"
-msgstr "Mais"
-
-#: ../inc/mappress-core.php:127
-msgid "Find a location"
-msgstr "Encontre no mapa"
-
-#: ../inc/mappress-core.php:128
-msgid "Results"
-msgstr "Resultados"
-
-#: ../inc/mappress-core.php:129
-msgid "Close search"
-msgstr "Fechar busca"
-
-#: ../inc/mappress-core.php:130
-msgid "Nothing found, try something else."
-msgstr "Nada encontrado, tente outra busca"
-
-#: ../inc/mappress-core.php:148
+#: ../inc/markers.php:287
 msgid "We couldn't find what you are looking for, please try again."
 msgstr "Não encontramos resultados para o que procura, tente novamente."
 
-#: ../inc/mappress-core.php:149
+#: ../inc/markers.php:288
 msgid "results found"
 msgstr "resultados encontrados"
 
-#: ../inc/mappress-markers.php:148
+#: ../inc/markers.php:305
+msgid "Address and geolocation"
+msgstr "Endereço e geolocalização"
+
+#: ../inc/markers.php:327
+msgid "Find the location"
+msgstr "Encontre a localização"
+
+#: ../inc/markers.php:329
+msgid "Full address"
+msgstr "Endereço completo"
+
+#: ../inc/markers.php:330
+msgid "Find"
+msgstr "Encontrar"
+
+#: ../inc/markers.php:335
+msgid "Drag the marker for a more precise result"
+msgstr "Arraste o marcador para melhor precisão"
+
+#: ../inc/markers.php:339
+msgid "Result"
+msgstr "Resultados"
+
+#: ../inc/markers.php:341
+msgid "Latitude"
+msgstr "Latitude"
+
+#: ../inc/markers.php:344
+msgid "Longitude"
+msgstr "Longitude"
+
+#: ../inc/markers.php:449
 msgctxt "reduced date format"
 msgid "m/d/Y"
 msgstr "d/m/Y"
+
+#: ../inc/featured.php:82
+msgid "Featured content"
+msgstr "Conteúdo destacado"
+
+#: ../inc/ui.php:16
+msgid "Locate on map"
+msgstr "Localizar no mapa"
+
+#: ../inc/streetview.php:38
+msgid "Use Google Street View"
+msgstr "Habilitar Google Street View"
+
+#: ../inc/core.php:87
+#: ../inc/core.php:99
+msgid "More"
+msgstr "Mais"
+
+#: ../inc/core.php:91
+msgid "Find a location"
+msgstr "Encontre no mapa"
+
+#: ../inc/core.php:92
+msgid "Results"
+msgstr "Resultados"
+
+#: ../inc/core.php:93
+msgid "Close search"
+msgstr "Fechar busca"
+
+#: ../inc/core.php:94
+msgid "Nothing found, try something else."
+msgstr "Nada encontrado, tente outra busca"
+
+#: ../inc/core.php:118
+#: ../inc/core.php:128
+msgid "Maps"
+msgstr "Mapas"
+
+#: ../inc/core.php:119
+msgid "Map"
+msgstr "Mapa"
+
+#: ../inc/core.php:120
+#: ../inc/core.php:121
+msgid "Add new map"
+msgstr "Adicionar novo mapa"
+
+#: ../inc/core.php:122
+msgid "Edit map"
+msgstr "Editar mapa"
+
+#: ../inc/core.php:123
+msgid "New map"
+msgstr "Novo mapa"
+
+#: ../inc/core.php:124
+msgid "View map"
+msgstr "Ver mapa"
+
+#: ../inc/core.php:125
+msgid "Search maps"
+msgstr "Buscar mapas"
+
+#: ../inc/core.php:126
+msgid "No map found"
+msgstr "Nenhum mapa foi encontrado"
+
+#: ../inc/core.php:127
+msgid "No map found in the trash"
+msgstr "Nenhum mapa foi encontrado na lixeira"
+
+#: ../inc/core.php:134
+msgid "MapPress Maps"
+msgstr "Mapas do MapPress"
+
+#: ../inc/core.php:151
+#: ../inc/core.php:161
+#: ../inc/core.php:181
+msgid "Map groups"
+msgstr "Grupos de mapa"
+
+#: ../inc/core.php:153
+#: ../inc/core.php:154
+#: ../inc/core.php:182
+msgid "Add new map group"
+msgstr "Adicionar novo grupo de mapa"
+
+#: ../inc/core.php:155
+msgid "Edit map group"
+msgstr "Editar grupo de mapa"
+
+#: ../inc/core.php:156
+msgid "New map group"
+msgstr "Novo grupo de mapa"
+
+#: ../inc/core.php:157
+msgid "View map group"
+msgstr "Ver grupo de mapa"
+
+#: ../inc/core.php:158
+msgid "Search map group"
+msgstr "Buscar grupo de mapa"
+
+#: ../inc/core.php:159
+msgid "No map group found"
+msgstr "Nenhum grupo de mapa foi encontrado"
+
+#: ../inc/core.php:160
+msgid "No map group found in the trash"
+msgstr "Nenhum grupo de mapa foi encontrado na lixeira"
+
+#: ../inc/core.php:167
+msgid "MapPress maps group"
+msgstr "Grupos de mapa do MapPress"
+
+#: ../inc/core.php:182
+msgid "Add new group"
+msgstr "Adicionar novo grupo"
+
+#: ../inc/marker-icons.php:149
+#: ../inc/marker-icons.php:159
+#: ../inc/marker-icons.php:278
+msgid "Marker icons"
+msgstr "Ícones"
+
+#: ../inc/marker-icons.php:150
+msgid "Marker icon"
+msgstr "Ícone"
+
+#: ../inc/marker-icons.php:151
+msgid "Add marker icon"
+msgstr "Adicionar ícone"
+
+#: ../inc/marker-icons.php:152
+#: ../inc/marker-icons.php:279
+msgid "Add new marker icon"
+msgstr "Adicionar novo ícone"
+
+#: ../inc/marker-icons.php:153
+msgid "Edit marker icon"
+msgstr "Editar ícone"
+
+#: ../inc/marker-icons.php:154
+msgid "New marker icon"
+msgstr "Novo ícone"
+
+#: ../inc/marker-icons.php:155
+msgid "View marker icon"
+msgstr "Ver ícone"
+
+#: ../inc/marker-icons.php:156
+msgid "Search marker icons"
+msgstr "Buscar ícones"
+
+#: ../inc/marker-icons.php:157
+msgid "No marker icon found"
+msgstr "Nenhum ícone foi encontrado"
+
+#: ../inc/marker-icons.php:158
+msgid "No marker icon found in the trash"
+msgstr "Nenhum ícone foi encontrado na lixeira"
+
+#: ../inc/marker-icons.php:165
+msgid "MapPress marker icons"
+msgstr "Ícones de marcadores do MapPress"
+
+#: ../inc/marker-icons.php:194
+#: ../inc/marker-icons.php:447
+msgid "Marker"
+msgstr "Marcador"
+
+#: ../inc/marker-icons.php:209
+#: ../inc/marker-icons.php:496
+msgid "default"
+msgstr "padrão"
+
+#: ../inc/marker-icons.php:233
+msgid "Set as default marker "
+msgstr "Definir como ícone padrão"
+
+#: ../inc/marker-icons.php:266
+msgid "Default marker updated"
+msgstr "Ícone padrão atualizado"
+
+#: ../inc/marker-icons.php:300
+msgid "Setup marker icon"
+msgstr "Configurar ícone de marcador"
+
+#: ../inc/marker-icons.php:319
+msgid "Choose image to use as marker icon"
+msgstr "Escolha uma imagem para usar como ícone"
+
+#: ../inc/marker-icons.php:320
+msgid "PNG image format is recomended"
+msgstr "Formato de imagem PNG é recomendado"
+
+#: ../inc/marker-icons.php:324
+msgid "Upload image"
+msgstr "Enviar imagem"
+
+#: ../inc/marker-icons.php:332
+msgid "Use default"
+msgstr "Utilizar padrão"
+
+#: ../inc/marker-icons.php:333
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../inc/marker-icons.php:334
+msgid "Save"
+msgstr "Salvar"
+
+#: ../inc/marker-icons.php:336
+msgid "Mouse"
+msgstr "Mouse"
+
+#: ../inc/marker-icons.php:341
+msgid "Point"
+msgstr "Ponto"
+
+#: ../inc/marker-icons.php:346
+msgid "Tip:"
+msgstr "Dica:"
+
+#: ../inc/marker-icons.php:346
+msgid "Use ARROWS to move the pointer, press ENTER to save or ESC to cancel."
+msgstr "Utilize as SETAS do teclado para mover o ponto, pressione ENTER para salvar ou ESC para cancelar."
+
+#: ../inc/marker-icons.php:350
+msgid "Icon anchor"
+msgstr "Âncora do ícone"
+
+#: ../inc/marker-icons.php:351
+msgid "Coordinates to correctly position the marker on the map"
+msgstr "Coordenadas para posicionar o marcador corretamente no mapa"
+
+#: ../inc/marker-icons.php:353
+#: ../inc/marker-icons.php:364
+msgid "Find coordinates"
+msgstr "Encontrar coordenadas"
+
+#: ../inc/marker-icons.php:356
+msgid "X"
+msgstr "X"
+
+#: ../inc/marker-icons.php:357
+msgid "Y"
+msgstr "Y"
+
+#: ../inc/marker-icons.php:361
+msgid "Popup anchor"
+msgstr "Âncora do popup"
+
+#: ../inc/marker-icons.php:362
+msgid "Coordinates to correctly position the marker's popup"
+msgstr "Coordenadas para posicionar corretamente o popup do marcador"
+
+#: ../inc/marker-icons.php:412
+msgid "Could not save image file"
+msgstr "Não pôde salvar o arquivo de imagem"
+
+#: ../inc/marker-icons.php:454
+msgid "Default"
+msgstr "Padrão"
+
+#: ../inc/marker-icons.php:458
+msgid "Create a new marker"
+msgstr "Criar novo marcador"
+
+#: ../inc/marker-icons.php:459
+msgid "Select a marker"
+msgstr "Selecione um marcador"
+
+#: ../inc/marker-icons.php:461
+msgid "You don't have custom markers yet."
+msgstr "Você ainda não tem marcadores customizados."
+
+#: ../inc/marker-icons.php:461
+msgid "Create your first here!"
+msgstr "Crie seu primeiro aqui!"
+
+#: ../inc/marker-icons.php:529
+msgid "Custom marker"
+msgstr "Marcador customizado"
+
+#: ../inc/marker-icons.php:543
+msgid "Choose a custom marker for your content. If it's set to <em>auto</em> we'll try to find the marker based on categories or map markers."
+msgstr "Defina um marcador customizado para seu conteúdo. Caso esteja marcado como <em>auto</em>, vamos buscar baseados nas categorias e mapas."
+
+#: ../inc/marker-icons.php:547
+msgid "Auto"
+msgstr "Auto"
+
+#: ../inc/admin/settings.php:10
+msgid "MapPress"
+msgstr "MapPress"
+
+#: ../inc/admin/settings.php:25
+msgid "Geocode"
+msgstr "Geocodificação"
+
+#: ../inc/admin/settings.php:26
+msgid "About"
+msgstr "Sobre"
+
+#: ../inc/admin/settings.php:42
+msgid "No maps were found"
+msgstr "Nenhum mapa foi encontrado"
+
+#: ../inc/admin/settings.php:72
+msgid "Front page settings"
+msgstr "Configuração da página inicial"
+
+#: ../inc/admin/settings.php:73
+msgid "Set your front page contents."
+msgstr "Configure o conteúdo da sua página inicial."
+
+#: ../inc/admin/settings.php:78
+msgid "Front page map"
+msgstr "Mapa da página inicial"
+
+#: ../inc/admin/settings.php:79
+msgid "Select if the front page map should be the featured map with latest content or a selection of featured posts."
+msgstr "Escolha se o mapa da página inicial deverá ser seu mapa destacado com últimos posts ou com uma seleção de posts destacados."
+
+#: ../inc/admin/settings.php:82
+msgid "Featured map with latest posts"
+msgstr "Mapa destacado com últimos posts"
+
+#: ../inc/admin/settings.php:82
+msgid "Selection of featured posts"
+msgstr "Seleção de posts destacados"
+
+#: ../inc/admin/settings.php:82
+msgid "featured map cannot be a map-group"
+msgstr "mapa destacado não pode ser um grupo de mapa"
+
+#: ../inc/admin/settings.php:86
+msgid "Featured map"
+msgstr "Mapa destacado"
+
+#: ../inc/admin/settings.php:87
+msgid "Select the map to be featured on the homepage and posts."
+msgstr "Selecione o mapa a ser destacado na página inicial e posts."
+
+#: ../inc/admin/settings.php:98
+msgid "Geocode settings"
+msgstr "Configurações de geocodificação"
+
+#: ../inc/admin/settings.php:104
+msgid "Geocode type"
+msgstr "Tipo"
+
+#: ../inc/admin/settings.php:105
+msgid "Choose simple latitude/longitude inputs or complete address lookup geocoding system"
+msgstr "Escolha entre campos de latitude/longitude ou um completo sistema de geodificação com busca por endereço"
+
+#: ../inc/admin/settings.php:108
+msgid "Address geocoding with interactive map (default)"
+msgstr "Busca por endereço com mapa interativo (padrão"
+
+#: ../inc/admin/settings.php:108
+msgid "Latitude/longitude inputs"
+msgstr "Campos de latitude/longitude"
+
+#: ../inc/admin/settings.php:112
+msgid "Geocode service"
+msgstr "Serviço"
+
+#: ../inc/admin/settings.php:113
+msgid "Choose the geocoding service to be used"
+msgstr "Escolha o serviço de geocodificação a ser utilizado"
+
+#: ../inc/admin/settings.php:116
+msgid "OpenStreetMaps with Nominatim"
+msgstr "OpenStreetMaps com Nominatim"
+
+#: ../inc/admin/settings.php:116
+msgid "Google Maps"
+msgstr "Google Maps"
+
+#: ../inc/admin/settings.php:120
+msgid "Google Maps API Key"
+msgstr "Chave de API do Google Maps"
+
+#: ../inc/admin/settings.php:121
+#, php-format
+msgid "Key to use the Google Maps geocoding services. <a href=\"%s\" target=\"_blank\">Click here to get one.</a>"
+msgstr "Chave para utilizar os serviços do Google Maps. <a href=\"%s\" target=\"_blank\">Clique aqui para obter uma.</a>"
+
+#: ../inc/admin/settings.php:131
+msgid "Map behaviours"
+msgstr "Comportamentos do mapa"
+
+#: ../inc/admin/settings.php:135
+msgid "Fragment hash"
+msgstr "Fragmentos de hash"
+
+#: ../inc/admin/settings.php:136
+msgid "Enable use of fragment hash url to share map location, selected maps on mapgroup and fullscreen state. <br/>E.g.: yoursite.com/#!/loc=-23,-42,7&map=12&full=true"
+msgstr "Habilitar uso de fragmentos de hash para rastrear na URL a localização do mapa, mapas selecionados em grupos de mapas e visualização em tela cheia. <br/>Exemplo: seusite.com/#!/loc=-23,-42,7&map=12&full=true"
+
+#: ../inc/admin/settings.php:139
+#: ../inc/admin/settings.php:147
+msgid "Enable"
+msgstr "Habilitar"
+
+#: ../inc/admin/settings.php:143
+msgid "Map query"
+msgstr "Conteúdo relacionado"
+
+#: ../inc/admin/settings.php:144
+msgid "Display posts only associated to the viewing map"
+msgstr "Exibir apenas posts associados ao mapa sendo visualizado"
+
+#: ../inc/admin/settings.php:151
+msgid "Mapped post types"
+msgstr "Tipos de post mapeados"
+
+#: ../inc/admin/settings.php:152
+msgid "Post types to enable map functionalities"
+msgstr "Tipos de post para habilitar funcionalidades de mapa"
+
+#: ../inc/admin/admin-page-framework.php:551
+#: ../inc/admin/admin-page-framework.php:2544
+msgid "Upload Image"
+msgstr "Enviar imagem"
+
+#: ../inc/admin/admin-page-framework.php:552
+#: ../inc/admin/admin-page-framework.php:1177
+msgid "Use This Image"
+msgstr "Utilizar imagem"
+
+#: ../inc/admin/admin-page-framework.php:1010
+msgid "Options have been updated."
+msgstr "Opções foram atualizadas."
+
+#: ../inc/admin/admin-page-framework.php:1194
+msgid "The file is bigger than this PHP installation allows."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1195
+msgid "The file is bigger than this form allows."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1196
+msgid "Only part of the file was uploaded."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1197
+msgid "No file was uploaded."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1202
+msgid "Import Error: Wrong file type."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1208
+msgid "Import Error: Wrong text format."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1230
+msgid "The importing process has been failed."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1241
+msgid "Options were imported."
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:1538
+msgid "Settings"
+msgstr "Configurações"
+
+#: ../inc/admin/admin-page-framework.php:1565
+msgid "Powered by"
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:2220
+#: ../inc/admin/admin-page-framework.php:2247
+msgid "Export Options"
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:2267
+msgid "Import Options"
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:2476
+#: ../inc/admin/admin-page-framework.php:2496
+msgid "Submit"
+msgstr "Enviar"
+
+#: ../inc/admin/admin-page-framework.php:2545
+msgid "Delete Image"
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:2546
+msgid "Unset Image"
+msgstr ""
+
+#: ../inc/admin/admin-page-framework.php:2583
+msgid "No url has been set."
+msgstr "Nenhum url foi inserida."
 

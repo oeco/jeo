@@ -4,20 +4,37 @@
 
 	<?php mappress_map(); ?>
 
-	<section id="content" class="single-post">
-		<header class="single-post-header">
+	<article id="content" class="single-post">
+		<header class="single-post-header" class="clearfix">
 			<div class="container">
-				<div class="twelve columns">
+				<div class="eight columns">
+					<?php the_category(); ?>
 					<h1><?php the_title(); ?></h1>
+				</div>
+				<div class="three columns offset-by-one">
+					<div class="post-meta">
+						<p class="author"><span class="lsf">user</span> <?php _e('by', 'mappress'); ?> <?php the_author(); ?></p>
+						<p class="date"><span class="lsf">time</span> <?php the_date(); ?></p>
+					</div>
+				</div>
 				</div>
 			</div>
 		</header>
-		<div class="container">
-			<div class="twelve columns">
-				<?php the_content(); ?>
+		<section class="content">
+			<div class="container">
+				<div class="eight columns">
+					<?php the_content(); ?>
+				</div>
+				<div class="three columns offset-by-one">
+					<aside id="sidebar">
+						<ul class="widgets">
+							<?php dynamic_sidebar('post'); ?>
+						</ul>
+					</aside>
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+	</article>
 
 <?php endif; ?>
 
