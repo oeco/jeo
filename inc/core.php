@@ -74,7 +74,7 @@ class MapPress {
 		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.1.9');
 		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.16');
 
-		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.3');
+		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.4');
 
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.3');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
@@ -208,8 +208,8 @@ class MapPress {
 
 	function use_hash() {
 		$options = $this->get_options();
-		if(isset($options['map']['use_hash']))
-			$use_hash = $options['map']['use_hash'];
+		if(isset($options['map']))
+			$use_hash = $options['map']['use_hash'] ? true : false;
 		else
 			$use_hash = true;
 		return apply_filters('mappress_use_hash', $use_hash);

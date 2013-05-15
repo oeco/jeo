@@ -99,5 +99,10 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 }
 
-new MapPress_StreetView;
+$streetview = new MapPress_StreetView;
+
+function mappress_is_streetview($post_id = false) {
+	global $streetview;
+	return $streetview->is_streetview($post_id);
+}
 ?>
