@@ -24,17 +24,17 @@ class MapPress_Featured {
 	}
 
 	function setup() {
-		add_action('init', array($this, 'query_var'));
+		add_action('init', array($this, 'setup_query'));
 		add_action('add_meta_boxes', array($this, 'add_metabox'));
 		add_action('save_post', array($this, 'save'));
 	}
 
-	function query_var() {
+	function setup_query() {
 
 		global $wp;
 		$wp->add_query_var($this->featured_var);
 
-		add_action('pre_get_posts', array($this, 'wp_query'));
+		add_action('pre_get_posts', array($this, 'wp_query'), 5);
 	}
 
 	function wp_query($query) {
@@ -55,9 +55,10 @@ class MapPress_Featured {
 			$query['meta_query'] = array();
 
 		$query['meta_query'][] = array(
-			'key' => '_mappress_featured',
+			'key' => $this->featured_meta,
 			'value' => 1
 		);
+
 		return $query;
 	}
 
