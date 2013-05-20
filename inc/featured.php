@@ -107,6 +107,15 @@ class MapPress_Featured {
 		return get_post_meta($post_id, $this->featured_meta, true);
 	}
 
+	function get_featured($query = false) {
+		if(!$query)
+			$query = array();
+
+		$query = array_merge($query, $this->query($query));
+
+		return get_posts($query);
+	}
+
 }
 
 $featured = new MapPress_Featured;
@@ -114,4 +123,9 @@ $featured = new MapPress_Featured;
 function mappress_is_featured($post_id = false) {
 	global $featured;
 	return $featured->is_featured($post_id);
+}
+
+function mappress_get_featured($query = false) {
+	global $featured;
+	return $featured->get_featured($query);
 }
