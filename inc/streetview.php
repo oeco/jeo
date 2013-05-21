@@ -20,13 +20,15 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.8');
+		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.9');
 	}
 
-	function editor($post) {
-		$streetview = $this->is_streetview();
-		$pitch = $this->get_pitch();
-		$heading = $this->get_heading();
+	function editor($post = false) {
+		if($post) {
+			$streetview = $this->is_streetview();
+			$pitch = $this->get_pitch();
+			$heading = $this->get_heading();
+		}
 		if(!$pitch)
 			$pitch = 0;
 		if(!$heading)
@@ -64,7 +66,7 @@ class MapPress_StreetView extends MapPress_Markers {
 			<div id="streetview_canvas" class="streetview">
 			</div>
 			<script type="text/javascript">
-				mappress.streetview({
+				new mappress.streetview({
 					containerID: 'streetview_canvas',
 					lat: <?php echo $this->get_latitude(); ?>,
 					lng: <?php echo $this->get_longitude(); ?>,

@@ -6,14 +6,12 @@ var streetviewBox;
 		mappress.mapReady(function() {
 			options.canvas = $('#' + options.containerID);
 			$('body').addClass('displaying-map');
-			var panorama = enable(options);
-			//setTimeout(function() {
-				panorama.setVisible(true);
-			//}, 500);
+			var panorama = StreetViewPanorama(options);
+			panorama.setVisible(true);
 		});
 	}
 
-	function enable(options) {
+	function StreetViewPanorama(options) {
 
 		var settings = {
 			canvas: false,
@@ -124,7 +122,7 @@ var streetviewBox;
 
 			loadPanorama: function() {
 
-				box.panorama = enable({
+				box.panorama = StreetViewPanorama({
 					canvas: box.canvas,
 					heading: 0,
 					pitch: 0,

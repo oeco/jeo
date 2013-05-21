@@ -379,9 +379,6 @@ class MapPress_Markers {
 		if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
 
-		if (defined('DOING_AJAX') && DOING_AJAX)
-			return;
-
 		if (false !== wp_is_post_revision($post_id))
 			return;
 
@@ -532,6 +529,11 @@ require_once($mappress_markers->directory . '/marker-icons.php');
 function mappress_geocode_box($post = false) {
 	global $mappress_markers;
 	return $mappress_markers->geocode_box($post);
+}
+
+function mappress_geocode_save($post_id = false) {
+	global $mappress_markers;
+	return $mappress_markers->geocode_save($post_id);
 }
 
 function mappress_get_geocode_service() {
