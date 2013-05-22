@@ -47,5 +47,7 @@ Now you can go manage your posts, geolocate them and add custom marker icons!
 ### Authors and Contributors
 MapPress is a collaboration between @oeco, @cardume, @memelab and @icfjknight.
 
+MapPress is a collaboration between [@oeco](https://github.com/oeco/), [@cardume](https://github.com/cardume/), [@memelab](https://github.com/memelab/) and [@icfjknight](https://github.com/icfjknight/). Developed after the theme was built for [InfoAmazonia](http://infoamazonia.org/), a project led by ICFJ Knight International Journalism Fellow [Gustavo Faleiros](http://www.icfj.org/our-work/brazil-expand-use-satellite-mapping-and-other-technologies-improve-environmental-reporting) and supported by [Internews](http://www.internews.org/).
+
 ### Support or Contact
 Having trouble with mappress? Go to our [issues page](https://github.com/cardume/mappress/issues) and we'll help you there!
