@@ -27,7 +27,7 @@ function mappress_find_post_on_map_button($zoom = null, $text = false, $post_id 
 	
 	$zoom_attr = 'data-zoom="' . $zoom . '"';
 
-	return apply_filters('mappress_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">geo</span> ' . $text . '</a>');
+	return apply_filters('mappress_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">&#xE056;</span> ' . $text . '</a>');
 }
 
 function mappress_element_geometry_data($post_id = false) {

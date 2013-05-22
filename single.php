@@ -13,8 +13,8 @@
 				</div>
 				<div class="three columns offset-by-one">
 					<div class="post-meta">
-						<p class="author"><span class="lsf">user</span> <?php _e('by', 'mappress'); ?> <?php the_author(); ?></p>
-						<p class="date"><span class="lsf">time</span> <?php the_date(); ?></p>
+						<p class="author"><span class="lsf">&#xE137;</span> <?php _e('by', 'mappress'); ?> <?php the_author(); ?></p>
+						<p class="date"><span class="lsf">&#xE12b;</span> <?php the_date(); ?></p>
 					</div>
 				</div>
 				</div>
