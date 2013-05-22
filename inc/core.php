@@ -71,7 +71,7 @@ class MapPress {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.1.9');
+		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.1.10');
 		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.16');
 
 		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.4');
@@ -459,6 +459,7 @@ class MapPress {
 		$post = get_post($map_id);
 		setup_postdata($post);
 		$data = get_post_meta($map_id, 'map_data', true);
+		$data['dataReady'] = true;
 		$data['postID'] = $map_id;
 		$data['title'] = get_the_title($map_id);
 		$data['legend'] = $this->get_map_legend($map_id);
@@ -686,10 +687,16 @@ function mappress_map($map_id = false, $main_map = true, $force = false) {
 	return $mappress->get_map($map_id, $main_map, $force = false);
 }
 
-// get the map conf
+// get JSON map conf
 function mappress_map_conf() {
 	global $mappress;
 	return $mappress->map_conf();
+}
+
+// get ARRAY map conf
+function mappress_get_map_conf($map_id = false) {
+	global $mappress;
+	return $mappress->get_map_conf();
 }
 
 // get the map conf

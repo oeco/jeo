@@ -14,7 +14,7 @@ var mappress = {};
 				return mappress.build(conf, callback);
 			}
 
-			if(!conf.postID && typeof conf === 'object') { // conf ready
+			if(conf.dataReady || !conf.postID) { // data ready
 				return mappress.build(conf, callback);
 			}
 
@@ -310,6 +310,12 @@ var mappress = {};
 
 		if(conf.server != 'mapbox')
 			newConf.server = conf.server;
+
+		if(conf.dataReady)
+			newConf.dataReady = true;
+
+		if(conf.conf)
+			newConf = _.extend(newConf, conf.conf);
 
 		newConf.layers = [];
 		newConf.filteringLayers = {};
