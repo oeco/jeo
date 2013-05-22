@@ -14,19 +14,19 @@ class MapPress_Featured {
 	var $featured_meta = '_mappress_featured';
 
 	function __construct() {
+		add_action('init', array($this, 'setup'));
+	}
+
+	function setup() {
+		$this->setup_query();
 		$this->set_post_types();
-		$this->setup();
+		add_action('add_meta_boxes', array($this, 'add_metabox'));
+		add_action('save_post', array($this, 'save'));
 	}
 
 	function set_post_types() {
 		$this->post_types = apply_filters('mappress_featured_post_types', $this->post_types);
 		return $this->post_types;
-	}
-
-	function setup() {
-		add_action('init', array($this, 'setup_query'));
-		add_action('add_meta_boxes', array($this, 'add_metabox'));
-		add_action('save_post', array($this, 'save'));
 	}
 
 	function setup_query() {
