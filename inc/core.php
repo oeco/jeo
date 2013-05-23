@@ -226,6 +226,9 @@ class MapPress {
 
 			$map_id = $this->map->ID;
 
+			if(get_post_type($map_id) != 'map')
+				return $clauses;
+
 			$join = "
 				LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
 				INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
