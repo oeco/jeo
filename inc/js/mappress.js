@@ -319,8 +319,8 @@ var mappress = {};
 
 		newConf.layers = [];
 		newConf.filteringLayers = {};
-		newConf.filteringLayers.switch = [];
-		newConf.filteringLayers.swap = [];
+		newConf.filteringLayers.switchLayers = [];
+		newConf.filteringLayers.swapLayers = [];
 
 		$.each(conf.layers, function(i, layer) {
 			newConf.layers.push(layer.id);
@@ -332,7 +332,7 @@ var mappress = {};
 					};
 					if(layer.switch_hidden)
 						switchLayer.hidden = true;
-					newConf.filteringLayers.switch.push(switchLayer);
+					newConf.filteringLayers.switchLayers.push(switchLayer);
 				}
 				if(layer.opts.filtering == 'swap') {
 					var swapLayer = {
@@ -341,7 +341,7 @@ var mappress = {};
 					};
 					if(conf.swap_first_layer == layer.id)
 						swapLayer.first = true;
-					newConf.filteringLayers.swap.push(swapLayer);
+					newConf.filteringLayers.swapLayers.push(swapLayer);
 				}
 			}
 		});

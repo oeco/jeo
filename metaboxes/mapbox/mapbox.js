@@ -298,8 +298,8 @@
 
 	function getFilteringLayers() {
 		var filtering = {};
-		filtering.switch = [];
-		filtering.swap = [];
+		filtering.switchLayers = [];
+		filtering.swapLayers = [];
 		$('#mapbox-metabox .layers-list li').each(function() {
 			var id = $(this).find('input.layer_id').val();
 			var filteringOpt = $(this).find('.filtering-opt:checked').val();

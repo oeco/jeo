@@ -23,8 +23,8 @@
 			/*
 			 * Swapables
 			 */
-			if(layers.swap && layers.swap.length >= 2) {
-				var swap = layers.swap;
+			if(layers.swapLayers && layers.swapLayers.length >= 2) {
+				var swap = layers.swapLayers;
 				var list = '';
 				_.each(swap, function(layer) {
 					var attrs = '';
@@ -37,15 +37,15 @@
 				swapWidget = mappress.widget(map_id, '<ul class="swap-layers">' + list + '</ul>', 'swap-layers-widget', 'filter-layers');
 
 				swapWidget.find('li').click(function() {
-					filter.swap($(this).data('layer'), swap);
+					filter.swapLayer($(this).data('layer'), swap);
 				});
 			}
 
 			/*
 			 * Switchables
 			 */
-			if(layers.switch && layers.switch.length) {
-				var switchable = layers.switch;
+			if(layers.switchLayers && layers.switchLayers.length) {
+				var switchable = layers.switchLayers;
 				var list = '';
 				_.each(switchable, function(layer) {
 					var attrs = 'class="active"';
@@ -58,14 +58,14 @@
 				switchWidget = mappress.widget(map_id, '<ul class="switch-layers">' + list + '</ul>', 'switch-layers-widget', 'filter-layers');
 
 				switchWidget.find('li').click(function() {
-					filter.switch($(this).data('layer'));
+					filter.switchLayer($(this).data('layer'));
 				});
 			}
 
 			filter.update();
 		}
 
-		filter.switch = function(layer) {
+		filter.switchLayer = function(layer) {
 
 			var widget = switchWidget;
 
@@ -88,7 +88,7 @@
 			filter.update();
 		};
 
-		filter.swap = function(layer) {
+		filter.swapLayer = function(layer) {
 
 			var widget = swapWidget;
 
