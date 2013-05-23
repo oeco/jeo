@@ -31,7 +31,7 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 		 * Data
 		 */
 
-		$maps = get_posts(array('post_type' => array('map', 'map-group')));
+		$maps = get_posts(array('post_type' => array('map', 'map-group'), 'posts_per_page' => -1));
 
 		$maps_input = array();
 		if($maps) {

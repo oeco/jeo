@@ -120,6 +120,11 @@ var mappress = {};
 	    // Enable zoom-level dependent design.
 	    map.$.addClass('zoom-' + map.getZoom());
 
+		if(!conf.disableInteraction) {
+			map.ui.zoomer.add();
+			map.ui.fullscreen.add();
+		}
+
 		map.$.find('.map-fullscreen').click(function() {
 			map.draw();
 		});
@@ -138,11 +143,6 @@ var mappress = {};
 			mappress.runCallbacks('layersReady', [map]);
 
 		}));
-
-		if(!conf.disableInteraction) {
-			map.ui.zoomer.add();
-			map.ui.fullscreen.add();
-		}
 
 		if(!conf.preview)
 			map.setZoomRange(conf.minZoom, conf.maxZoom);
