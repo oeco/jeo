@@ -181,6 +181,7 @@ class MapPress_Markers {
 	}
 
 	function get_data($query = false) {
+
 		$query = $query ? $query : $_REQUEST['query'];
 
 		if(!isset($query['singular_map']) || $query['singular_map'] !== true) {
@@ -200,7 +201,7 @@ class MapPress_Markers {
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
 		$data = false;
-		$data = wp_cache_get($cache_key, 'mappress_markers_query');
+		$data = get_transient($cache_key, 'mappress_markers_query');
 
 		if($data === false) {
 			$data = array();
@@ -233,7 +234,7 @@ class MapPress_Markers {
 			}
 			$data = apply_filters('mappress_markers_data', $data);
 			$data = json_encode($data);
-			wp_cache_set($cache_key, $data, 'mappress_markers_query');
+			set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
 		header('Content Type: application/json');

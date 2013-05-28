@@ -23,7 +23,7 @@ class MapPress {
 	var $options = array();
 
 	function __construct() {
-		$this->setup();
+		add_action('after_setup_theme', array($this, 'setup'));
 		$this->plugin_fixes();
 	}
 
@@ -36,6 +36,11 @@ class MapPress {
 		$this->setup_pre_get_map();
 		$this->setup_ajax();
 		$this->setup_canonical();
+		$this->init();
+	}
+
+	function init() {
+		do_action('mappress_init');
 	}
 
 	function setup_directories() {
@@ -105,9 +110,9 @@ class MapPress {
 	}
 
 	function setup_post_types() {
-		add_action('init', array($this, 'register_post_types'));
+		$this->register_post_types();
+		$this->mapped_post_types();
 		add_action('admin_menu', array($this, 'admin_menu'));
-		add_action('init', array($this, 'mapped_post_types'));
 	}
 
 	function register_post_types() {
