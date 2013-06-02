@@ -445,7 +445,7 @@ class MapPress_Markers {
 		$properties['postID'] = $post->ID;
 		$properties['title'] = get_the_title();
 		$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'mappress'));
-		$properties['url'] = get_permalink();
+		$properties['url'] = apply_filters('the_permalink', get_permalink());
 		$properties['bubble'] = $this->get_bubble();
 		$properties['marker'] = $this->get_icon();
 		$properties['class'] = implode(' ', $this->get_class());
