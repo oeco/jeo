@@ -121,9 +121,8 @@ class MapPress_Markers {
 
 		$query = $marker_query->query_vars;
 
-		if($wp_query->get('embed')) {
-			$query = array();
-		}
+		if(isset($query['suppress_filters']))
+			unset($query['suppress_filters']);
 
 		if(is_singular(array('map', 'map-group'))) {
 			global $post;
@@ -133,7 +132,7 @@ class MapPress_Markers {
 			$query['map_id'] = $post->ID;
 		}
 
-		if($wp_query->get('map_id')) {
+		if($wp_query->get('map_id') && !$wp_query->get('p')) {
 			$query['map_id'] = $wp_query->get('map_id');
 		}
 
