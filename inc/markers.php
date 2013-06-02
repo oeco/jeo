@@ -24,12 +24,7 @@ class MapPress_Markers {
 
 	function __construct() {
 		$this->setup_directories();
-		$this->setup();
-		$this->setup_scripts();
-		$this->setup_post_map();
-		$this->setup_ajax();
-		$this->setup_cache_flush();
-		$this->geocode_setup();
+		add_action('mappress_init', array($this, 'setup'));
 	}
 
 	/*
@@ -37,6 +32,11 @@ class MapPress_Markers {
 	 */
 
 	function setup() {
+		$this->setup_scripts();
+		$this->setup_post_map();
+		$this->setup_ajax();
+		$this->setup_cache_flush();
+		$this->geocode_setup();
 		$this->get_options();
 		$this->geocode_type();
 		$this->geocode_service();
@@ -100,18 +100,19 @@ class MapPress_Markers {
 	}
 
 	function enqueue_scripts() {
-		if(wp_script_is('mappress.markers', 'registered'))
+		if(wp_script_is('mappress.markers', 'registered')) {
 			wp_enqueue_script('mappress.markers');
+			wp_localize_script('mappress.markers', 'mappress_markers', array(
+				'ajaxurl' => admin_url('admin-ajax.php'),
+				'query' => $this->query(),
+				'markerextent' => $this->use_extent(),
+				'markerextent_defaultzoom' => $this->extent_default_zoom()
+			));
+		}
 	}
 
 	function register_scripts() {
 		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.4');
-		wp_localize_script('mappress.markers', 'mappress_markers', array(
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'query' => $this->query(),
-			'markerextent' => $this->use_extent(),
-			'markerextent_defaultzoom' => $this->extent_default_zoom()
-		));
 	}
 
 	function query() {
@@ -120,14 +121,26 @@ class MapPress_Markers {
 
 		$query = $marker_query->query_vars;
 
+		if($wp_query->get('embed')) {
+			$query = array();
+		}
+
 		if(is_singular(array('map', 'map-group'))) {
+			global $post;
 			$marker_query = new WP_Query();
 			$marker_query->parse_query();
 			$query = $marker_query->query_vars;
+			$query['map_id'] = $post->ID;
+		}
+
+		if($wp_query->get('map_id')) {
+			$query['map_id'] = $wp_query->get('map_id');
 		}
 
 		if(!$query['post_type'])
 			$query['post_type'] = mappress_get_mapped_post_types();
+
+		$query['post_status'] = 'publish';
 
 		$markers_limit = $this->get_limit();
 		$query['posts_per_page'] = $markers_limit;
@@ -200,24 +213,23 @@ class MapPress_Markers {
 
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
-		$data = false;
 		$data = get_transient($cache_key, 'mappress_markers_query');
+		$data = false;
 
 		if($data === false) {
 			$data = array();
 
-			$posts = apply_filters('mappress_the_markers', get_posts($query), $query);
+			$markers_query = new WP_Query($query);
 
 			$data['query_id'] = $cache_key;
 
-			if($posts) {
-				global $post;
+			if($markers_query->have_posts()) {
 				$data['type'] = 'FeatureCollection';
 				$data['features'] = array();
 				$i = 0;
-				foreach($posts as $post) {
+				while($markers_query->have_posts()) {
 
-					setup_postdata($post);
+					$markers_query->the_post();
 
 					$data['features'][$i]['type'] = 'Feature';
 
@@ -228,10 +240,9 @@ class MapPress_Markers {
 					$data['features'][$i]['properties'] = $this->get_properties();
 
 					$i++;
-
-					wp_reset_postdata();
 				}
 			}
+			wp_reset_postdata();
 			$data = apply_filters('mappress_markers_data', $data);
 			$data = json_encode($data);
 			set_transient($cache_key, $data, 60*10); // 10 minutes transient
@@ -239,12 +250,12 @@ class MapPress_Markers {
 
 		header('Content Type: application/json');
 
-		/* Browser caching */
+		/* Browser caching
 		$expires = 60 * 10; // 10 minutes of browser cache
 		header('Pragma: public');
 		header('Cache-Control: maxage=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
-		/* --------------- */
+		--------------- */
 
 		echo $data;
 		exit;

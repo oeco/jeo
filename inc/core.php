@@ -23,7 +23,7 @@ class MapPress {
 	var $options = array();
 
 	function __construct() {
-		add_action('after_setup_theme', array($this, 'setup'));
+		add_action('init', array($this, 'setup'));
 		$this->plugin_fixes();
 	}
 
@@ -197,8 +197,9 @@ class MapPress {
 
 	function setup_query() {
 		if($this->use_the_query()) {
-			add_filter('posts_clauses', array($this, 'posts_clauses'));
-			add_action('parse_query', array($this, 'parse_query'));
+			add_filter('query_vars', array($this, 'query_vars'));
+			add_action('parse_query', array($this, 'parse_query'), 5, 1);
+			add_filter('posts_clauses', array($this, 'posts_clauses'), 5, 2);
 		}
 	}
 
@@ -220,9 +221,14 @@ class MapPress {
 		return apply_filters('mappress_use_hash', $use_hash);
 	}
 
-	function posts_clauses($clauses) {
+	function query_vars($vars) {
+		$vars[] = 'map_id';
+		return $vars;
+	}
 
-		if(is_admin())
+	function posts_clauses($clauses, $query) {
+
+		if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX))
 			return $clauses;
 
 		global $wpdb;
@@ -259,45 +265,27 @@ class MapPress {
 
 	function parse_query($query) {
 
-		if(is_admin())
+		if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX))
 			return $query;
 
-		if($query->is_main_query()) {
-			if(is_home() && !$this->map) {
-				$this->set_map($this->featured());
-			} elseif($query->get('map') || $query->get('map-group')) {
-				if($query->get('map'))
-					$type = 'map';
-				elseif($query->get('map-group'))
-					$type = 'map-group';
-				$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
-			}
-		}
+		if($query->get('map_id')) {
+			$map_id = $query->get('map_id');
+			$this->set_map(get_post($map_id));
 
-		if(!$this->map)
-			return $query;
+		} else {
 
-		if(get_post_type($this->map->ID) == 'map-group') {
-			/*
-			This can get really huge and crash, not using for now.
-			Plan to create a custom query var for the query string and try to create the query server-side.
-			$groupdata = get_post_meta($mappress_map->ID, 'mapgroup_data', true);
-			$meta_query = array('relation' => 'OR');
-			$i = 1;
-			foreach($groupdata['maps'] as $m) {
-				$meta_query[$i] = array(
-					'key' => 'maps',
-					'value' => intval($m['id']),
-					'compare' => 'LIKE'
-				);
-				$i++;
+			if($query->is_main_query()) {
+				if(is_home() && !$this->map) {
+					$this->set_map($this->featured());
+				} elseif($query->get('map') || $query->get('map-group')) {
+					if($query->get('map'))
+						$type = 'map';
+					elseif($query->get('map-group'))
+						$type = 'map-group';
+					$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
+				}
 			}
-			$meta_query[$i] = array(
-				'key' => 'has_maps',
-				'value' => '',
-				'compare' => 'NOT EXISTS'
-			);
-			*/
+
 		}
 
 		return $query;
