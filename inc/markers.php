@@ -214,7 +214,7 @@ class MapPress_Markers {
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
 		$data = get_transient($cache_key, 'mappress_markers_query');
-		$data = false;
+		//$data = false;
 
 		if($data === false) {
 			$data = array();
@@ -250,12 +250,12 @@ class MapPress_Markers {
 
 		header('Content Type: application/json');
 
-		/* Browser caching
+		/* Browser caching */
 		$expires = 60 * 10; // 10 minutes of browser cache
 		header('Pragma: public');
 		header('Cache-Control: maxage=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
-		--------------- */
+		/* --------------- */
 
 		echo $data;
 		exit;
