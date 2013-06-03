@@ -213,7 +213,7 @@ class MapPress_Markers {
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
 		$data = get_transient($cache_key, 'mappress_markers_query');
-		//$data = false;
+		$data = false;
 
 		if($data === false) {
 			$data = array();

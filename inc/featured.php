@@ -14,7 +14,7 @@ class MapPress_Featured {
 	var $featured_meta = '_mappress_featured';
 
 	function __construct() {
-		add_action('init', array($this, 'setup'));
+		add_action('mappress_init', array($this, 'setup'));
 	}
 
 	function setup() {
@@ -44,8 +44,10 @@ class MapPress_Featured {
 
 	function verify_query($query) {
 		if($query[$this->featured_var]) {
+			global $wp_the_query;
 			$query = $this->query($query);
-			add_filter('mappress_marker_query', array($this, 'query'));
+			if($query === $wp_the_query)
+				add_filter('mappress_marker_query', array($this, 'query'));
 		}
 		return $query;
 	}
