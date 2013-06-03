@@ -42,6 +42,7 @@ class MapPress_Markers {
 		$this->geocode_service();
 		$this->gmaps_api_key();
 		$this->use_extent();
+		$this->geojson_cache_hooks();
 	}
 
 	function get_options() {
@@ -212,8 +213,8 @@ class MapPress_Markers {
 
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
-		$data = get_transient($cache_key, 'mappress_markers_query');
-		//$data = false;
+		//$data = get_transient($cache_key, 'mappress_markers_query');
+		$data = false;
 
 		if($data === false) {
 			$data = array();
@@ -230,13 +231,7 @@ class MapPress_Markers {
 
 					$markers_query->the_post();
 
-					$data['features'][$i]['type'] = 'Feature';
-
-					// marker geometry
-					$data['features'][$i]['geometry'] = $this->get_geometry();
-
-					// marker properties
-					$data['features'][$i]['properties'] = $this->get_properties();
+					$data['features'][$i] = $this->get_geojson();
 
 					$i++;
 				}
@@ -244,7 +239,7 @@ class MapPress_Markers {
 			wp_reset_postdata();
 			$data = apply_filters('mappress_markers_data', $data);
 			$data = json_encode($data);
-			set_transient($cache_key, $data, 60*10); // 10 minutes transient
+			//set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
 		header('Content Type: application/json');
@@ -529,6 +524,92 @@ class MapPress_Markers {
 
 		return get_post_meta($post_id, '_geocode_country', true);
 	}
+
+	function get_geojson($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$geojson = get_post_meta($post_id, '_mp_geojson', true);
+
+		if(!$geojson)
+			return $this->update_geojson($post_id);
+
+		return $geojson;
+	}
+
+	function update_geojson($post_id = false) {
+		if(!$post_id)
+			return false;
+
+		global $post;
+		setup_postdata(get_post($post_id));
+
+		$geojson = array();
+
+		$geojson['type'] = 'Feature';
+
+		// marker geometry
+		$geojson['geometry'] = $this->get_geometry();
+
+		// marker properties
+		$geojson['properties'] = $this->get_properties();
+
+		update_post_meta($post_id, '_mp_geojson', $geojson);
+
+		wp_reset_postdata();
+
+		return $geojson;
+	}
+
+	function clean_geojson($post_id = false) {
+
+		if(is_int($post_id) && get_post_type($post_id) == 'revision')
+			return false;
+
+		if(is_int($post_id) && in_array(get_post_type($post_id), mappress_get_mapped_post_types())) {
+			delete_post_meta($post_id, '_mp_geojson');
+		} else {
+			global $wpdb;
+			$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '_mp_geojson'"));
+		}
+
+	}
+
+	function geojson_cache_hooks() {
+		add_action('save_post', array($this, 'clean_geojson'));
+		add_action('create_term', array($this, 'clean_geojson'));
+		add_action('delete_term', array($this, 'clean_geojson'));
+		add_action('edit_term', array($this, 'clean_geojson'));
+
+		// buttons
+		add_action('admin_bar_menu', array($this, 'geojson_cache_button'), 200);
+		$this->geojson_cache_button_action();
+	}
+
+	function geojson_cache_button() {
+		global $wp_admin_bar;
+
+		if ( !is_super_admin() || !is_admin_bar_showing() )
+			return;
+
+		$wp_admin_bar->add_menu( array(
+			'id' => 'mp_geojson_clean',
+			'title' => __('Clear GeoJSON Cache', 'mappress'),
+			'href' => add_query_arg(array('mappress_clear_geojson' => 1))
+		));
+	}
+
+	function geojson_cache_button_action() {
+		if(isset($_REQUEST['mappress_clear_geojson']) && is_super_admin()) {
+			$this->clean_geojson();
+			add_action('admin_notices', array($this, 'geojson_cache_clean_message'));
+		}
+	}
+
+	function geojson_cache_clean_message() {
+		echo '<div class="updated fade"><p>' . __('<strong>Markers GeoJSON cache has been cleared. Don\'t worry! They will be dynamically regenerated.</strong>', 'mappress') . '</p><p>' . __('The next map markers load might take a little while, depending on the amount of markers. If you want to speed this up for your users, we recommend you clear your browser\'s cache and navigate through your website to let the markers cache be replaced.', 'mappress') . '</p></div>';
+	}
+
 
 }
 
