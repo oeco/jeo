@@ -103,11 +103,13 @@
 				}
 			}
 
+			mappress.runCallbacks('markersReady', [map]);
+
 			return markers;
 
 		};
 	}
-
 	mappress.mapReady(markers);
+	mappress.createCallback('markersReady');
 
 })(jQuery);

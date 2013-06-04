@@ -103,17 +103,17 @@ class MapPress_Markers {
 	function enqueue_scripts() {
 		if(wp_script_is('mappress.markers', 'registered')) {
 			wp_enqueue_script('mappress.markers');
-			wp_localize_script('mappress.markers', 'mappress_markers', array(
-				'ajaxurl' => admin_url('admin-ajax.php'),
-				'query' => $this->query(),
-				'markerextent' => $this->use_extent(),
-				'markerextent_defaultzoom' => $this->extent_default_zoom()
-			));
 		}
 	}
 
 	function register_scripts() {
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.4');
+		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.6');
+		wp_localize_script('mappress.markers', 'mappress_markers', array(
+			'ajaxurl' => admin_url('admin-ajax.php'),
+			'query' => $this->query(),
+			'markerextent' => $this->use_extent(),
+			'markerextent_defaultzoom' => $this->extent_default_zoom()
+		));
 	}
 
 	function query() {
