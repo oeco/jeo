@@ -50,6 +50,6 @@ function mappress_theme_scripts() {
 
 	wp_enqueue_script('mappress-site', get_template_directory_uri() . '/js/site.js', array('jquery', 'jquery-isotope'));
 }
-add_action('wp_enqueue_scripts', 'mappress_theme_scripts', 2);
+add_action('wp_enqueue_scripts', 'mappress_theme_scripts', 5);
 
 ?>
