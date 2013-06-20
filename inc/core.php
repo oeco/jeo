@@ -254,9 +254,16 @@ class MapPress {
 					OR m_has_maps.post_id IS NULL
 				) ";
 
+			$groupby = "{$wpdb->posts}.ID";
+
+			// hooks
+			$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
+			$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
+			$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+
 			$clauses['join'] .= $join;
 			$clauses['where'] .= $where;
-			$clauses['groupby'] = "{$wpdb->posts}.ID";
+			$clauses['groupby'] .= $groupby;
 
 		}
 
