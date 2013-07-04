@@ -43,7 +43,7 @@ class MapPress_Featured {
 	}
 
 	function verify_query($query) {
-		if($query[$this->featured_var]) {
+		if(isset($query[$this->featured_var]) && $query[$this->featured_var]) {
 			global $wp_the_query;
 			$query = $this->query($query);
 			if($query === $wp_the_query)

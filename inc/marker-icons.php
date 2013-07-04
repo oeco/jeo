@@ -404,8 +404,10 @@ class MapPress_Marker_Icons {
 				update_post_meta($post_id, '_popup_anchor_y', 0);
 			}
 		} else {
-			update_post_meta($post_id, '_marker_image_width', $_POST['marker_width']);
-			update_post_meta($post_id, '_marker_image_height', $_POST['marker_height']);
+			if(isset($_POST['marker_width']))
+				update_post_meta($post_id, '_marker_image_width', $_POST['marker_width']);
+			if(isset($_POST['marker_height']))
+				update_post_meta($post_id, '_marker_image_height', $_POST['marker_height']);
 			if(isset($_POST['marker_icon_anchor_x']))
 				update_post_meta($post_id, '_icon_anchor_x', $_POST['marker_icon_anchor_x']);
 			if(isset($_POST['marker_icon_anchor_y']))

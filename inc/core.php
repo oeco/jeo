@@ -254,7 +254,9 @@ class MapPress {
 					OR m_has_maps.post_id IS NULL
 				) ";
 
-			$groupby = "{$wpdb->posts}.ID";
+			$groupby = '';
+			if(!$clauses['groupby'])
+				$groupby = " {$wpdb->posts}.ID ";
 
 			// hooks
 			$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
@@ -466,8 +468,8 @@ class MapPress {
 		$data['postID'] = $map_id;
 		$data['title'] = get_the_title($map_id);
 		$data['legend'] = $this->get_map_legend($map_id);
-		if(get_the_content())
-			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', get_the_content());
+		if($post->post_content)
+			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', $post->post_content);
 		wp_reset_postdata();
 		return apply_filters('mappress_map_data', $data, $post);
 	}
@@ -541,7 +543,7 @@ class MapPress {
 
 	function get_map_legend($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
-		return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $map);
+		return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $this->map);
 	}
 
 	function get_options() {

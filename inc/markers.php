@@ -51,7 +51,7 @@ class MapPress_Markers {
 	}
 
 	function geocode_type() {
-		if($this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$type = $this->options['geocode']['type'];
 		else
 			$type = 'default';
@@ -60,7 +60,7 @@ class MapPress_Markers {
 	}
 
 	function geocode_service() {
-		if($this->options && $this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$service = $this->options['geocode']['service'];
 		else
 			$service = 'osm';
@@ -69,7 +69,7 @@ class MapPress_Markers {
 	}
 
 	function gmaps_api_key() {
-		if($this->options && $this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$key = $this->options['geocode']['gmaps_api_key'];
 		else
 			$key = false;
@@ -417,7 +417,7 @@ class MapPress_Markers {
 		return apply_filters('mappress_markers_limit', 200);
 	}
 
-	function get_bubble() {
+	function get_bubble($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 		ob_start();
