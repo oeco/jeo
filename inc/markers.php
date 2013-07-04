@@ -319,6 +319,8 @@ class MapPress_Markers {
 
 	function geocode_box($post = false) {
 
+		wp_enqueue_script('mappress.geocode.box');
+
 		if($post) {
 			$geocode_latitude = $this->get_latitude();
 			$geocode_longitude = $this->get_longitude();
