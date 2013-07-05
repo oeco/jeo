@@ -321,6 +321,13 @@ class MapPress_Markers {
 
 		wp_enqueue_script('mappress.geocode.box');
 
+		$geocode_latitude = '';
+		$geocode_longitude = '';
+		$geocode_city = '';
+		$geocode_country = '';
+		$geocode_address = '';
+		$geocode_viewport = '';
+
 		if($post) {
 			$geocode_latitude = $this->get_latitude();
 			$geocode_longitude = $this->get_longitude();
