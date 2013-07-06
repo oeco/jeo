@@ -397,23 +397,23 @@ class MapPress_Markers {
 		if (false !== wp_is_post_revision($post_id))
 			return;
 
-		if(isset($_POST['geocode_address']))
-			update_post_meta($post_id, 'geocode_address', $_POST['geocode_address']);
+		if(isset($_REQUEST['geocode_address']))
+			update_post_meta($post_id, 'geocode_address', $_REQUEST['geocode_address']);
 
-		if(isset($_POST['geocode_latitude']))
-			update_post_meta($post_id, 'geocode_latitude', $_POST['geocode_latitude']);
+		if(isset($_REQUEST['geocode_latitude']))
+			update_post_meta($post_id, 'geocode_latitude', $_REQUEST['geocode_latitude']);
 
-		if(isset($_POST['geocode_longitude']))
-			update_post_meta($post_id, 'geocode_longitude', $_POST['geocode_longitude']);
+		if(isset($_REQUEST['geocode_longitude']))
+			update_post_meta($post_id, 'geocode_longitude', $_REQUEST['geocode_longitude']);
 
-		if(isset($_POST['geocode_city']))
-			update_post_meta($post_id, '_geocode_city', $_POST['geocode_city']);
+		if(isset($_REQUEST['geocode_city']))
+			update_post_meta($post_id, '_geocode_city', $_REQUEST['geocode_city']);
 
-		if(isset($_POST['geocode_country']))
-			update_post_meta($post_id, '_geocode_country', $_POST['geocode_country']);
+		if(isset($_REQUEST['geocode_country']))
+			update_post_meta($post_id, '_geocode_country', $_REQUEST['geocode_country']);
 
-		if(isset($_POST['geocode_viewport']))
-			update_post_meta($post_id, 'geocode_viewport', $_POST['geocode_viewport']);
+		if(isset($_REQUEST['geocode_viewport']))
+			update_post_meta($post_id, 'geocode_viewport', $_REQUEST['geocode_viewport']);
 
 		do_action('mappress_geocode_box_save', $post_id);
 	}
