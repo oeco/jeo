@@ -107,7 +107,7 @@ class MapPress_Markers {
 	}
 
 	function register_scripts() {
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.6');
+		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.7');
 		wp_localize_script('mappress.markers', 'mappress_markers', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'query' => $this->query(),
