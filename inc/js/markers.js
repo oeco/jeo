@@ -41,6 +41,9 @@
 
 			features = geojson.features;
 
+			if(!features.length)
+				return false;
+
 			map.features = features;
 			map.markersLayer = markersLayer;
 

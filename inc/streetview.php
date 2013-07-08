@@ -24,15 +24,13 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 
 	function editor($post = false) {
+		$pitch = 0;
+		$heading = 0;
 		if($post) {
 			$streetview = $this->is_streetview();
 			$pitch = $this->get_pitch();
 			$heading = $this->get_heading();
 		}
-		if(!$pitch)
-			$pitch = 0;
-		if(!$heading)
-			$heading = 0;
 		?>
 		<div id="mappress_streetview">
 			<p class="streetview-toggler">

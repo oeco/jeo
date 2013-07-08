@@ -51,7 +51,7 @@ class MapPress_Markers {
 	}
 
 	function geocode_type() {
-		if($this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$type = $this->options['geocode']['type'];
 		else
 			$type = 'default';
@@ -60,7 +60,7 @@ class MapPress_Markers {
 	}
 
 	function geocode_service() {
-		if($this->options && $this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$service = $this->options['geocode']['service'];
 		else
 			$service = 'osm';
@@ -69,7 +69,7 @@ class MapPress_Markers {
 	}
 
 	function gmaps_api_key() {
-		if($this->options && $this->options['geocode'])
+		if($this->options && isset($this->options['geocode']))
 			$key = $this->options['geocode']['gmaps_api_key'];
 		else
 			$key = false;
@@ -107,7 +107,7 @@ class MapPress_Markers {
 	}
 
 	function register_scripts() {
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.6');
+		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.7');
 		wp_localize_script('mappress.markers', 'mappress_markers', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'query' => $this->query(),
@@ -319,6 +319,15 @@ class MapPress_Markers {
 
 	function geocode_box($post = false) {
 
+		wp_enqueue_script('mappress.geocode.box');
+
+		$geocode_latitude = '';
+		$geocode_longitude = '';
+		$geocode_city = '';
+		$geocode_country = '';
+		$geocode_address = '';
+		$geocode_viewport = '';
+
 		if($post) {
 			$geocode_latitude = $this->get_latitude();
 			$geocode_longitude = $this->get_longitude();
@@ -388,23 +397,23 @@ class MapPress_Markers {
 		if (false !== wp_is_post_revision($post_id))
 			return;
 
-		if(isset($_POST['geocode_address']))
-			update_post_meta($post_id, 'geocode_address', $_POST['geocode_address']);
+		if(isset($_REQUEST['geocode_address']))
+			update_post_meta($post_id, 'geocode_address', $_REQUEST['geocode_address']);
 
-		if(isset($_POST['geocode_latitude']))
-			update_post_meta($post_id, 'geocode_latitude', $_POST['geocode_latitude']);
+		if(isset($_REQUEST['geocode_latitude']))
+			update_post_meta($post_id, 'geocode_latitude', $_REQUEST['geocode_latitude']);
 
-		if(isset($_POST['geocode_longitude']))
-			update_post_meta($post_id, 'geocode_longitude', $_POST['geocode_longitude']);
+		if(isset($_REQUEST['geocode_longitude']))
+			update_post_meta($post_id, 'geocode_longitude', $_REQUEST['geocode_longitude']);
 
-		if(isset($_POST['geocode_city']))
-			update_post_meta($post_id, '_geocode_city', $_POST['geocode_city']);
+		if(isset($_REQUEST['geocode_city']))
+			update_post_meta($post_id, '_geocode_city', $_REQUEST['geocode_city']);
 
-		if(isset($_POST['geocode_country']))
-			update_post_meta($post_id, '_geocode_country', $_POST['geocode_country']);
+		if(isset($_REQUEST['geocode_country']))
+			update_post_meta($post_id, '_geocode_country', $_REQUEST['geocode_country']);
 
-		if(isset($_POST['geocode_viewport']))
-			update_post_meta($post_id, 'geocode_viewport', $_POST['geocode_viewport']);
+		if(isset($_REQUEST['geocode_viewport']))
+			update_post_meta($post_id, 'geocode_viewport', $_REQUEST['geocode_viewport']);
 
 		do_action('mappress_geocode_box_save', $post_id);
 	}
@@ -417,7 +426,7 @@ class MapPress_Markers {
 		return apply_filters('mappress_markers_limit', 200);
 	}
 
-	function get_bubble() {
+	function get_bubble($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 		ob_start();
@@ -525,11 +534,19 @@ class MapPress_Markers {
 		return get_post_meta($post_id, '_geocode_country', true);
 	}
 
+	function get_geojson_key() {
+		return apply_filters('mappress_markers_geojson_key', '_mp_geojson');
+	}
+
+	function get_geojson_keys() {
+		return apply_filters('mappress_markers_geojson_keys', array('_mp_geojson'));
+	}
+
 	function get_geojson($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
 
-		$geojson = get_post_meta($post_id, '_mp_geojson', true);
+		$geojson = get_post_meta($post_id, $this->get_geojson_key(), true);
 
 		if(!$geojson)
 			return $this->update_geojson($post_id);
@@ -554,7 +571,7 @@ class MapPress_Markers {
 		// marker properties
 		$geojson['properties'] = $this->get_properties();
 
-		update_post_meta($post_id, '_mp_geojson', $geojson);
+		update_post_meta($post_id, $this->get_geojson_key(), $geojson);
 
 		wp_reset_postdata();
 
@@ -563,14 +580,20 @@ class MapPress_Markers {
 
 	function clean_geojson($post_id = false) {
 
+		$keys = $this->get_geojson_keys();
+
 		if(is_int($post_id) && get_post_type($post_id) == 'revision')
 			return false;
 
 		if(is_int($post_id) && in_array(get_post_type($post_id), mappress_get_mapped_post_types())) {
-			delete_post_meta($post_id, '_mp_geojson');
+			foreach($keys as $key) {
+				delete_post_meta($post_id, $key);
+			}
 		} else {
 			global $wpdb;
-			$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '_mp_geojson'"));
+			foreach($keys as $key) {
+				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '$key'"));
+			}
 		}
 
 	}
