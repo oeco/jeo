@@ -77,7 +77,9 @@
 /*
  * Defaults
  */
-body {
+html,body {
+	width: 100%;
+	height: 100%;
 	font: 14px/18px "Open Sans", "Helvetica", "Arial", sans-serif;
 	.font-smoothing(antialiased);
 	text-rendering: optimizeLegibility;
@@ -402,10 +404,12 @@ h3,h4,h5,h6 {
 .single-map,
 .single-map-group {
 	.map-container {
+		min-height: 500px;
+		height: 80%;
 		.streetview,
 		.map {
 			width: 100%;
-			height: 80%;
+			height: 100%;
 		}
 	}
 }
@@ -430,9 +434,12 @@ h3,h4,h5,h6 {
 .map-container {
 	position: relative;
 	z-index: 5;
+	min-height: 500px;
+	height: 55%;
 	.map {
+		width: 100%;
+		height: 100%;
 		position: relative;
-		height: 55%;
 		z-index: 2;
 		.zoomer {
 			top: 50%;
