@@ -107,16 +107,6 @@ var mappress = {};
 				$('body').addClass('displaying-map');
 		}
 
-		/*
-		 * Widgets (reset and add)
-		 */
-		map.$.parent().find('.map-widgets').remove();
-		map.$.parent().prepend('<div class="map-widgets"></div>');
-
-		map.$.widgets = map.$.parent().find('.map-widgets');
-
-		map.$.addClass('zoom-' + map.getZoom());
-
 		/* 
 		 * Legends
 		 */
@@ -125,6 +115,11 @@ var mappress = {};
 		}
 		if(conf.legend_full)
 			mappress.enableDetails(map, conf.legend, conf.legend_full);
+
+		/*
+		 * Fullscreen
+		 */
+		map.addControl(new mappress.fullscreen());
 
 		/*
 		 * Geocode
@@ -154,27 +149,6 @@ var mappress = {};
 
 		return map;
 	}
-
-
-	/*
-	 * Map widgets
-	 */
-
-	mappress.widget = function(map_id, content, widgetClass, group) {
-		var $map = $('#' + map_id);
-		var $widgets = $map.parent().find('.map-widgets');
-		// add widget
-		var widget = $('<div class="map-widget" />');
-		if(typeof group !== 'undefined') {
-			widget.append('<div class="' + group + '" />');
-			widget.find('.' + group).append($(content));
-		} else {
-			widget.append($(content));
-		}
-		if(typeof widgetClass !== 'undefined') widget.addClass(widgetClass);
-		$widgets.append(widget);
-		return widget;
-	};
 
 	/*
 	 * Utils

@@ -11,8 +11,13 @@
 	height: 100%;
 }
 
-.map-container .map.map-fullscreen-map {
+.fullscreen-map {
 	z-index: 9999999;
+	position: fixed !important;
+	top: 0;
+	bottom:0;
+	left: 0;
+	right: 0;
 }
 
 .map-container .lang-en,

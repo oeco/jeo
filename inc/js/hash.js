@@ -53,7 +53,7 @@
 		}, 400);
 		map.on('zoomend', track);
 		map.on('dragend', track);
-		fragment.get('full') && map.ui.fullscreen.full();
+		//fragment.get('full') && map.fullscreen.toggle();
 		fragment.get('iframe') && $('body').addClass('iframe');
 
 		var loc = fragment.get('loc');
@@ -68,7 +68,7 @@
 
 		// fullscreen hash
 		map.on('resize', function() {
-			if(map.$.hasClass('map-fullscreen-map')) {
+			if($('body').hasClass('map-fullscreen')) {
 				fragment.set({full: true});
 			} else {
 				fragment.rm('full');
