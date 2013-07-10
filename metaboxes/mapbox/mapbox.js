@@ -319,7 +319,7 @@
 				if($(this).find('input.layer_hidden:checked').length)
 					layer.hidden = true;
 
-				filtering.switch.push(layer);
+				filtering.switchLayers.push(layer);
 
 			} else if(filteringOpt == 'swap') {
 
@@ -330,7 +330,7 @@
 				if($('#mapbox .layers-list .swap_first_layer:checked').val() == id)
 					layer.first = true;
 
-				filtering.swap.push(layer);
+				filtering.swapLayers.push(layer);
 
 			}
 		});
