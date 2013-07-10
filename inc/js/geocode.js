@@ -1,9 +1,9 @@
 (function($) {
 
-	mappress.Geocode = L.Control.extend({
+	mappress.geocode = L.Control.extend({
 
 		options: {
-			position: 'bottomleft'
+			position: 'topleft'
 		},
 
 		onAdd: function(map) {
@@ -11,6 +11,8 @@
 			var self = this;
 
 			this._map = map;
+
+			this._map.geocode = this;
 
 			this._container = L.DomUtil.create('div', 'mappress-geocode');
 

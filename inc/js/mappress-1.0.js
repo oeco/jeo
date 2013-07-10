@@ -48,7 +48,8 @@ var mappress = {};
 			maxZoom: 17,
 			minZoom: 0,
 			zoom: 2,
-			center: [0,0]
+			center: [0,0],
+			attributionControl: false
 		};
 
 		if(conf.center && !isNaN(conf.center[0]))
@@ -129,7 +130,13 @@ var mappress = {};
 		 * Geocode
 		 */
 		if(map.conf.geocode)
-			map.addControl(new mappress.Geocode());
+			map.addControl(new mappress.geocode());
+
+		/*
+		 * Filter layers
+		 */
+		if(map.conf.filteringLayers)
+			map.addControl(new mappress.filterLayers());
 
 		/*
 		 * CALLBACKS
@@ -224,19 +231,22 @@ var mappress = {};
 
 	mappress.loadLayers = function(map, parsedLayers) {
 
-		var layerGroup = new L.layerGroup();
+		if(map.coreLayers)
+			map.coreLayers.clearLayers();
+		else {
+			map.coreLayers = new L.layerGroup();
+			map.addLayer(map.coreLayers);
+		}
 
 		$.each(parsedLayers, function(i, layer) {
-			layerGroup.addLayer(layer);
+			map.coreLayers.addLayer(layer);
 			if(layer._tilejson) {
 				map.addControl(L.mapbox.gridControl(layer));
 			}
 		});
 
-		map.coreLayers = layerGroup;
-		map.addLayer(layerGroup);
 
-		return layerGroup;
+		return map.coreLayers;
 	}
 
 	mappress.parseConf = function(conf) {

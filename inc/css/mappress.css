@@ -33,46 +33,6 @@ body.es-ES .map-container .lang-es {
 	display: block;
 }
 
-/*
- * Map widgets
- */
-
-.map-container .map-widgets {
-	width: 200px;
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
-	z-index: 100;
-	opacity: 1;
-	pointer-events: all;
-}
-
-.map-container .map-widgets.hide {
-	opacity: 0;
-	-webkit-transition: opacity 150ms;
-	-moz-transition: opacity 150ms;
-	-ms-transition: opacity 150ms;
-	-o-transition: opacity 150ms;
-}
-
-.map-container .map-widgets.fullscreen {
-	position: fixed;
-	z-index: 999999999999;
-}
-
-.map-container .map-widgets .map-widget {
- 	width: 100%;
-	padding: 0;
-	border: 1px solid #BBB;
-	background: white;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	-khtml-border-radius: 3px;
-	-o-border-radius: 3px;
-	border-radius: 3px;
-	margin: 0 0 10px;
-}
-
 .leaflet-control .widget-title {
 	padding: 5px;
 	text-transform: uppercase;
@@ -139,15 +99,20 @@ body.es-ES .map-container .lang-es {
  * Switch layers
  */
 
-.map-container .map-widgets .switch-layers,
-.map-container .map-widgets .swap-layers {
+.leaflet-control.mappress-filter-layers {
+	background: #fff;
+	max-width: 300px;
+}
+
+.leaflet-control.mappress-filter-layers .switch-layers,
+.leaflet-control.mappress-filter-layers .swap-layers {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.map-container .map-widgets .switch-layers li,
-.map-container .map-widgets .swap-layers li {
+.leaflet-control.mappress-filter-layers .switch-layers li,
+.leaflet-control.mappress-filter-layers .swap-layers li {
 	margin: 0;
 	padding: 5px;
 	cursor: pointer;
@@ -160,36 +125,18 @@ body.es-ES .map-container .lang-es {
 	opacity: .5;
 }
 
-.map-container .map-widgets .switch-layers li.active,
-.map-container .map-widgets .swap-layers li.active {
+.leaflet-control.mappress-filter-layers .switch-layers li.active,
+.leaflet-control.mappress-filter-layers .swap-layers li.active {
 	opacity: 1;
 }
 
-.map-container .map-widgets .switch-layers li:hover,
-.map-container .map-widgets .swap-layers li:hover {
+.leaflet-control.mappress-filter-layers .switch-layers li:hover,
+.leaflet-control.mappress-filter-layers .swap-layers li:hover {
 	opacity: .7;
 }
 
-.map-container .map-widgets .swap-layers li.active:hover {
+.leaflet-control.mappress-filter-layers .swap-layers li.active:hover {
 	opacity: 1;
-}
-
-/*
- * D3 Vectors
- */
-
-.d3-vec {
-	position:absolute;
-}
-.d3-vec path {
-	fill: #000;
-	fill-opacity: .3;
-	stroke: #fff;
-	stroke-width: 1.5px;
-	
-}
-.d3-vec path:hover {
-	fill-opacity: .7;
 }
 
 .map-container {
@@ -212,23 +159,4 @@ body.es-ES .map-container .lang-es {
 }
 .leaflet-popup-content h4 {
 	margin: 0;
-}
-.map-container .cluster .popup .story {
-	display: none;
-}
-.map-container .cluster.open .popup .story {
-	display: block;
-}
-.map-container .cluster.open .popup .count {
-	display: none;
-}
-.map-container .inplace {
-	height: 100%;
-	display: none;
-	width: 100%;
-	padding: 0 15px 5px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background-color: #111;
 }

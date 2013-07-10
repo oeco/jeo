@@ -119,14 +119,13 @@ var groups = {};
 
 		group.update = function(mapID) {
 
-			group.map.coreLayers.clearLayers();
+			// store prev conf
+			var prevMap = group.map;
+			var prevConf = prevMap.conf;
 
 			// prepare new conf and layers
 			var conf = mappress.parseConf(group.mapsData[mapID]);
 			var layers = mappress.loadLayers(group.map, mappress.parseLayers(conf.layers));
-
-			// store prev conf
-			var prevConf = group.map.conf;
 
 			// store new conf
 			group.map.conf = conf;
@@ -139,17 +138,31 @@ var groups = {};
 			if(fragmentEnabled)
 				fragment.set({'map': mapID});
 
+			/*
+			 * reset geocode
+			 */
+			if(prevConf.geocode)
+				group.map.geocode.removeFrom(group.map);
 
-			group.map.$.widgets.empty();
+			if(group.map.conf.geocode)
+				group.map.addControl(new mappress.geocode());
+
 
 			/*
-			if(conf.geocode)
-				mappress.geocode(group.map);
+			 * reset filtering layers
+			 */
+			if(prevConf.filteringLayers)
+				group.map.filterLayers.removeFrom(group.map);
 
-			if(conf.filteringLayers)
-				mappress.filterLayers(group.map);
-			*/
+			if(group.map.conf.filteringLayers)
+				group.map.addControl(new mappress.filterLayers());
 
+			console.log(prevMap);
+
+
+			/*
+			 * reset legend
+			 */
 			if(prevConf.legend_full_content)
 				group.map.legendControl.removeLegend(prevConf.legend_full_content);
 			else
@@ -161,6 +174,8 @@ var groups = {};
 			if(conf.legend_full)
 				mappress.enableDetails(group.map, conf.legend, conf.legend_full);
 
+
+			// callbacks
 			mappress.runCallbacks('groupChanged', [mapID, group]);
 
 		}

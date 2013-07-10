@@ -97,7 +97,7 @@ class MapPress {
 
 		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.4');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
-			.js', array('mappress', 'underscore'), '0.0.8.1');
+			.js', array('mappress', 'underscore'), '0.0.8.2');
 		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.7');
 		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.2');
 
