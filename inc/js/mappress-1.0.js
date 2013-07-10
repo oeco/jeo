@@ -89,7 +89,6 @@ var mappress = {};
 		// layers
 		mappress.loadLayers(map, mappress.parseLayers(conf.layers));
 
-
 		// set bounds
 		if(conf.fitBounds instanceof L.LatLngBounds)
 			map.fitBounds(conf.fitBounds);
@@ -318,7 +317,8 @@ var mappress = {};
 			legend = '';
 
 		map.legendControl.removeLegend(legend);
-		map.legendControl.addLegend(legend + '<span class="map-details-link">' + mappress_localization.more_label + '</span>');
+		map.conf.legend_full_content = legend + '<span class="map-details-link">' + mappress_localization.more_label + '</span>';
+		map.legendControl.addLegend(map.conf.legend_full_content);
 
 		var isContentMap = map.$.parents('.content-map').length;
 		var $detailsContainer = map.$.parents('.map-container');

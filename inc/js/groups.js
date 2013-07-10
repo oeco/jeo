@@ -125,6 +125,9 @@ var groups = {};
 			var conf = mappress.parseConf(group.mapsData[mapID]);
 			var layers = mappress.loadLayers(group.map, mappress.parseLayers(conf.layers));
 
+			// store prev conf
+			var prevConf = group.map.conf;
+
 			// store new conf
 			group.map.conf = conf;
 
@@ -147,12 +150,10 @@ var groups = {};
 				mappress.filterLayers(group.map);
 			*/
 
-			var $prevLegend = group.map.$.find('.map-legend');
-			var prevLegend = '';
-			if($prevLegend.length)
-				prevLegend = $prevLegend[0].innerHTML;
-
-			group.map.legendControl.removeLegend(prevLegend);
+			if(prevConf.legend_full_content)
+				group.map.legendControl.removeLegend(prevConf.legend_full_content);
+			else
+				group.map.legendControl.removeLegend(prevConf.legend);
 
 			if(conf.legend)
 				group.map.legendControl.addLegend(conf.legend);
