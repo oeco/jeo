@@ -1,242 +1,157 @@
 (function($) {
 
-	mappress.layersReady(function(map) {
-		if(map.conf.geocode && !map.conf.disableInteraction)
-			mappress.geocode(map);
-	});
+	mappress.Geocode = L.Control.extend({
 
-	mappress.geocode = function(map) {
+		options: {
+			position: 'bottomleft'
+		},
 
-		var map_id = map.map_id;
+		onAdd: function(map) {
 
-		var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + mappress_labels.search_placeholder + '" /></form>';
+			var self = this;
 
-		var widget = mappress.widget(map_id, form, 'geocode-widget');
-		widget.append('<div class="geocode-results"></div>');
+			this._map = map;
 
-		// bind submit event
-		widget.submit(function() {
-			mappress.geocode.get(widget.find('input').val(), map_id, widget);
+			this._container = L.DomUtil.create('div', 'mappress-geocode');
+
+			this._$ = $(this._container);
+
+			var map_id = map.map_id;
+			var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + mappress_labels.search_placeholder + '" /></form><div class="geocode-results" />';
+
+			this._$.append($(form));
+
+			this._resultsContainer = this._$.find('.geocode-results');
+
+			// bind submit event
+			this._$.find('form').submit(function() {
+
+				self._get($(this).find('input').val());
+				return false;
+
+			});
+
+			return this._container;
+
+		},
+
+		_submit: function() {
+
+			this._get(this._$.find('input[type=text]').val());
 			return false;
-		});
-	}
 
-	mappress.geocode.get = function(search, map_id, widget) {
+		},
 
-		if(typeof search == 'undefined')
-			return;
+		_get: function(search) {
 
-		// nominatim query
-		search = search.replace('%20','+');
-		var query = {
-			q: search,
-			polygon_geojson: 1,
-			format: 'json'
-		}
+			var self = this;
 
-		// map setup
-		if(typeof map_id != 'undefined') {
+			if(typeof search == 'undefined')
+				return;
+
+			// nominatim query
+			search = search.replace('%20','+');
+			var query = {
+				q: search,
+				polygon_geojson: 1,
+				format: 'json'
+			}
+
 			// clear previous search on map
-			mappress.geocode.clear(map, widget);
-
-			var map = mappress.maps[map_id];
+			this._clear();
 
 			// set query viewbox from map
-			if(map.panLimits) {
-				var viewbox = map.panLimits.west + ',' + map.panLimits.north + ',' + map.panLimits.east + ',' + map.panLimits.south;
+			if(this._map.conf.bounds) {
+				var viewbox = this._map.conf.bounds[0][1] + ',' + this._map.conf.bounds[1][0] + ',' + this._map.conf.bounds[1][1] + ',' + this._map.conf.bounds[0][0];
 				query.viewbox = viewbox;
 				query.bounded = 1;
 			}
-		}
-	
-		var resultsContainer = widget.find('.geocode-results');
 
-		$.getJSON('http://nominatim.openstreetmap.org/search.php?json_callback=?', query, function(data) {
-			if(data.length && typeof map_id != 'undefined')
-				mappress.geocode.draw(map, data, widget);
-			else
-				resultsContainer.append('<span class="widget-title">' + mappress_labels.not_found +  '</span>');
-		});
-	}
+			$.getJSON('http://nominatim.openstreetmap.org/search.php?json_callback=?', query, function(data) {
+				if(data.length)
+					self._draw(data);
+				else
+					this._resultsContainer.append('<span class="widget-title">' + mappress_labels.not_found +  '</span>');
+			});
 
-	mappress.geocode.clear = function(map, widget) {
-		if(typeof map == 'undefined')
-			return;
+		},
 
-		// clear results list
-		widget.find('.geocode-results').empty();
+		_clear: function() {
 
-		// clear markers
-		map.removeLayer('search-layer');
+			this._resultsContainer.empty();
 
-		// clear d3
-		$searchLayer = $('#' + map.map_id).find('.search-layer');
-		if($searchLayer.length)
-			$searchLayer.remove();
-	}
+			if(this._resultsLayer)
+				this._map.removeLayer(this._resultsLayer);
 
-	mappress.geocode.draw = function(map, data, widget) {
+		},
 
-		if(typeof map == 'undefined')
-			return;
+		_draw: function(data) {
 
-		/*
-		 * Extract and isolate results
-		 */
-		// points and linestrings
-		var markers = _.filter(data, function(d) { if(d.geojson.type == 'Point' || d.geojson.type == 'LineString') return d; });
-		// polygons and multipolygons
-		var polygons = _.filter(data, function(d) { if(d.geojson.type == 'Polygon' || d.geojson.type == 'MultiPolygon') return d; });
+			var self = this;
 
-		/*
-		 * Results list
-		*/
-		if(typeof widget != 'undefined') {
-			var resultsContainer = widget.find('.geocode-results');
-			if(resultsContainer.length) {
-				resultsContainer.empty();
-				resultsContainer.append('<a href="#" class="clear-search">' + mappress_labels.clear_search + '</a><span class="widget-title">' + mappress_labels.results_title + '</span><ul />');
-				var list = resultsContainer.find('ul');
-				var item;
+			/*
+			 * Map
+			 */
 
-				resultsContainer.find('.clear-search').click(function() {
-					widget.find('input').val('');
-					mappress.geocode.clear(map, widget);
-					return false;
-				});
+			var geojson = { type: 'FeatureCollection', features: [] }
 
-				// list polygons
-				if(polygons.length) {
-					_.each(polygons, function(polygon) {
-						item = $('<li>' + polygon.display_name + '</li>')
-						list.append(item);
-						item.data({
-							extent: {
-								north: polygon.boundingbox[0],
-								west: polygon.boundingbox[2],
-								south: polygon.boundingbox[1],
-								east: polygon.boundingbox[3]
-							}
-						}); 
-					});
-				}
-
-				// list markers
-				if(markers.length) {
-					_.each(markers, function(marker) {
-						item = $('<li>' + marker.display_name + '</li>');
-						list.append(item);
-						item.data({
-							loc: {
-								lon: parseFloat(marker.lon),
-								lat: parseFloat(marker.lat)
-							}
-						}); 
-					});
-				}
-
-				list.find('li').click(function() {
-					var extent = $(this).data('extent');
-					var loc = $(this).data('loc');
-
-					if(extent) {
-						map.setExtent(new MM.Extent(extent.north, extent.west, extent.south, extent.east));
-					} else if(loc) {
-						map.ease.location(loc).zoom(map.zoom()).run(700);
-					}
-				});
-			}
-		}
-
-		/*
-		 * Draw markers layer
-		 */
-		if(markers.length) {
-			var markerLayer = mapbox.markers.layer();
-			markerLayer.named('search-layer');
-			mapbox.markers.interaction(markerLayer);
-			map.addLayer(markerLayer);
-
-			_.each(markers, function(marker) {
-				markerLayer.add_feature({
-					geometry: {
-						coordinates: [parseFloat(marker.lon), parseFloat(marker.lat)]
-					},
+			$.each(data, function(i, r) {
+				var item = {
+					type: 'Feature',
+					geometry: r.geojson,
 					properties: {
-						'marker-color': '#000',
-						'marker-symbol': 'marker-stroked',
-						title: marker.display_name
+						display_name: r.display_name
 					}
-				})
+				};
+				geojson.features.push(item);
 			});
-		}
 
-		/*
-		 * Draw polygons with d3js
-		 */
-		if(polygons.length) {
-			var data = {
-				"type": "FeatureCollection",
-				"features": []
-			};
-			_.each(polygons, function(polygon) {
-				var polygonData = {
-					"type": "Feature",
-					"id": "34",
-					"properties": {
-						"name": polygon.display_name
-					},
-					"geometry": polygon.geojson
+			this._resultsLayer = L.geoJson(geojson, {
+				onEachFeature: function(f, l) {
+					l.bindPopup(f.properties.display_name);
 				}
-				data.features.push(polygonData);
 			});
-			var polygonLayer = d3layer().data(data);
-			map.addLayer(polygonLayer);
+
+			this._resultsLayer.addTo(this._map);
+
+			/*
+			 * List
+			 */
+
+			this._resultsContainer.empty();
+			this._resultsContainer.append('<a href="#" class="clear-search">' + mappress_labels.clear_search + '</a><span class="widget-title">' + mappress_labels.results_title + '</span><ul />');
+			var list = this._resultsContainer.find('ul');
+			var item;
+
+			this._resultsContainer.find('.clear-search').click(function() {
+				self._$.find('input').val('');
+				self._clear();
+				return false;
+			});
+
+			_.each(data, function(obj) {
+				item = $('<li>' + obj.display_name + '</li>')
+				list.append(item);
+				item.data({
+					bounds: {
+						north: obj.boundingbox[0],
+						west: obj.boundingbox[2],
+						south: obj.boundingbox[1],
+						east: obj.boundingbox[3]
+					}
+				}); 
+			});
+
+			list.find('li').click(function() {
+				var bounds = $(this).data('bounds');
+				self._map.fitBounds([
+					[bounds.south, bounds.west],
+					[bounds.north, bounds.east]
+				]);
+			});
+
 		}
 
-	}
-
-	function d3layer() {
-	    var f = {}, bounds, feature, collection;
-	    var div = d3.select(document.body)
-	        .append("div")
-	        .attr('class', 'd3-vec search-layer'),
-	        svg = div.append('svg'),
-	        g = svg.append("g");
-
-	    f.parent = div.node();
-
-	    f.project = function(x) {
-	      var point = f.map.locationPoint({ lat: x[1], lon: x[0] });
-	      return [point.x, point.y];
-	    };
-
-	    var first = true;
-	    f.draw = function() {
-	      first && svg.attr("width", f.map.dimensions.x)
-	          .attr("height", f.map.dimensions.y)
-	          .style("margin-left", "0px")
-	          .style("margin-top", "0px") && (first = false);
-
-	      path = d3.geo.path().projection(f.project);
-	      feature.attr("d", path);
-	    };
-
-	    f.data = function(x) {
-	        collection = x;
-	        bounds = d3.geo.bounds(collection);
-	        feature = g.selectAll("path")
-	            .data(collection.features)
-	            .enter().append("path");
-	        return f;
-	    };
-
-	    f.extent = function() {
-	        return new MM.Extent(
-	            new MM.Location(bounds[0][1], bounds[0][0]),
-	            new MM.Location(bounds[1][1], bounds[1][0]));
-	    };
-	    return f;
-	}
+	});
 
 })(jQuery);

@@ -141,7 +141,7 @@
 
 		filter.update = function() {
 
-			var layers = mappress.setupLayers(filter.getActiveLayers());
+			var layers = mappress.parseLayers(filter.getActiveLayers());
 
 			mapbox.load(layers, function(data) {
 				map.setLayerAt(0, data.layer);
@@ -180,6 +180,6 @@
 
 	mappress.filterLayers = filter;
 
-	mappress.mapReady(filter);
+	//mappress.mapReady(filter);
 
 })(jQuery);

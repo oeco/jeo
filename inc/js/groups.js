@@ -53,7 +53,7 @@ var groups = {};
 			if(fragment.get('map'))
 				firstMapID = fragment.get('map');
 
-			group.conf = _.extend(data, mappress.convertMapConf(group.mapsData[firstMapID]));
+			group.conf = _.extend(data, mappress.parseConf(group.mapsData[firstMapID]));
 			delete group.conf.postID;
 
 			// set mappress conf containerID to group id
@@ -119,11 +119,11 @@ var groups = {};
 
 		group.update = function(mapID) {
 
-			group.map = mappress.maps[group.containerID];
+			group.map.coreLayers.clearLayers();
 
 			// prepare new conf and layers
-			var conf = mappress.convertMapConf(group.mapsData[mapID]);
-			var layers = mappress.setupLayers(conf.layers);
+			var conf = mappress.parseConf(group.mapsData[mapID]);
+			var layers = mappress.loadLayers(group.map, mappress.parseLayers(conf.layers));
 
 			// store new conf
 			group.map.conf = conf;
@@ -136,32 +136,32 @@ var groups = {};
 			if(fragmentEnabled)
 				fragment.set({'map': mapID});
 
-			mapbox.load(layers, function(data) {
 
-				group.map.setLayerAt(0, data.layer);
-				group.map.interaction.refresh();
+			group.map.$.widgets.empty();
 
-				// clear widgets
+			/*
+			if(conf.geocode)
+				mappress.geocode(group.map);
 
-				group.map.$.widgets.empty();
+			if(conf.filteringLayers)
+				mappress.filterLayers(group.map);
+			*/
 
-				if(conf.geocode)
-					mappress.geocode(group.map);
+			var $prevLegend = group.map.$.find('.map-legend');
+			var prevLegend = '';
+			if($prevLegend.length)
+				prevLegend = $prevLegend[0].innerHTML;
 
-				if(conf.filteringLayers)
-					mappress.filterLayers(group.map);
+			group.map.legendControl.removeLegend(prevLegend);
 
-				group.map.ui.legend.remove();
+			if(conf.legend)
+				group.map.legendControl.addLegend(conf.legend);
 
-				if(conf.legend)
-					group.map.ui.legend.add().content(conf.legend);
+			if(conf.legend_full)
+				mappress.enableDetails(group.map, conf.legend, conf.legend_full);
 
-				if(conf.legend_full)
-					mappress.enableDetails(group.map, conf.legend, conf.legend_full);
+			mappress.runCallbacks('groupChanged', [mapID, group]);
 
-				mappress.runCallbacks('groupChanged', [mapID, group]);
-
-			});
 		}
 
 		groups[group.id] = group;

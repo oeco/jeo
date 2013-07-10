@@ -403,6 +403,7 @@ h3,h4,h5,h6 {
 .home,
 .single-map,
 .single-map-group {
+	.mapgroup-container,
 	.map-container {
 		min-height: 500px;
 		height: 80%;
@@ -455,6 +456,23 @@ h3,h4,h5,h6 {
 			margin-top: 39px;
 			left: 10px;
 		}
+		.map-legend {
+			.map-details-link {
+				display: block;
+				background: #333;
+				margin: 10px -11px -11px;
+				color: #f0f0f0;
+				cursor: pointer;
+				padding: 5px;
+				text-align: center;
+				text-transform: uppercase;
+				font-size: 10px;
+				font-weight: 800;
+				&:hover {
+					background: #000;
+				}
+			}
+		}
 	}
 	.map-details-page {
 		position: absolute;
@@ -464,8 +482,9 @@ h3,h4,h5,h6 {
 		bottom: 0;
 		.box-sizing(border-box);
 		background: #333;
-		padding: 8% 10%;
+		padding: 15% 10%;
 		min-width: 400px;
+		z-index: 100;
 		.inner {
 			height: 95%;
 			color: #f0f0f0;
@@ -551,9 +570,18 @@ h3,h4,h5,h6 {
 	}
 }
 
+.mapgroup-container {
+	height: 55%;
+	.map-container {
+		min-height: 0;
+		height: 100%;
+	}
+}
+
 .mapgroup {
 	position: relative;
 	width: 100%;
+	height: 100%;
 	.map-nav-container {
 		position: absolute;
 		bottom: 0;

@@ -12,6 +12,8 @@ class MapPress_Markers {
 
 	var $options = array();
 
+	var $use_clustering = false;
+
 	var $geocode_service = '';
 
 	var $geocode_type = 'default';
@@ -38,6 +40,7 @@ class MapPress_Markers {
 		$this->setup_cache_flush();
 		$this->geocode_setup();
 		$this->get_options();
+		$this->use_clustering();
 		$this->geocode_type();
 		$this->geocode_service();
 		$this->gmaps_api_key();
@@ -48,6 +51,16 @@ class MapPress_Markers {
 	function get_options() {
 		$this->options = mappress_get_options();
 		return $this->options;
+	}
+
+	function use_clustering() {
+		if($this->options && isset($this->options['map']))
+			$clustering = $this->options['map']['enable_clustering'];
+		else
+			$clustering = false;
+
+		$this->use_clustering = apply_filters('mappress_enable_clustering', $clustering);
+		return $this->use_clustering;
 	}
 
 	function geocode_type() {
@@ -107,12 +120,25 @@ class MapPress_Markers {
 	}
 
 	function register_scripts() {
+
+		/* 
+		 * Clustering
+		 */
+		if($this->use_clustering()) {
+
+			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('mappress'));
+			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
+
+		}
+
 		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.7');
+
 		wp_localize_script('mappress.markers', 'mappress_markers', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'query' => $this->query(),
 			'markerextent' => $this->use_extent(),
-			'markerextent_defaultzoom' => $this->extent_default_zoom()
+			'markerextent_defaultzoom' => $this->extent_default_zoom(),
+			'enable_clustering' => $this->use_clustering() ? true : false
 		));
 	}
 
@@ -659,6 +685,11 @@ function mappress_get_geocode_service() {
 function mappress_get_gmaps_api_key() {
 	global $mappress_markers;
 	return $mappress_markers->gmaps_api_key;
+}
+
+function mappress_use_clustering() {
+	global $mappress_markers;
+	return $mappress_markers->use_clustering();
 }
 
 function mappress_use_marker_extent() {
