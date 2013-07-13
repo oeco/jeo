@@ -371,11 +371,11 @@ var geocodeBox;
 
 			_map: function(lat, lng, bounds) {
 
-				box.markerLayer = mapbox.markers.layer();
-				box.map = mapbox.map(mapCanvasID);
+				box.markerLayer = new L.layerGroup();
+				box.map = new L.map(mapCanvasID);
 
-				box.map.addLayer(new MM.TemplatedLayer('http://a.tile.openstreetmap.org/{Z}/{X}/{Y}.png'));
-				box.map.zoom(1);
+				box.map.setView([0,0], 1);
+				box.map.addLayer(new L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png'));
 				box.map.addLayer(box.markerLayer);
 
 				box.isMapReady = true;
@@ -406,44 +406,44 @@ var geocodeBox;
 				if(!box.isMapReady)
 					box._map();
 
+				box.map.invalidateSize(true);
+
 				box.clearMarkers();
 
-				box.map.addLayer(box.markerLayer);
+				if(lat && lng) {
 
-				var position = {
-					lat: lat,
-					lon: lng
-				};
+					var position = [lat, lng];
+					box.map.setView(position);
 
-				box.map.center(position);
-
-				if(typeof bounds !== 'undefined') {
-					var extent = new MM.Extent(
-						parseFloat(bounds[1]),
-						parseFloat(bounds[2]),
-						parseFloat(bounds[0]),
-						parseFloat(bounds[3])
-					);
-				}
-
-				if(typeof extent !== 'undefined')
-					box.map.setExtent(extent);
-
-				var features = [
-					{
-						geometry: {
-							coordinates: [lng, lat]
-						}
+					if(typeof bounds !== 'undefined') {
+						var bounds = new L.Bounds(
+							parseFloat(bounds[0]),
+							parseFloat(bounds[1]),
+							parseFloat(bounds[2]),
+							parseFloat(bounds[3])
+						);
 					}
-				];
 
-				box.markerLayer.features(features);
+					if(typeof extent !== 'undefined')
+						box.map.fitBounds(bounds);
+
+					var features = [
+						{
+							geometry: {
+								coordinates: [lng, lat]
+							}
+						}
+					];
+
+					box.markerLayer.addLayer(new L.geoJson(features));
+
+				}
 
 			},
 
 			clearMarkers: function() {
 
-				box.map.removeLayer(box.markerLayer);
+				box.markerLayer.clearLayers();
 
 			}
 
@@ -510,7 +510,7 @@ var geocodeBox;
 
 			} else {
 
-				resultsContainer.append('<p>' + geocode_labels.not_found + '</p>');
+				resultsContainer.append('<p>' + geocode_localization.not_found + '</p>');
 
 			}
 
