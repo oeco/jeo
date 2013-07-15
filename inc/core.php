@@ -240,22 +240,21 @@ class MapPress {
 
 	function posts_clauses($clauses, $query) {
 
-		if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX))
+		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map)
 			return $clauses;
 
 		global $wpdb;
 
-		if($this->map) {
+		$map_id = $this->map->ID;
 
-			$map_id = $this->map->ID;
+		$join = "
+			LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
+			INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
+			";
 
-			if(get_post_type($map_id) != 'map')
-				return $clauses;
 
-			$join = "
-				LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
-				INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
-				";
+		// MAP
+		if(get_post_type($map_id) == 'map') {
 
 			$where = "
 				AND (
@@ -266,20 +265,47 @@ class MapPress {
 					OR m_has_maps.post_id IS NULL
 				) ";
 
-			$groupby = '';
-			if(!$clauses['groupby'])
-				$groupby = " {$wpdb->posts}.ID ";
+		// MAPGROUP
+		} else {
 
-			// hooks
-			$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
-			$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
-			$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+			$groupdata = get_post_meta($map_id, 'mapgroup_data', true);
 
-			$clauses['join'] .= $join;
-			$clauses['where'] .= $where;
-			$clauses['groupby'] .= $groupby;
+			$where = "
+				AND (
+			";
+
+			foreach($groupdata['maps'] as $m) {
+
+				$c_map_id = $m['id'];
+
+				$where .= "
+					(
+						m_maps.meta_key = 'maps'
+						AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}'
+					)
+					OR
+				";
+
+			}
+
+			$where .= "
+				m_has_maps.post_id IS NULL
+			) ";
 
 		}
+
+		$groupby = '';
+		if(!$clauses['groupby'])
+			$groupby = " {$wpdb->posts}.ID ";
+
+		// hooks
+		$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
+		$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
+		$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+
+		$clauses['join'] .= $join;
+		$clauses['where'] .= $where;
+		$clauses['groupby'] .= $groupby;
 
 		return $clauses;
 	}
