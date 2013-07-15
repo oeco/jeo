@@ -373,9 +373,9 @@ var geocodeBox;
 
 				box.markerLayer = new L.layerGroup();
 				box.map = new L.map(mapCanvasID);
+				box.map.setView([0,0], 2);
 
-				box.map.setView([0,0], 1);
-				box.map.addLayer(new L.tileLayer('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png'));
+				box.map.addLayer(L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'));
 				box.map.addLayer(box.markerLayer);
 
 				box.isMapReady = true;
@@ -412,30 +412,31 @@ var geocodeBox;
 
 				if(lat && lng) {
 
-					var position = [lat, lng];
-					box.map.setView(position);
-
-					if(typeof bounds !== 'undefined') {
-						var bounds = new L.Bounds(
-							parseFloat(bounds[0]),
-							parseFloat(bounds[1]),
-							parseFloat(bounds[2]),
-							parseFloat(bounds[3])
-						);
-					}
-
-					if(typeof extent !== 'undefined')
-						box.map.fitBounds(bounds);
+					if(typeof bounds !== 'undefined')
+						box.map.fitBounds([
+							[
+								parseFloat(bounds[0]),
+								parseFloat(bounds[2])
+							],
+							[
+								parseFloat(bounds[1]),
+								parseFloat(bounds[3])
+							]
+						]);
+					
+					box.map.panTo([lat, lng]);
 
 					var features = [
 						{
+							type: 'Feature',
 							geometry: {
+								type: 'Point',
 								coordinates: [lng, lat]
 							}
 						}
 					];
 
-					box.markerLayer.addLayer(new L.geoJson(features));
+					box.markerLayer.addLayer(new L.geoJson({type:'FeatureCollection', features: features}));
 
 				}
 

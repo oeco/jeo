@@ -79,6 +79,21 @@ var mappress = {};
 		else
 			map = L.map(map_id, options);
 
+		if(conf.mainMap)
+			mappress.map = map;
+
+		/*
+		 * DOM settings
+		 */
+		// store jquery node
+		map.$ = $('#' + map_id);
+
+		if(conf.mainMap) {
+			$('body').removeClass('loading-map');
+			if(!$('body').hasClass('displaying-map'))
+				$('body').addClass('displaying-map');
+		}
+
 		// store conf
 		map.conf = conf;
 
@@ -94,18 +109,11 @@ var mappress = {};
 		if(conf.fitBounds instanceof L.LatLngBounds)
 			map.fitBounds(conf.fitBounds);
 
+		// Handlers
 
-		/*
-		 * DOM settings
-		 */
-		// store jquery node
-		map.$ = $('#' + map_id);
-
-		if(conf.mainMap) {
-			$('body').removeClass('loading-map');
-			if(!$('body').hasClass('displaying-map'))
-				$('body').addClass('displaying-map');
-		}
+		// mousewheel
+		if(conf.disableHandlers.mousewheel)
+			map.scrollWheelZoom.disable();
 
 		/* 
 		 * Legends

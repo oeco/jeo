@@ -442,13 +442,9 @@ h3,h4,h5,h6 {
 		height: 100%;
 		position: relative;
 		z-index: 2;
-		.zoomer {
-			top: 50%;
-			left: 10px;
-			.border-radius(0 0 3px 3px);
-			&.zoomin {
-				margin-top: -29px;
-				.border-radius(3px 3px 0 0);
+		.leaflet-control-container {
+			.leaflet-top {
+				top: 125px;
 			}
 		}
 		.map-fullscreen {
@@ -482,7 +478,7 @@ h3,h4,h5,h6 {
 		bottom: 0;
 		.box-sizing(border-box);
 		background: #333;
-		padding: 15% 10%;
+		padding: 150px 10% 40px;
 		min-width: 400px;
 		z-index: 100;
 		.inner {
@@ -721,7 +717,6 @@ h3,h4,h5,h6 {
 }
 
 .posts-section {
-	padding: 0 0 20px;
 	.posts-list {
 		li {
 			margin-bottom: 20px;
