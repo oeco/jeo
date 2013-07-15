@@ -123,7 +123,7 @@
 			if(this._getStatus(layer).on)
 				return;
 
-			_.each(this._layers.swap, function(swapLayer) {
+			_.each(this._layers.swapLayers, function(swapLayer) {
 
 				if(swapLayer.id == layer) {
 
