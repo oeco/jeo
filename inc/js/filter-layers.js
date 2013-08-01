@@ -168,6 +168,7 @@
 
 		_update: function() {
 
+			this._map.$.find('.map-tooltip').hide();
 			mappress.loadLayers(this._map, mappress.parseLayers(this._getActiveLayers()));
 
 		},
