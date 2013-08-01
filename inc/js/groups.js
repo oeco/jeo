@@ -159,6 +159,11 @@ var groups = {};
 
 			console.log(prevMap);
 
+			/*
+			 * clear tooltips
+			 */
+			 group.$.find('.map-tooltip').hide();
+
 
 			/*
 			 * reset legend
