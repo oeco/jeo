@@ -22,8 +22,7 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 			array(	// slug => title
 				'home'		=> __('Front page', 'mappress'),
 				'map'		=> __('Maps', 'mappress'),
-				'geocode'	=> __('Geocode', 'mappress'),
-				'about'		=> __('About', 'mappress')
+				'geocode'	=> __('Geocode', 'mappress')
 			) 
 		);
 
