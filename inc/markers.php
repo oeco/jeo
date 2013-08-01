@@ -311,7 +311,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.1');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'type' => $this->geocode_type,
@@ -396,7 +396,7 @@ class MapPress_Markers {
 			<script type="text/javascript">
 				jQuery(document).ready(function() {
 					<?php if($this->geocode_service == 'gmaps') : ?>
-						streetviewBox({geocoder: geocodeBox() });
+						streetviewBox({ geocoder: geocodeBox() });
 					<?php else : ?>
 						geocodeBox();
 					<?php endif; ?>
