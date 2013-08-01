@@ -55,6 +55,8 @@
 
 			}
 
+			this._map.invalidateSize(true);
+
 		}
 	});
 

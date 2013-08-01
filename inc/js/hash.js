@@ -53,7 +53,7 @@
 		}, 400);
 		map.on('zoomend', track);
 		map.on('dragend', track);
-		//fragment.get('full') && map.fullscreen.toggle();
+		fragment.get('full') && _.delay(function() { map.fullscreen.toggle() }, 100);
 		fragment.get('iframe') && $('body').addClass('iframe');
 
 		var loc = fragment.get('loc');
