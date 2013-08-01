@@ -67,25 +67,37 @@ class MapPress {
 		/*
 		 * Libraries
 		 */
+
+		// LEAFLET
+		wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+		wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
+
+		wp_register_style('leaflet-ie', get_template_directory_uri() . '/lib/leaflet/leaflet.ie.css');
+		$GLOBALS['wp_styles']->add_data('leaflet-ie', 'conditional', 'lte IE 8');
+		wp_enqueue_style('leaflet-ie');
+
+		// MAPBOX
+		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.2.0');
+		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
+
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
 		wp_register_script('underscore', get_template_directory_uri() . '/lib/underscore-min.js', array(), '1.4.3');
-		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox.js', array(), '0.6.7');
-		wp_enqueue_style('mapbox', get_template_directory_uri() . '/lib/mapbox.css', array(), '0.6.7');
-		wp_register_script('d3js', get_template_directory_uri() . '/lib/d3.v2.min.js', array('jquery'), '3.0.5');
 
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress.js', array('mapbox-js', 'underscore', 'jquery'), '0.2.1');
-		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress', 'underscore'), '0.1.16');
+		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress-1.0.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.2');
 
-		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress', 'underscore'), '0.0.4');
+		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress'), '0.2.2');
 
-		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress', 'd3js', 'underscore'), '0.0.4');
+		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress'), '0.0.5');
+
+		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress'), '0.0.5');
+		wp_enqueue_script('mappress.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('mappress'), '0.0.5');
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
-			.js', array('mappress', 'underscore'), '0.0.8.1');
-		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.7');
-		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.2');
+			.js', array('mappress'), '0.0.9');
+		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.8');
+		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.3');
 
 		wp_localize_script('mappress', 'mappress_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -228,22 +240,21 @@ class MapPress {
 
 	function posts_clauses($clauses, $query) {
 
-		if(is_admin() && !(defined('DOING_AJAX') && DOING_AJAX))
+		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map)
 			return $clauses;
 
 		global $wpdb;
 
-		if($this->map) {
+		$map_id = $this->map->ID;
 
-			$map_id = $this->map->ID;
+		$join = "
+			LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
+			INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
+			";
 
-			if(get_post_type($map_id) != 'map')
-				return $clauses;
 
-			$join = "
-				LEFT JOIN {$wpdb->postmeta} AS m_has_maps ON ({$wpdb->posts}.ID = m_has_maps.post_id AND m_has_maps.meta_key = 'has_maps')
-				INNER JOIN {$wpdb->postmeta} m_maps ON ({$wpdb->posts}.ID = m_maps.post_id)
-				";
+		// MAP
+		if(get_post_type($map_id) == 'map') {
 
 			$where = "
 				AND (
@@ -254,20 +265,47 @@ class MapPress {
 					OR m_has_maps.post_id IS NULL
 				) ";
 
-			$groupby = '';
-			if(!$clauses['groupby'])
-				$groupby = " {$wpdb->posts}.ID ";
+		// MAPGROUP
+		} else {
 
-			// hooks
-			$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
-			$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
-			$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+			$groupdata = get_post_meta($map_id, 'mapgroup_data', true);
 
-			$clauses['join'] .= $join;
-			$clauses['where'] .= $where;
-			$clauses['groupby'] .= $groupby;
+			$where = "
+				AND (
+			";
+
+			foreach($groupdata['maps'] as $m) {
+
+				$c_map_id = $m['id'];
+
+				$where .= "
+					(
+						m_maps.meta_key = 'maps'
+						AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}'
+					)
+					OR
+				";
+
+			}
+
+			$where .= "
+				m_has_maps.post_id IS NULL
+			) ";
 
 		}
+
+		$groupby = '';
+		if(!$clauses['groupby'])
+			$groupby = " {$wpdb->posts}.ID ";
+
+		// hooks
+		$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
+		$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
+		$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+
+		$clauses['join'] .= $join;
+		$clauses['where'] .= $where;
+		$clauses['groupby'] .= $groupby;
 
 		return $clauses;
 	}

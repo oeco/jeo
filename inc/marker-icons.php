@@ -45,32 +45,49 @@ class MapPress_Marker_Icons {
 		return false;
 	}
 
-	function get_marker_width($marker_id) {
-		return get_post_meta($marker_id, '_marker_image_width', true);
+	function get_marker_size($marker_id) {
+		return array(
+			intval(get_post_meta($marker_id, '_marker_image_width', true)),
+			intval(get_post_meta($marker_id, '_marker_image_height', true))
+		);
 	}
 
-	function get_marker_height($marker_id) {
-		return get_post_meta($marker_id, '_marker_image_height', true);
+	function get_marker_anchor($marker_id) {
+		return array(
+			intval(get_post_meta($marker_id, '_icon_anchor_x', true)),
+			intval(get_post_meta($marker_id, '_icon_anchor_y', true))
+		);
 	}
 
-	function get_marker_formatted($marker_id) {
-		if(!$marker_id)
-			return false;
+	function get_marker_popup_anchor($marker_id) {
+		return array(
+			intval(get_post_meta($marker_id, '_popup_anchor_x', true)) - intval(get_post_meta($marker_id, '_icon_anchor_x', true)),
+			intval(get_post_meta($marker_id, '_popup_anchor_y', true)) - intval(get_post_meta($marker_id, '_icon_anchor_y', true))
+		);
+	}
 
-		$post_marker_id = $this->get_post_marker_id($marker_id);
+	function get_marker_formatted($marker_id = false) {
 
-		if(!$post_marker_id) {
-			return array(
-				'url' => get_template_directory_uri() . '/img/marker.png',
-				'width' => 26,
-				'height' => 30
-			);
+		if($marker_id) {
+			$post_marker_id = $this->get_post_marker_id($marker_id);
+
+			if($post_marker_id) {
+				return array(
+					'iconUrl' => $this->get_marker_image_url($post_marker_id),
+					'iconSize' => $this->get_marker_size($post_marker_id),
+					'iconAnchor' => $this->get_marker_anchor($post_marker_id),
+					'popupAnchor' => $this->get_marker_popup_anchor($post_marker_id),
+					'markerId' => $post_marker_id
+				);
+			}
 		}
 
 		return array(
-			'url' => $this->get_marker_image_url($post_marker_id),
-			'width' => $this->get_marker_width($post_marker_id),
-			'height' => $this->get_marker_height($post_marker_id)
+			'iconUrl' => get_template_directory_uri() . '/img/marker.png',
+			'iconSize' => array(26, 30),
+			'iconAnchor' => array(13, 30),
+			'popupAnchor' => array(0, -40),
+			'markerId' => 'none'
 		);
 	}
 
@@ -619,16 +636,6 @@ function mappress_get_marker_image_url($marker_id) {
 	return $mappress_marker_icons->get_marker_image_url($marker_id);
 }
 
-function mappress_get_marker_width($marker_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker_width($marker_id);
-}
-
-function mappress_get_marker_height($marker_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker_height($marker_id);
-}
-
 function mappress_get_marker_formatted($marker_id) {
 	global $mappress_marker_icons;
 	return $mappress_marker_icons->get_marker_formatted($marker_id);
@@ -652,4 +659,9 @@ function mappress_get_default_marker_id() {
 function mappress_get_default_marker() {
 	global $mappress_marker_icons;
 	return $mappress_marker_icons->get_default_marker();
+}
+
+function mappress_formatted_default_marker() {
+	global $mappress_marker_icons;
+	return $mappress_marker_icons->get_marker_formatted();
 }

@@ -53,7 +53,7 @@ var groups = {};
 			if(fragment.get('map'))
 				firstMapID = fragment.get('map');
 
-			group.conf = _.extend(data, mappress.convertMapConf(group.mapsData[firstMapID]));
+			group.conf = _.extend(data, mappress.parseConf(group.mapsData[firstMapID]));
 			delete group.conf.postID;
 
 			// set mappress conf containerID to group id
@@ -119,11 +119,13 @@ var groups = {};
 
 		group.update = function(mapID) {
 
-			group.map = mappress.maps[group.containerID];
+			// store prev conf
+			var prevMap = group.map;
+			var prevConf = prevMap.conf;
 
 			// prepare new conf and layers
-			var conf = mappress.convertMapConf(group.mapsData[mapID]);
-			var layers = mappress.setupLayers(conf.layers);
+			var conf = mappress.parseConf(group.mapsData[mapID]);
+			var layers = mappress.loadLayers(group.map, mappress.parseLayers(conf.layers));
 
 			// store new conf
 			group.map.conf = conf;
@@ -136,32 +138,46 @@ var groups = {};
 			if(fragmentEnabled)
 				fragment.set({'map': mapID});
 
-			mapbox.load(layers, function(data) {
+			/*
+			 * reset geocode
+			 */
+			if(prevConf.geocode)
+				group.map.geocode.removeFrom(group.map);
 
-				group.map.setLayerAt(0, data.layer);
-				group.map.interaction.refresh();
+			if(group.map.conf.geocode)
+				group.map.addControl(new mappress.geocode());
 
-				// clear widgets
 
-				group.map.$.widgets.empty();
+			/*
+			 * reset filtering layers
+			 */
+			if(prevConf.filteringLayers)
+				group.map.filterLayers.removeFrom(group.map);
 
-				if(conf.geocode)
-					mappress.geocode(group.map);
+			if(group.map.conf.filteringLayers)
+				group.map.addControl(new mappress.filterLayers());
 
-				if(conf.filteringLayers)
-					mappress.filterLayers(group.map);
+			console.log(prevMap);
 
-				group.map.ui.legend.remove();
 
-				if(conf.legend)
-					group.map.ui.legend.add().content(conf.legend);
+			/*
+			 * reset legend
+			 */
+			if(prevConf.legend_full_content)
+				group.map.legendControl.removeLegend(prevConf.legend_full_content);
+			else
+				group.map.legendControl.removeLegend(prevConf.legend);
 
-				if(conf.legend_full)
-					mappress.enableDetails(group.map, conf.legend, conf.legend_full);
+			if(conf.legend)
+				group.map.legendControl.addLegend(conf.legend);
 
-				mappress.runCallbacks('groupChanged', [mapID, group]);
+			if(conf.legend_full)
+				mappress.enableDetails(group.map, conf.legend, conf.legend_full);
 
-			});
+
+			// callbacks
+			mappress.runCallbacks('groupChanged', [mapID, group]);
+
 		}
 
 		groups[group.id] = group;

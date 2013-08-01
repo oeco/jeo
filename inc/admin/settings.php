@@ -138,6 +138,14 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 							'default' => true,
 							'label' => __('Enable', 'mappress') 
 						),
+						array(
+							'id' => 'enable_clustering',
+							'title' => __('Enable marker clustering', 'mappress'),
+							'description' => __('Enable marker clustering system.', 'mappress'),
+							'type' => 'checkbox',
+							'default' => true,
+							'label' => __('Enable', 'mappress')
+						),
 						array(  
 							'id' => 'use_map_query',
 							'title' => __('Map query', 'mappress'),

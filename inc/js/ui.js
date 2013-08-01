@@ -8,13 +8,22 @@
 			map = mappress.map;
 
 		if(typeof zoom == 'undefined' || !zoom)
-			zoom = map.zoom();
+			zoom = map.getZoom();
 
 		if(lat && lon && zoom) {
 			$('html,body').stop().animate({
 				scrollTop: $('.map-container').offset().top
 			}, 400, function() {
-				map.centerzoom({lat: lat, lon: lon}, zoom, true);
+				map.setView([lat, lon], zoom, {
+					animate: true,
+					pan: {
+						animate: true,
+						duration: 2
+					},
+					zoom: {
+						animate: true
+					}
+				});
 			});
 		}
 	}
@@ -51,14 +60,21 @@
 			$container = $('#' + elementID);
 			$items = $container.find('.slider-item');
 			$controllers = $container.find('.slider-controllers');
-			$activeItem = $container.find('.active');
+			$activeItem = $container.find('.slider-item:first-child');
 
 			var _lockMap = function() {
-				map.ui.zoomer.remove();
-				map.ui.fullscreen.remove();
-				if(map.eventHandlers.length && map.eventHandlers[3].length)
-					map.eventHandlers[3].remove();
-				map.$.widgets.remove();
+				map.boxZoom.disable();
+				map.touchZoom.disable();
+				map.scrollWheelZoom.disable();
+				map.dragging.disable();
+				map.doubleClickZoom.disable();
+				if(map.filterLayers)
+					map.filterLayers.removeFrom(map);
+				if(map.zoomControl)
+					map.zoomControl.removeFrom(map);
+				if(map.geocode)
+					map.geocode.removeFrom(map);
+				map.invalidateSize(true);
 			}
 			_lockMap();
 
@@ -77,7 +93,7 @@
 				if(!$next.length)
 					$next = $container.find('.slider-item:nth-child(1)');
 
-				map.centerzoom({lat: $item.data('lat'), lon: $item.data('lon')}, $item.data('zoom'), animate);
+				map.setView([parseFloat($item.data('lat')), parseFloat($item.data('lon'))], parseInt($item.data('zoom')));
 			}
 			_openItem($activeItem, false);
 
