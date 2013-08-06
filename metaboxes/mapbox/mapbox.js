@@ -3,6 +3,8 @@
 	var mapConf = {};
 	var map_id;
 
+	var map;
+
 	var updateMapConf = function() {
 
 		// layers
@@ -17,10 +19,10 @@
 		// center
 		if($('.centerzoom.map-setting input.center-lat').val()) {
 			var $centerInputs = $('.centerzoom.map-setting');
-			mapConf.center = {
-				lat: parseFloat($centerInputs.find('input.center-lat').val()),
-				lon: parseFloat($centerInputs.find('input.center-lon').val())
-			}
+			mapConf.center = [
+				parseFloat($centerInputs.find('input.center-lat').val()),
+				parseFloat($centerInputs.find('input.center-lon').val())
+			]
 		}
 
 		// zoom
@@ -36,10 +38,16 @@
 
 		// pan limits
 		if($('.pan-limits.map-setting input.east').val()) {
-			mapConf.panLimits =	$('.pan-limits.map-setting input.north').val() + ',' +
-								$('.pan-limits.map-setting input.west').val() + ',' +
-								$('.pan-limits.map-setting input.south').val() + ',' +
-								$('.pan-limits.map-setting input.east').val();
+			mapConf.panLimits =	[
+				[
+					$('.pan-limits.map-setting input.south').val(),
+					$('.pan-limits.map-setting input.west').val()
+				],
+				[
+					$('.pan-limits.map-setting input.north').val(),
+					$('.pan-limits.map-setting input.east').val()
+				]
+			];
 		}
 
 		// geocode
@@ -90,32 +98,36 @@
 
 	function updateMap() {
 		updateMapConf();
-		if(typeof mappress.maps[map_id] === 'object')
-			mapConf.extent = mappress.maps[map_id].getExtent();
+		if(typeof map === 'object')
+			mapConf.fitBounds = map.getBounds();
 
-		mappress(mapConf);
+		map.remove();
+
+		map = mappress.build(mapConf);
 	}
 
 	function updateMapData() {
-		var extent = mappress.maps[map_id].getExtent();
-		var center = mappress.maps[map_id].center();
-		var zoom = mappress.maps[map_id].zoom();
-		$('.current.map-setting .east').text(extent.east);
-		$('.current.map-setting .north').text(extent.north);
-		$('.current.map-setting .south').text(extent.south);
-		$('.current.map-setting .west').text(extent.west);
-		$('.current.map-setting .center').text(center);
-		$('.current.map-setting .zoom').text(zoom);
+		if(typeof map === 'object') {
+			var bounds = map.getBounds();
+			var center = map.getCenter();
+			var zoom = map.getZoom();
+			$('.current.map-setting .east').text(bounds.getEast());
+			$('.current.map-setting .north').text(bounds.getNorth());
+			$('.current.map-setting .south').text(bounds.getSouth());
+			$('.current.map-setting .west').text(bounds.getWest());
+			$('.current.map-setting .center').text(center);
+			$('.current.map-setting .zoom').text(zoom);
+		}
 	}
 
-	mapConf.callbacks = function() {
-		mappress.maps[map_id].addCallback('drawn', function() {
+	mapConf.callbacks = function(map) {
+		map.on('load', function() {
 			updateMapData();
 		});
-		mappress.maps[map_id].addCallback('zoomed', function() {
+		map.on('zoomend', function() {
 			updateMapData();
 		});
-		mappress.maps[map_id].addCallback('panned', function() {
+		map.on('dragend', function() {
 			updateMapData();
 		});
 	}
@@ -136,13 +148,8 @@
 
 		updateMapConf();
 
-		mappress(mapConf);
-		
-		$('input[name="map_data[server]"]').change(function() {
-			toggleCustomServer();
-		});
-
-		toggleCustomServer();
+		map = mappress.build(mapConf);
+		updateMapData();
 
 		/*
 		 * Layer management
@@ -231,38 +238,38 @@
 		 });
 
 		function updateCenterZoom() {
-			var center = mappress.maps[map_id].center();
-			var zoom = mappress.maps[map_id].zoom();
+			var center = map.getCenter();
+			var zoom = map.getZoom();
 			$('.centerzoom.map-setting span.center').text(center);
 			$('.centerzoom.map-setting span.zoom').text(zoom);
 
 			// update inputs
 			$('.centerzoom.map-setting input.center-lat').val(center.lat);
-			$('.centerzoom.map-setting input.center-lon').val(center.lon);
+			$('.centerzoom.map-setting input.center-lon').val(center.lng);
 			$('.centerzoom.map-setting input.zoom').val(zoom);
 		}
 
 		function updatePanLimits() {
-			var extent = mappress.maps[map_id].getExtent();
-			$('.pan-limits.map-setting span.east').text(extent.east);
-			$('.pan-limits.map-setting span.north').text(extent.north);
-			$('.pan-limits.map-setting span.south').text(extent.south);
-			$('.pan-limits.map-setting span.west').text(extent.west);
+			var bounds = map.getBounds();
+			$('.pan-limits.map-setting span.east').text(bounds.getEast());
+			$('.pan-limits.map-setting span.north').text(bounds.getNorth());
+			$('.pan-limits.map-setting span.south').text(bounds.getSouth());
+			$('.pan-limits.map-setting span.west').text(bounds.getWest());
 
 			// update inputs
-			$('.pan-limits.map-setting input.east').val(extent.east);
-			$('.pan-limits.map-setting input.north').val(extent.north);
-			$('.pan-limits.map-setting input.south').val(extent.south);
-			$('.pan-limits.map-setting input.west').val(extent.west);
+			$('.pan-limits.map-setting input.east').val(bounds.getEast());
+			$('.pan-limits.map-setting input.north').val(bounds.getNorth());
+			$('.pan-limits.map-setting input.south').val(bounds.getSouth());
+			$('.pan-limits.map-setting input.west').val(bounds.getWest());
 		}
 
 		function updateMaxZoom() {
-			var zoom = mappress.maps[map_id].zoom();
+			var zoom = map.getZoom();
 			$('#max-zoom-input').val(zoom);
 		}
 
 		function updateMinZoom() {
-			var zoom = mappress.maps[map_id].zoom();
+			var zoom = map.getZoom();
 			$('#min-zoom-input').val(zoom);
 		}
 
@@ -312,7 +319,7 @@
 				if($(this).find('input.layer_hidden:checked').length)
 					layer.hidden = true;
 
-				filtering.switch.push(layer);
+				filtering.switchLayers.push(layer);
 
 			} else if(filteringOpt == 'swap') {
 
@@ -323,23 +330,11 @@
 				if($('#mapbox .layers-list .swap_first_layer:checked').val() == id)
 					layer.first = true;
 
-				filtering.swap.push(layer);
+				filtering.swapLayers.push(layer);
 
 			}
 		});
 		return filtering;
-	}
-
-	/*
-	 * Custom server setup
-	 */
-	var toggleCustomServer = function() {
-		var $mapServerInput = $('input[name="map_data[server]"]:checked');
-		var $mapCustomServerInput = $('input[name="map_data[custom_server]"]');
-		if($mapServerInput.val() === 'mapbox')
-			$mapCustomServerInput.attr('disabled', 'disabled');
-		else
-			$mapCustomServerInput.attr('disabled', false);
 	}
 
 })(jQuery);

@@ -1,5 +1,5 @@
 #mappress
-v0.7.10beta
+v0.8.1beta
 
 MapPress WordPress Theme acts as a geojournalism platform which allows news organizations, bloggers and NGOs to publish news stories as layers of information on digital maps. With MapPress, creating the interaction between data layers and contextual information is much more intuitive and interactive. The theme is ready for multilingual content and facilitates the publishing tasks.
 
@@ -20,6 +20,7 @@ $ git clone git://github.com/cardume/mappress.git
 After setting the files, go to **Appearance > Themes** and activate **mappress**.
 
 ## Features
+ - Leaflet map library
  - MapBox maps integration with filtering layers tools.
  - Geocoding WordPress posts using OpenStreetMaps or Google Maps supporting custom post types.
  - Google Street View support for Google Maps geocoding.
@@ -30,7 +31,6 @@ After setting the files, go to **Appearance > Themes** and activate **mappress**
  - Support [qTranslate](http://wordpress.org/extend/plugins/qtranslate/) multilanguage plugin
 
 ### Features to come
- - Leaflet map library for more map features
  - Custom map tiles, such as [stamen maps](http://maps.stamen.com/), [MapQuest](http://developer.mapquest.com/web/products/open/map) and [OpenStreetMap](http://wiki.openstreetmap.org/wiki/Tiles)
  - CartoDB integration
 

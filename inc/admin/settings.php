@@ -22,8 +22,7 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 			array(	// slug => title
 				'home'		=> __('Front page', 'mappress'),
 				'map'		=> __('Maps', 'mappress'),
-				'geocode'	=> __('Geocode', 'mappress'),
-				'about'		=> __('About', 'mappress')
+				'geocode'	=> __('Geocode', 'mappress')
 			) 
 		);
 
@@ -137,6 +136,14 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 							'type' => 'checkbox',
 							'default' => true,
 							'label' => __('Enable', 'mappress') 
+						),
+						array(
+							'id' => 'enable_clustering',
+							'title' => __('Enable marker clustering', 'mappress'),
+							'description' => __('Enable marker clustering system.', 'mappress'),
+							'type' => 'checkbox',
+							'default' => true,
+							'label' => __('Enable', 'mappress')
 						),
 						array(  
 							'id' => 'use_map_query',

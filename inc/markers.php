@@ -12,6 +12,8 @@ class MapPress_Markers {
 
 	var $options = array();
 
+	var $use_clustering = false;
+
 	var $geocode_service = '';
 
 	var $geocode_type = 'default';
@@ -38,6 +40,7 @@ class MapPress_Markers {
 		$this->setup_cache_flush();
 		$this->geocode_setup();
 		$this->get_options();
+		$this->use_clustering();
 		$this->geocode_type();
 		$this->geocode_service();
 		$this->gmaps_api_key();
@@ -48,6 +51,16 @@ class MapPress_Markers {
 	function get_options() {
 		$this->options = mappress_get_options();
 		return $this->options;
+	}
+
+	function use_clustering() {
+		if($this->options && isset($this->options['map']))
+			$clustering = $this->options['map']['enable_clustering'];
+		else
+			$clustering = false;
+
+		$this->use_clustering = apply_filters('mappress_enable_clustering', $clustering);
+		return $this->use_clustering;
 	}
 
 	function geocode_type() {
@@ -103,22 +116,44 @@ class MapPress_Markers {
 	function enqueue_scripts() {
 		if(wp_script_is('mappress.markers', 'registered')) {
 			wp_enqueue_script('mappress.markers');
+
+			wp_localize_script('mappress.markers', 'mappress_markers', array(
+				'ajaxurl' => admin_url('admin-ajax.php'),
+				'query' => $this->query(),
+				'markerextent' => $this->use_extent(),
+				'markerextent_defaultzoom' => $this->extent_default_zoom(),
+				'enable_clustering' => $this->use_clustering() ? true : false
+			));
 		}
 	}
 
 	function register_scripts() {
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.7');
-		wp_localize_script('mappress.markers', 'mappress_markers', array(
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'query' => $this->query(),
-			'markerextent' => $this->use_extent(),
-			'markerextent_defaultzoom' => $this->extent_default_zoom()
-		));
+
+		/* 
+		 * Clustering
+		 */
+		if($this->use_clustering()) {
+
+			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('mappress'));
+			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
+
+		}
+
+		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.8');
+	}
+
+	function setup_query_vars() {
+		add_filter('query_vars', array($this, 'query_vars'));
+	}
+
+	function query_vars($vars) {
+		$vars[] = 'is_marker_query';
+		return $vars;
 	}
 
 	function query() {
 		global $wp_query;
-		$marker_query = $wp_query;
+		$marker_query = apply_filters('mappress_marker_base_query', $wp_query);
 
 		$query = $marker_query->query_vars;
 
@@ -127,7 +162,7 @@ class MapPress_Markers {
 
 		if(is_singular(array('map', 'map-group'))) {
 			global $post;
-			$marker_query = new WP_Query();
+			$marker_query = apply_filters('mappress_marker_base_query', new WP_Query());
 			$marker_query->parse_query();
 			$query = $marker_query->query_vars;
 			$query['map_id'] = $post->ID;
@@ -203,6 +238,8 @@ class MapPress_Markers {
 			$query['paged'] = 0;
 		}
 
+		$query['is_marker_query'] = 1;
+
 		$cache_key = 'mp_';
 
 		if(function_exists('qtrans_getLanguage'))
@@ -222,10 +259,10 @@ class MapPress_Markers {
 			$markers_query = new WP_Query($query);
 
 			$data['query_id'] = $cache_key;
+			$data['type'] = 'FeatureCollection';
+			$data['features'] = array();
 
 			if($markers_query->have_posts()) {
-				$data['type'] = 'FeatureCollection';
-				$data['features'] = array();
 				$i = 0;
 				while($markers_query->have_posts()) {
 
@@ -237,7 +274,7 @@ class MapPress_Markers {
 				}
 			}
 			wp_reset_postdata();
-			$data = apply_filters('mappress_markers_data', $data);
+			$data = apply_filters('mappress_markers_data', $data, $markers_query);
 			$data = json_encode($data);
 			//set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
@@ -285,7 +322,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.4');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.1');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'type' => $this->geocode_type,
@@ -370,7 +407,7 @@ class MapPress_Markers {
 			<script type="text/javascript">
 				jQuery(document).ready(function() {
 					<?php if($this->geocode_service == 'gmaps') : ?>
-						streetviewBox({geocoder: geocodeBox() });
+						streetviewBox({ geocoder: geocodeBox() });
 					<?php else : ?>
 						geocodeBox();
 					<?php endif; ?>
@@ -592,7 +629,7 @@ class MapPress_Markers {
 		} else {
 			global $wpdb;
 			foreach($keys as $key) {
-				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '$key'"));
+				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '{$key}'"));
 			}
 		}
 
@@ -661,6 +698,11 @@ function mappress_get_gmaps_api_key() {
 	return $mappress_markers->gmaps_api_key;
 }
 
+function mappress_use_clustering() {
+	global $mappress_markers;
+	return $mappress_markers->use_clustering();
+}
+
 function mappress_use_marker_extent() {
 	global $mappress_markers;
 	return $mappress_markers->use_extent();
@@ -724,4 +766,9 @@ function mappress_get_marker_conf_coordinates($post_id = false) {
 function mappress_has_marker_location($post_id = false) {
 	global $mappress_markers;
 	return $mappress_markers->has_location($post_id);
+}
+
+function mappress_get_post_geojson($post_id = false) {
+	global $mappress_markers;
+	return $mappress_markers->get_geojson($post_id);
 }

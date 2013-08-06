@@ -18,6 +18,7 @@ function mapbox_metabox_init() {
 					</div>
 					<input type="text" class="layer_id" size="40" />
 					<div class="layer-opts">
+						<input type="text" class="layer_title" size="60" placeholder="' . __('Layer title', 'mappress') . '" />
 						<h4>' . __('Layer options', 'mappress') . '</h4>
 						<div class="filter-opts">
 							<input class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
@@ -28,7 +29,6 @@ function mapbox_metabox_init() {
 							' . __('Swapable', 'mappress') . '
 
 							<div class="filtering-opts">
-								<input type="text" class="layer_title" size="60" placeholder="' . __('Layer title', 'mappress') . '" />
 								<span class="switch-opts">
 									<input type="checkbox" class="layer_hidden" value="1" /> ' . __('Hidden', 'mappress') . '
 								</span>
@@ -83,6 +83,7 @@ function mapbox_inner_custom_box($post) {
 					</div>
 					<input type="text" name="map_data[layers][0][id]" value="examples.map-vyofok3q" class="layer_id" size="40" />
 					<div class="layer-opts">
+						<input type="text" name="map_data[layers][0][title]" class="layer_title" size="60" placeholder="<?php _e('Layer title', 'mappress'); ?>" />
 						<h4><?php _e('Layer options', 'mappress'); ?></h4>
 						<div class="filter-opts">
 							<input name="map_data[layers][0][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
@@ -93,7 +94,6 @@ function mapbox_inner_custom_box($post) {
 							<?php _e('Swapable', 'mappress'); ?>
 
 							<div class="filtering-opts">
-								<input type="text" name="map_data[layers][0][title]" class="layer_title" size="60" placeholder="<?php _e('Layer title', 'mappress'); ?>" />
 								<span class="switch-opts">
 									<input type="checkbox" name="map_data[layers][0][switch_hidden]" class="layer_hidden" value="1" /> <?php _e('Hidden', 'mappress'); ?>
 								</span>
@@ -146,6 +146,7 @@ function mapbox_inner_custom_box($post) {
 						</div>
 						<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" />
 						<div class="layer-opts">
+							<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Layer title', 'mappress'); ?>" />
 							<h4><?php _e('Layer options', 'mappress'); ?></h4>
 							<div class="filter-opts">
 								<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" <?php if($filtering == 'fixed') echo 'checked'; ?> />
@@ -156,7 +157,6 @@ function mapbox_inner_custom_box($post) {
 								<?php _e('Swapable', 'mappress'); ?>
 
 								<div class="filtering-opts">
-									<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Layer title', 'mappress'); ?>" />
 									<span class="switch-opts">
 										<input type="checkbox" name="map_data[layers][<?php echo $i; ?>][switch_hidden]" class="layer_hidden" value="1" <?php if(isset($layer['switch_hidden'])) echo 'checked'; ?> /> <?php _e('Hidden', 'mappress'); ?>
 									</span>

@@ -46,32 +46,29 @@
 
 		mappress.fragmentEnabled = true;
 
-		var track = _.debounce(function(m) {
-			var c = m.center();
-			(isNumber(c.lat) && isNumber(c.lon) && isNumber(m.zoom())) &&
-			fragment.set({loc: [c.lat, c.lon, parseInt(m.zoom())].join(',')});
+		var track = _.debounce(function() {
+			var c = map.getCenter();
+			(isNumber(c.lat) && isNumber(c.lng) && isNumber(map.getZoom())) &&
+			fragment.set({loc: [c.lat, c.lng, parseInt(map.getZoom())].join(',')});
 		}, 400);
-		map.addCallback('zoomed', track);
-		map.addCallback('panned', track);
-		fragment.get('full') && map.ui.fullscreen.full();
+		map.on('zoomend', track);
+		map.on('dragend', track);
+		fragment.get('full') && _.delay(function() { map.fullscreen.toggle() }, 100);
 		fragment.get('iframe') && $('body').addClass('iframe');
 
 		var loc = fragment.get('loc');
 		if(loc) {
 			loc = loc.split(',');
 			if(loc.length = 3) {
-				var center = {
-					lat: parseFloat(loc[0]),
-					lon: parseFloat(loc[1])
-				};
+				var center = [parseFloat(loc[0]), parseFloat(loc[1])];
 				var zoom = parseInt(loc[2]);
+				map.setView(center, zoom, {reset: true});
 			}
 		}
-		map.centerzoom(center, zoom, false);
 
 		// fullscreen hash
-		map.addCallback('drawn', function() {
-			if(map.$.hasClass('map-fullscreen-map')) {
+		map.on('resize', function() {
+			if($('body').hasClass('map-fullscreen')) {
 				fragment.set({full: true});
 			} else {
 				fragment.rm('full');

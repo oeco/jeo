@@ -5,9 +5,6 @@
 		if(map.conf.disableMarkers || map.conf.admin)
 			return false;
 
-		var	markersLayer = mapbox.markers.layer(),
-			features;
-
 		$.getJSON(mappress_markers.ajaxurl,
 		{
 			action: 'markers_geojson',
@@ -19,96 +16,58 @@
 			_build(geojson);
 		});
 
-		markers.getMarker = function(id) {
-			return _.find(features, function(m) { return m.properties.id === id; });
-		}
-
-		markers.open = function(marker) {
-			window.location = marker.properties.url;
-			return false;
-		};
-
-		markers.hasLocation = function(marker) {
-			if(marker.geometry.coordinates[0] ===  0 || !marker.geometry.coordinates[0])
-				return false;
-			else
-				return true;
-		}
-
 		var _build = function(geojson) {
 
-			map.addLayer(markersLayer);
+			var icon = L.Icon.extend({});
+			var icons = {};
+			var parentLayer;
 
-			features = geojson.features;
+			if(mappress_markers.enable_clustering)
+				parentLayer = new L.MarkerClusterGroup();
+			else
+				parentLayer = new L.layerGroup();
 
-			if(!features.length)
-				return false;
+			map.addLayer(parentLayer);
 
-			map.features = features;
-			map.markersLayer = markersLayer;
+			var layer = L.geoJson(geojson, {
+				onEachFeature: function(f, l) {
 
-			markersLayer
-				.features(features)
-				.key(function(f) {
-					return f.properties.id;
-				})
-				.factory(function(x) {
+					if(icons[f.properties.marker.markerId]) {
+						var fIcon = icons[f.properties.marker.markerId];
+					} else {
+						var fIcon = new icon(f.properties.marker);
+						icons[f.properties.marker.markerId] = fIcon;
+					}
 
-					if(!markers.hasLocation(x))
-						return;
+					l.setIcon(fIcon);
 
-					var e = document.createElement('div');
+					l.bindPopup(f.properties.bubble);
 
-					$(e).addClass('story-points')
-						.addClass(x.properties.id)
-						.addClass(x.properties.class);
-
-					$(e).data('feature', x);
-
-					// styles
-					$(e).css({
-						'background': 'url(' + x.properties.marker.url + ')',
-						'width': x.properties.marker.width,
-						'height': x.properties.marker.height,
-						'margin-top': -x.properties.marker.height,
-						'margin-left': -(x.properties.marker.width/2)
+					l.on('mouseover', function(e) {
+						e.target.openPopup();
+					});
+					l.on('mouseout', function(e) {
+						e.target.closePopup();
+					});
+					l.on('click', function(e) {
+						window.location = f.properties.url;
+						return false;
 					});
 
-					// POPUP
+				}
+			});
 
-					var o = document.createElement('div');
-					o.className = 'popup clearfix';
-					$(o).css({
-						'bottom': parseInt(x.properties.marker.height) + 11
-					});
-					e.appendChild(o);
-					var content = document.createElement('div');
-					content.className = 'post';
-					content.innerHTML = x.properties.bubble;
-					o.appendChild(content);
+			map._markerLayer = layer;
 
-					$(e).click(function() {
-						markers.open(x);
-					});
-
-					return e;
-
-				});
+			layer.addTo(parentLayer);
 
 			if(!mappress.fragment().get('loc') && mappress_markers.markerextent) {
-				var extent = markersLayer.extent();
-				if(extent[0].lat !== 0 && extent[0].lon !== 0) {
-					if(extent[1].lat !== 0 && extent[1].lon !== 0) {
-						map.setExtent(extent);
-					} else {
-						map.center(extent[0]);
-					}
-				}
+				map.fitBounds(layer.getBounds());
 			}
 
 			mappress.runCallbacks('markersReady', [map]);
 
-			return markers;
+			return layer;
 
 		};
 	}
