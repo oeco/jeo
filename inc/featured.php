@@ -13,6 +13,8 @@ class MapPress_Featured {
 
 	var $featured_meta = '_mappress_featured';
 
+	var $query = null;
+
 	function __construct() {
 		add_action('mappress_init', array($this, 'setup'));
 	}
@@ -34,32 +36,41 @@ class MapPress_Featured {
 		global $wp;
 		$wp->add_query_var($this->featured_var);
 
-		add_action('pre_get_posts', array($this, 'wp_query'), 5);
+		add_action('pre_get_posts', array($this, 'pre_get_posts'), 5);
+		add_filter('mappress_marker_base_query', array($this, 'get_query'));
 	}
 
-	function wp_query($query) {
-		$query->query_vars = $this->verify_query($query->query_vars);
-		return $query;
-	}
-
-	function verify_query($query) {
-		if(isset($query[$this->featured_var]) && $query[$this->featured_var]) {
-			global $wp_the_query;
-			$query = $this->query($query);
-			if($query === $wp_the_query)
-				add_filter('mappress_marker_query', array($this, 'query'));
+	function pre_get_posts($query) {
+		if($query->get($this->featured_var)) {
+			$this->query = $this->query($query);
+			return $this->query;
 		}
 		return $query;
 	}
 
-	function query($query) {
-		if(!$query['meta_query']) 
-			$query['meta_query'] = array();
+	function get_query($query) {
+		if($this->query) {
+			return $this->query;
+		}
 
-		$query['meta_query'][] = array(
+		return $query;
+	}
+
+	function query($query) {
+
+		$query_vars = $query->query_vars;
+
+		if(!$query_vars['meta_query']) 
+			$query_vars['meta_query'] = array();
+
+		$query_vars['meta_query'][] = array(
 			'key' => $this->featured_meta,
 			'value' => 1
 		);
+
+		//unset($query_vars[$this->featured_var]);
+
+		$query->query_vars = $query_vars;
 
 		return $query;
 	}

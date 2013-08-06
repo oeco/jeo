@@ -66,12 +66,12 @@ class MapPress_Marker_Icons {
 		);
 	}
 
-	function get_marker_formatted($marker_id = false) {
+	function get_marker_formatted($post_id = false) {
 
-		if($marker_id) {
-			$post_marker_id = $this->get_post_marker_id($marker_id);
+		if($post_id) {
+			$post_marker_id = $this->get_post_marker_id($post_id);
 
-			if($post_marker_id) {
+			if($post_marker_id && get_post($post_marker_id)) {
 				return array(
 					'iconUrl' => $this->get_marker_image_url($post_marker_id),
 					'iconSize' => $this->get_marker_size($post_marker_id),
