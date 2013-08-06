@@ -142,6 +142,15 @@ class MapPress_Markers {
 		));
 	}
 
+	function setup_query_vars() {
+		add_filter('query_vars', array($this, 'query_vars'));
+	}
+
+	function query_vars($vars) {
+		$vars[] = 'is_marker_query';
+		return $vars;
+	}
+
 	function query() {
 		global $wp_query;
 		$marker_query = $wp_query;
@@ -229,6 +238,8 @@ class MapPress_Markers {
 			$query['paged'] = 0;
 		}
 
+		$query['is_marker_query'] = 1;
+
 		$cache_key = 'mp_';
 
 		if(function_exists('qtrans_getLanguage'))
@@ -248,10 +259,10 @@ class MapPress_Markers {
 			$markers_query = new WP_Query($query);
 
 			$data['query_id'] = $cache_key;
+			$data['type'] = 'FeatureCollection';
+			$data['features'] = array();
 
 			if($markers_query->have_posts()) {
-				$data['type'] = 'FeatureCollection';
-				$data['features'] = array();
 				$i = 0;
 				while($markers_query->have_posts()) {
 
@@ -263,7 +274,7 @@ class MapPress_Markers {
 				}
 			}
 			wp_reset_postdata();
-			$data = apply_filters('mappress_markers_data', $data);
+			$data = apply_filters('mappress_markers_data', $data, $markers_query);
 			$data = json_encode($data);
 			//set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
@@ -755,4 +766,9 @@ function mappress_get_marker_conf_coordinates($post_id = false) {
 function mappress_has_marker_location($post_id = false) {
 	global $mappress_markers;
 	return $mappress_markers->has_location($post_id);
+}
+
+function mappress_get_post_geojson($post_id = false) {
+	global $mappress_markers;
+	return $mappress_markers->get_geojson($post_id);
 }
