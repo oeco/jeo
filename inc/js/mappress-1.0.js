@@ -110,10 +110,11 @@ var mappress = {};
 			map.fitBounds(conf.fitBounds);
 
 		// Handlers
-
-		// mousewheel
-		if(conf.disableHandlers.mousewheel)
-			map.scrollWheelZoom.disable();
+		if(conf.disableHandlers) {
+			// mousewheel
+			if(conf.disableHandlers.mousewheel)
+				map.scrollWheelZoom.disable();
+		}
 
 		/* 
 		 * Legends
