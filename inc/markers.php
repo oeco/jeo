@@ -629,7 +629,7 @@ class MapPress_Markers {
 		} else {
 			global $wpdb;
 			foreach($keys as $key) {
-				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '{$key}'"));
+				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '{$key}'", null));
 			}
 		}
 
