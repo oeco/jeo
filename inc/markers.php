@@ -250,7 +250,7 @@ class MapPress_Markers {
 
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
-		//$data = get_transient($cache_key, 'mappress_markers_query');
+		$data = get_transient($cache_key, 'mappress_markers_query');
 		$data = false;
 
 		if($data === false) {
@@ -279,7 +279,7 @@ class MapPress_Markers {
 			wp_reset_postdata();
 			$data = apply_filters('mappress_markers_data', $data, $markers_query);
 			$data = json_encode($data);
-			//set_transient($cache_key, $data, 60*10); // 10 minutes transient
+			set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
 		header('Content Type: application/json');
