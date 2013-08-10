@@ -235,12 +235,13 @@ class MapPress {
 
 	function query_vars($vars) {
 		$vars[] = 'map_id';
+		$vars[] = 'without_map_query';
 		return $vars;
 	}
 
 	function posts_clauses($clauses, $query) {
 
-		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map)
+		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map || !$query->get('without_map_query'))
 			return $clauses;
 
 		global $wpdb;
