@@ -20,21 +20,21 @@
 	right: 0;
 }
 
-.map-container .lang-en,
-.map-container .lang-pt,
-.map-container .lang-es {
+.lang-en,
+.lang-pt,
+.lang-es {
 	display: none;
 }
 
-body.locale-en-us .map-container .lang-en,
-body.locale-pt-br .map-container .lang-pt,
-body.locale-es-es .map-container .lang-es {
+body.locale-en-us .lang-en,
+body.locale-pt-br .lang-pt,
+body.locale-es-es .lang-es {
 	display: block;
 }
 
-body.pt-BR .map-container .lang-pt,
-body.en-US .map-container .lang-en,
-body.es-ES .map-container .lang-es {
+body.pt-BR .lang-pt,
+body.en-US .lang-en,
+body.es-ES .lang-es {
 	display: block;
 }
 

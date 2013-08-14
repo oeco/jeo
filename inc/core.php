@@ -63,7 +63,7 @@ class MapPress {
 		add_action('admin_footer', array($this, 'scripts'));
 	}
 
-	function scripts() {	
+	function scripts() {
 		/*
 		 * Libraries
 		 */
@@ -86,7 +86,7 @@ class MapPress {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress-1.0.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.2');
+		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress-1.0.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.4');
 
 		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress'), '0.2.3');
 
@@ -95,7 +95,7 @@ class MapPress {
 		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
 			.js', array('mappress'), '0.1.0');
 		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.8');
-		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.1.3');
+		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.2');
 
 		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress'), '0.0.6');
 
@@ -235,12 +235,13 @@ class MapPress {
 
 	function query_vars($vars) {
 		$vars[] = 'map_id';
+		$vars[] = 'without_map_query';
 		return $vars;
 	}
 
 	function posts_clauses($clauses, $query) {
 
-		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map)
+		if((is_admin() && !(defined('DOING_AJAX') && DOING_AJAX)) || !$this->map || !$query->get('without_map_query'))
 			return $clauses;
 
 		global $wpdb;
@@ -530,37 +531,43 @@ class MapPress {
 		return $map_data['zoom'];
 	}
 
-	function get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
+	function get_mapbox_image($map_id_or_layers = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
 
-		$map_id = $map_id ? $map_id : $this->map->ID;
-
-		if(get_post_type($map_id) == 'map-group') {
-			$mapgroup = $this->get_mapgroup_data($map_id);
-			$map = array_shift($mapgroup['maps']);
-			$map_id = $map['postID'];
-		}
-
-		$layers = $this->get_map_layers($map_id);
 		$layers_ids = array();
-		foreach($layers as $layer) {
-			if($layer['opts']['filtering'] == 'fixed') {
-				$layers_ids[] = $layer['id'];
-			}
-		}
+		$center = array('lat' => 0, 'lon' => 0);
 
-		$zoom = $zoom ? $zoom : $this->get_map_zoom($map_id);
+		if(is_array($map_id_or_layers)) {
+
+			$layer_ids = $map_id_or_layers;
+
+		} else {
+
+			$map_id = $map_id ? $map_id : $this->map->ID;
+
+			$zoom = $zoom ? $zoom : $this->get_map_zoom($map_id);
+
+			if(get_post_type($map_id) == 'map-group') {
+				$mapgroup = $this->get_mapgroup_data($map_id);
+				$map = array_shift($mapgroup['maps']);
+				$map_id = $map['postID'];
+			}
+
+			$layers = $this->get_map_layers($map_id);
+			$layers_ids = array();
+			foreach($layers as $layer) {
+				if($layer['opts']['filtering'] == 'fixed') {
+					$layers_ids[] = $layer['id'];
+				}
+			}
+
+			$center = $this->get_map_center($map_id);
+		}
 
 		if(!$zoom)
 			$zoom = 1;
 
-		$center = $this->get_map_center($map_id);
 		$lat = $lat ? $lat : $center['lat'];
 		$lng = $lng ? $lng : $center['lon'];
-
-		if(!$lat)
-			$lat = 0;
-		if(!$lng)
-			$lng = 0;
 
 		return 'http://api.tiles.mapbox.com/v3/' . implode(',', $layers_ids) . '/' . $lng . ',' . $lat . ',' . $zoom . '/' . $width . 'x' . $height . '.png';
 	}
@@ -789,6 +796,11 @@ function mappress_get_mapbox_image($map_id = false, $width = 200, $height = 200,
 function mappress_get_map_zoom($map_id = false) {
 	global $mappress;
 	return $mappress->get_map_zoom($map_id);
+}
+
+function mappress_get_map_legend($map_id = false) {
+	global $mappress;
+	return $mappress->get_map_legend($map_id);
 }
 
 function mappress_get_options() {

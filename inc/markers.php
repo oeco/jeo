@@ -250,7 +250,7 @@ class MapPress_Markers {
 
 		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
 
-		//$data = get_transient($cache_key, 'mappress_markers_query');
+		$data = get_transient($cache_key, 'mappress_markers_query');
 		$data = false;
 
 		if($data === false) {
@@ -268,15 +268,18 @@ class MapPress_Markers {
 
 					$markers_query->the_post();
 
-					$data['features'][$i] = $this->get_geojson();
+					$geojson = $this->get_geojson();
 
-					$i++;
+					if($geojson) {
+						$data['features'][$i] = $this->get_geojson();
+						$i++;
+					}
 				}
 			}
 			wp_reset_postdata();
 			$data = apply_filters('mappress_markers_data', $data, $markers_query);
 			$data = json_encode($data);
-			//set_transient($cache_key, $data, 60*10); // 10 minutes transient
+			set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
 		header('Content Type: application/json');
@@ -505,9 +508,14 @@ class MapPress_Markers {
 
 	function get_geometry() {
 		global $post;
-		$geometry = array();
-		$geometry['type'] = 'Point';
-		$geometry['coordinates'] = $this->get_coordinates();
+		$coordinates = $this->get_coordinates();
+		if(!$coordinates) {
+			$geometry = false;
+		} else {
+			$geometry = array();
+			$geometry['type'] = 'Point';
+			$geometry['coordinates'] = $coordinates;
+		}
 		return apply_filters('mappress_marker_geometry', $geometry, $post);
 	}
 
@@ -526,10 +534,10 @@ class MapPress_Markers {
 		$lat = get_post_meta($post_id, 'geocode_latitude', true);
 		$lon = get_post_meta($post_id, 'geocode_longitude', true);
 
-		if($lat && $lon)
+		if($lat && is_numeric($lat) && $lon && is_numeric($lon))
 			$coordinates = array($lon, $lat);
 		else
-			$coordinates = array(0, 0);
+			$coordinates = false;
 
 		return apply_filters('mappress_marker_coordinates', $coordinates, $post);
 	}
@@ -551,10 +559,7 @@ class MapPress_Markers {
 	function has_location($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
-		$coordinates = $this->get_coordinates($post_id);
-		if($coordinates[0] !== 0)
-			return true;
-		return false;
+		return $this->get_coordinates($post_id);
 	}
 
 	function get_city($post_id = false) {
@@ -598,12 +603,23 @@ class MapPress_Markers {
 		global $post;
 		setup_postdata(get_post($post_id));
 
+		$geometry = $this->get_geometry();
+
+		/*
+		if(!$geometry) {
+			$this->clean_geojson($post_id);
+			return false;
+		}
+		*/
+
 		$geojson = array();
 
 		$geojson['type'] = 'Feature';
 
 		// marker geometry
-		$geojson['geometry'] = $this->get_geometry();
+		if($geometry) {
+			$geojson['geometry'] = $geometry;
+		}
 
 		// marker properties
 		$geojson['properties'] = $this->get_properties();
@@ -629,7 +645,7 @@ class MapPress_Markers {
 		} else {
 			global $wpdb;
 			foreach($keys as $key) {
-				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '{$key}'"));
+				$wpdb->query($wpdb->prepare("DELETE FROM $wpdb->postmeta WHERE meta_key = '{$key}'", null));
 			}
 		}
 
