@@ -412,7 +412,7 @@ var geocodeBox;
 
 				if(lat && lng) {
 
-					if(typeof bounds !== 'undefined')
+					if($.isArray(bounds))
 						box.map.fitBounds([
 							[
 								parseFloat(bounds[0]),
