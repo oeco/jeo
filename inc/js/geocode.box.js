@@ -75,13 +75,13 @@ var geocodeBox;
 					runCallbacks('locationChanged', [box]);
 				},
 				get: function() {
-					return [latInput.val(), lngInput.val()];
+					return [parseFloat(latInput.val()), parseFloat(lngInput.val())];
 				},
 				getLat: function() {
-					return latInput.val();
+					return parseFloat(latInput.val());
 				},
 				getLng: function() {
-					return lngInput.val();
+					return parseFloat(lngInput.val());
 				}
 			}
 			return f;
@@ -291,6 +291,9 @@ var geocodeBox;
 
 				var viewport = bounds.split('), (');
 
+				if(viewport.length !== 2)
+					return false;
+
 				var viewportSW = viewport[0];
 				var viewportNE = viewport[1];
 
@@ -340,12 +343,16 @@ var geocodeBox;
 						box._map(position);
 
 					box.map.setCenter(position);
+					box.map.setZoom(2);
 
 					if(box.marker)
 						box.marker.setMap(box.map);
 
-					if(typeof bounds !== 'undefined')
-						box.map.fitBounds(box._convertToViewport(bounds));
+					if(typeof bounds !== 'undefined') {
+						var viewport = box._convertToViewport(bounds);
+						if(viewport)
+							box.map.fitBounds(viewport);
+					}
 
 				}
 
@@ -370,6 +377,8 @@ var geocodeBox;
 			isOSM: true,
 
 			_map: function(lat, lng, bounds) {
+
+				mapContainer.show();
 
 				box.markerLayer = new L.layerGroup();
 				box.map = new L.map(mapCanvasID);

@@ -3,14 +3,13 @@
 class MapPress_StreetView extends MapPress_Markers {
 
 	function __construct() {
-
 		add_action('init', array($this, 'setup'));
 	}
 
 	function setup() {
 
-		if(mappress_get_geocode_service() !== 'gmaps' && !mappress_get_gmaps_api_key())
-			return;
+		if(mappress_get_geocode_service() !== 'gmaps' || !mappress_get_gmaps_api_key())
+			return false;
 
 		add_action('admin_footer', array($this, 'scripts'));
 		add_action('mappress_geocode_scripts', array($this, 'scripts'));
@@ -20,7 +19,7 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.4.9');
+		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.5');
 	}
 
 	function editor($post = false) {
