@@ -124,6 +124,8 @@ class MapPress_Markers {
 				'markerextent_defaultzoom' => $this->extent_default_zoom(),
 				'enable_clustering' => $this->use_clustering() ? true : false
 			));
+
+			do_action('mappress_markers_enqueue_scripts');
 		}
 	}
 
