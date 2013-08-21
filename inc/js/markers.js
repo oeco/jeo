@@ -61,7 +61,8 @@
 
 			layer.addTo(parentLayer);
 
-			if(!mappress.fragment().get('loc') && mappress_markers.markerextent) {
+			var bounds = layer.getBounds();
+			if(!mappress.fragment().get('loc') && mappress_markers.markerextent && bounds.isValid()) {
 				map.fitBounds(layer.getBounds());
 			}
 

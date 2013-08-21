@@ -82,8 +82,6 @@ var streetviewBox;
 				box.geocoder.closed(box.disableAll);
 				box.geocoder.opened(function() {
 
-					box.checkToggler();
-
 					if(settings.force)
 						box.enable();
 
@@ -100,7 +98,10 @@ var streetviewBox;
 				var loc = box.geocoder.location().get();
 				box.updatePosition(loc[0], loc[1]);
 
-				box.updatePov(box.pitch.get(), box.heading.get());
+				var pitch = box.pitch.get();
+				var heading = box.heading.get();
+				if(pitch && heading)
+					box.updatePov(box.pitch.get(), box.heading.get());
 
 				box.checkToggler();
 
@@ -219,6 +220,9 @@ var streetviewBox;
 
 			updatePosition: function(lat, lng) {
 
+				if(!box.panorama)
+					return box;
+
 				box.panorama.setPosition(new google.maps.LatLng(lat, lng));
 
 				return box;
@@ -226,6 +230,9 @@ var streetviewBox;
 			},
 
 			updatePov: function(pitch, heading) {
+
+				if(!box.panorama)
+					return box;
 
 				box.panorama.setPov({
 					heading: heading,

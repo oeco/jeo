@@ -124,6 +124,8 @@ class MapPress_Markers {
 				'markerextent_defaultzoom' => $this->extent_default_zoom(),
 				'enable_clustering' => $this->use_clustering() ? true : false
 			));
+
+			do_action('mappress_markers_enqueue_scripts');
 		}
 	}
 
@@ -325,7 +327,7 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.1');
+		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.3');
 
 		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
 			'type' => $this->geocode_type,
