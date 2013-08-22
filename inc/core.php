@@ -554,9 +554,11 @@ class MapPress {
 
 			$layers = $this->get_map_layers($map_id);
 			$layers_ids = array();
-			foreach($layers as $layer) {
-				if($layer['opts']['filtering'] == 'fixed') {
-					$layers_ids[] = $layer['id'];
+			if($layers) {
+				foreach($layers as $layer) {
+					if($layer['opts']['filtering'] == 'fixed') {
+						$layers_ids[] = $layer['id'];
+					}
 				}
 			}
 
