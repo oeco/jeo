@@ -14,16 +14,8 @@
 			$('html,body').stop().animate({
 				scrollTop: $('.map-container').offset().top
 			}, 400, function() {
-				map.setView([lat, lon], zoom, {
-					animate: true,
-					pan: {
-						animate: true,
-						duration: 2
-					},
-					zoom: {
-						animate: true
-					}
-				});
+				map.setView([lat, lon], zoom);
+				map.invalidateSize(true);
 			});
 		}
 	}
