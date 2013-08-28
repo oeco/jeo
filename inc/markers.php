@@ -1,10 +1,10 @@
 <?php
 
 /*
- * MapPress Markers
+ * JEO Markers
  */
 
-class MapPress_Markers {
+class JEO_Markers {
 
 	var $directory = '';
 
@@ -26,7 +26,7 @@ class MapPress_Markers {
 
 	function __construct() {
 		$this->setup_directories();
-		add_action('mappress_init', array($this, 'setup'));
+		add_action('jeo_init', array($this, 'setup'));
 	}
 
 	/*
@@ -49,7 +49,7 @@ class MapPress_Markers {
 	}
 
 	function get_options() {
-		$this->options = mappress_get_options();
+		$this->options = jeo_get_options();
 		return $this->options;
 	}
 
@@ -59,8 +59,16 @@ class MapPress_Markers {
 		else
 			$clustering = false;
 
-		$this->use_clustering = apply_filters('mappress_enable_clustering', $clustering);
+		$this->use_clustering = apply_filters('jeo_enable_clustering', $clustering);
 		return $this->use_clustering;
+	}
+
+	function use_transient() {
+		return apply_filters('jeo_markers_enable_transient', true);
+	}
+
+	function use_browser_caching() {
+		return apply_filters('jeo_markers_enable_browser_caching', true);
 	}
 
 	function geocode_type() {
@@ -68,7 +76,7 @@ class MapPress_Markers {
 			$type = $this->options['geocode']['type'];
 		else
 			$type = 'default';
-		$this->geocode_type = apply_filters('mappress_geocode_type', $type);
+		$this->geocode_type = apply_filters('jeo_geocode_type', $type);
 		return $this->geocode_type;
 	}
 
@@ -77,7 +85,7 @@ class MapPress_Markers {
 			$service = $this->options['geocode']['service'];
 		else
 			$service = 'osm';
-		$this->geocode_service = apply_filters('mappress_geocode_service', $service);
+		$this->geocode_service = apply_filters('jeo_geocode_service', $service);
 		return $this->geocode_service;
 	}
 
@@ -86,7 +94,7 @@ class MapPress_Markers {
 			$key = $this->options['geocode']['gmaps_api_key'];
 		else
 			$key = false;
-		$this->gmaps_api_key = apply_filters('mappress_gmaps_api_key', $key);
+		$this->gmaps_api_key = apply_filters('jeo_gmaps_api_key', $key);
 		return $this->gmaps_api_key;
 	}
 
@@ -95,17 +103,17 @@ class MapPress_Markers {
 		if(is_front_page() || is_singular(array('map', 'map-group')))
 			$this->use_extent = false;
 
-		return apply_filters('mappress_use_marker_extent', $this->use_extent);
+		return apply_filters('jeo_use_marker_extent', $this->use_extent);
 	}
 
 	function extent_default_zoom() {
 		$this->extent_default_zoom = false;
-		return apply_filters('mappress_marker_extent_default_zoom', $this->extent_default_zoom);
+		return apply_filters('jeo_marker_extent_default_zoom', $this->extent_default_zoom);
 	}
 
 	function setup_directories() {
-		$this->directory = apply_filters('mappress_directory', get_template_directory() . '/inc');
-		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri() . '/inc');
+		$this->directory = apply_filters('jeo_directory', get_template_directory() . '/inc');
+		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri() . '/inc');
 	}
 
 	function setup_scripts() {
@@ -114,10 +122,10 @@ class MapPress_Markers {
 	}
 
 	function enqueue_scripts() {
-		if(wp_script_is('mappress.markers', 'registered')) {
-			wp_enqueue_script('mappress.markers');
+		if(wp_script_is('jeo.markers', 'registered')) {
+			wp_enqueue_script('jeo.markers');
 
-			wp_localize_script('mappress.markers', 'mappress_markers', array(
+			wp_localize_script('jeo.markers', 'jeo_markers', array(
 				'ajaxurl' => admin_url('admin-ajax.php'),
 				'query' => $this->query(),
 				'markerextent' => $this->use_extent(),
@@ -125,7 +133,7 @@ class MapPress_Markers {
 				'enable_clustering' => $this->use_clustering() ? true : false
 			));
 
-			do_action('mappress_markers_enqueue_scripts');
+			do_action('jeo_markers_enqueue_scripts');
 		}
 	}
 
@@ -136,12 +144,12 @@ class MapPress_Markers {
 		 */
 		if($this->use_clustering()) {
 
-			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('mappress'));
+			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'));
 			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
 
 		}
 
-		wp_register_script('mappress.markers', $this->directory_uri . '/js/markers.js', array('mappress', 'underscore'), '0.2.8');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.8');
 	}
 
 	function setup_query_vars() {
@@ -155,7 +163,7 @@ class MapPress_Markers {
 
 	function query() {
 		global $wp_query;
-		$marker_query = apply_filters('mappress_marker_base_query', $wp_query);
+		$marker_query = apply_filters('jeo_marker_base_query', $wp_query);
 
 		$query = $marker_query->query_vars;
 
@@ -164,7 +172,7 @@ class MapPress_Markers {
 
 		if(is_singular(array('map', 'map-group'))) {
 			global $post;
-			$marker_query = apply_filters('mappress_marker_base_query', new WP_Query());
+			$marker_query = apply_filters('jeo_marker_base_query', new WP_Query());
 			$marker_query->parse_query();
 			$query = $marker_query->query_vars;
 			$query['map_id'] = $post->ID;
@@ -175,7 +183,7 @@ class MapPress_Markers {
 		}
 
 		if(!$query['post_type'])
-			$query['post_type'] = mappress_get_mapped_post_types();
+			$query['post_type'] = jeo_get_mapped_post_types();
 
 		$query['post_status'] = 'publish';
 
@@ -203,7 +211,7 @@ class MapPress_Markers {
 
 		$query['paged'] = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
-		return apply_filters('mappress_marker_query', $query);
+		return apply_filters('jeo_marker_query', $query);
 	}
 
 	function setup_post_map() {
@@ -217,12 +225,12 @@ class MapPress_Markers {
 		if(is_single() && $this->has_location($p->ID) && !is_singular(array('map', 'map-group'))) {
 			$post_maps = get_post_meta($p->ID, 'maps');
 			if(!$post_maps) {
-				mappress_set_map(mappress_map_featured());
+				jeo_set_map(jeo_map_featured());
 			} else {
-				mappress_set_map(get_post(array_shift($post_maps)));
+				jeo_set_map(get_post(array_shift($post_maps)));
 			}
 		}
-		return mappress_the_map();
+		return jeo_the_map();
 	}
 
 	function setup_ajax() {
@@ -250,10 +258,12 @@ class MapPress_Markers {
 		$query_id = md5(serialize($query));
 		$cache_key .= $query_id;
 
-		$cache_key = apply_filters('mappress_markers_cache_key', $cache_key, $query);
+		$cache_key = apply_filters('jeo_markers_cache_key', $cache_key, $query);
 
-		$data = get_transient($cache_key, 'mappress_markers_query');
 		$data = false;
+
+		if($this->use_transient())
+			$data = get_transient($cache_key, 'jeo_markers_query');
 
 		if($data === false) {
 			$data = array();
@@ -279,19 +289,23 @@ class MapPress_Markers {
 				}
 			}
 			wp_reset_postdata();
-			$data = apply_filters('mappress_markers_data', $data, $markers_query);
+			$data = apply_filters('jeo_markers_data', $data, $markers_query);
 			$data = json_encode($data);
-			set_transient($cache_key, $data, 60*10); // 10 minutes transient
+
+			if($this->use_transient())
+				set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
 		header('Content Type: application/json');
 
-		/* Browser caching */
-		$expires = 60 * 10; // 10 minutes of browser cache
-		header('Pragma: public');
-		header('Cache-Control: maxage=' . $expires);
-		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
-		/* --------------- */
+		if($this->use_browser_caching()) {
+			/* Browser caching */
+			$expires = 60 * 10; // 10 minutes of browser cache
+			header('Pragma: public');
+			header('Cache-Control: maxage=' . $expires);
+			header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+			/* --------------- */
+		}
 
 		echo $data;
 		exit;
@@ -327,30 +341,30 @@ class MapPress_Markers {
 			$dependencies[] = 'google-maps-api';
 		}
 
-		wp_register_script('mappress.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.3');
+		wp_register_script('jeo.geocode.box', $this->directory_uri . '/js/geocode.box.js', $dependencies, '0.5.3');
 
-		wp_localize_script('mappress.geocode.box', 'geocode_localization', array(
+		wp_localize_script('jeo.geocode.box', 'geocode_localization', array(
 			'type' => $this->geocode_type,
 			'service' => $this->geocode_service,
-			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'mappress'),
-			'results_found' => __('results found', 'mappress')
+			'not_found' => __('We couldn\'t find what you are looking for, please try again.', 'jeo'),
+			'results_found' => __('results found', 'jeo')
 		));
 
-		do_action('mappress_geocode_scripts');
+		do_action('jeo_geocode_scripts');
 	}
 
 	function geocode_enqueue_scripts() {
 		if($this->geocode_service == 'gmaps' && $this->gmaps_api_key)
 			wp_enqueue_script('google-maps-api');
-		wp_enqueue_script('mappress.geocode.box');
+		wp_enqueue_script('jeo.geocode.box');
 	}
 
 	function geocode_add_meta_box() {
-		$post_types = mappress_get_mapped_post_types();
+		$post_types = jeo_get_mapped_post_types();
 		foreach($post_types as $post_type) {
 			add_meta_box(
 				'geocoding-address',
-				__('Address and geolocation', 'mappress'),
+				__('Address and geolocation', 'jeo'),
 				array($this, 'geocode_box'),
 				$post_type,
 				'advanced',
@@ -361,7 +375,7 @@ class MapPress_Markers {
 
 	function geocode_box($post = false) {
 
-		wp_enqueue_script('mappress.geocode.box');
+		wp_enqueue_script('jeo.geocode.box');
 
 		$geocode_latitude = '';
 		$geocode_longitude = '';
@@ -381,24 +395,24 @@ class MapPress_Markers {
 
 		?>
 		<div id="geocode_box" class="clearfix">
-			<h4><?php _e('Find the location', 'mappress'); ?></h4>
+			<h4><?php _e('Find the location', 'jeo'); ?></h4>
 			<p class="clearfix">
-				<input type="text" size="80" id="geocode_address" name="geocode_address" placeholder="<?php _e('Full address', 'mappress'); ?>" value="<?php if($geocode_address) echo $geocode_address; ?>" />
-				<a class="button geocode_address secondary" href="#"><?php _e('Find', 'mappress'); ?></a>
+				<input type="text" size="80" id="geocode_address" name="geocode_address" placeholder="<?php _e('Full address', 'jeo'); ?>" value="<?php if($geocode_address) echo $geocode_address; ?>" />
+				<a class="button geocode_address secondary" href="#"><?php _e('Find', 'jeo'); ?></a>
 			</p>
 			<div class="geocode-map-container">
 				<div class="results"></div>
 				<?php if($this->geocode_service == 'gmaps' && $this->gmaps_api_key) : ?>
-					<p class="draggable-tip"><?php _e('Drag the marker for a more precise result', 'mappress'); ?></p>
+					<p class="draggable-tip"><?php _e('Drag the marker for a more precise result', 'jeo'); ?></p>
 				<?php endif; ?>
 				<div id="map_canvas" style="width:500px;height:300px"></div>
 				<div class="latlng-container">
-					<h4><?php _e('Result', 'mappress'); ?>:</h4>
+					<h4><?php _e('Result', 'jeo'); ?>:</h4>
 					<p>
-						<?php _e('Latitude', 'mappress'); ?>:
+						<?php _e('Latitude', 'jeo'); ?>:
 						<input type="text" id="geocode_lat" name="geocode_latitude" value="<?php if($geocode_latitude) echo $geocode_latitude; ?>" /><br/>
 
-						<?php _e('Longitude', 'mappress'); ?>:
+						<?php _e('Longitude', 'jeo'); ?>:
 						<input type="text" id="geocode_lon" name="geocode_longitude" value="<?php if($geocode_longitude) echo $geocode_longitude; ?>" />
 					</p>
 					<input type="hidden" id="geocode_city" name="geocode_city" value="<?php if($geocode_city) echo $geocode_city; ?>" />
@@ -406,7 +420,7 @@ class MapPress_Markers {
 					<input type="hidden" id="geocode_viewport" name="geocode_viewport" value="<?php if($geocode_viewport) echo $geocode_viewport; ?>" />
 				</div>
 			</div>
-			<?php do_action('mappress_geocode_box', $post); ?>
+			<?php do_action('jeo_geocode_box', $post); ?>
 		</div>
 		<?php if(is_admin()) : ?>
 			<script type="text/javascript">
@@ -457,7 +471,7 @@ class MapPress_Markers {
 		if(isset($_REQUEST['geocode_viewport']))
 			update_post_meta($post_id, 'geocode_viewport', $_REQUEST['geocode_viewport']);
 
-		do_action('mappress_geocode_box_save', $post_id);
+		do_action('jeo_geocode_box_save', $post_id);
 	}
 
 	/*
@@ -465,7 +479,7 @@ class MapPress_Markers {
 	 */
 
 	function get_limit() {
-		return apply_filters('mappress_markers_limit', 200);
+		return apply_filters('jeo_markers_limit', 200);
 	}
 
 	function get_bubble($post_id = false) {
@@ -475,7 +489,7 @@ class MapPress_Markers {
 		get_template_part('content', 'marker-bubble');
 		$bubble = ob_get_contents();
 		ob_end_clean();
-		return apply_filters('mappress_marker_bubble', $bubble, $post);
+		return apply_filters('jeo_marker_bubble', $bubble, $post);
 	}
 
 	function get_icon() {
@@ -485,13 +499,13 @@ class MapPress_Markers {
 			'width' => 26,
 			'height' => 30
 		);
-		return apply_filters('mappress_marker_icon', $marker, $post);
+		return apply_filters('jeo_marker_icon', $marker, $post);
 	}
 
 	function get_class() {
 		global $post;
 		$class = get_post_class();
-		return apply_filters('mappress_marker_class', $class, $post);
+		return apply_filters('jeo_marker_class', $class, $post);
 	}
 
 	function get_properties() {
@@ -500,12 +514,12 @@ class MapPress_Markers {
 		$properties['id'] = 'post-' . $post->ID;
 		$properties['postID'] = $post->ID;
 		$properties['title'] = get_the_title();
-		$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'mappress'));
+		$properties['date'] = get_the_date(_x('m/d/Y', 'reduced date format', 'jeo'));
 		$properties['url'] = apply_filters('the_permalink', get_permalink());
 		$properties['bubble'] = $this->get_bubble();
 		$properties['marker'] = $this->get_icon();
 		$properties['class'] = implode(' ', $this->get_class());
-		return apply_filters('mappress_marker_data', $properties, $post);
+		return apply_filters('jeo_marker_data', $properties, $post);
 	}
 
 	function get_geometry() {
@@ -518,7 +532,7 @@ class MapPress_Markers {
 			$geometry['type'] = 'Point';
 			$geometry['coordinates'] = $coordinates;
 		}
-		return apply_filters('mappress_marker_geometry', $geometry, $post);
+		return apply_filters('jeo_marker_geometry', $geometry, $post);
 	}
 
 	function get_conf_coordinates($post_id = false) {
@@ -541,7 +555,7 @@ class MapPress_Markers {
 		else
 			$coordinates = false;
 
-		return apply_filters('mappress_marker_coordinates', $coordinates, $post);
+		return apply_filters('jeo_marker_coordinates', $coordinates, $post);
 	}
 
 	function get_latitude($post_id = false) {
@@ -579,11 +593,11 @@ class MapPress_Markers {
 	}
 
 	function get_geojson_key() {
-		return apply_filters('mappress_markers_geojson_key', '_mp_geojson');
+		return apply_filters('jeo_markers_geojson_key', '_mp_geojson');
 	}
 
 	function get_geojson_keys() {
-		return apply_filters('mappress_markers_geojson_keys', array('_mp_geojson'));
+		return apply_filters('jeo_markers_geojson_keys', array('_mp_geojson'));
 	}
 
 	function get_geojson($post_id = false) {
@@ -640,7 +654,7 @@ class MapPress_Markers {
 		if(is_int($post_id) && get_post_type($post_id) == 'revision')
 			return false;
 
-		if(is_int($post_id) && in_array(get_post_type($post_id), mappress_get_mapped_post_types())) {
+		if(is_int($post_id) && in_array(get_post_type($post_id), jeo_get_mapped_post_types())) {
 			foreach($keys as $key) {
 				delete_post_meta($post_id, $key);
 			}
@@ -672,121 +686,121 @@ class MapPress_Markers {
 
 		$wp_admin_bar->add_menu( array(
 			'id' => 'mp_geojson_clean',
-			'title' => __('Clear GeoJSON Cache', 'mappress'),
-			'href' => add_query_arg(array('mappress_clear_geojson' => 1))
+			'title' => __('Clear GeoJSON Cache', 'jeo'),
+			'href' => add_query_arg(array('jeo_clear_geojson' => 1))
 		));
 	}
 
 	function geojson_cache_button_action() {
-		if(isset($_REQUEST['mappress_clear_geojson']) && is_super_admin()) {
+		if(isset($_REQUEST['jeo_clear_geojson']) && is_super_admin()) {
 			$this->clean_geojson();
 			add_action('admin_notices', array($this, 'geojson_cache_clean_message'));
 		}
 	}
 
 	function geojson_cache_clean_message() {
-		echo '<div class="updated fade"><p>' . __('<strong>Markers GeoJSON cache has been cleared. Don\'t worry! They will be dynamically regenerated.</strong>', 'mappress') . '</p><p>' . __('The next map markers load might take a little while, depending on the amount of markers. If you want to speed this up for your users, we recommend you clear your browser\'s cache and navigate through your website to let the markers cache be replaced.', 'mappress') . '</p></div>';
+		echo '<div class="updated fade"><p>' . __('<strong>Markers GeoJSON cache has been cleared. Don\'t worry! They will be dynamically regenerated.</strong>', 'jeo') . '</p><p>' . __('The next map markers load might take a little while, depending on the amount of markers. If you want to speed this up for your users, we recommend you clear your browser\'s cache and navigate through your website to let the markers cache be replaced.', 'jeo') . '</p></div>';
 	}
 
 
 }
 
-$mappress_markers = new MapPress_Markers();
+$jeo_markers = new JEO_Markers();
 
-require_once($mappress_markers->directory . '/streetview.php');
-require_once($mappress_markers->directory . '/marker-icons.php');
+require_once($jeo_markers->directory . '/streetview.php');
+require_once($jeo_markers->directory . '/marker-icons.php');
 
-function mappress_geocode_box($post = false) {
-	global $mappress_markers;
-	return $mappress_markers->geocode_box($post);
+function jeo_geocode_box($post = false) {
+	global $jeo_markers;
+	return $jeo_markers->geocode_box($post);
 }
 
-function mappress_geocode_save($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->geocode_save($post_id);
+function jeo_geocode_save($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->geocode_save($post_id);
 }
 
-function mappress_get_geocode_service() {
-	global $mappress_markers;
-	return $mappress_markers->geocode_service;
+function jeo_get_geocode_service() {
+	global $jeo_markers;
+	return $jeo_markers->geocode_service;
 }
 
-function mappress_get_gmaps_api_key() {
-	global $mappress_markers;
-	return $mappress_markers->gmaps_api_key;
+function jeo_get_gmaps_api_key() {
+	global $jeo_markers;
+	return $jeo_markers->gmaps_api_key;
 }
 
-function mappress_use_clustering() {
-	global $mappress_markers;
-	return $mappress_markers->use_clustering();
+function jeo_use_clustering() {
+	global $jeo_markers;
+	return $jeo_markers->use_clustering();
 }
 
-function mappress_use_marker_extent() {
-	global $mappress_markers;
-	return $mappress_markers->use_extent();
+function jeo_use_marker_extent() {
+	global $jeo_markers;
+	return $jeo_markers->use_extent();
 }
 
-function mappress_marker_extent_default_zoom() {
-	global $mappress_markers;
-	return $mappress_markers->extent_default_zoom();
+function jeo_marker_extent_default_zoom() {
+	global $jeo_markers;
+	return $jeo_markers->extent_default_zoom();
 }
 
-function mappress_get_markers_limit() {
-	global $mappress_markers;
-	return $mappress_markers->get_limit();
+function jeo_get_markers_limit() {
+	global $jeo_markers;
+	return $jeo_markers->get_limit();
 }
 
-function mappress_get_marker_latitude($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_latitude($post_id);
+function jeo_get_marker_latitude($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_latitude($post_id);
 }
 
-function mappress_get_marker_longitude($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_longitude($post_id);
+function jeo_get_marker_longitude($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_longitude($post_id);
 }
 
-function mappress_get_marker_bubble($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_bubble();
+function jeo_get_marker_bubble($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_bubble();
 }
 
-function mappress_get_marker_icon() {
-	global $mappress_markers;
-	return $mappress_markers->get_icon();
+function jeo_get_marker_icon() {
+	global $jeo_markers;
+	return $jeo_markers->get_icon();
 }
 
-function mappress_get_marker_class() {
-	global $mappress_markers;
-	return $mappress_markers->get_class();
+function jeo_get_marker_class() {
+	global $jeo_markers;
+	return $jeo_markers->get_class();
 }
 
-function mappress_get_marker_properties() {
-	global $mappress_markers;
-	return $mappress_markers->get_properties();
+function jeo_get_marker_properties() {
+	global $jeo_markers;
+	return $jeo_markers->get_properties();
 }
 
-function mappress_get_marker_geometry() {
-	global $mappress_markers;
-	return $mappress_markers->get_geometry();
+function jeo_get_marker_geometry() {
+	global $jeo_markers;
+	return $jeo_markers->get_geometry();
 }
 
-function mappress_get_marker_coordinates($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_coordinates($post_id);
+function jeo_get_marker_coordinates($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_coordinates($post_id);
 }
 
-function mappress_get_marker_conf_coordinates($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_conf_coordinates($post_id);
+function jeo_get_marker_conf_coordinates($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_conf_coordinates($post_id);
 }
 
-function mappress_has_marker_location($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->has_location($post_id);
+function jeo_has_marker_location($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->has_location($post_id);
 }
 
-function mappress_get_post_geojson($post_id = false) {
-	global $mappress_markers;
-	return $mappress_markers->get_geojson($post_id);
+function jeo_get_post_geojson($post_id = false) {
+	global $jeo_markers;
+	return $jeo_markers->get_geojson($post_id);
 }

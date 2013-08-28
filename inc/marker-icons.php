@@ -1,10 +1,10 @@
 <?php
 
 /* 
- * MapPress Marker Icons
+ * JEO Marker Icons
  */
 
-class MapPress_Marker_Icons {
+class JEO_Marker_Icons {
 
 	var $post_type = 'marker-icon';
 	var $connected_taxonomies = false;
@@ -135,7 +135,7 @@ class MapPress_Marker_Icons {
 	 */
 
 	function get_default_marker_id() {
-		$marker_id = get_option('mappress_default_marker_id');
+		$marker_id = get_option('jeo_default_marker_id');
 		return $marker_id ? $marker_id : false;
 	}
 
@@ -145,7 +145,7 @@ class MapPress_Marker_Icons {
 	}
 
 	function set_default_marker($marker_id) {
-		return update_option('mappress_default_marker_id', $marker_id);
+		return update_option('jeo_default_marker_id', $marker_id);
 	}
 
 	/*
@@ -171,23 +171,23 @@ class MapPress_Marker_Icons {
 	function register_post_type() {
 
 		$labels = array( 
-			'name' => __('Marker icons', 'mappress'),
-			'singular_name' => __('Marker icon', 'mappress'),
-			'add_new' => __('Add marker icon', 'mappress'),
-			'add_new_item' => __('Add new marker icon', 'mappress'),
-			'edit_item' => __('Edit marker icon', 'mappress'),
-			'new_item' => __('New marker icon', 'mappress'),
-			'view_item' => __('View marker icon', 'mappress'),
-			'search_items' => __('Search marker icons', 'mappress'),
-			'not_found' => __('No marker icon found', 'mappress'),
-			'not_found_in_trash' => __('No marker icon found in the trash', 'mappress'),
-			'menu_name' => __('Marker icons', 'mappress')
+			'name' => __('Marker icons', 'jeo'),
+			'singular_name' => __('Marker icon', 'jeo'),
+			'add_new' => __('Add marker icon', 'jeo'),
+			'add_new_item' => __('Add new marker icon', 'jeo'),
+			'edit_item' => __('Edit marker icon', 'jeo'),
+			'new_item' => __('New marker icon', 'jeo'),
+			'view_item' => __('View marker icon', 'jeo'),
+			'search_items' => __('Search marker icons', 'jeo'),
+			'not_found' => __('No marker icon found', 'jeo'),
+			'not_found_in_trash' => __('No marker icon found in the trash', 'jeo'),
+			'menu_name' => __('Marker icons', 'jeo')
 		);
 
 		$args = array( 
 			'labels' => $labels,
 			'hierarchical' => false,
-			'description' => __('MapPress marker icons', 'mappress'),
+			'description' => __('JEO marker icons', 'jeo'),
 			'supports' => array('title'),
 			'public' => false,
 			'show_ui' => true,
@@ -216,7 +216,7 @@ class MapPress_Marker_Icons {
 		foreach($column as $k => $v) {
 			$new_column[$k] = $v;
 			if($i == 0) {
-				$new_column['marker'] = __('Marker', 'mappress');
+				$new_column['marker'] = __('Marker', 'jeo');
 			}
 			$i++;
 		}
@@ -231,7 +231,7 @@ class MapPress_Marker_Icons {
 					echo '<img src="' . $image . '" />';
 				$default_marker = $this->get_default_marker();
 				if($default_marker->ID == $post_id)
-					echo '(' . __('default', 'mappress') . ')';
+					echo '(' . __('default', 'jeo') . ')';
 				break;
 			default:
 		}
@@ -255,7 +255,7 @@ class MapPress_Marker_Icons {
 				$i = 0;
 				foreach($actions as $a => $v) {
 					if($i == 0) {
-						$new_actions['set_default'] .= '<input type="submit" class="button set_default_marker" data-marker="' . $post->ID . '" value="' . __('Set as default marker ', 'mappress') . '" />';
+						$new_actions['set_default'] .= '<input type="submit" class="button set_default_marker" data-marker="' . $post->ID . '" value="' . __('Set as default marker ', 'jeo') . '" />';
 					}
 					$new_actions[$a] = $v;
 					$i++;
@@ -288,7 +288,7 @@ class MapPress_Marker_Icons {
 		}
 	}
 	function save_default_marker_notice() {
-		echo '<div class="updated"><p>' . __('Default marker updated', 'mappress') . '</p></div>';
+		echo '<div class="updated"><p>' . __('Default marker updated', 'jeo') . '</p></div>';
 	}
 
 	/*
@@ -300,8 +300,8 @@ class MapPress_Marker_Icons {
 	}
 
 	function admin_menu() {
-	    add_submenu_page('edit.php?post_type=map', __('Marker icons', 'mappress'), __('Marker icons', 'mappress'), 'edit_posts', 'edit.php?post_type=marker-icon');
-	    add_submenu_page('edit.php?post_type=map', __('Add new marker icon', 'mappress'), __('Add new marker icon', 'mappress'), 'edit_posts', 'post-new.php?post_type=marker-icon');
+	    add_submenu_page('edit.php?post_type=map', __('Marker icons', 'jeo'), __('Marker icons', 'jeo'), 'edit_posts', 'edit.php?post_type=marker-icon');
+	    add_submenu_page('edit.php?post_type=map', __('Add new marker icon', 'jeo'), __('Add new marker icon', 'jeo'), 'edit_posts', 'post-new.php?post_type=marker-icon');
 	}
 
 	/*
@@ -315,14 +315,14 @@ class MapPress_Marker_Icons {
 	}
 
 	function init_meta_box() {
-		wp_enqueue_style('mappress-markericons', get_template_directory_uri() . '/inc/css/marker-icons.css');
-		wp_enqueue_script('mappress-markericons', get_template_directory_uri() . '/inc/js/marker-icons.js', array('jquery', 'imagesloaded'), '0.0.4');
+		wp_enqueue_style('jeo-markericons', get_template_directory_uri() . '/inc/css/marker-icons.css');
+		wp_enqueue_script('jeo-markericons', get_template_directory_uri() . '/inc/js/marker-icons.js', array('jquery', 'imagesloaded'), '0.0.4');
 	}
 
 	function add_meta_box() {
 		add_meta_box(
-			'mappress_markericon',
-			__('Setup marker icon', 'mappress'),
+			'jeo_markericon',
+			__('Setup marker icon', 'jeo'),
 			array($this, 'inner_meta_box'),
 			$this->post_type,
 			'advanced',
@@ -341,12 +341,12 @@ class MapPress_Marker_Icons {
 		?>
 		<div id="marker-icon-metabox">
 			<p>
-				<label for="marker_icon_image"><strong><?php _e('Choose image to use as marker icon', 'mappress'); ?></strong></label><br/>
-				<small><?php _e('PNG image format is recomended', 'mappress'); ?></small><br/>
+				<label for="marker_icon_image"><strong><?php _e('Choose image to use as marker icon', 'jeo'); ?></strong></label><br/>
+				<small><?php _e('PNG image format is recomended', 'jeo'); ?></small><br/>
 				<input type="file" name="marker_image" id="marker_icon_image" />
 				<input type="hidden" name="marker_width" id="marker_icon_width" />
 				<input type="hidden" name="marker_height" id="marker_icon_height" />
-				<button class="button-primary"><?php _e('Upload image', 'mappress'); ?></button>
+				<button class="button-primary"><?php _e('Upload image', 'jeo'); ?></button>
 			</p>
 			<div class="clearfix">
 				<div class="marker-icon-container">
@@ -354,26 +354,26 @@ class MapPress_Marker_Icons {
 						<?php if($marker_image_id) : ?>
 							<img src="<?php echo $marker_image->guid; ?>" />
 						<?php endif; ?>
-						<button class="button use-default"><?php _e('Use default', 'mappress'); ?></button>
-						<button class="button cancel"><?php _e('Cancel', 'mappress'); ?></button>
-						<button class="button-primary save"><?php _e('Save', 'mappress'); ?></button>
+						<button class="button use-default"><?php _e('Use default', 'jeo'); ?></button>
+						<button class="button cancel"><?php _e('Cancel', 'jeo'); ?></button>
+						<button class="button-primary save"><?php _e('Save', 'jeo'); ?></button>
 						<p class="console mouse">
-							<strong><?php _e('Mouse', 'mappress'); ?></strong>
+							<strong><?php _e('Mouse', 'jeo'); ?></strong>
 							<span class="x-console">X: <span class="x">0</span></span>
 							<span class="y-console">Y: <span class="y">0</span></span>
 						</p>
 						<p class="console position">
-							<strong><?php _e('Point', 'mappress'); ?></strong>
+							<strong><?php _e('Point', 'jeo'); ?></strong>
 							<span class="x-console">X: <span class="x">0</span></span>
 							<span class="y-console">Y: <span class="y">0</span></span>
 						</p>
 					</div>
-					<small class="tip"><strong><?php _e('Tip:', 'mappress'); ?></strong> <?php _e('Use ARROWS to move the pointer, press ENTER to save or ESC to cancel.', 'mappress'); ?></small>
+					<small class="tip"><strong><?php _e('Tip:', 'jeo'); ?></strong> <?php _e('Use ARROWS to move the pointer, press ENTER to save or ESC to cancel.', 'jeo'); ?></small>
 				</div>
 				<div class="marker-icon-settings">
 					<div class="marker-icon-anchor marker-icon-setting">
-						<h4><?php _e('Icon anchor', 'mappress'); ?></h4>
-						<p><?php _e('Coordinates to correctly position the marker on the map', 'mappress'); ?></p>
+						<h4><?php _e('Icon anchor', 'jeo'); ?></h4>
+						<p><?php _e('Coordinates to correctly position the marker on the map', 'jeo'); ?></p>
 						<p>
 							<button class="button enable-point-edit" data-xinput="marker_icon_anchor_x" data-yinput="marker_icon_anchor_y" data-anchortype="icon"><?php _e('Find coordinates'); ?></button>
 						</p>
@@ -383,8 +383,8 @@ class MapPress_Marker_Icons {
 						</p>
 					</div>
 					<div class="marker-icon-popup-anchor marker-icon-setting">
-						<h4><?php _e('Popup anchor', 'mappress'); ?></h4>
-						<p><?php _e('Coordinates to correctly position the marker\'s popup', 'mappress'); ?></p>
+						<h4><?php _e('Popup anchor', 'jeo'); ?></h4>
+						<p><?php _e('Coordinates to correctly position the marker\'s popup', 'jeo'); ?></p>
 						<p>
 							<button class="button enable-point-edit" data-xinput="marker_icon_popup_anchor_x" data-yinput="marker_icon_popup_anchor_y" data-anchortype="popup"><?php _e('Find coordinates'); ?></button>
 						</p>
@@ -436,7 +436,7 @@ class MapPress_Marker_Icons {
 		}
 	}
 	function save_marker_image_error_notice() {
-		echo '<div class="error"><p>' . __('Could not save image file', 'mappress') . '</p></div>';
+		echo '<div class="error"><p>' . __('Could not save image file', 'jeo') . '</p></div>';
 	}
 
 	/*
@@ -450,7 +450,7 @@ class MapPress_Marker_Icons {
 	 */
 
 	function connected_taxonomies() {
-		$this->connected_taxonomies = apply_filters('mappress_marker_taxonomies', array('category', 'post_tag'));
+		$this->connected_taxonomies = apply_filters('jeo_marker_taxonomies', array('category', 'post_tag'));
 		return $this->connected_taxonomies;
 	}
 
@@ -471,21 +471,21 @@ class MapPress_Marker_Icons {
 		?>
 		<tr class="form-field">
 			<th scope="row" valign="top">
-				<label for="marker_id"><?php _e('Marker', 'mappress'); ?></label>
+				<label for="marker_id"><?php _e('Marker', 'jeo'); ?></label>
 			</th>
 			<td>
 				<?php
 				$markers = $this->get_markers();
 				if($markers) : ?>
 					<select name="term_meta[marker_id]" id="marker_id">
-						<option value=""><?php _e('Default', 'mappress'); ?></option>
+						<option value=""><?php _e('Default', 'jeo'); ?></option>
 						<?php foreach($markers as $marker) : ?>
 							<option value="<?php echo $marker->ID; ?>" <?php if($term_marker_id == $marker->ID) echo 'selected'; ?>><?php echo apply_filters('post_title', $marker->post_title); ?></option>
 						<?php endforeach; ?>
-					</select> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create a new marker', 'mappress'); ?></a><br />
-					<span class="description"><?php _e('Select a marker', 'mappress'); ?></span>
+					</select> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create a new marker', 'jeo'); ?></a><br />
+					<span class="description"><?php _e('Select a marker', 'jeo'); ?></span>
 				<?php else : ?>
-					<span class="description"><?php _e('You don\'t have custom markers yet.', 'mappress'); ?> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create your first here!', 'mappress'); ?></a></span>
+					<span class="description"><?php _e('You don\'t have custom markers yet.', 'jeo'); ?> <a href="post-new.php?post_type=<?php echo $this->post_type; ?>" target="_blank"><?php _e('Create your first here!', 'jeo'); ?></a></span>
 				<?php endif; ?>
 			</td>
 		</tr>
@@ -510,7 +510,7 @@ class MapPress_Marker_Icons {
 		switch($column_name) {
 			case 'marker' :
 				$term_meta = get_option("taxonomy_term_$term_id");
-				$default_marker = get_option('mappress_default_marker_id');
+				$default_marker = get_option('jeo_default_marker_id');
 				if($term_meta && $term_meta['marker_id']) {
 					$marker_id = $term_meta['marker_id'];
 				} else {
@@ -520,7 +520,7 @@ class MapPress_Marker_Icons {
 				if($image)
 					echo '<img src="' . $image . '" />';
 				if($default_marker == $marker_id)
-					echo '(' . __('default', 'mappress') . ')';
+					echo '(' . __('default', 'jeo') . ')';
 				break;
 			default:
 		}
@@ -531,7 +531,7 @@ class MapPress_Marker_Icons {
 	 */
 
 	function connected_post_types() {
-		$this->connected_post_types = mappress_get_mapped_post_types();
+		$this->connected_post_types = jeo_get_mapped_post_types();
 		return $this->connected_post_types;
 	}
 
@@ -542,7 +542,7 @@ class MapPress_Marker_Icons {
 	}
 
 	function relationship_init_meta_box() {
-		wp_enqueue_style('mappress-markericons', get_template_directory_uri() . '/inc/markericons/markericons.css');
+		wp_enqueue_style('jeo-markericons', get_template_directory_uri() . '/inc/markericons/markericons.css');
 	}
 
 	function relationship_add_meta_box() {
@@ -552,8 +552,8 @@ class MapPress_Marker_Icons {
 		$post_types = $this->connected_post_types();
 		foreach($post_types as $post_type) {
 			add_meta_box(
-				'mappress_markericon_relationship',
-				__('Custom marker', 'mappress'),
+				'jeo_markericon_relationship',
+				__('Custom marker', 'jeo'),
 				array($this, 'relationship_inner_meta_box'),
 				$post_type,
 				'advanced',
@@ -571,7 +571,7 @@ class MapPress_Marker_Icons {
 			<?php if($markers) : ?>
 				<ul id="markers-list" class="clearfix">
 					<li>
-						<label for="marker_0"><strong><?php _e('Auto', 'mappress'); ?></strong></label>
+						<label for="marker_0"><strong><?php _e('Auto', 'jeo'); ?></strong></label>
 						<input type="radio" name="marker_id" id="marker_0" value="0" <?php if(!$post_marker_id) echo 'checked'; ?> />
 					</li>
 					<?php foreach($markers as $marker) : ?>
@@ -603,10 +603,10 @@ class MapPress_Marker_Icons {
 	}
 
 	/*
-	 * Send filter to mappress markers
+	 * Send filter to jeo markers
 	 */
 	function setup_post_marker_icon() {
-		add_filter('mappress_marker_icon', array($this, 'post_marker_icon'), 1, 2);
+		add_filter('jeo_marker_icon', array($this, 'post_marker_icon'), 1, 2);
 	}
 
 	function post_marker_icon($marker, $post) {
@@ -615,53 +615,53 @@ class MapPress_Marker_Icons {
 
 }
 
-$mappress_marker_icons = new MapPress_Marker_Icons();
+$jeo_marker_icons = new JEO_Marker_Icons();
 
 /*
  * Marker icons functions api
  */
 
-function mappress_get_markers() {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_markers();
+function jeo_get_markers() {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_markers();
 }
 
-function mappress_get_marker($marker_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker($marker_id);
+function jeo_get_marker($marker_id) {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_marker($marker_id);
 }
 
-function mappress_get_marker_image_url($marker_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker_image_url($marker_id);
+function jeo_get_marker_image_url($marker_id) {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_marker_image_url($marker_id);
 }
 
-function mappress_get_marker_formatted($marker_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker_formatted($marker_id);
+function jeo_get_marker_formatted($marker_id) {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_marker_formatted($marker_id);
 }
 
-function mappress_get_term_marker_id($term_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_term_marker_id($term_id);
+function jeo_get_term_marker_id($term_id) {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_term_marker_id($term_id);
 }
 
-function mappress_get_post_marker_id($post_id) {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_post_marker_id($post_id);
+function jeo_get_post_marker_id($post_id) {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_post_marker_id($post_id);
 }
 
-function mappress_get_default_marker_id() {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_default_marker_id();
+function jeo_get_default_marker_id() {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_default_marker_id();
 }
 
-function mappress_get_default_marker() {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_default_marker();
+function jeo_get_default_marker() {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_default_marker();
 }
 
-function mappress_formatted_default_marker() {
-	global $mappress_marker_icons;
-	return $mappress_marker_icons->get_marker_formatted();
+function jeo_formatted_default_marker() {
+	global $jeo_marker_icons;
+	return $jeo_marker_icons->get_marker_formatted();
 }

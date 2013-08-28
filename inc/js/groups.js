@@ -2,11 +2,11 @@ var groups = {};
 
 (function($) {
 
-	mappress.group = function(conf) {
+	jeo.group = function(conf) {
 
 		var group = {};
 
-		var fragment = mappress.fragment();
+		var fragment = jeo.fragment();
 
 		var _init = function() {
 
@@ -17,7 +17,7 @@ var groups = {};
 				return group.build(conf);
 			}
 
-			$.getJSON(mappress_groups.ajaxurl,
+			$.getJSON(jeo_groups.ajaxurl,
 				{
 					action: 'mapgroup_data',
 					group_id: conf.postID
@@ -53,10 +53,10 @@ var groups = {};
 			if(fragment.get('map'))
 				firstMapID = fragment.get('map');
 
-			group.conf = _.extend(data, mappress.parseConf(group.mapsData[firstMapID]));
+			group.conf = _.extend(data, jeo.parseConf(group.mapsData[firstMapID]));
 			delete group.conf.postID;
 
-			// set mappress conf containerID to group id
+			// set jeo conf containerID to group id
 			group.conf.containerID = group.containerID;
 
 			// force main map
@@ -66,11 +66,11 @@ var groups = {};
 			group.currentMapID = firstMapID;
 
 			// build group
-			group.map = mappress(group.conf);
+			group.map = jeo(group.conf);
 			group.map.isGroup = true;
 			group.map.currentMapID = firstMapID;
 
-			if(mappress.fragmentEnabled)
+			if(jeo.fragmentEnabled)
 				fragment.set({'map': firstMapID});
 
 			group.updateUI();
@@ -95,7 +95,7 @@ var groups = {};
 				return false;
 			});
 
-			mappress.runCallbacks('groupReady', [group]);
+			jeo.runCallbacks('groupReady', [group]);
 
 		}
 
@@ -124,8 +124,8 @@ var groups = {};
 			var prevConf = prevMap.conf;
 
 			// prepare new conf and layers
-			var conf = mappress.parseConf(group.mapsData[mapID]);
-			var layers = mappress.loadLayers(group.map, mappress.parseLayers(conf.layers));
+			var conf = jeo.parseConf(group.mapsData[mapID]);
+			var layers = jeo.loadLayers(group.map, jeo.parseLayers(conf.layers));
 
 			// store new conf
 			group.map.conf = conf;
@@ -134,7 +134,7 @@ var groups = {};
 			group.currentMapID = mapID;
 			group.map.currentMapID = mapID;
 
-			var fragmentEnabled = mappress.fragmentEnabled;
+			var fragmentEnabled = jeo.fragmentEnabled;
 			if(fragmentEnabled)
 				fragment.set({'map': mapID});
 
@@ -145,7 +145,7 @@ var groups = {};
 				group.map.geocode.removeFrom(group.map);
 
 			if(group.map.conf.geocode)
-				group.map.addControl(new mappress.geocode());
+				group.map.addControl(new jeo.geocode());
 
 
 			/*
@@ -155,7 +155,7 @@ var groups = {};
 				group.map.filterLayers.removeFrom(group.map);
 
 			if(group.map.conf.filteringLayers)
-				group.map.addControl(new mappress.filterLayers());
+				group.map.addControl(new jeo.filterLayers());
 
 			console.log(prevMap);
 
@@ -177,11 +177,11 @@ var groups = {};
 				group.map.legendControl.addLegend(conf.legend);
 
 			if(conf.legend_full)
-				mappress.enableDetails(group.map, conf.legend, conf.legend_full);
+				jeo.enableDetails(group.map, conf.legend, conf.legend_full);
 
 
 			// callbacks
-			mappress.runCallbacks('groupChanged', [mapID, group]);
+			jeo.runCallbacks('groupChanged', [mapID, group]);
 
 		}
 
@@ -189,7 +189,7 @@ var groups = {};
 		return group;
 	}
 
-	mappress.createCallback('groupReady');
-	mappress.createCallback('groupChanged');
+	jeo.createCallback('groupReady');
+	jeo.createCallback('groupChanged');
 
 })(jQuery);

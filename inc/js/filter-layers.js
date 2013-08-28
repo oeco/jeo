@@ -1,6 +1,6 @@
 (function($) {
 
-	mappress.filterLayers = L.Control.extend({
+	jeo.filterLayers = L.Control.extend({
 
 		options: {
 			position: 'bottomleft'
@@ -14,7 +14,7 @@
 
 			this._map.filterLayers = this;
 
-			this._container = L.DomUtil.create('div', 'mappress-filter-layers');
+			this._container = L.DomUtil.create('div', 'jeo-filter-layers');
 
 			this._$ = $(this._container);
 
@@ -169,7 +169,7 @@
 		_update: function() {
 
 			this._map.$.find('.map-tooltip').hide();
-			mappress.loadLayers(this._map, mappress.parseLayers(this._getActiveLayers()));
+			jeo.loadLayers(this._map, jeo.parseLayers(this._getActiveLayers()));
 
 		},
 

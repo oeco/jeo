@@ -1,40 +1,40 @@
 <?php
 
 /*
- * Mappress
+ * JEO
  * UI stuff
  */
 
-function mappress_find_post_on_map_button($zoom = null, $text = false, $post_id = false) {
+function jeo_find_post_on_map_button($zoom = null, $text = false, $post_id = false) {
 
-	if(!mappress_has_main_map())
+	if(!jeo_has_main_map())
 		return false;
 
 	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 
-	$text = $text ? $text : __('Locate on map', 'mappress');
+	$text = $text ? $text : __('Locate on map', 'jeo');
 
-	$geometry = mappress_element_geometry_data($post_id);
+	$geometry = jeo_element_geometry_data($post_id);
 
 	if(!$geometry)
 		return false;
 
 	if(!$zoom) {
-		$map_data = mappress_get_map_data();
+		$map_data = jeo_get_map_data();
 		$zoom = $map_data['max_zoom'];
 	}
 	
 	$zoom_attr = 'data-zoom="' . $zoom . '"';
 
-	return apply_filters('mappress_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">&#xE056;</span> ' . $text . '</a>');
+	return apply_filters('jeo_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">&#xE056;</span> ' . $text . '</a>');
 }
 
-function mappress_element_geometry_data($post_id = false) {
+function jeo_element_geometry_data($post_id = false) {
 	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 
-	$coords = mappress_get_marker_coordinates($post_id);
+	$coords = jeo_get_marker_coordinates($post_id);
 	$lon = $coords[0];
 	$lat = $coords[1];
 
@@ -44,10 +44,10 @@ function mappress_element_geometry_data($post_id = false) {
 	return 'data-lat="' . $coords[1] . '"" data-lon="' . $coords[0] . '"';
 }
 
-function mappress_element_max_zoom($post_id = false) {
-	global $mappress_map;
+function jeo_element_max_zoom($post_id = false) {
+	global $jeo_map;
 
-	$map_data = mappress_get_map_data();
+	$map_data = jeo_get_map_data();
 
 	$zoom = $map_data['max_zoom'] ? $map_data['max_zoom'] : 18;
 

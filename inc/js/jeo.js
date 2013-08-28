@@ -1,30 +1,30 @@
-var mappress = {};
+var jeo = {};
 
 (function($) {
 
-	mappress = function(conf, callback) {
+	jeo = function(conf, callback) {
 
 		var _init = function() {
 			if(conf.mainMap)
 				$('body').addClass('loading-map');
 
 			if(conf.admin) { // is admin panel
-				return mappress.build(conf, callback);
+				return jeo.build(conf, callback);
 			}
 
 			if(conf.dataReady || !conf.postID) { // data ready
-				return mappress.build(conf, callback);
+				return jeo.build(conf, callback);
 			}
 
-			return $.getJSON(mappress_localization.ajaxurl,
+			return $.getJSON(jeo_localization.ajaxurl,
 				{
 					action: 'map_data',
 					map_id: conf.postID
 				},
 				function(map_data) {
-					mapConf = mappress.parseConf(map_data);
+					mapConf = jeo.parseConf(map_data);
 					mapConf = _.extend(mapConf, conf);
-					return mappress.build(mapConf, callback);
+					return jeo.build(mapConf, callback);
 				});
 		}
 
@@ -36,9 +36,9 @@ var mappress = {};
 		
 	};
 
-	mappress.maps = {};
+	jeo.maps = {};
 
-	mappress.build = function(conf, callback) {
+	jeo.build = function(conf, callback) {
 		
 		/*
 		 * Map settings
@@ -80,7 +80,7 @@ var mappress = {};
 			map = L.map(map_id, options);
 
 		if(conf.mainMap)
-			mappress.map = map;
+			jeo.map = map;
 
 		/*
 		 * DOM settings
@@ -103,7 +103,7 @@ var mappress = {};
 			map.postID = conf.postID;
 
 		// layers
-		mappress.loadLayers(map, mappress.parseLayers(conf.layers));
+		jeo.loadLayers(map, jeo.parseLayers(conf.layers));
 
 		// set bounds
 		if(conf.fitBounds instanceof L.LatLngBounds)
@@ -123,24 +123,24 @@ var mappress = {};
 			map.legendControl.addLegend(conf.legend);
 		}
 		if(conf.legend_full)
-			mappress.enableDetails(map, conf.legend, conf.legend_full);
+			jeo.enableDetails(map, conf.legend, conf.legend_full);
 
 		/*
 		 * Fullscreen
 		 */
-		map.addControl(new mappress.fullscreen());
+		map.addControl(new jeo.fullscreen());
 
 		/*
 		 * Geocode
 		 */
 		if(map.conf.geocode)
-			map.addControl(new mappress.geocode());
+			map.addControl(new jeo.geocode());
 
 		/*
 		 * Filter layers
 		 */
 		if(map.conf.filteringLayers)
-			map.addControl(new mappress.filterLayers());
+			map.addControl(new jeo.filterLayers());
 
 		/*
 		 * CALLBACKS
@@ -151,7 +151,7 @@ var mappress = {};
 			conf.callbacks(map);
 
 		// map is ready, do callbacks
-		mappress.runCallbacks('mapReady', [map]);
+		jeo.runCallbacks('mapReady', [map]);
 
 		if(typeof callback === 'function')
 			callback(map);
@@ -163,7 +163,7 @@ var mappress = {};
 	 * Utils
 	 */
 
-	mappress.parseLayers = function(layers) {
+	jeo.parseLayers = function(layers) {
 
 		var parsedLayers = [];
 
@@ -212,7 +212,7 @@ var mappress = {};
 		return layers;
 	};
 
-	mappress.loadLayers = function(map, parsedLayers) {
+	jeo.loadLayers = function(map, parsedLayers) {
 
 		if(map.coreLayers)
 			map.coreLayers.clearLayers();
@@ -232,7 +232,7 @@ var mappress = {};
 		return map.coreLayers;
 	}
 
-	mappress.parseConf = function(conf) {
+	jeo.parseConf = function(conf) {
 
 		var newConf = {};
 
@@ -305,12 +305,12 @@ var mappress = {};
 	/*
 	 * Legend page (map details)
 	 */
-	mappress.enableDetails = function(map, legend, full) {
+	jeo.enableDetails = function(map, legend, full) {
 		if(typeof legend === 'undefined')
 			legend = '';
 
 		map.legendControl.removeLegend(legend);
-		map.conf.legend_full_content = legend + '<span class="map-details-link">' + mappress_localization.more_label + '</span>';
+		map.conf.legend_full_content = legend + '<span class="map-details-link">' + jeo_localization.more_label + '</span>';
 		map.legendControl.addLegend(map.conf.legend_full_content);
 
 		var isContentMap = map.$.parents('.content-map').length;
@@ -334,7 +334,7 @@ var mappress = {};
 	/*
 	 * Custom fullscreen
 	 */
-	mappress.fullscreen = function(map) {
+	jeo.fullscreen = function(map) {
 
 		if(map.$.parents('.content-map').length)
 			var container = map.$.parents('.content-map');
@@ -357,21 +357,21 @@ var mappress = {};
 	 * Callback manager
 	 */
 
-	mappress.callbacks = {};
+	jeo.callbacks = {};
 
-	mappress.createCallback = function(name) {
-		mappress.callbacks[name] = [];
-		mappress[name] = function(callback) {
-			mappress.callbacks[name].push(callback);
+	jeo.createCallback = function(name) {
+		jeo.callbacks[name] = [];
+		jeo[name] = function(callback) {
+			jeo.callbacks[name].push(callback);
 		}
 	}
 
-	mappress.runCallbacks = function(name, args) {
-		if(!mappress.callbacks[name]) {
-			console.log('A MapPress callback tried to run, but wasn\'t initialized');
+	jeo.runCallbacks = function(name, args) {
+		if(!jeo.callbacks[name]) {
+			console.log('A JEO callback tried to run, but wasn\'t initialized');
 			return false;
 		}
-		if(!mappress.callbacks[name].length)
+		if(!jeo.callbacks[name].length)
 			return false;
 
 		var _run = function(callbacks) {
@@ -382,10 +382,10 @@ var mappress = {};
 				});
 			}
 		}
-		_run(mappress.callbacks[name]);
+		_run(jeo.callbacks[name]);
 	}
 
-	mappress.createCallback('mapReady');
-	mappress.createCallback('layersReady');
+	jeo.createCallback('mapReady');
+	jeo.createCallback('layersReady');
 
 })(jQuery);

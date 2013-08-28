@@ -4,13 +4,13 @@
 	<header class="single-post-header">
 		<div class="container">
 			<div class="twelve columns">
-				<h1><?php _e('404 - Page not found', 'mappress'); ?></h1>
+				<h1><?php _e('404 - Page not found', 'jeo'); ?></h1>
 			</div>
 		</div>
 	</header>
 	<div class="container">
 		<div class="eight columns">
-			<p><?php _e('Trying searching:', 'mappress'); ?></p>
+			<p><?php _e('Trying searching:', 'jeo'); ?></p>
 			<?php get_search_form(); ?>
 		</div>
 		<div class="three columns offset-by-one">

@@ -1,6 +1,6 @@
 <?php
 
-class MapPress_StreetView extends MapPress_Markers {
+class JEO_StreetView extends JEO_Markers {
 
 	function __construct() {
 		add_action('init', array($this, 'setup'));
@@ -8,18 +8,18 @@ class MapPress_StreetView extends MapPress_Markers {
 
 	function setup() {
 
-		if(mappress_get_geocode_service() !== 'gmaps' || !mappress_get_gmaps_api_key())
+		if(jeo_get_geocode_service() !== 'gmaps' || !jeo_get_gmaps_api_key())
 			return false;
 
 		add_action('admin_footer', array($this, 'scripts'));
-		add_action('mappress_geocode_scripts', array($this, 'scripts'));
-		add_action('mappress_geocode_box', array($this, 'editor'));
-		add_action('mappress_geocode_box_save', array($this, 'save'));
-		add_action('mappress_map', array($this, 'apply'));
+		add_action('jeo_geocode_scripts', array($this, 'scripts'));
+		add_action('jeo_geocode_box', array($this, 'editor'));
+		add_action('jeo_geocode_box_save', array($this, 'save'));
+		add_action('jeo_map', array($this, 'apply'));
 	}
 
 	function scripts() {
-		wp_enqueue_script('mappress-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'mappress.geocode.box'), '0.5');
+		wp_enqueue_script('jeo-streetview', get_template_directory_uri() . '/inc/js/streetview.js', array('google-maps-api', 'jquery', 'jeo.geocode.box'), '0.5');
 	}
 
 	function editor($post = false) {
@@ -31,10 +31,10 @@ class MapPress_StreetView extends MapPress_Markers {
 			$heading = $this->get_heading();
 		}
 		?>
-		<div id="mappress_streetview">
+		<div id="jeo_streetview">
 			<p class="streetview-toggler">
 				<input type="checkbox" name="enable_streetview" id="enable_streetview" <?php if($streetview) echo 'checked'; ?> />
-				<label for="enable_streetview"><?php _e('Use Google Street View', 'mappress'); ?></label>
+				<label for="enable_streetview"><?php _e('Use Google Street View', 'jeo'); ?></label>
 			</p>
 			<div id="streetview_canvas" style="width:60%;height:400px;float:left;"></div>
 			<input type="hidden" name="streetview_pitch" id="streetview_pitch" value="<?php echo $pitch; ?>" />
@@ -63,7 +63,7 @@ class MapPress_StreetView extends MapPress_Markers {
 			<div id="streetview_canvas" class="streetview">
 			</div>
 			<script type="text/javascript">
-				new mappress.streetview({
+				new jeo.streetview({
 					containerID: 'streetview_canvas',
 					lat: <?php echo $this->get_latitude(); ?>,
 					lng: <?php echo $this->get_longitude(); ?>,
@@ -98,10 +98,10 @@ class MapPress_StreetView extends MapPress_Markers {
 	}
 }
 
-$streetview = new MapPress_StreetView;
+$jeo_streetview = new JEO_StreetView;
 
-function mappress_is_streetview($post_id = false) {
-	global $streetview;
-	return $streetview->is_streetview($post_id);
+function jeo_is_streetview($post_id = false) {
+	global $jeo_streetview;
+	return $jeo_streetview->is_streetview($post_id);
 }
 ?>

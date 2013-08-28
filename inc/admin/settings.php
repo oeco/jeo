@@ -3,26 +3,26 @@
 if ( !class_exists( 'Admin_Page_Framework' ) ) 
 	include_once( TEMPLATEPATH . '/inc/admin/admin-page-framework.php' );
 
-class MapPress_Settings_Page extends Admin_Page_Framework {
+class JEO_Settings_Page extends Admin_Page_Framework {
 
 	function SetUp() {
 					
-		$this->SetRootMenu(__('MapPress', 'mappress'));	
+		$this->SetRootMenu(__('JEO', 'jeo'));	
 		
 		$this->AddSubMenu(
-			'MapPress Settings',
-			'mappress_settings'
+			'JEO Settings',
+			'jeo_settings'
 		);
 
 		$this->ShowPageHeadingTabs(false);
 		
 		// Add in-page tabs in the first page.			
 		$this->AddInPageTabs(
-			'mappress_settings',	
+			'jeo_settings',	
 			array(	// slug => title
-				'home'		=> __('Front page', 'mappress'),
-				'map'		=> __('Maps', 'mappress'),
-				'geocode'	=> __('Geocode', 'mappress')
+				'home'		=> __('Front page', 'jeo'),
+				'map'		=> __('Maps', 'jeo'),
+				'geocode'	=> __('Geocode', 'jeo')
 			) 
 		);
 
@@ -38,10 +38,10 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 				$maps_input[$map->ID] = $map->post_title . ' (' . get_post_type($map->ID) . ')';
 			}
 		} else {
-			$maps_input[0] = __('No maps were found', 'mappress');
+			$maps_input[0] = __('No maps were found', 'jeo');
 		}
 
-		$mapped = mappress_get_mapped_post_types();
+		$mapped = jeo_get_mapped_post_types();
 
 		$mapped_post_types = array();
 		foreach($mapped as $post_type) {
@@ -65,25 +65,25 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 			// Section Arrays - numerically indexed.
 			array(
 				array(  
-					'pageslug' => 'mappress_settings',
+					'pageslug' => 'jeo_settings',
 					'tabslug' => 'home',
 					'id' => 'front_page', 
-					'title' => __('Front page settings', 'mappress'),
-					'description' => __('Set your front page contents.', 'mappress'),
+					'title' => __('Front page settings', 'jeo'),
+					'description' => __('Set your front page contents.', 'jeo'),
 					'fields' => array(	// Field Arrays
 						// Dropdown List
 						array(
 							'id' => 'front_page_map',
-							'title' => __('Front page map', 'mappress'),
-							'description' => __('Select if the front page map should be the featured map with latest content or a selection of featured posts.', 'mappress'),
+							'title' => __('Front page map', 'jeo'),
+							'description' => __('Select if the front page map should be the featured map with latest content or a selection of featured posts.', 'jeo'),
 							'type' => 'radio',
 							'default' => 'latest',
-							'label' => array('latest' => __('Featured map with latest posts', 'mappress'), 'featured' => __('Selection of featured posts') . ' <strong>(' . __('featured map cannot be a map-group', 'mappress') . ')</strong>')
+							'label' => array('latest' => __('Featured map with latest posts', 'jeo'), 'featured' => __('Selection of featured posts') . ' <strong>(' . __('featured map cannot be a map-group', 'jeo') . ')</strong>')
 						),
 						array(  
 							'id' => 'featured_map',
-							'title' => __('Featured map', 'mappress'),
-							'description' => __('Select the map to be featured on the homepage and posts.', 'mappress'),
+							'title' => __('Featured map', 'jeo'),
+							'description' => __('Select the map to be featured on the homepage and posts.', 'jeo'),
 							'type' => 'select',
 							'default' => 0,
 							'label' => $maps_input
@@ -91,72 +91,72 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 					)
 				),
 				array(  
-					'pageslug' => 'mappress_settings',
+					'pageslug' => 'jeo_settings',
 					'tabslug' => 'geocode',
 					'id' => 'geocode', 
-					'title' => __('Geocode settings', 'mappress'),
+					'title' => __('Geocode settings', 'jeo'),
 					'description' => '',
 					'fields' => array(	// Field Arrays
 						// Text Field
 						array(  
 							'id' => 'type', 
-							'title' => __('Geocode type', 'mappress'),
-							'description' => __('Choose simple latitude/longitude inputs or complete address lookup geocoding system', 'mappress'),	// additional notes besides the form field
+							'title' => __('Geocode type', 'jeo'),
+							'description' => __('Choose simple latitude/longitude inputs or complete address lookup geocoding system', 'jeo'),	// additional notes besides the form field
 							'type' => 'radio',
 							'default' => 'default',
-							'label' => array('default' => __('Address geocoding with interactive map (default)', 'mappress'), 'latlng' => __('Latitude/longitude inputs', 'mappress')) 
+							'label' => array('default' => __('Address geocoding with interactive map (default)', 'jeo'), 'latlng' => __('Latitude/longitude inputs', 'jeo')) 
 						),
 						array(
 							'id' => 'service',
-							'title' => __('Geocode service', 'mappress'),
-							'description' => __('Choose the geocoding service to be used', 'mappress'),
+							'title' => __('Geocode service', 'jeo'),
+							'description' => __('Choose the geocoding service to be used', 'jeo'),
 							'type' => 'radio',
 							'default' => 'osm',
-							'label' => array('osm' => __('OpenStreetMaps with Nominatim', 'mappress'), 'gmaps' => __('Google Maps'))
+							'label' => array('osm' => __('OpenStreetMaps with Nominatim', 'jeo'), 'gmaps' => __('Google Maps'))
 						),
 						array(
 							'id' => 'gmaps_api_key',
-							'title' => __('Google Maps API Key', 'mappress'),
-							'description' => sprintf(__('Key to use the Google Maps geocoding services. <a href="%s" target="_blank">Click here to get one.</a>', 'mappress'), 'https://developers.google.com/maps/documentation/javascript/tutorial#api_key'),
+							'title' => __('Google Maps API Key', 'jeo'),
+							'description' => sprintf(__('Key to use the Google Maps geocoding services. <a href="%s" target="_blank">Click here to get one.</a>', 'jeo'), 'https://developers.google.com/maps/documentation/javascript/tutorial#api_key'),
 							'type' => 'text',
 							'size' => 100
 						)
 					)
 				),
 				array(  
-					'pageslug' => 'mappress_settings',
+					'pageslug' => 'jeo_settings',
 					'tabslug' => 'map',
 					'id' => 'map', 
-					'title' => __('Map behaviours', 'mappress'),
+					'title' => __('Map behaviours', 'jeo'),
 					'fields' => array(
 						array(  
 							'id' => 'use_hash', 
-							'title' => __('Fragment hash', 'mappress'),
-							'description' => __('Enable use of fragment hash url to share map location, selected maps on mapgroup and fullscreen state. <br/>E.g.: yoursite.com/#!/loc=-23,-42,7&map=12&full=true', 'mappress'),
+							'title' => __('Fragment hash', 'jeo'),
+							'description' => __('Enable use of fragment hash url to share map location, selected maps on mapgroup and fullscreen state. <br/>E.g.: yoursite.com/#!/loc=-23,-42,7&map=12&full=true', 'jeo'),
 							'type' => 'checkbox',
 							'default' => true,
-							'label' => __('Enable', 'mappress') 
+							'label' => __('Enable', 'jeo') 
 						),
 						array(
 							'id' => 'enable_clustering',
-							'title' => __('Enable marker clustering', 'mappress'),
-							'description' => __('Enable marker clustering system.', 'mappress'),
+							'title' => __('Enable marker clustering', 'jeo'),
+							'description' => __('Enable marker clustering system.', 'jeo'),
 							'type' => 'checkbox',
 							'default' => true,
-							'label' => __('Enable', 'mappress')
+							'label' => __('Enable', 'jeo')
 						),
 						array(  
 							'id' => 'use_map_query',
-							'title' => __('Map query', 'mappress'),
-							'description' => __('Display posts only associated to the viewing map', 'mappress'),
+							'title' => __('Map query', 'jeo'),
+							'description' => __('Display posts only associated to the viewing map', 'jeo'),
 							'type' => 'checkbox',
 							'default' => true,
-							'label' => __('Enable', 'mappress')
+							'label' => __('Enable', 'jeo')
 						),	
 						array(  
 							'id' => 'mapped_post_types',
-							'title' => __('Mapped post types', 'mappress'),
-							'description' => __('Post types to enable map functionalities', 'mappress'),
+							'title' => __('Mapped post types', 'jeo'),
+							'description' => __('Post types to enable map functionalities', 'jeo'),
 							'type' => 'checkbox',
 							'default' => $mapped_post_types,
 							'label' => $post_types
@@ -168,7 +168,7 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 
 	}
 
-	function do_mappress_settings() {
+	function do_jeo_settings() {
 
 		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'about' ) return;
 	
@@ -176,7 +176,7 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 
 	}
 	
-	function content_mappress_settings_about( $strContent ) {
+	function content_jeo_settings_about( $strContent ) {
 		
 		return $strContent . '<h3>Documentation</h3>'
 			. '<ul class="admin-page-framework">'
@@ -193,4 +193,4 @@ class MapPress_Settings_Page extends Admin_Page_Framework {
 	
 }
 
-new MapPress_Settings_Page('mappress_settings', __FILE__);
+new JEO_Settings_Page('jeo_settings', __FILE__);

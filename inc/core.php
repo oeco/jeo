@@ -1,10 +1,10 @@
 <?php
 
 /*
- * MapPress Core
+ * JEO Core
  */
 
-class MapPress {
+class JEO {
 
 	var $directory = '';
 
@@ -40,18 +40,18 @@ class MapPress {
 	}
 
 	function init() {
-		do_action('mappress_init');
+		do_action('jeo_init');
 	}
 
 	function setup_directories() {
-		$this->directory = apply_filters('mappress_directory', TEMPLATEPATH . '/inc');
-		$this->directory_uri = apply_filters('mappress_directory_uri', get_template_directory_uri());
+		$this->directory = apply_filters('jeo_directory', TEMPLATEPATH . '/inc');
+		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri());
 	}
 
 	function setup_options() {
-		$options = get_option('mappress_settings');
-		if($options && isset($options['mappress_settings'])) {
-			$this->options = $options['mappress_settings'];
+		$options = get_option('jeo_settings');
+		if($options && isset($options['jeo_settings'])) {
+			$this->options = $options['jeo_settings'];
 		} else {
 			$this->options = false;
 		}
@@ -86,37 +86,37 @@ class MapPress {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('mappress', get_template_directory_uri() . '/inc/js/mappress-1.0.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.4');
+		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.4');
 
-		wp_enqueue_script('mappress.groups', get_template_directory_uri() . '/inc/js/groups.js', array('mappress'), '0.2.3');
+		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.3');
 
-		wp_enqueue_script('mappress.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('mappress'), '0.0.5');
-		wp_enqueue_script('mappress.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('mappress'), '0.0.6');
-		wp_enqueue_script('mappress.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
-			.js', array('mappress'), '0.1.0');
-		wp_enqueue_script('mappress.ui', get_template_directory_uri() . '/inc/js/ui.js', array('mappress'), '0.0.9');
-		wp_enqueue_style('mappress', get_template_directory_uri() . '/inc/css/mappress.css', array(), '0.0.2');
+		wp_enqueue_script('jeo.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('jeo'), '0.0.5');
+		wp_enqueue_script('jeo.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('jeo'), '0.0.6');
+		wp_enqueue_script('jeo.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
+			.js', array('jeo'), '0.1.0');
+		wp_enqueue_script('jeo.ui', get_template_directory_uri() . '/inc/js/ui.js', array('jeo'), '0.0.9');
+		wp_enqueue_style('jeo', get_template_directory_uri() . '/inc/css/jeo.css', array(), '0.0.2');
 
-		wp_enqueue_script('mappress.hash', get_template_directory_uri() . '/inc/js/hash.js', array('mappress'), '0.0.6');
+		wp_enqueue_script('jeo.hash', get_template_directory_uri() . '/inc/js/hash.js', array('jeo'), '0.0.6');
 
-		wp_localize_script('mappress', 'mappress_localization', array(
+		wp_localize_script('jeo', 'jeo_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
-			'more_label' => __('More', 'mappress')
+			'more_label' => __('More', 'jeo')
 		));
 
-		wp_localize_script('mappress.geocode', 'mappress_labels', array(
-			'search_placeholder' => __('Find a location', 'mappress'),
-			'results_title' => __('Results', 'mappress'),
-			'clear_search' => __('Close search', 'mappress'),
-			'not_found' => __('Nothing found, try something else.', 'mappress')
+		wp_localize_script('jeo.geocode', 'jeo_labels', array(
+			'search_placeholder' => __('Find a location', 'jeo'),
+			'results_title' => __('Results', 'jeo'),
+			'clear_search' => __('Close search', 'jeo'),
+			'not_found' => __('Nothing found, try something else.', 'jeo')
 		));
 
-		wp_localize_script('mappress.groups', 'mappress_groups', array(
+		wp_localize_script('jeo.groups', 'jeo_groups', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
-			'more_label' => __('More', 'mappress')
+			'more_label' => __('More', 'jeo')
 		));
 
-		wp_localize_script('mappress.hash', 'mappress_hash', array(
+		wp_localize_script('jeo.hash', 'jeo_hash', array(
 			'enable' => $this->use_hash()
 		));
 	}
@@ -132,23 +132,23 @@ class MapPress {
 		 * Map
 		 */
 		$labels = array( 
-			'name' => __('Maps', 'mappress'),
-			'singular_name' => __('Map', 'mappress'),
-			'add_new' => __('Add new map', 'mappress'),
-			'add_new_item' => __('Add new map', 'mappress'),
-			'edit_item' => __('Edit map', 'mappress'),
-			'new_item' => __('New map', 'mappress'),
+			'name' => __('Maps', 'jeo'),
+			'singular_name' => __('Map', 'jeo'),
+			'add_new' => __('Add new map', 'jeo'),
+			'add_new_item' => __('Add new map', 'jeo'),
+			'edit_item' => __('Edit map', 'jeo'),
+			'new_item' => __('New map', 'jeo'),
 			'view_item' => __('View map'),
-			'search_items' => __('Search maps', 'mappress'),
-			'not_found' => __('No map found', 'mappress'),
-			'not_found_in_trash' => __('No map found in the trash', 'mappress'),
-			'menu_name' => __('Maps', 'mappress')
+			'search_items' => __('Search maps', 'jeo'),
+			'not_found' => __('No map found', 'jeo'),
+			'not_found_in_trash' => __('No map found in the trash', 'jeo'),
+			'menu_name' => __('Maps', 'jeo')
 		);
 
 		$args = array(
 			'labels' => $labels,
 			'hierarchical' => true,
-			'description' => __('MapPress Maps', 'mappress'),
+			'description' => __('JEO Maps', 'jeo'),
 			'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'page-attributes'),
 			'rewrite' => array('slug' => 'maps'),
 			'public' => true,
@@ -165,23 +165,23 @@ class MapPress {
 		 * Map group
 		 */
 		$labels = array( 
-			'name' => __('Map groups', 'mappress'),
-			'singular_name' => __('Map group', 'mappress'),
-			'add_new' => __('Add new map group', 'mappress'),
-			'add_new_item' => __('Add new map group', 'mappress'),
-			'edit_item' => __('Edit map group', 'mappress'),
-			'new_item' => __('New map group', 'mappress'),
-			'view_item' => __('View map group', 'mappress'),
-			'search_items' => __('Search map group', 'mappress'),
-			'not_found' => __('No map group found', 'mappress'),
-			'not_found_in_trash' => __('No map group found in the trash', 'mappress'),
-			'menu_name' => __('Map groups', 'mappress')
+			'name' => __('Map groups', 'jeo'),
+			'singular_name' => __('Map group', 'jeo'),
+			'add_new' => __('Add new map group', 'jeo'),
+			'add_new_item' => __('Add new map group', 'jeo'),
+			'edit_item' => __('Edit map group', 'jeo'),
+			'new_item' => __('New map group', 'jeo'),
+			'view_item' => __('View map group', 'jeo'),
+			'search_items' => __('Search map group', 'jeo'),
+			'not_found' => __('No map group found', 'jeo'),
+			'not_found_in_trash' => __('No map group found in the trash', 'jeo'),
+			'menu_name' => __('Map groups', 'jeo')
 		);
 
 		$args = array( 
 			'labels' => $labels,
 			'hierarchical' => true,
-			'description' => __('MapPress maps group', 'mappress'),
+			'description' => __('JEO Map Groups', 'jeo'),
 			'supports' => array( 'title'),
 			'public' => true,
 			'show_ui' => true,
@@ -195,8 +195,8 @@ class MapPress {
 	}
 
 	function admin_menu() {
-		add_submenu_page('edit.php?post_type=map', __('Map groups', 'mappress'), __('Map groups', 'mappress'), 'edit_posts', 'edit.php?post_type=map-group');
-		add_submenu_page('edit.php?post_type=map', __('Add new group', 'mappress'), __('Add new map group', 'mappress'), 'edit_posts', 'post-new.php?post_type=map-group');
+		add_submenu_page('edit.php?post_type=map', __('Map groups', 'jeo'), __('Map groups', 'jeo'), 'edit_posts', 'edit.php?post_type=map-group');
+		add_submenu_page('edit.php?post_type=map', __('Add new group', 'jeo'), __('Add new map group', 'jeo'), 'edit_posts', 'post-new.php?post_type=map-group');
 	}
 
 	function mapped_post_types() {
@@ -204,7 +204,7 @@ class MapPress {
 		$this->mapped_post_types = $custom + array('post');
 		unset($this->mapped_post_types['map']);
 		unset($this->mapped_post_types['map-group']);
-		return apply_filters('mappress_mapped_post_types', $this->mapped_post_types);
+		return apply_filters('jeo_mapped_post_types', $this->mapped_post_types);
 	}
 
 	function setup_query() {
@@ -221,7 +221,7 @@ class MapPress {
 			$use_query = $options['map']['use_map_query'];
 		else
 			$use_query = true;
-		return apply_filters('mappress_use_map_query', $use_query);
+		return apply_filters('jeo_use_map_query', $use_query);
 	}
 
 	function use_hash() {
@@ -230,7 +230,7 @@ class MapPress {
 			$use_hash = $options['map']['use_hash'] ? true : false;
 		else
 			$use_hash = true;
-		return apply_filters('mappress_use_hash', $use_hash);
+		return apply_filters('jeo_use_hash', $use_hash);
 	}
 
 	function query_vars($vars) {
@@ -300,9 +300,9 @@ class MapPress {
 			$groupby = " {$wpdb->posts}.ID ";
 
 		// hooks
-		$join = apply_filters('mappress_posts_clauses_join', $join, $clauses, $query);
-		$where = apply_filters('mappress_posts_clauses_where', $where, $clauses, $query);
-		$groupby = apply_filters('mappress_posts_clauses_groupby', $groupby, $clauses, $query);
+		$join = apply_filters('jeo_posts_clauses_join', $join, $clauses, $query);
+		$where = apply_filters('jeo_posts_clauses_where', $where, $clauses, $query);
+		$groupby = apply_filters('jeo_posts_clauses_groupby', $groupby, $clauses, $query);
 
 		$clauses['join'] .= $join;
 		$clauses['where'] .= $where;
@@ -355,7 +355,7 @@ class MapPress {
 		if($query->get('map')) {
 			if(isset($_GET['s']))
 				$query->set('s', null);
-			do_action('mappress_pre_get_map', $query);
+			do_action('jeo_pre_get_map', $query);
 		}
 	}
 
@@ -368,7 +368,7 @@ class MapPress {
 	}
 
 	function featured_map_type() {
-		return apply_filters('mappress_featured_map_type', array('map', 'map-group'));
+		return apply_filters('jeo_featured_map_type', array('map', 'map-group'));
 	}
 
 	function featured($post_type = false) {
@@ -411,7 +411,7 @@ class MapPress {
 
 		global $post;
 		if(is_single()) {
-			if(!$this->is_map() && !mappress_has_marker_location() && !$force) {
+			if(!$this->is_map() && !jeo_has_marker_location() && !$force) {
 				return;
 			} else {
 				$single_post_maps_id = get_post_meta($post->ID, 'maps');
@@ -425,9 +425,9 @@ class MapPress {
 		else
 			$map_id = $this->map->ID;
 
-		if($main_map) add_filter('mappress_map_conf', array($this, 'set_main'));
+		if($main_map) add_filter('jeo_map_conf', array($this, 'set_main'));
 		get_template_part('content', get_post_type($map_id));
-		if($main_map) remove_filter('mappress_map_conf', array($this, 'set_main'));
+		if($main_map) remove_filter('jeo_map_conf', array($this, 'set_main'));
 
 		$map_js_id = 'map_' . $map_id . '_' . $this->map_count;
 
@@ -448,8 +448,8 @@ class MapPress {
 	function create_map_message() {
 		?>
 		<div id="first-map-message">
-			<h2><?php _e('You haven\'t created any maps!', 'mappress'); ?></h2>
-			<h3><a href="<?php echo admin_url('/post-new.php?post_type=map'); ?>"><?php _e('Click here to create your first', 'mappress'); ?></a></h3>
+			<h2><?php _e('You haven\'t created any maps!', 'jeo'); ?></h2>
+			<h3><a href="<?php echo admin_url('/post-new.php?post_type=map'); ?>"><?php _e('Click here to create your first', 'jeo'); ?></a></h3>
 		</div>
 		<?php
 	}
@@ -475,7 +475,7 @@ class MapPress {
 			$conf['disableHash'] = true;
 			$conf['disableInteraction'] = true;
 		}
-		return apply_filters('mappress_map_conf', $conf, $this->map, $post);
+		return apply_filters('jeo_map_conf', $conf, $this->map, $post);
 	}
 
 	function mapgroup_conf() {
@@ -493,7 +493,7 @@ class MapPress {
 			$conf['disableHash'] = true;
 			$conf['disableInteraction'] = true;
 		}
-		return apply_filters('mappress_mapgroup_conf', $conf, $this->map, $post);
+		return apply_filters('jeo_mapgroup_conf', $conf, $this->map, $post);
 	}
 
 	function get_map_data($map_id = false) {
@@ -510,7 +510,7 @@ class MapPress {
 		if($post->post_content)
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', $post->post_content);
 		wp_reset_postdata();
-		return apply_filters('mappress_map_data', $data, $post);
+		return apply_filters('jeo_map_data', $data, $post);
 	}
 
 	function get_map_layers($map_id = false) {
@@ -585,12 +585,12 @@ class MapPress {
 			$data['maps'][$map_id] = $map;
 			$data['maps'][$map_id] += $this->get_map_data($map['id']);
 		}
-		return apply_filters('mappress_mapgroup_data', $data, $post);
+		return apply_filters('jeo_mapgroup_data', $data, $post);
 	}
 
 	function get_map_legend($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
-		return apply_filters('mappress_map_legend', get_post_meta($map_id, 'legend', true), $this->map);
+		return apply_filters('jeo_map_legend', get_post_meta($map_id, 'legend', true), $this->map);
 	}
 
 	function get_options() {
@@ -669,7 +669,7 @@ class MapPress {
 	}
 }
 
-$mappress = new MapPress();
+$JEO = new JEO();
 
 require_once(TEMPLATEPATH . '/inc' . '/markers.php');
 require_once(TEMPLATEPATH . '/inc' . '/ui.php');
@@ -682,137 +682,137 @@ require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
 require_once(TEMPLATEPATH . '/inc' . '/featured.php');
 
 /*
- * MapPress functions api
+ * JEO functions api
  */
 
-function mappress_the_query($query) {
-	global $mappress;
-	return $mappress->the_query($query);	
+function jeo_the_query($query) {
+	global $JEO;
+	return $JEO->the_query($query);	
 }
 
 // mapped post types
-function mappress_get_mapped_post_types() {
-	global $mappress;
-	return $mappress->mapped_post_types();
+function jeo_get_mapped_post_types() {
+	global $JEO;
+	return $JEO->mapped_post_types();
 }
 
-function mappress_set_map($post) {
-	global $mappress;
-	return $mappress->set_map($post);
+function jeo_set_map($post) {
+	global $JEO;
+	return $JEO->set_map($post);
 }
 
 // get the main map post
-function mappress_the_map() {
-	global $mappress;
-	return $mappress->map;
+function jeo_the_map() {
+	global $JEO;
+	return $JEO->map;
 }
 
 
 // get the featured map post
-function mappress_map_featured($post_type = false) {
-	global $mappress;
-	return $mappress->featured($post_type);
+function jeo_map_featured($post_type = false) {
+	global $JEO;
+	return $JEO->featured($post_type);
 }
 
 
 // get the latest map post
-function mappress_map_latest($post_type = false) {
-	global $mappress;
-	return $mappress->latest($post_type);
+function jeo_map_latest($post_type = false) {
+	global $JEO;
+	return $JEO->latest($post_type);
 }
 
 // if post is map
-function mappress_is_map($map_id = false) {
-	global $mappress;
-	return $mappress->is_map($map_id);
+function jeo_is_map($map_id = false) {
+	global $JEO;
+	return $JEO->is_map($map_id);
 }
 
 // display the featured map
-function mappress_featured($main_map = true, $force = false) {
-	global $mappress;
-	return $mappress->get_featured($main_map, $force);
+function jeo_featured($main_map = true, $force = false) {
+	global $JEO;
+	return $JEO->get_featured($main_map, $force);
 }
 
 // display map
-function mappress_map($map_id = false, $main_map = true, $force = false) {
-	global $mappress;
-	return $mappress->get_map($map_id, $main_map, $force = false);
+function jeo_map($map_id = false, $main_map = true, $force = false) {
+	global $JEO;
+	return $JEO->get_map($map_id, $main_map, $force = false);
 }
 
 // get JSON map conf
-function mappress_map_conf() {
-	global $mappress;
-	return $mappress->map_conf();
+function jeo_map_conf() {
+	global $JEO;
+	return $JEO->map_conf();
 }
 
 // get ARRAY map conf
-function mappress_get_map_conf($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_conf();
+function jeo_get_map_conf($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_conf();
 }
 
 // get the map conf
-function mappress_mapgroup_conf() {
-	global $mappress;
-	return $mappress->mapgroup_conf();
+function jeo_mapgroup_conf() {
+	global $JEO;
+	return $JEO->mapgroup_conf();
 }
 
 // get the main map id
-function mappress_get_map_id() {
-	global $mappress;
-	return $mappress->get_id();
+function jeo_get_map_id() {
+	global $JEO;
+	return $JEO->get_id();
 }
 
 // get the main map id
-function mappress_get_the_ID() {
-	global $mappress;
-	return $mappress->get_the_ID();
+function jeo_get_the_ID() {
+	global $JEO;
+	return $JEO->get_the_ID();
 }
 
-function mappress_get_mapgroup_data($map_id = false) {
-	global $mappress;
-	return $mappress->get_mapgroup_data($map_id);
+function jeo_get_mapgroup_data($map_id = false) {
+	global $JEO;
+	return $JEO->get_mapgroup_data($map_id);
 }
 
 // get the map formatted data
-function mappress_get_map_data($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_data($map_id);
+function jeo_get_map_data($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_data($map_id);
 }
 
-function mappress_get_map_layers($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_layers($map_id);
+function jeo_get_map_layers($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_layers($map_id);
 }
 
-function mappress_get_map_center($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_center($map_id);
+function jeo_get_map_center($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_center($map_id);
 }
 
-function mappress_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
-	global $mappress;
-	return $mappress->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
+function jeo_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
+	global $JEO;
+	return $JEO->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
 }
 
-function mappress_get_map_zoom($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_zoom($map_id);
+function jeo_get_map_zoom($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_zoom($map_id);
 }
 
-function mappress_get_map_legend($map_id = false) {
-	global $mappress;
-	return $mappress->get_map_legend($map_id);
+function jeo_get_map_legend($map_id = false) {
+	global $JEO;
+	return $JEO->get_map_legend($map_id);
 }
 
-function mappress_get_options() {
-	global $mappress;
-	return $mappress->get_options();
+function jeo_get_options() {
+	global $JEO;
+	return $JEO->get_options();
 }
 
-function mappress_has_main_map() {
-	global $mappress;
-	return $mappress->has_main_map;
+function jeo_has_main_map() {
+	global $JEO;
+	return $JEO->has_main_map;
 }
 
 ?>

@@ -1,10 +1,10 @@
 <?php
 
 /*
- * MapPress GeoJSON API
+ * JEO GeoJSON API
  */
 
-class MapPress_API {
+class JEO_API {
 
 	function __construct() {
 		add_filter('init', array($this, 'endpoint'));
@@ -20,10 +20,10 @@ class MapPress_API {
 
 	function template_redirect() {
 		if(get_query_var('geojson')) {
-			global $mappress_markers;
-			$marker_query = $mappress_markers->query();
-			$query = apply_filters('mappress_geojson_api_query', $marker_query);
-			$mappress_markers->get_data($marker_query);
+			global $jeo_markers;
+			$marker_query = $jeo_markers->query();
+			$query = apply_filters('jeo_geojson_api_query', $marker_query);
+			$jeo_markers->get_data($marker_query);
 			exit;
 		}
 	}
@@ -38,4 +38,4 @@ class MapPress_API {
 	}
 }
 
-new MapPress_API;
+new JEO_API;

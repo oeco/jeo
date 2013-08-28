@@ -2,7 +2,7 @@
 
 <?php if(have_posts()) : the_post(); ?>
 
-	<?php mappress_map(); ?>
+	<?php jeo_map(); ?>
 
 	<article id="content" class="single-post">
 		<header class="single-post-header" class="clearfix">
@@ -13,7 +13,7 @@
 				</div>
 				<div class="three columns offset-by-one">
 					<div class="post-meta">
-						<p class="author"><span class="lsf">&#xE137;</span> <?php _e('by', 'mappress'); ?> <?php the_author(); ?></p>
+						<p class="author"><span class="lsf">&#xE137;</span> <?php _e('by', 'jeo'); ?> <?php the_author(); ?></p>
 						<p class="date"><span class="lsf">&#xE12b;</span> <?php the_date(); ?></p>
 					</div>
 				</div>

@@ -1,22 +1,22 @@
 <?php
 
 /*
- * MapPress
+ * JEO
  * Featured content
  */
 
-class MapPress_Featured {
+class JEO_Featured {
 
 	var $post_types = array('post');
 
-	var $featured_var = 'mappress_featured';
+	var $featured_var = 'jeo_featured';
 
-	var $featured_meta = '_mappress_featured';
+	var $featured_meta = '_jeo_featured';
 
 	var $query = null;
 
 	function __construct() {
-		add_action('mappress_init', array($this, 'setup'));
+		add_action('jeo_init', array($this, 'setup'));
 	}
 
 	function setup() {
@@ -27,7 +27,7 @@ class MapPress_Featured {
 	}
 
 	function set_post_types() {
-		$this->post_types = apply_filters('mappress_featured_post_types', $this->post_types);
+		$this->post_types = apply_filters('jeo_featured_post_types', $this->post_types);
 		return $this->post_types;
 	}
 
@@ -37,7 +37,7 @@ class MapPress_Featured {
 		$wp->add_query_var($this->featured_var);
 
 		add_action('pre_get_posts', array($this, 'pre_get_posts'), 5);
-		add_filter('mappress_marker_base_query', array($this, 'get_query'));
+		add_filter('jeo_marker_base_query', array($this, 'get_query'));
 	}
 
 	function pre_get_posts($query) {
@@ -79,7 +79,7 @@ class MapPress_Featured {
 		foreach($this->post_types as $post_type) {
 			add_meta_box(
 				'featured-metabox',
-				__('Featured', 'mappress'),
+				__('Featured', 'jeo'),
 				array($this, 'box'),
 				$post_type,
 				'advanced',
@@ -93,7 +93,7 @@ class MapPress_Featured {
 		?>
 		<div class="featured-box">
 			<input type="checkbox" name="featured_content" id="featured_content" value="1" <?php if($featured) echo 'checked'; ?> />
-			<label for="featured_content"><?php _e('Featured content', 'mappress'); ?></label>
+			<label for="featured_content"><?php _e('Featured content', 'jeo'); ?></label>
 		</div>
 		<?php
 	}
@@ -132,14 +132,14 @@ class MapPress_Featured {
 
 }
 
-$featured = new MapPress_Featured;
+$featured = new JEO_Featured;
 
-function mappress_is_featured($post_id = false) {
+function jeo_is_featured($post_id = false) {
 	global $featured;
 	return $featured->is_featured($post_id);
 }
 
-function mappress_get_featured($query = false) {
+function jeo_get_featured($query = false) {
 	global $featured;
 	return $featured->get_featured($query);
 }

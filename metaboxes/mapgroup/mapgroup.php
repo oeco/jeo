@@ -12,10 +12,10 @@ function mapgroup_init() {
 					<strong class="title"></strong>
 					<input type="hidden" class="map_id" />
 					<input type="hidden" class="map_title" />
-					<input type="checkbox" class="more_list" value="1" /> ' . __('Add to "more" tab', 'mappress') . '
+					<input type="checkbox" class="more_list" value="1" /> ' . __('Add to "more" tab', 'jeo') . '
 					<span class="map-actions">
 						<span class="sort"></span>
-						<a href="#" class="remove-map button">' . __('Remove', 'mappress') . '</a>
+						<a href="#" class="remove-map button">' . __('Remove', 'jeo') . '</a>
 					</span>
 				</li>'
 		)
@@ -27,7 +27,7 @@ function mapgroup_init() {
 function mapgroup_add_meta_box() {
 	add_meta_box(
 		'mapgroup',
-		__('Map group', 'mappress'),
+		__('Map group', 'jeo'),
 		'mapgroup_inner_custom_box',
 		'map-group',
 		'advanced',
@@ -42,7 +42,7 @@ function mapgroup_inner_custom_box($post) {
 		$maps = $data['maps'];
 	?>
 	<div id="mapgroup-metabox">
-		<h4><?php _e('Select a map to add to your map group', 'mappress'); ?></h4>
+		<h4><?php _e('Select a map to add to your map group', 'jeo'); ?></h4>
 		<select id="mapgroup_maps">
 			<?php
 			$all_maps = get_posts('post_type=map&posts_per_page=-1');
@@ -51,7 +51,7 @@ function mapgroup_inner_custom_box($post) {
 			}
 			?>
 		</select>
-		<a href="#" class="include-map button"><?php _e('Add map', 'mappress'); ?></a>
+		<a href="#" class="include-map button"><?php _e('Add map', 'jeo'); ?></a>
 		<ol class="map-list">
 			<?php
 			if($maps) { $i = 0;
@@ -61,10 +61,10 @@ function mapgroup_inner_custom_box($post) {
 						<input type="hidden" class="map_id" name="mapgroup_data[maps][<?php echo $i; ?>][id]" value="<?php echo $map['id']; ?>" />
 						<input type="hidden" class="map_title" name="mapgroup_data[maps][<?php echo $i; ?>][title]" value="<?php _e($map['title']); ?>" />
 						<input type="checkbox" class="more_list" name="mapgroup_data[maps][<?php echo $i; ?>][more]" value="1" <?php if(isset($map['more'])) echo 'checked'; ?>  />
-						<?php _e('Add to "more" tab', 'mappress'); ?>
+						<?php _e('Add to "more" tab', 'jeo'); ?>
 						<span class="map-actions">
 							<span class="sort"></span>
-							<a href="#" class="remove-map button"><?php _e('Remove', 'mappress'); ?></a>
+							<a href="#" class="remove-map button"><?php _e('Remove', 'jeo'); ?></a>
 						</span>
 					</li> 
 				<?php
