@@ -1,6 +1,6 @@
 (function($) {
 
-	mappress.fullscreen = L.Control.extend({
+	jeo.fullscreen = L.Control.extend({
 
 		options: {
 			position: 'topleft'
@@ -8,7 +8,7 @@
 
 		onAdd: function(map) {
 
-			this._container = L.DomUtil.create('div', 'mappress-fullscreen');
+			this._container = L.DomUtil.create('div', 'jeo-fullscreen');
 			this._$ = $(this._container);
 
 			this._map = map;

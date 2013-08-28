@@ -2,8 +2,8 @@ var streetviewBox;
 
 (function($) {
 
-	mappress.streetview = function(options) {
-		mappress.mapReady(function() {
+	jeo.streetview = function(options) {
+		jeo.mapReady(function() {
 			options.canvas = $('#' + options.containerID);
 			$('body').addClass('displaying-map');
 			var panorama = StreetViewPanorama(options);
@@ -49,7 +49,7 @@ var streetviewBox;
 
 		var settings = {
 			geocoder: false,
-			containerID: 'mappress_streetview',
+			containerID: 'jeo_streetview',
 			force: false
 		};
 

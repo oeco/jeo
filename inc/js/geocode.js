@@ -1,6 +1,6 @@
 (function($) {
 
-	mappress.geocode = L.Control.extend({
+	jeo.geocode = L.Control.extend({
 
 		options: {
 			position: 'topleft'
@@ -14,12 +14,12 @@
 
 			this._map.geocode = this;
 
-			this._container = L.DomUtil.create('div', 'mappress-geocode');
+			this._container = L.DomUtil.create('div', 'jeo-geocode');
 
 			this._$ = $(this._container);
 
 			var map_id = map.map_id;
-			var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + mappress_labels.search_placeholder + '" /></form><div class="geocode-results" />';
+			var form = '<form id="' + map_id + '_search" class="map-search"><input type="text" placeholder="' + jeo_labels.search_placeholder + '" /></form><div class="geocode-results" />';
 
 			this._$.append($(form));
 
@@ -73,7 +73,7 @@
 				if(data.length)
 					self._draw(data);
 				else
-					this._resultsContainer.append('<span class="widget-title">' + mappress_labels.not_found +  '</span>');
+					this._resultsContainer.append('<span class="widget-title">' + jeo_labels.not_found +  '</span>');
 			});
 
 		},
@@ -121,7 +121,7 @@
 			 */
 
 			this._resultsContainer.empty();
-			this._resultsContainer.append('<a href="#" class="clear-search">' + mappress_labels.clear_search + '</a><span class="widget-title">' + mappress_labels.results_title + '</span><ul />');
+			this._resultsContainer.append('<a href="#" class="clear-search">' + jeo_labels.clear_search + '</a><span class="widget-title">' + jeo_labels.results_title + '</span><ul />');
 			var list = this._resultsContainer.find('ul');
 			var item;
 

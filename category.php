@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<?php mappress_featured(); ?>
+<?php jeo_featured(); ?>
 
 <div class="section-title">
 	<div class="container">

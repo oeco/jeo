@@ -103,7 +103,7 @@
 
 		map.remove();
 
-		map = mappress.build(mapConf);
+		map = jeo.build(mapConf);
 	}
 
 	function updateMapData() {
@@ -148,7 +148,7 @@
 
 		updateMapConf();
 
-		map = mappress.build(mapConf);
+		map = jeo.build(mapConf);
 		updateMapData();
 
 		/*

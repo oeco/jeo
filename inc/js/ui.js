@@ -1,11 +1,11 @@
 (function($) {
 
-	mappress.ui = {};
+	jeo.ui = {};
 
-	mappress.ui.centermap = function(lat, lon, zoom, map) {
+	jeo.ui.centermap = function(lat, lon, zoom, map) {
 
 		if(typeof map == 'undefined')
-			map = mappress.map;
+			map = jeo.map;
 
 		if(typeof zoom == 'undefined' || !zoom)
 			zoom = map.getZoom();
@@ -14,21 +14,13 @@
 			$('html,body').stop().animate({
 				scrollTop: $('.map-container').offset().top
 			}, 400, function() {
-				map.setView([lat, lon], zoom, {
-					animate: true,
-					pan: {
-						animate: true,
-						duration: 2
-					},
-					zoom: {
-						animate: true
-					}
-				});
+				map.setView([lat, lon], zoom);
+				map.invalidateSize(true);
 			});
 		}
 	}
 
-	mappress.ui.highlightCenter = function() {
+	jeo.ui.highlightCenter = function() {
 		var $endEl = $('.transition.has-end');
 		if($endEl.length) {
 			setTimeout(function() {
@@ -44,7 +36,7 @@
 		}
 	}
 
-	mappress.ui.featuredSlider = function(elementID, mapID) {
+	jeo.ui.featuredSlider = function(elementID, mapID) {
 
 		var	$container,
 			$items,
@@ -52,7 +44,7 @@
 			$activeItem,
 			$nextItem;
 
-		mappress.mapReady(function(map) {
+		jeo.mapReady(function(map) {
 
 			if(map.map_id != mapID)
 				return false;
@@ -115,12 +107,12 @@
 	$(document).ready(function() {
 		$('.center-map').click(function() {
 			if($(this).data('lat') && $(this).data('lon')) {
-				mappress.ui.centermap($(this).data('lat'), $(this).data('lon'), $(this).data('zoom'));
+				jeo.ui.centermap($(this).data('lat'), $(this).data('lon'), $(this).data('zoom'));
 			}
 			return false;
 		});
 
-		mappress.ui.highlightCenter();
+		jeo.ui.highlightCenter();
 	});
 
 })(jQuery);

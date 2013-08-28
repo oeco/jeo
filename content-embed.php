@@ -13,7 +13,7 @@
 		echo " | $site_description";
 
 	if ( $paged >= 2 || $page >= 2 )
-		echo ' | ' . __('Page', 'mappress') . max($paged, $page);
+		echo ' | ' . __('Page', 'jeo') . max($paged, $page);
 
 	?></title>
 <link rel="profile" href="http://gmpg.org/xfn/11" />
@@ -24,7 +24,7 @@
 </head>
 <body <?php body_class(get_bloginfo('language')); ?>>
 
-<?php mappress_map($_GET['map_id']); ?>
+<?php jeo_map($_GET['map_id']); ?>
 
 <?php wp_footer(); ?>
 </body>

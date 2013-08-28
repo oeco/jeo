@@ -5,10 +5,10 @@
 		if(map.conf.disableMarkers || map.conf.admin)
 			return false;
 
-		$.getJSON(mappress_markers.ajaxurl,
+		$.getJSON(jeo_markers.ajaxurl,
 		{
 			action: 'markers_geojson',
-			query: mappress_markers.query
+			query: jeo_markers.query
 		},
 		function(geojson) {
 			if(geojson === 0)
@@ -22,7 +22,7 @@
 			var icons = {};
 			var parentLayer;
 
-			if(mappress_markers.enable_clustering)
+			if(jeo_markers.enable_clustering)
 				parentLayer = new L.MarkerClusterGroup();
 			else
 				parentLayer = new L.layerGroup();
@@ -62,17 +62,17 @@
 			layer.addTo(parentLayer);
 
 			var bounds = layer.getBounds();
-			if(!mappress.fragment().get('loc') && mappress_markers.markerextent && bounds.isValid()) {
+			if(!jeo.fragment().get('loc') && jeo_markers.markerextent && bounds.isValid()) {
 				map.fitBounds(layer.getBounds());
 			}
 
-			mappress.runCallbacks('markersReady', [map]);
+			jeo.runCallbacks('markersReady', [map]);
 
 			return layer;
 
 		};
 	}
-	mappress.mapReady(markers);
-	mappress.createCallback('markersReady');
+	jeo.mapReady(markers);
+	jeo.createCallback('markersReady');
 
 })(jQuery);

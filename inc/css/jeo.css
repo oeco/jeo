@@ -50,19 +50,19 @@ body.es-ES .lang-es {
  * Search form
  */
 
-.leaflet-control.mappress-geocode {
+.leaflet-control.jeo-geocode {
 	max-width: 300px;
 	background: #fff;
 }
 
-.leaflet-control.mappress-geocode .map-search {
+.leaflet-control.jeo-geocode .map-search {
 	margin: 0;
 	padding: 0;
 	display: block;
 	border-bottom: 1px solid #eee;
 }
 
-.leaflet-control.mappress-geocode .map-search input {
+.leaflet-control.jeo-geocode .map-search input {
 	border: 0;
 	background: transparent;
 	width: 100%;
@@ -73,28 +73,28 @@ body.es-ES .lang-es {
 	margin: 0;
 }
 
-.leaflet-control.mappress-geocode .geocode-results .widget-title {
+.leaflet-control.jeo-geocode .geocode-results .widget-title {
 	border-top: 1px solid #f0f0f0;
 }
 
-.leaflet-control.mappress-geocode .geocode-results ul {
+.leaflet-control.jeo-geocode .geocode-results ul {
 	padding: 0;
 	margin: 0;
 	list-style: none;
 }
 
-.leaflet-control.mappress-geocode .geocode-results ul li {
+.leaflet-control.jeo-geocode .geocode-results ul li {
 	padding: 3px 5px;
 	margin: 0;
 	border-bottom: 1px solid #f3f3f3;
 	cursor: pointer;
 }
 
-.leaflet-control.mappress-geocode .geocode-results ul li:hover {
+.leaflet-control.jeo-geocode .geocode-results ul li:hover {
 	background-color: #f3f3f3;
 }
 
-.leaflet-control.mappress-geocode .geocode-results .clear-search {
+.leaflet-control.jeo-geocode .geocode-results .clear-search {
 	float: right;
 	font-size: 80%;
 	padding: 5px;
@@ -104,20 +104,20 @@ body.es-ES .lang-es {
  * Switch layers
  */
 
-.leaflet-control.mappress-filter-layers {
+.leaflet-control.jeo-filter-layers {
 	background: #fff;
 	max-width: 300px;
 }
 
-.leaflet-control.mappress-filter-layers .switch-layers,
-.leaflet-control.mappress-filter-layers .swap-layers {
+.leaflet-control.jeo-filter-layers .switch-layers,
+.leaflet-control.jeo-filter-layers .swap-layers {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.leaflet-control.mappress-filter-layers .switch-layers li,
-.leaflet-control.mappress-filter-layers .swap-layers li {
+.leaflet-control.jeo-filter-layers .switch-layers li,
+.leaflet-control.jeo-filter-layers .swap-layers li {
 	margin: 0;
 	padding: 5px;
 	cursor: pointer;
@@ -130,17 +130,17 @@ body.es-ES .lang-es {
 	opacity: .5;
 }
 
-.leaflet-control.mappress-filter-layers .switch-layers li.active,
-.leaflet-control.mappress-filter-layers .swap-layers li.active {
+.leaflet-control.jeo-filter-layers .switch-layers li.active,
+.leaflet-control.jeo-filter-layers .swap-layers li.active {
 	opacity: 1;
 }
 
-.leaflet-control.mappress-filter-layers .switch-layers li:hover,
-.leaflet-control.mappress-filter-layers .swap-layers li:hover {
+.leaflet-control.jeo-filter-layers .switch-layers li:hover,
+.leaflet-control.jeo-filter-layers .swap-layers li:hover {
 	opacity: .7;
 }
 
-.leaflet-control.mappress-filter-layers .swap-layers li.active:hover {
+.leaflet-control.jeo-filter-layers .swap-layers li.active:hover {
 	opacity: 1;
 }
 

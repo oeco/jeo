@@ -1,10 +1,10 @@
 <?php
 
 /*
- * MapPress embed tool
+ * JEO embed tool
  */
 
-class MapPress_Embed {
+class JEO_Embed {
 
 	function __construct() {
 		add_filter('query_vars', array(&$this, 'query_var'));
@@ -27,9 +27,9 @@ class MapPress_Embed {
 	function template_redirect() {
 		if(get_query_var('embed')) {
 			add_filter('show_admin_bar', '__return_false');
-			do_action('mappress_before_embed');
+			do_action('jeo_before_embed');
 			$this->template();
-			do_action('mappress_after_embed');
+			do_action('jeo_after_embed');
 			exit;
 		}
 	}
@@ -45,9 +45,9 @@ class MapPress_Embed {
 	}
 }
 
-$mappress_embed = new MapPress_Embed();
+$jeo_embed = new JEO_Embed();
 
-function mappress_get_embed_url($vars = array()) {
-	global $mappress_embed;
-	return $mappress_embed->get_embed_url($vars);
+function jeo_get_embed_url($vars = array()) {
+	global $jeo_embed;
+	return $jeo_embed->get_embed_url($vars);
 }

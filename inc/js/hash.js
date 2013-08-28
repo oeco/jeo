@@ -1,6 +1,6 @@
 (function($) {
 
-	mappress.fragment = function() {
+	jeo.fragment = function() {
 
         var f = {};
         var _set = function(query) {
@@ -35,16 +35,16 @@
 
 	}
 
-	var fragment = mappress.fragment();
+	var fragment = jeo.fragment();
 
-	mappress.fragmentEnabled = false;
+	jeo.fragmentEnabled = false;
 
 	var setupHash = function(map) {
 
 		if(map.conf.disableHash || map.conf.admin || !map.conf.mainMap)
 			return false;
 
-		mappress.fragmentEnabled = true;
+		jeo.fragmentEnabled = true;
 
 		var track = _.debounce(function() {
 			var c = map.getCenter();
@@ -80,7 +80,7 @@
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
 
-	if(mappress_hash.enable)
-		mappress.mapReady(setupHash);
+	if(jeo_hash.enable)
+		jeo.mapReady(setupHash);
 
 })(jQuery);
