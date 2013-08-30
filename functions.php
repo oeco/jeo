@@ -52,4 +52,13 @@ function jeo_theme_scripts() {
 }
 add_action('wp_enqueue_scripts', 'jeo_theme_scripts', 5);
 
+function jeo_flush_rewrite() {
+	global $pagenow;
+	if(is_admin() && $_REQUEST['activated'] && $pagenow == 'themes.php') {
+		global $wp_rewrite;
+		$wp_rewrite->init();
+		$wp_rewrite->flush_rules();
+	}
+}
+add_action('init', 'jeo_flush_rewrite');
 ?>
