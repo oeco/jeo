@@ -93,7 +93,7 @@ class JEO_Marker_Icons {
 			}
 		}
 
-		return apply_filters('jeo_marker_icon', $marker, $post_id);
+		return $marker;
 	}
 
  	/*
