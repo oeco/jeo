@@ -24,7 +24,7 @@ function jeo_find_post_on_map_button($zoom = null, $text = false, $post_id = fal
 		$map_data = jeo_get_map_data();
 		$zoom = $map_data['max_zoom'];
 	}
-	
+
 	$zoom_attr = 'data-zoom="' . $zoom . '"';
 
 	return apply_filters('jeo_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">&#xE056;</span> ' . $text . '</a>');
