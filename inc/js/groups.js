@@ -157,8 +157,6 @@ var groups = {};
 			if(group.map.conf.filteringLayers)
 				group.map.addControl(new jeo.filterLayers());
 
-			console.log(prevMap);
-
 			/*
 			 * clear tooltips
 			 */
@@ -181,7 +179,7 @@ var groups = {};
 
 
 			// callbacks
-			jeo.runCallbacks('groupChanged', [mapID, group]);
+			jeo.runCallbacks('groupChanged', [group, prevMap]);
 
 		}
 

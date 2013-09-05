@@ -105,6 +105,24 @@ var jeo = {};
 		// layers
 		jeo.loadLayers(map, jeo.parseLayers(conf.layers));
 
+		// test cartodb
+		/*
+		cartodb.createLayer(map, 'http://documentation.cartodb.com/api/v2/viz/2b13c956-e7c1-11e2-806b-5404a6a683d5/viz.json').addTo(map).on('done', function(layer) {
+
+          layer.setInteraction(true);
+
+          layer.on('featureOver', function(e, pos, latlng, data) {
+            cartodb.log.log(e, pos, latlng, data);
+          });
+
+          layer.on('error', function(err) {
+            cartodb.log.log('error: ' + err);
+          });
+        }).on('error', function() {
+          cartodb.log.log("some error occurred");
+        });
+		*/
+
 		// set bounds
 		if(conf.fitBounds instanceof L.LatLngBounds)
 			map.fitBounds(conf.fitBounds);
@@ -234,12 +252,9 @@ var jeo = {};
 
 	jeo.parseConf = function(conf) {
 
-		var newConf = {};
+		var newConf = $.extend({}, conf);
 
 		newConf.server = conf.server;
-
-		if(conf.dataReady)
-			newConf.dataReady = true;
 
 		if(conf.conf)
 			newConf = _.extend(newConf, conf.conf);
@@ -327,28 +342,6 @@ var jeo = {};
 				$detailsContainer.find('.map-details-page').remove();
 				return false;
 			});
-
-		});
-	}
-
-	/*
-	 * Custom fullscreen
-	 */
-	jeo.fullscreen = function(map) {
-
-		if(map.$.parents('.content-map').length)
-			var container = map.$.parents('.content-map');
-		else
-			var container = map.$.parents('.map-container');
-
-		map.$.find('.map-fullscreen').click(function() {
-
-			if(container.hasClass('fullsreen-map'))
-				container.removeClass('fullscreen-map');
-			else
-				container.addClass('fullscreen-map');
-
-			return false;
 
 		});
 	}

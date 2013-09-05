@@ -8,6 +8,9 @@
 
 		onAdd: function(map) {
 
+			if(!this._map.conf.filteringLayers || this._map.conf.disableInteraction)
+				return false;
+
 			var self = this;
 
 			this._map = map;
@@ -17,9 +20,6 @@
 			this._container = L.DomUtil.create('div', 'jeo-filter-layers');
 
 			this._$ = $(this._container);
-
-			if(!this._map.conf.filteringLayers || this._map.conf.disableInteraction)
-				return false;
 
 			this._layers = map.conf.filteringLayers;
 

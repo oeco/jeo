@@ -280,6 +280,7 @@ function mapbox_inner_custom_box($post) {
 					<label for="disable_mousewheel"><?php _e('Disable mousewheel zooming', 'jeo'); ?></label>
 				</p>
 			</div>
+			<?php do_action('jeo_map_setup_options', $map_data); ?>
 		</div>
 		<p>
 			<a class="button-primary preview-map" href="#"><?php _e('Update preview', 'jeo'); ?></a>

@@ -1,0 +1,11 @@
+.jeo-date-range-slider {
+	min-width: 300px;
+}
+
+.jeo-date-range-slider-container {
+	margin-right: 40px;
+}
+
+.leaflet-hidden {
+	display: none;
+}

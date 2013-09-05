@@ -28,8 +28,16 @@
 				parentLayer = new L.layerGroup();
 
 			map.addLayer(parentLayer);
+			map._markers = [];
 
 			var layer = L.geoJson(geojson, {
+				pointToLayer: function(f, latLng) {
+
+					var marker = new L.marker(latLng);
+					map._markers.push(marker);
+					return marker;
+
+				},
 				onEachFeature: function(f, l) {
 
 					if(icons[f.properties.marker.markerId]) {

@@ -64,11 +64,11 @@ class JEO_Markers {
 	}
 
 	function use_transient() {
-		return apply_filters('jeo_markers_enable_transient', true);
+		return apply_filters('jeo_markers_enable_transient', false);
 	}
 
 	function use_browser_caching() {
-		return apply_filters('jeo_markers_enable_browser_caching', true);
+		return apply_filters('jeo_markers_enable_browser_caching', false);
 	}
 
 	function geocode_type() {
@@ -149,7 +149,7 @@ class JEO_Markers {
 
 		}
 
-		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.8');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.9');
 	}
 
 	function setup_query_vars() {
