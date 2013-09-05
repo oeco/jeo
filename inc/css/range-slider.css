@@ -2,7 +2,8 @@
 	min-width: 300px;
 	background: #fff;
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.1);
-	padding: 8px 25px;
+	padding: 5px 30px;
+	margin-top: 50px;
 }
 
 .jeo-date-range-slider-container {
@@ -12,6 +13,10 @@
 	display: none;
 }
 
+.ui-rangeSlider {
+	height: 16px;
+}
+
 .ui-rangeSlider .ui-rangeSlider-innerBar {
 	background: #f0f0f0;
 	box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1);
@@ -19,18 +24,24 @@
 	border-left: 1px solid rgba(0,0,0,0.15);
 	border-bottom: 1px solid #fff;
 	border-right: 1px solid #fff;
-	margin: 3px 0;
+	margin: 2px 0;
+	height: 10px;
 }
 
 .ui-rangeSlider .ui-rangeSlider-bar {
 	background: #777;
-	margin: 3px 6px;
-	height: 18px;
+	margin: 2px 6px;
+	height: 12px;
 }
 
 .ui-rangeSlider .ui-rangeSlider-handle {
 	background: rgba(0,0,0,0.6);
 	width: 2px;
+	height: 16px;
+}
+
+.ui-rangeSlider-arrow {
+	height: 14px;
 }
 
 .ui-rangeSlider-arrow.ui-rangeSlider-rightArrow {
@@ -43,7 +54,7 @@
 
 .ui-rangeSlider-label {
 	background: transparent;
-	margin-bottom: 15px;
+	margin-bottom: 5px;
 	padding: 3px 5px 7px;
 }
 
@@ -51,7 +62,7 @@
 	background: #f0f0f0;
 	padding: 5px 7px;
 	font-weight: 600;
-	font-size: 14px;
+	font-size: 12px;
 	font-family: "Open Sans";
 	display: block;
 	margin: 0;

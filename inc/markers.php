@@ -64,11 +64,11 @@ class JEO_Markers {
 	}
 
 	function use_transient() {
-		return apply_filters('jeo_markers_enable_transient', false);
+		return apply_filters('jeo_markers_enable_transient', true);
 	}
 
 	function use_browser_caching() {
-		return apply_filters('jeo_markers_enable_browser_caching', false);
+		return apply_filters('jeo_markers_enable_browser_caching', true);
 	}
 
 	function geocode_type() {
