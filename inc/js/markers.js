@@ -58,7 +58,11 @@
 						e.target.closePopup();
 					});
 					l.on('click', function(e) {
-						window.location = f.properties.url;
+						if(window.self === window.top) {
+							window.location = f.properties.url;
+						} else {
+							window.open(f.properties.url, '_blank');
+						}
 						return false;
 					});
 
@@ -70,7 +74,7 @@
 			layer.addTo(parentLayer);
 
 			var bounds = layer.getBounds();
-			if(!jeo.fragment().get('loc') && jeo_markers.markerextent && bounds.isValid()) {
+			if(!jeo.fragment().get('loc') && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {
 				map.fitBounds(layer.getBounds());
 			}
 

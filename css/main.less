@@ -565,7 +565,16 @@ h3,h4,h5,h6 {
 		z-index: 3;
 	}
 }
+html#map-embed {
+	.map-container {
+		.leaflet-control-container {
+			.leaflet-top {
+				top: 0;
+			}
+		}
 
+	}
+}
 .mapgroup-container {
 	height: 55%;
 	.map-container {
@@ -642,7 +651,8 @@ h3,h4,h5,h6 {
 }
 
 .section-title,
-.single-post-header {
+.single-post-header,
+.page-header {
 	background: #fefefe;
 	.box-shadow(0 0 3px rgba(0,0,0,0.1));
 	padding: 40px 0 20px;

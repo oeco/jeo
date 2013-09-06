@@ -38,6 +38,11 @@
 
 		_build: function() {
 
+			if(this._map._markers.length <= 1) {
+				this.removeFrom(this._map);
+				return false;
+			}
+
 			var self = this;
 
 			var min = _.min(this._map._markers, function(m) { return m.toGeoJSON().properties[self.options.sliderProperty]; });

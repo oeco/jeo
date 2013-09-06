@@ -1,0 +1,50 @@
+html#map-embed,
+html#mab-embed body {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+html#map-embed .map-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 30px;
+	min-height: 0;
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 0;
+}
+
+html#map-embed header {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 30px;
+	background: #101010;
+	margin: 0;
+	padding: 0;
+}
+
+
+html#map-embed header h1 {
+	float: right;
+	font-family: 'OpenSansCondensedBold';
+	text-transform: uppercase;
+	display: block;
+	line-height: 30px;
+	font-size: 14px;
+	margin: 0 10px;
+}
+
+html#map-embed header h1 a {
+	color: #666;
+	text-decoration: none;
+}
+
+html#map-embed header h1 a:hover {
+	color: #d0d0d0;
+}

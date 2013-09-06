@@ -2,6 +2,7 @@
 
 require_once(TEMPLATEPATH . '/inc/admin/settings.php');
 require_once(TEMPLATEPATH . '/inc/core.php');
+require_once(TEMPLATEPATH . '/inc/share-widget.php');
 
 /*
  * Theme setup

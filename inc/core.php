@@ -29,7 +29,7 @@ class JEO {
 
 	function init() {
 		$this->setup_directories();
-		$this->setup_options();
+		$this->get_options();
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
@@ -44,7 +44,7 @@ class JEO {
 		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri());
 	}
 
-	function setup_options() {
+	function get_options() {
 		$options = get_option('jeo_settings');
 		if($options && isset($options['jeo_settings'])) {
 			$this->options = $options['jeo_settings'];
@@ -592,10 +592,6 @@ class JEO {
 		return apply_filters('jeo_map_legend', get_post_meta($map_id, 'legend', true), $this->map);
 	}
 
-	function get_options() {
-		return $this->options;
-	}
-
 	/*
 	 * Ajax
 	 */
@@ -684,6 +680,11 @@ include_once(TEMPLATEPATH . '/inc/range-slider.php');
 /*
  * JEO functions api
  */
+
+function jeo_get_options() {
+	global $jeo;
+	return $jeo->get_options();
+}
 
 function jeo_the_query($query) {
 	global $jeo;
@@ -803,11 +804,6 @@ function jeo_get_map_zoom($map_id = false) {
 function jeo_get_map_legend($map_id = false) {
 	global $jeo;
 	return $jeo->get_map_legend($map_id);
-}
-
-function jeo_get_options() {
-	global $jeo;
-	return $jeo->get_options();
 }
 
 function jeo_has_main_map() {
