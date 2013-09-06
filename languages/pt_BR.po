@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-09-06 19:41-0300\n"
-"PO-Revision-Date: 2013-09-06 19:50-0300\n"
+"PO-Revision-Date: 2013-09-06 19:55-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -565,7 +565,7 @@ msgstr "padrão"
 #: ../inc/range-slider.php:41
 msgctxt "Range slider date format"
 msgid "MM/DD/YYYY"
-msgstr "DD/MM/YYY"
+msgstr "DD/MM/YYYY"
 
 #: ../inc/range-slider.php:58
 msgid "Date range slider filter"
