@@ -274,7 +274,6 @@ class JEO_Markers {
 
 			$markers_query = new WP_Query($query);
 
-			$data['query_id'] = $cache_key;
 			$data['type'] = 'FeatureCollection';
 			$data['features'] = array();
 
@@ -300,7 +299,7 @@ class JEO_Markers {
 				set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
-		header('Content Type: application/json');
+		header(apply_filters('jeo_geojson_content_type', 'Content-type: application/json'));
 
 		if($this->use_browser_caching()) {
 			/* Browser caching */
@@ -311,7 +310,11 @@ class JEO_Markers {
 			/* --------------- */
 		}
 
-		echo $data;
+		do_action('jeo_markers_before_print');
+
+		echo apply_filters('jeo_markers_geojson', $data);
+
+		do_action('jeo_markers_after_print');
 		exit;
 	}
 
