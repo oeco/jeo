@@ -32,7 +32,7 @@ class JEO_API extends JEO_Markers {
 
 	function jsonp_callback($geojson) {
 		if(get_query_var('geojson') && isset($_GET['callback'])) {
-			$jsonp_callback = $_GET['callback'];
+			$jsonp_callback = preg_replace('/[^a-zA-Z0-9$_]/s', '', $_GET['callback']);
 			$geojson = "$jsonp_callback($geojson)";
 		}
 		return $geojson;
