@@ -324,10 +324,10 @@ class JEO {
 			if($query->is_main_query()) {
 				if(is_home() && !$this->map) {
 					$this->set_map($this->featured());
-				} elseif($query->get('map') || $query->get('map-group')) {
-					if($query->get('map'))
+				} elseif(is_singular(array('map', 'map-group'))) {
+					if(is_singular('map'))
 						$type = 'map';
-					elseif($query->get('map-group'))
+					elseif(is_singular('map-group'))
 						$type = 'map-group';
 					$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
 				}
@@ -338,15 +338,15 @@ class JEO {
 		return $query;
 	}
 
-	/*
-	 * Allow search box inside map page (disable `s` argument for the map query)
-	 */
-
 	function set_map($post) {
 		$this->map = $post;
 		return $this->map;
 	}
 
+
+	/*
+	 * Allow search box inside map page (disable `s` argument for the map query)
+	 */
 	function setup_pre_get_map() {
 		add_action('pre_get_posts', array($this, 'pre_get_map'));
 	}
@@ -419,9 +419,9 @@ class JEO {
 			}
 		}
 
-		if($map_id)
+		if($map_id) {
 			$this->set_map(get_post($map_id));
-		else
+		} else
 			$map_id = $this->map->ID;
 
 		if($main_map) add_filter('jeo_map_conf', array($this, 'set_main'));

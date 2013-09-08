@@ -186,6 +186,10 @@ if (!Array.prototype.indexOf) {
 
 				}
 
+			} else if (this.id === 'map_id') {
+
+				embed.map_id = val;
+
 			}
 
 			// Defer these next actions until the
@@ -197,7 +201,7 @@ if (!Array.prototype.indexOf) {
 
 		}
 
-		$('.chzn-select').each(updateInputs);
+		$('.chzn-select, #jeo-share-widget input').each(updateInputs);
 		$('.chzn-select').chosen().change(updateInputs);
 
 		$('.clear-layers').click(function() {

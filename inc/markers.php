@@ -222,12 +222,16 @@ class JEO_Markers {
 	function the_post_map($p = false) {
 		global $post;
 		$p = $p ? $p : $post;
+		$map = jeo_the_map();
 		if(is_single() && $this->has_location($p->ID) && !is_singular(array('map', 'map-group'))) {
 			$post_maps = get_post_meta($p->ID, 'maps');
-			if(!$post_maps) {
-				jeo_set_map(jeo_map_featured());
-			} else {
-				jeo_set_map(get_post(array_shift($post_maps)));
+			if(!$map) {
+				if($post_maps) {
+					$map = get_post(array_shift($post_maps));
+				} else {
+					$map = jeo_map_featured();
+				}
+				jeo_set_map($map);
 			}
 		}
 		return jeo_the_map();

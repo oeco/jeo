@@ -107,6 +107,7 @@ if($_GET['map_id']) {
 								</div>
 							<?php else : ?>
 								<h4>&nbsp;</h4>
+								<input type="hidden" id="map_id" name="map_id" value="<?php echo $map->ID; ?>" />
 								<p><a class="button" href="<?php echo jeo_get_share_url(); ?>"><?php _e('View all maps', 'jeo'); ?></a></p>
 							<?php endif; ?>
 						</div>
