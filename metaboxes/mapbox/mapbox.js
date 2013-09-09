@@ -139,6 +139,9 @@
 
 		var postID = $('input[name=post_ID]').val();
 
+		updateBaseLayerURLBox();
+
+		// load map
 		$('.map-container > .map').attr('id', 'map_' + postID);
 		mapConf.containerID = map_id = 'map_' + postID;
 		mapConf.postID = postID;
@@ -154,14 +157,19 @@
 		/*
 		 * Layer management
 		 */
+				
 		$('#mapbox-metabox .add-layer').click(function() {
 			addLayer();
 			return false;
 		});
+
 		$('#mapbox-metabox .remove-layer').live('click', function() {
 			removeLayer($(this).parents('li'));
 			return false;
 		});
+
+		// update base layer select and set change listener
+		$('#baselayer_drop_down').change(updateBaseLayerURLBox);
 
 		// filtering layers opts
 		$('#mapbox-metabox .filtering-opts').hide();
@@ -275,31 +283,43 @@
 
 	});
 
+  // Add an entry to the layer list.
 	function addLayer() {
+	  
 		var layersList = $('#mapbox-metabox .layers-list');
 		var layerItem = $(mapbox_metabox_localization.layer_item);
-		var layerLength = layersList.find('li').length;
+		var layerLength = layersList.find('li').length + 1;
+		var layerTypeCaption = layerItem.find('.layer_type');
+		var layerID = layerItem.find('.layer_id');
 
-		layerItem.find('.layer_id').attr('name', 'map_data[layers][' + layerLength + '][id]');
+		layerID.attr('name', 'map_data[layers][' + layerLength + '][id]');
 		layerItem.find('.fixed_layer, .switch_layer, .swap_layer').attr('name', 'map_data[layers][' + layerLength + '][opts][filtering]');
 		layerItem.find('.layer_title').attr('name', 'map_data[layers][' + layerLength + '][title]');
 		layerItem.find('.layer_hidden').attr('name', 'map_data[layers][' + layerLength + '][switch_hidden]');
 
 		layerItem.find('.filtering-opts').hide();
 
+
 		layersList.append(layerItem);
 	}
 
 	function removeLayer(layer) {
 		layer.remove();
-		updateMap();
 	}
 
 	function getLayers() {
 		var layers = [];
+		
+		// add base layer url
+		base_layer_url = $('#baselayer_url_box').val();
+		if (base_layer_url) 
+			layers.push(base_layer_url);
+		
+		// add other layers
 		$('#mapbox-metabox .layers-list li').each(function() {
 			layers.push($(this).find('input.layer_id').val());
 		});
+
 		return layers;
 	}
 
@@ -335,6 +355,46 @@
 			}
 		});
 		return filtering;
+	}
+
+	function updateBaseLayerURLBox() {
+
+		base_layer_url_box = $('#baselayer_url_box');
+
+		switch ( $('#baselayer_drop_down').val() ){
+			case 'openstreetmap':
+				base_layer_url_box.val('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
+				base_layer_url_box.attr('readonly', true);
+				break;
+		    case 'mapquest_osm':
+			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'mapquest_sat':
+			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'stamen_toner':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'stamen_watercolor':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;		  
+		    case 'stamen_terrain':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'none':
+			    base_layer_url_box.val('');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+			case 'custom': 
+				base_layer_url_box.attr('readonly', false);
+				break;
+		}
+		return false;
 	}
 
 })(jQuery);
