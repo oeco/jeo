@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-09 18:29-0300\n"
-"PO-Revision-Date: 2013-09-09 18:29-0300\n"
+"POT-Creation-Date: 2013-09-09 18:49-0300\n"
+"PO-Revision-Date: 2013-09-09 18:49-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -552,6 +552,7 @@ msgid "Select if you'd like to enable your embed tool"
 msgstr "Selecione se você gostaria de habilitar a ferramenta"
 
 #: ../inc/share-widget.php:65
+#: ../inc/api.php:54
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -584,6 +585,27 @@ msgstr "Filtro por data"
 #: ../inc/range-slider.php:61
 msgid "Enable date range slider filter for markers"
 msgstr "Habilitar filtro interativo por data de publicação dos posts"
+
+#: ../inc/api.php:35
+msgid "GeoJSON API"
+msgstr ""
+
+#: ../inc/api.php:45
+msgid "GeoJSON API Settings"
+msgstr "Configurações da API GeoJSON"
+
+#: ../inc/api.php:50
+msgid "Enable API"
+msgstr "Habilitar API"
+
+#: ../inc/api.php:51
+msgid "Select if you'd like to enable the GeoJSON API"
+msgstr "Selecione se você gostaria de habilitar a API GeoJSON"
+
+#: ../inc/api.php:60
+#, php-format
+msgid "Your API is <strong>enabled</strong>! <a href=\"%s\" target=\"_blank\">Click here to learn more</a>."
+msgstr "Sua API está <strong>ativada</strong>! <a href=\"%s\" target=\"_blank\">Clique aqui para saber mais</a>."
 
 #: ../inc/core.php:103
 #: ../inc/core.php:115

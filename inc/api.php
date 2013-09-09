@@ -7,12 +7,68 @@
 class JEO_API extends JEO_Markers {
 
 	function __construct() {
-		add_rewrite_endpoint('geojson', EP_ALL);
-		add_filter('query_vars', array($this, 'query_var'));
-		add_filter('jeo_markers_geojson', array($this, 'jsonp_callback'));
-		add_filter('jeo_geojson_content_type', array($this, 'content_type'));
-		add_action('jeo_markers_before_print', array($this, 'headers'));
-		add_action('template_redirect', array($this, 'template_redirect'));
+
+		add_filter('jeo_settings_tabs', array($this, 'admin_settings_tab'));
+		add_filter('jeo_settings_form_sections', array($this, 'admin_settings_form_section'), 10, 2);
+
+
+		if($this->is_enabled()) {
+			add_rewrite_endpoint('geojson', EP_ALL);
+			add_filter('query_vars', array($this, 'query_var'));
+			add_filter('jeo_markers_geojson', array($this, 'jsonp_callback'));
+			add_filter('jeo_geojson_content_type', array($this, 'content_type'));
+			add_action('jeo_markers_before_print', array($this, 'headers'));
+			add_action('template_redirect', array($this, 'template_redirect'));
+		}
+	}
+
+	/*
+	 * Admin settings
+	 */
+
+	function is_enabled() {
+		$options = jeo_get_options();
+		return ($options && isset($options['api']) && $options['api']['enable']);
+	}
+
+	function admin_settings_tab($tabs = array()) {
+		$tabs['api'] = __('GeoJSON API', 'jeo');
+		return $tabs;
+	}
+
+	function admin_settings_form_section($sections = array(), $page_slug) {
+
+		$section = array(
+			'pageslug' => $page_slug,
+			'tabslug' => 'api',
+			'id' => 'api',
+			'title' => __('GeoJSON API Settings', 'jeo'),
+			'description' => '',
+			'fields' => array(
+				array(
+					'id' => 'enable',
+					'title' => __('Enable API', 'jeo'),
+					'description' => __('Select if you\'d like to enable the GeoJSON API', 'jeo'),
+					'type' => 'checkbox',
+					'default' => false,
+					'label' => __('Enable', 'jeo')
+				)
+			)
+		);
+
+		if($this->is_enabled()) {
+			$section['description'] = sprintf(__('Your API is <strong>enabled</strong>! <a href="%s" target="_blank">Click here to learn more</a>.', 'jeo'), 'http://dev.cardume.art.br/jeo/features/geojson-api/') . '<br/><br/>' . $section['description'];
+		}
+
+		$sections[] = $section;
+		return $sections;
+	}
+
+	function get_options() {
+		$options = jeo_get_options();
+		if($options && isset($options['api'])) {
+			return $options['api'];
+		}
 	}
 
 	function query_var($vars) {
@@ -63,10 +119,18 @@ class JEO_API extends JEO_Markers {
 		$query_args = $query_args + array('geojson' => 1);
 		return add_query_arg($query_args, home_url('/'));
 	}
+
+	function get_download_url($query_args = array()) {
+		return add_query_arg(array('download' => 1), $this->get_api_url($query_args));
+	}
 }
 
 $GLOBALS['jeo_api'] = new JEO_API;
 
 function jeo_get_api_url() {
 	return $GLOBALS['jeo_api']->get_api_url();
+}
+
+function jeo_get_api_download_url() {
+	return $GLOBALS['jeo_api']->get_download_url();
 }
