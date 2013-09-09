@@ -52,7 +52,7 @@ if($allow_layers) {
 
 				if(count($maps) > 1 || ($map && $layers)) :
 					?>
-					<div class="section layer two columns">
+					<div class="section layer three columns">
 						<div class='inner'>
 							<?php if(!$map) : ?>
 								<h4>
@@ -121,10 +121,10 @@ if($allow_layers) {
 				$taxonomies = jeo_get_share_widget_taxonomies();
 				?>
 
-				<div class="section three columns">
+				<div class="section two columns">
 					<div class="inner">
 						<h4>
-							<?php _e('Filter map content', 'jeo'); ?>
+							<?php _e('Filter content', 'jeo'); ?>
 							<a class="tip" href="#">
 								?
 								<div class="popup arrow-left">
