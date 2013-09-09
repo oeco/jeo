@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-09 16:41-0300\n"
-"PO-Revision-Date: 2013-09-09 16:42-0300\n"
+"POT-Creation-Date: 2013-09-09 16:57-0300\n"
+"PO-Revision-Date: 2013-09-09 16:57-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -237,6 +237,10 @@ msgstr "Copie e cole este código em uma página HTML para incorporar o mapa com
 #: ../content-share.php:213
 msgid "Share this map, with it's current settings and location, on your social network"
 msgstr "Compartilhe este mapa, com a localização e configurações atuais, em sua rede social"
+
+#: ../content-share.php:229
+msgid "Map preview"
+msgstr "Pré-visualização do mapa"
 
 #: ../searchform.php:3
 msgid "Search and hit enter"

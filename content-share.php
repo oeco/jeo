@@ -224,8 +224,15 @@ if($allow_layers) {
 			</div>
 		</div>
 
-		<div class='content' id='widget-content'>
-		<!-- iframe goes here -->
+		<div class="container">
+			<div class="twelve columns">
+				<h2 class="preview-title"><?php _e('Map preview', 'jeo'); ?></h2>
+			</div>
+		</div>
+		<div id="embed-container">
+			<div class="content" id="widget-content">
+				<!-- iframe goes here -->
+			</div>
 		</div>
 
 	</div>

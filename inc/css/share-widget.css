@@ -103,6 +103,21 @@
   color: #9AE4E8;
 }
 
+#jeo-share-widget #embed-container {
+  background: #333;
+  padding: 52px 0 40px;
+  margin: -52px 0 -60px;
+}
+
+#jeo-share-widget .preview-title {
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+  margin: -20px 0 20px;
+  text-align: center;
+  color: #fff;
+}
+
 /* Layout
 ------------------------------------------------------- */
 #jeo-share-widget .section {
