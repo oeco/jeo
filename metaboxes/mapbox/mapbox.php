@@ -74,45 +74,41 @@ function mapbox_inner_custom_box($post) {
 			</p>
 		</div>
 		
+
 		
 		
 		<h4><?php _e('Edit the default layer and fill the IDs of the maps to overlay layers of your map, in order of appearance', 'jeo'); ?></h4>
 		<div class="layers-container">
+
+			<?php 
+			if(isset($map_data['layer'])) 
+				$select_base_layer = $map_data['layer']['0']['type'];
+			else
+				$select_base_layer = 'openstreetmap';
+			?>
+
+			<div>
+				Select base layer
+				<select name="map_data[layer][0][type]" id="baselayer_drop_down">
+					<option value="openstreetmap" <?=$select_base_layer == 'openstreetmap' ? ' selected="selected"' : '';?> >OpenStreetMap</option>
+					<option value="mapquest_osm" <?=$select_base_layer == 'mapquest_osm' ? ' selected="selected"' : '';?> >Mapquest OpenStreetMap</option>
+					<option value="mapquest_sat" <?=$select_base_layer == 'mapquest_sat' ? ' selected="selected"' : '';?> >Mapquest Satellite</option>
+					<option value="stamen_toner" <?=$select_base_layer == 'stamen_toner' ? ' selected="selected"' : '';?> >Stamen Toner</option>
+					<option value="stamen_watercolor" <?=$select_base_layer == 'stamen_watercolor' ? ' selected="selected"' : '';?> >Stamen Watercolor</option>
+					<option value="stamen_terrain" <?=$select_base_layer == 'stamen_terrain' ? ' selected="selected"' : '';?> >Stamen Terrain <?php _e('(USA Only)','jeo'); ?></option>
+					<option value="custom" <?=$select_base_layer == 'custom' ? ' selected="selected"' : '';?> ><?php _e('Custom','jeo'); ?></option>
+					<option value="none" <?=$select_base_layer == 'none' ? ' selected="selected"' : '';?> ><?php _e('None','jeo'); ?></option>	
+				</select>
+				<input type="text" name="map_data[layer][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
+			</div>
+
+			<p><a class="button add-layer-mapbox-custom" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a></p>
+
+
 			<ol class="layers-list">
-			<?php if(!isset($map_data['layers'])) { ?>
-				<li>
-					<div class="layer-actions">
-						<span class="sort"></span>
-						<a href="#" class="button remove-layer"><?php _e('Remove', 'jeo'); ?></a>
-					</div>
-					<div class="layer_type">OpenStreetMap Base Layer</div>
-				
-					<div class="layer-opts">
-						<p><input type="text" name="map_data[layers][0][title]" class="layer_title" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" /></p>
-						<p><input type="text" name="map_data[layers][0][id]" value="http://a.tile.openstreetmap.org/{z}/{x}/{y}.png" class="layer_id" size="60" readonly=true /></p>
-						<h4><?php _e('Layer options', 'jeo'); ?></h4>
-						<div class="filter-opts">
-							<input name="map_data[layers][0][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
-							<?php _e('Fixed', 'jeo'); ?>
-							<input name="map_data[layers][0][opts][filtering]" class="switch_layer filtering-opt" value="switch" type="radio" />
-							<?php _e('Switchable', 'jeo'); ?>
-							<input name="map_data[layers][0][opts][filtering]" class="swap_layer filtering-opt" value="swap" type="radio" />
-							<?php _e('Swapable', 'jeo'); ?>
+			<?php if(isset($map_data['layers'][1])) {
 
-							<div class="filtering-opts">
-								<span class="switch-opts">
-									<input type="checkbox" name="map_data[layers][0][switch_hidden]" class="layer_hidden" value="1" /> <?php _e('Hidden', 'jeo'); ?>
-								</span>
-								<span class="swap-opts">
-									<input type="radio" name="map_data[swap_first_layer]" class="swap_first_layer" value="examples.map-vyofok3q" /> <?php _e('Default swap option', 'jeo'); ?>
-								</span>
-							</div>
-						</div>
-					</div>
-				</li>
-			<?php } else {
-
-				$i = 0;
+				$i = 1;
 				$swap_first = false;
 				if(isset($map_data['swap_first_layer']))
 					$swap_first = $map_data['swap_first_layer'];
@@ -177,14 +173,7 @@ function mapbox_inner_custom_box($post) {
 				}
 			} ?>
 			</ol>
-			<p><?php _e('Add new layer', 'jeo'); ?></p>
-			<p><a class="button add-layer-mapbox-custom" href="#"><?php _e('Mapbox Custom', 'jeo'); ?></a>
-			<a class="button add-layer-openstreetmap" href="#"><?php _e('OpenStreetMap', 'jeo'); ?></a>
-			<a class="button add-layer-mapquest-osm" href="#"><?php _e('Mapquest OSM', 'jeo'); ?></a>
-			<a class="button add-layer-mapquest-satellite" href="#"><?php _e('Mapquest Satellite', 'jeo'); ?></a>
-			<a class="button add-layer-stamen-toner" href="#"><?php _e('Stamen Toner', 'jeo'); ?></a>
-			<a class="button add-layer-stamen-watercolor" href="#"><?php _e('Stamen Watercolor', 'jeo'); ?></a>
-			<a class="button add-layer-stamen-terrain" href="#"><?php _e('Stamen Terrain', 'jeo'); ?></a></p>
+			
 </p>
 			
 			
