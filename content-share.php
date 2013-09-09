@@ -78,7 +78,7 @@ if($allow_layers) {
 								<?php $map_id = $map->ID; ?>
 								<h4>
 									<?php if(!isset($_GET['layers'])) : ?>
-										<?php echo __('Select layers from', 'jeo') . ' ' . get_the_title($map_id); ?>
+										<?php echo __('Select layers', 'jeo'); ?>
 									<?php else : ?>
 										<?php _e('Select layers', 'jeo'); ?>
 									<?php endif; ?>
@@ -104,7 +104,9 @@ if($allow_layers) {
 										</select>
 									<?php endif; ?>
 									<a class="clear-layers" href="#"><?php _e('Back to default layer configuration', 'jeo'); ?></a>
-									<p><a class="button" href="<?php echo jeo_get_share_url(); ?>"><?php _e('View all maps', 'jeo'); ?></a></p>
+									<?php if(count($maps) > 1) : ?>
+										<p><a class="button" href="<?php echo jeo_get_share_url(); ?>"><?php _e('View all maps', 'jeo'); ?></a></p>
+									<?php endif; ?>
 								</div>
 							<?php else : ?>
 								<h4>&nbsp;</h4>
