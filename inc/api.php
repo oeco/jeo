@@ -17,9 +17,12 @@ class JEO_API extends JEO_Markers {
 	}
 
 	function query_var($vars) {
-		$vars[] = 'geojson';
 		$vars[] = 'download';
 		return $vars;
+	}
+
+	function endpoint() {
+		add_rewrite_endpoint('geojson', EP_ALL);
 	}
 
 	function template_redirect() {
@@ -40,7 +43,7 @@ class JEO_API extends JEO_Markers {
 
 	function content_type($content_type) {
 		if(get_query_var('geojson') && isset($_GET['callback'])) {
-			$content_type = 'Content-type: application/javascript';
+			$content_type = 'application/javascript';
 		}
 		return $content_type;
 	}
@@ -58,9 +61,14 @@ class JEO_API extends JEO_Markers {
 		return $vars;
 	}
 
-	function endpoint() {
-		add_rewrite_endpoint('geojson', EP_ALL);
+	function get_api_url() {
+		global $wp;
+		return home_url('/') . 'geojson/' . $wp->request;
 	}
 }
 
-new JEO_API;
+$GLOBALS['jeo_api'] = new JEO_API;
+
+function jeo_get_api_url() {
+	return $GLOBALS['jeo_api']->get_api_url();
+}

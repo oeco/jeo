@@ -10,6 +10,31 @@ if($_GET['map_id']) {
 	else
 		$map = false;
 }
+
+// All maps
+$maps = get_posts(array('post_type' => 'map', 'posts_per_page' => -1));
+
+// Single map
+if(!$map && count($maps) <= 1) {
+	$map = array_shift($maps);
+	$page_title = __('Share the map', 'jeo');
+}
+
+// check for layer count
+
+$allow_layers = true;
+$layers = false;
+
+if($allow_layers) {
+	if(isset($_GET['layers'])) {
+		$layers = explode(',', $_GET['layers']);
+	} elseif($map) {
+		$layers = jeo_get_map_layers($map->ID);
+		if(count($layers) <= 1) {
+			$layers = false;
+		}
+	}
+}
 ?>
 
 <section id="content">
@@ -25,33 +50,9 @@ if($_GET['map_id']) {
 			<div class="container row">
 				<?php
 
-				// All maps
-				$maps = get_posts(array('post_type' => 'map', 'posts_per_page' => -1));
-
-				// Single map
-				if(!$map && count($maps) <= 1) {
-					$map = array_shift($maps);
-				}
-
-				// check for layer count
-
-				$allow_layers = true;
-				$layers = false;
-
-				if($allow_layers) {
-					if(isset($_GET['layers'])) {
-						$layers = explode(',', $_GET['layers']);
-					} elseif($map) {
-						$layers = jeo_get_map_layers($map->ID);
-						if(count($layers) <= 1) {
-							$layers = false;
-						}
-					}
-				}
-
 				if(count($maps) > 1 || ($map && $layers)) :
 					?>
-					<div class="section layer three columns">
+					<div class="section layer two columns">
 						<div class='inner'>
 							<?php if(!$map) : ?>
 								<h4>
@@ -183,7 +184,7 @@ if($_GET['map_id']) {
 					</div>
 				</div>
 
-				<div class='section output three columns'>
+				<div class='section output two columns'>
 					<div class='inner'>
 						<h4>
 							<div class='popup arrow-right'>
@@ -192,12 +193,32 @@ if($_GET['map_id']) {
 							<a class='tip' href='#'>
 								?
 								<div class='popup arrow-left'>
-									<?php _e('Copy and paste this code into an HTML page', 'jeo'); ?>
+									<?php _e('Copy and paste this code into an HTML page to embed with it\'s current settings and location', 'jeo'); ?>
 								</div>
 							</a>
 						</h4>
 						<textarea id='output'></textarea>
 					</div>
+				</div>
+
+				<div class="section social two columns">
+					<div class="inner">
+						<h4>
+							<div class="popup arrow-right">
+							</div>
+							<?php _e('Share', 'jeo'); ?>
+							<a class="tip" href="#">
+								?
+								<div class="popup arrow-left">
+									<?php _e('Share this map, with it\'s current settings and location, on your social network', 'jeo'); ?>
+								</div>
+							</a>
+						</h4>
+					</div>
+					<p id="jeo-share-social" class="links">
+						<a href="#" class="facebook"><span class="lsf">&#xE047;</span></a>
+						<a href="#" class="twitter"><span class="lsf">&#xE12f;</span></a>
+					</p>
 				</div>
 
 			</div>

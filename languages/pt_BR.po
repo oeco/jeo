@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-06 19:41-0300\n"
-"PO-Revision-Date: 2013-09-06 19:55-0300\n"
+"POT-Creation-Date: 2013-09-09 16:41-0300\n"
+"PO-Revision-Date: 2013-09-09 16:42-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: \n"
@@ -129,105 +129,114 @@ msgid "Share a map"
 msgstr "Compartilhe um mapa"
 
 #: ../content-share.php:9
+#: ../content-share.php:209
 msgid "Share"
 msgstr "Compartilhar"
 
-#: ../content-share.php:58
+#: ../content-share.php:20
+msgid "Share the map"
+msgstr "Compartilhe o mapa"
+
+#: ../content-share.php:59
 msgid "Choose a map"
 msgstr "Escolha um mapa"
 
-#: ../content-share.php:62
+#: ../content-share.php:63
 msgid "Choose any map from the list"
 msgstr "Escolha qualquer mapa da lista"
 
-#: ../content-share.php:67
+#: ../content-share.php:68
 msgid "Select a map"
 msgstr "Selecione um mapa"
 
-#: ../content-share.php:73
+#: ../content-share.php:74
 msgid "Select layers from this map"
 msgstr "Selecione camadas deste mapa"
 
-#: ../content-share.php:80
+#: ../content-share.php:81
 msgid "Select layers from"
 msgstr "Selecione camadas de"
 
-#: ../content-share.php:82
-#: ../content-share.php:93
+#: ../content-share.php:83
+#: ../content-share.php:94
 msgid "Select layers"
 msgstr "Selecione camadas"
 
-#: ../content-share.php:87
+#: ../content-share.php:88
 msgid "Choose any layers from the list"
 msgstr "Escolha camadas da lista"
 
-#: ../content-share.php:105
+#: ../content-share.php:106
 msgid "Back to default layer configuration"
 msgstr "Voltar para a configuração original de camadas"
 
-#: ../content-share.php:123
+#: ../content-share.php:125
 msgid "Filter map content"
 msgstr "Filtrar conteúdo do mapa"
 
-#: ../content-share.php:127
+#: ../content-share.php:129
 msgid "Filter the content displayed on the map through our options"
 msgstr "Filtre o conteúdo exibido no mapa através das nossas opções"
 
-#: ../content-share.php:132
+#: ../content-share.php:134
 msgid "Select content"
 msgstr "Selecione conteúdo"
 
-#: ../content-share.php:137
+#: ../content-share.php:139
 msgid "Selected content"
 msgstr "Conteúdo selecionado"
 
-#: ../content-share.php:142
+#: ../content-share.php:144
 msgid "General content"
 msgstr "Geral"
 
-#: ../content-share.php:143
+#: ../content-share.php:145
 msgid "Content from the map"
 msgstr "Conteúdo do mapa"
 
-#: ../content-share.php:143
+#: ../content-share.php:145
 msgid "Latest content"
 msgstr "Último conteúdo"
 
-#: ../content-share.php:144
+#: ../content-share.php:146
 msgid "No content (map only)"
 msgstr "Nenhum conteúdo (apenas o mapa)"
 
-#: ../content-share.php:152
+#: ../content-share.php:154
 msgid "By"
 msgstr "Por"
 
-#: ../content-share.php:169
+#: ../content-share.php:171
 msgid "Width & Height"
 msgstr "Dimensões"
 
-#: ../content-share.php:173
+#: ../content-share.php:175
 msgid "Select the width and height proportions you would like to embed to be."
 msgstr "Selecione as proporções que você gostaria de incorporar o mapa."
 
-#: ../content-share.php:178
+#: ../content-share.php:180
 msgid "Small"
 msgstr "Pequeno"
 
-#: ../content-share.php:179
+#: ../content-share.php:181
 msgid "Medium"
 msgstr "Médio"
 
-#: ../content-share.php:180
+#: ../content-share.php:182
 msgid "Large"
 msgstr "Grande"
 
-#: ../content-share.php:190
+#: ../content-share.php:192
 msgid "HTML Output"
 msgstr "Resultado HTML"
 
-#: ../content-share.php:194
-msgid "Copy and paste this code into an HTML page"
-msgstr "Copie e cole este código para uma página HTML"
+#: ../content-share.php:196
+msgid "Copy and paste this code into an HTML page to embed with it's current settings and location"
+msgstr "Copie e cole este código em uma página HTML para incorporar o mapa com sua localização e configurações atuais"
+
+#: ../content-share.php:213
+msgid "Share this map, with it's current settings and location, on your social network"
+msgstr "Compartilhe este mapa, com a localização e configurações atuais, em sua rede social"
 
 #: ../searchform.php:3
 msgid "Search and hit enter"
@@ -452,60 +461,60 @@ msgstr "Selecione um mapa para adicionar ao seu grupo de mapas"
 msgid "Add map"
 msgstr "Adicionar mapa"
 
-#: ../inc/markers.php:349
+#: ../inc/markers.php:358
 msgid "We couldn't find what you are looking for, please try again."
 msgstr "Não encontramos resultados para o que procura, tente novamente."
 
-#: ../inc/markers.php:350
+#: ../inc/markers.php:359
 msgid "results found"
 msgstr "resultados encontrados"
 
-#: ../inc/markers.php:367
+#: ../inc/markers.php:376
 msgid "Address and geolocation"
 msgstr "Endereço e geolocalização"
 
-#: ../inc/markers.php:398
+#: ../inc/markers.php:407
 msgid "Find the location"
 msgstr "Encontre a localização"
 
-#: ../inc/markers.php:400
+#: ../inc/markers.php:409
 msgid "Full address"
 msgstr "Endereço completo"
 
-#: ../inc/markers.php:401
+#: ../inc/markers.php:410
 msgid "Find"
 msgstr "Encontrar"
 
-#: ../inc/markers.php:406
+#: ../inc/markers.php:415
 msgid "Drag the marker for a more precise result"
 msgstr "Arraste o marcador para melhor precisão"
 
-#: ../inc/markers.php:410
+#: ../inc/markers.php:419
 msgid "Result"
 msgstr "Resultados"
 
-#: ../inc/markers.php:412
+#: ../inc/markers.php:421
 msgid "Latitude"
 msgstr "Latitude"
 
-#: ../inc/markers.php:415
+#: ../inc/markers.php:424
 msgid "Longitude"
 msgstr "Longitude"
 
-#: ../inc/markers.php:517
+#: ../inc/markers.php:526
 msgctxt "reduced date format"
 msgid "m/d/Y"
 msgstr "d/m/Y"
 
-#: ../inc/markers.php:689
+#: ../inc/markers.php:698
 msgid "Clear GeoJSON Cache"
 msgstr "Limpar cache do GeoJSON"
 
-#: ../inc/markers.php:702
+#: ../inc/markers.php:711
 msgid "<strong>Markers GeoJSON cache has been cleared. Don't worry! They will be dynamically regenerated.</strong>"
 msgstr "<strong>O cache GeoJSON dos marcados foi apagado. Não se preocupe! Eles serão gerados dinamicamente.</strong>"
 
-#: ../inc/markers.php:702
+#: ../inc/markers.php:711
 msgid "The next map markers load might take a little while, depending on the amount of markers. If you want to speed this up for your users, we recommend you clear your browser's cache and navigate through your website to let the markers cache be replaced."
 msgstr "A próxima exibição de marcadores pode demorar um pouco, dependendo da quantidade de marcadores. Se você quiser acelerar este processo para seus usuários, recomendamos que vocẽ limpe o cache do seu navegador e navegue nos seus mapas pelo site para que o cache seja reposto."
 
@@ -1072,6 +1081,12 @@ msgstr "Desativar imagem"
 #: ../inc/admin/admin-page-framework.php:2583
 msgid "No url has been set."
 msgstr "Nenhum url foi inserida."
+
+#~ msgid "Share this map"
+#~ msgstr "Compartilhe este mapa"
+
+#~ msgid "Copy and paste this code into an HTML page"
+#~ msgstr "Copie e cole este código para uma página HTML"
 
 #, fuzzy
 #~ msgid "jeo Maps"

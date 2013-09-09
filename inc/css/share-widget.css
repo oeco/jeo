@@ -79,6 +79,30 @@
     border:1px solid #aaa;
 }
 
+#jeo-share-widget .social .links {
+  font-size: 40px;
+  line-height: 40px;
+  display: table;
+  width: 100%;
+}
+
+#jeo-share-widget .social .links a {
+  display: table-cell;
+  width: 1%;
+}
+
+#jeo-share-widget .social .links a:hover {
+  color: #333 !important;
+}
+
+#jeo-share-widget .social .links a.facebook {
+  color: #3b5998;
+}
+
+#jeo-share-widget .social .links a.twitter {
+  color: #9AE4E8;
+}
+
 /* Layout
 ------------------------------------------------------- */
 #jeo-share-widget .section {

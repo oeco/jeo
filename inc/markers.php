@@ -299,7 +299,9 @@ class JEO_Markers {
 				set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
-		header(apply_filters('jeo_geojson_content_type', 'Content-type: application/json'));
+		$content_type = apply_filters('jeo_geojson_content_type', 'application/json');
+
+		header('Content-Type: ' . $content_type . ';charset=UTF-8');
 
 		if($this->use_browser_caching()) {
 			/* Browser caching */

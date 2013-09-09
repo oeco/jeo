@@ -109,6 +109,7 @@ if (!Array.prototype.indexOf) {
 		}
 
 		function updateOutput() {
+			updateLocation();
 			$output.html('<iframe src="' + BASEURL + serialize(embed) + '" width="' + embed.width + '" height="' + embed.height + '" frameborder="0"></iframe>');
 		}
 
@@ -201,6 +202,18 @@ if (!Array.prototype.indexOf) {
 
 		}
 
+		function updateLocation() {
+
+			embed.lat = parseFloat($('#iframe').contents().find('#latitude').val())
+			embed.lon = parseFloat($('#iframe').contents().find('#longitude').val());
+			embed.zoom = parseInt($('#iframe').contents().find('#zoom').val());
+
+			$('.zoom .val').text(embed.zoom);
+			$('.latitude .val').text(embed.lat);
+			$('.longitude .val').text(embed.lon);
+
+		}
+
 		$('.chzn-select, #jeo-share-widget input').each(updateInputs);
 		$('.chzn-select').chosen().change(updateInputs);
 
@@ -226,14 +239,6 @@ if (!Array.prototype.indexOf) {
 		}
 
 		$('#output').focus(function() {
-
-			embed.lat = parseFloat($('#iframe').contents().find('#latitude').val())
-			embed.lon = parseFloat($('#iframe').contents().find('#longitude').val());
-			embed.zoom = parseInt($('#iframe').contents().find('#zoom').val());
-
-			$('.zoom .val').text(embed.zoom);
-			$('.latitude .val').text(embed.lat);
-			$('.longitude .val').text(embed.lon);
 
 			updateOutput();
 
@@ -300,6 +305,37 @@ if (!Array.prototype.indexOf) {
 			// re-run
 			updateOutput();
 			return false;
+		});
+
+		$('#jeo-share-social a').click(function() {
+
+			updateOutput();
+
+			var share_embed = $.extend({}, embed);
+
+			share_embed.width = undefined;
+			share_embed.height = undefined;
+
+			var share_url = encodeURIComponent(BASEURL + serialize(share_embed));
+
+			if($(this).hasClass('facebook')) {
+
+				window.open(
+					'https://www.facebook.com/sharer/sharer.php?u='+ share_url,
+					'facebook-share-dialog',
+					'width=626, height=436, toolbar=0, location=0, menubar=0, directories=0, scrollbars=0'
+				);
+
+			} else if($(this).hasClass('twitter')) {
+
+				window.open('http://twitter.com/share?url=' + share_url + '&',
+					'twitterwindow',
+					'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+$(window).width()/2 +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+
+			}
+
+			return false;
+
 		});
 	};
 

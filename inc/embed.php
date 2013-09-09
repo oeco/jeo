@@ -6,7 +6,7 @@
 
 class JEO_Embed {
 
-	var $query_var = 'jeo_embed';
+	var $query_var = 'jeo_map_embed';
 	var $slug = 'embed';
 
 	function __construct() {
@@ -72,11 +72,45 @@ class JEO_Embed {
 		$query = http_build_query($vars);
 		return home_url('/' . $this->slug . '/?' . $query);
 	}
+
+	function get_map_conf() {
+		$conf = array();
+		$conf['containerID'] = 'map_embed';
+		$conf['disableHash'] = true;
+		$conf['mainMap'] = true;
+		if(isset($_GET['map_id'])) {
+			$conf['postID'] = $_GET['map_id'];
+		} else {
+			$conf['postID'] = jeo_get_the_ID();
+		}
+		if(isset($_GET['map_only'])) {
+			$conf['disableMarkers'] = true;
+		}
+		if(isset($_GET['layers'])) {
+			$conf['layers'] = explode(',', $_GET['layers']);
+			if(isset($conf['postID']))
+				unset($conf['postID']);
+		}
+		if(isset($_GET['zoom'])) {
+			$conf['zoom'] = $_GET['zoom'];
+		}
+		if(isset($_GET['lat']) && isset($_GET['lon'])) {
+			$conf['center'] = array($_GET['lat'], $_GET['lon']);
+			$conf['forceCenter'] = true;
+		}
+
+		$conf = apply_filters('jeo_map_embed_conf', $conf);
+
+		return apply_filters('jeo_map_embed_geojson_conf', json_encode($conf));
+	}
 }
 
-$jeo_embed = new JEO_Embed();
+$GLOBALS['jeo_embed'] = new JEO_Embed();
 
 function jeo_get_embed_url($vars = array()) {
-	global $jeo_embed;
-	return $jeo_embed->get_embed_url($vars);
+	return $GLOBALS['jeo_embed']->get_embed_url($vars);
+}
+
+function jeo_get_map_embed_conf() {
+	return $GLOBALS['jeo_embed']->get_map_conf();
 }
