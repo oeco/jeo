@@ -16,7 +16,6 @@ function mapbox_metabox_init() {
 						<span class="sort"></span>
 						<a href="#" class="button remove-layer">' . __('Remove', 'jeo'). '</a>
 					</div>
-					<div class="layer_type"></div>
 					<div class="layer-opts">
 						<p><input type="text" class="layer_title" size="60" placeholder="' . __('Title', 'jeo') . '" /></p>
 						<p><input type="text" class="layer_id" size="60" placeholder="' . __('ID', 'jeo') . '" /></p>
@@ -102,7 +101,7 @@ function mapbox_inner_custom_box($post) {
 				<input type="text" name="map_data[layer][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
 			</div>
 
-			<p><a class="button add-layer-mapbox-custom" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a></p>
+			<p><a class="button add-layer" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a></p>
 
 
 			<ol class="layers-list">

@@ -158,8 +158,8 @@
 		 * Layer management
 		 */
 				
-		$('#mapbox-metabox .add-layer-mapbox-custom').click(function() {
-			addLayer('mapbox-custom');
+		$('#mapbox-metabox .add-layer').click(function() {
+			addLayer();
 			return false;
 		});
 
@@ -283,59 +283,14 @@
 
 	});
 
-	function updateBaseLayerURLBox() {
-
-		base_layer_url_box = $('#baselayer_url_box');
-
-		switch ( $('#baselayer_drop_down').val() ){
-			case 'openstreetmap':
-				base_layer_url_box.val('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
-				base_layer_url_box.attr('readonly', true);
-				break;
-		    case 'mapquest_osm':
-			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg');
-			    base_layer_url_box.attr('readonly', true);
-			    break;
-		    case 'mapquest_sat':
-			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg');
-			    base_layer_url_box.attr('readonly', true);
-			    break;
-		    case 'stamen_toner':
-			    base_layer_url_box.val('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png');
-			    base_layer_url_box.attr('readonly', true);
-			    break;
-		    case 'stamen_watercolor':
-			    base_layer_url_box.val('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg');
-			    base_layer_url_box.attr('readonly', true);
-			    break;		  
-		    case 'stamen_terrain':
-			    base_layer_url_box.val('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg');
-			    base_layer_url_box.attr('readonly', true);
-			    break;
-		    case 'none':
-			    base_layer_url_box.val('');
-			    base_layer_url_box.attr('readonly', true);
-			    break;
-			case 'custom': 
-				base_layer_url_box.attr('readonly', false);
-				break;
-		}
-		return false;
-	}
-
   // Add an entry to the layer list.
-	function addLayer(type) {
+	function addLayer() {
 	  
 		var layersList = $('#mapbox-metabox .layers-list');
 		var layerItem = $(mapbox_metabox_localization.layer_item);
 		var layerLength = layersList.find('li').length + 1;
 		var layerTypeCaption = layerItem.find('.layer_type');
 		var layerID = layerItem.find('.layer_id');
-
-	    // Set read-only URL for not custom fields
-	    if (type != 'mapbox-custom') {
-			  layerItem.find('.layer_id').attr('readonly', true);
-	    }
 
 		layerID.attr('name', 'map_data[layers][' + layerLength + '][id]');
 		layerItem.find('.fixed_layer, .switch_layer, .swap_layer').attr('name', 'map_data[layers][' + layerLength + '][opts][filtering]');
@@ -400,6 +355,46 @@
 			}
 		});
 		return filtering;
+	}
+
+	function updateBaseLayerURLBox() {
+
+		base_layer_url_box = $('#baselayer_url_box');
+
+		switch ( $('#baselayer_drop_down').val() ){
+			case 'openstreetmap':
+				base_layer_url_box.val('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
+				base_layer_url_box.attr('readonly', true);
+				break;
+		    case 'mapquest_osm':
+			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'mapquest_sat':
+			    base_layer_url_box.val('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'stamen_toner':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'stamen_watercolor':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;		  
+		    case 'stamen_terrain':
+			    base_layer_url_box.val('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+		    case 'none':
+			    base_layer_url_box.val('');
+			    base_layer_url_box.attr('readonly', true);
+			    break;
+			case 'custom': 
+				base_layer_url_box.attr('readonly', false);
+				break;
+		}
+		return false;
 	}
 
 })(jQuery);
