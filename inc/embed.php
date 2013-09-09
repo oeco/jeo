@@ -98,6 +98,7 @@ class JEO_Embed {
 			$conf['center'] = array($_GET['lat'], $_GET['lon']);
 			$conf['forceCenter'] = true;
 		}
+		$conf['disable_mousewheel'] = false;
 
 		$conf = apply_filters('jeo_map_embed_conf', $conf);
 

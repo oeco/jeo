@@ -503,12 +503,15 @@ class JEO_Markers {
 
 	function get_icon() {
 		global $post;
-		$marker = array(
-			'url' => get_template_directory_uri() . '/img/marker.png',
-			'width' => 26,
-			'height' => 30
-		);
-		return apply_filters('jeo_marker_icon', $marker, $post);
+		if($this->has_location()) {
+			$marker = array(
+				'url' => get_template_directory_uri() . '/img/marker.png',
+				'width' => 26,
+				'height' => 30
+			);
+			return apply_filters('jeo_marker_icon', $marker, $post);
+		}
+		return null;
 	}
 
 	function get_class() {
@@ -584,7 +587,7 @@ class JEO_Markers {
 	function has_location($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
-		return $this->get_coordinates($post_id);
+		return ($this->get_coordinates($post_id));
 	}
 
 	function get_city($post_id = false) {

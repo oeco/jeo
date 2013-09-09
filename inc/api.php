@@ -7,9 +7,8 @@
 class JEO_API extends JEO_Markers {
 
 	function __construct() {
-		add_filter('init', array($this, 'endpoint'));
+		add_rewrite_endpoint('geojson', EP_ALL);
 		add_filter('query_vars', array($this, 'query_var'));
-		add_filter('request', array($this, 'request'));
 		add_filter('jeo_markers_geojson', array($this, 'jsonp_callback'));
 		add_filter('jeo_geojson_content_type', array($this, 'content_type'));
 		add_action('jeo_markers_before_print', array($this, 'headers'));
@@ -17,16 +16,15 @@ class JEO_API extends JEO_Markers {
 	}
 
 	function query_var($vars) {
+		$vars[] = 'geojson';
 		$vars[] = 'download';
 		return $vars;
 	}
 
-	function endpoint() {
-		add_rewrite_endpoint('geojson', EP_ALL);
-	}
-
 	function template_redirect() {
-		if(get_query_var('geojson')) {
+		global $wp_query;
+		if(isset($wp_query->query['geojson'])) {
+			define('DONOTCACHEPAGE', true);
 			$query = apply_filters('jeo_geojson_api_query', $this->query());
 			$this->get_data($query);
 			exit;
@@ -34,7 +32,8 @@ class JEO_API extends JEO_Markers {
 	}
 
 	function jsonp_callback($geojson) {
-		if(get_query_var('geojson') && isset($_GET['callback'])) {
+		global $wp_query;
+		if(isset($wp_query->query['geojson']) && isset($_GET['callback'])) {
 			$jsonp_callback = preg_replace('/[^a-zA-Z0-9$_]/s', '', $_GET['callback']);
 			$geojson = "$jsonp_callback($geojson)";
 		}
@@ -42,28 +41,27 @@ class JEO_API extends JEO_Markers {
 	}
 
 	function content_type($content_type) {
-		if(get_query_var('geojson') && isset($_GET['callback'])) {
+		global $wp_query;
+		if(isset($wp_query->query['geojson']) && isset($_GET['callback'])) {
 			$content_type = 'application/javascript';
 		}
 		return $content_type;
 	}
 
 	function headers() {
-		if(get_query_var('geojson') && isset($_GET['download'])) {
+		global $wp_query;
+		if(isset($wp_query->query['geojson']) && isset($_GET['download'])) {
 			$filename = apply_filters('jeo_geojson_filename', sanitize_title(get_bloginfo('name') . ' ' . wp_title(null, false)));
 			header('Content-Disposition: attachment; filename="' . $filename . '.geojson"');
 		}
 		header('Access-Control-Allow-Origin: *');
 	}
 
-	function request($vars) {
-		if(isset($vars['geojson'])) $vars['geojson'] = true;
-		return $vars;
-	}
-
-	function get_api_url() {
-		global $wp;
-		return home_url('/') . 'geojson/' . $wp->request;
+	function get_api_url($query_args = array()) {
+		global $wp_query;
+		$query_args = (empty($query_args)) ? $wp_query->query : $query_args;
+		$query_args = $query_args + array('geojson' => 1);
+		return add_query_arg($query_args, home_url('/'));
 	}
 }
 
