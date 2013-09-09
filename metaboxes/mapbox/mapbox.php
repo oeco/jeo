@@ -16,9 +16,10 @@ function mapbox_metabox_init() {
 						<span class="sort"></span>
 						<a href="#" class="button remove-layer">' . __('Remove', 'jeo'). '</a>
 					</div>
-					<input type="text" class="layer_id" size="40" />
+					<div class="layer_type"></div>
 					<div class="layer-opts">
-						<input type="text" class="layer_title" size="60" placeholder="' . __('Layer title', 'jeo') . '" />
+						<p><input type="text" class="layer_title" size="60" placeholder="' . __('Title', 'jeo') . '" /></p>
+						<p><input type="text" class="layer_id" size="60" placeholder="' . __('ID', 'jeo') . '" /></p>
 						<h4>' . __('Layer options', 'jeo') . '</h4>
 						<div class="filter-opts">
 							<input class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
@@ -72,6 +73,9 @@ function mapbox_inner_custom_box($post) {
 				<input id="input_server_custom" type="radio" name="map_data[server]" value="custom" <?php if($map_data['server'] == 'custom') echo 'checked'; ?> /> <label for="input_server_custom"><?php _e('Use custom TileStream server', 'jeo'); ?>: <input type="text" name="map_data[custom_server]" value="<?php if(isset($map_data['custom_server'])) echo $map_data['custom_server']; ?>" size="70" placeholder="http://maps.example.com/v2/" /></label>
 			</p>
 		</div>
+		
+		
+		
 		<h4><?php _e('Edit the default layer and fill the IDs of the maps to overlay layers of your map, in order of appearance', 'jeo'); ?></h4>
 		<div class="layers-container">
 			<ol class="layers-list">
@@ -81,9 +85,11 @@ function mapbox_inner_custom_box($post) {
 						<span class="sort"></span>
 						<a href="#" class="button remove-layer"><?php _e('Remove', 'jeo'); ?></a>
 					</div>
-					<input type="text" name="map_data[layers][0][id]" value="examples.map-vyofok3q" class="layer_id" size="40" />
+					<div class="layer_type">OpenStreetMap Base Layer</div>
+				
 					<div class="layer-opts">
-						<input type="text" name="map_data[layers][0][title]" class="layer_title" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" />
+						<p><input type="text" name="map_data[layers][0][title]" class="layer_title" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" /></p>
+						<p><input type="text" name="map_data[layers][0][id]" value="http://a.tile.openstreetmap.org/{z}/{x}/{y}.png" class="layer_id" size="60" readonly=true /></p>
 						<h4><?php _e('Layer options', 'jeo'); ?></h4>
 						<div class="filter-opts">
 							<input name="map_data[layers][0][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
@@ -171,7 +177,17 @@ function mapbox_inner_custom_box($post) {
 				}
 			} ?>
 			</ol>
-			<p><a class="button add-layer" href="#"><?php _e('Add new layer', 'jeo'); ?></a></p>
+			<p><?php _e('Add new layer', 'jeo'); ?></p>
+			<p><a class="button add-layer-mapbox-custom" href="#"><?php _e('Mapbox Custom', 'jeo'); ?></a>
+			<a class="button add-layer-openstreetmap" href="#"><?php _e('OpenStreetMap', 'jeo'); ?></a>
+			<a class="button add-layer-mapquest-osm" href="#"><?php _e('Mapquest OSM', 'jeo'); ?></a>
+			<a class="button add-layer-mapquest-satellite" href="#"><?php _e('Mapquest Satellite', 'jeo'); ?></a>
+			<a class="button add-layer-stamen-toner" href="#"><?php _e('Stamen Toner', 'jeo'); ?></a>
+			<a class="button add-layer-stamen-watercolor" href="#"><?php _e('Stamen Watercolor', 'jeo'); ?></a>
+			<a class="button add-layer-stamen-terrain" href="#"><?php _e('Stamen Terrain', 'jeo'); ?></a></p>
+</p>
+			
+			
 			<p><a class="button-primary preview-map" href="#"><?php _e('Update preview', 'jeo'); ?></a></p>
 		</div>
 		<h3><?php _e('Preview map', 'jeo'); ?></h3>
