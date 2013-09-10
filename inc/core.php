@@ -324,16 +324,17 @@ class JEO {
 			if($query->is_main_query()) {
 				if(is_home() && !$this->map) {
 					$this->set_map($this->featured());
-				} elseif(is_singular(array('map', 'map-group'))) {
-					if(is_singular('map'))
+				} elseif($query->get('map') || $query->get('map-group')) {
+					if($query->get('map'))
 						$type = 'map';
-					elseif(is_singular('map-group'))
+					elseif($query->get('map-group'))
 						$type = 'map-group';
 					$this->set_map(get_page_by_path($query->get($type), 'OBJECT', $type));
 				}
 			}
 
 		}
+					error_log($this->map->ID);
 
 		return $query;
 	}
@@ -393,10 +394,10 @@ class JEO {
 		return $map;
 	}
 
-	function is_map($map_id = false) {
+	function is_map($post_id = false) {
 		global $post;
-		$map_id = $map_id ? $map_id : $post->ID;
-		if(get_post_type($map_id) == 'map' || get_post_type($map_id) == 'map-group')
+		$post_id = $post_id ? $post_id : $post->ID;
+		if(get_post_type($post_id) == 'map' || get_post_type($post_id) == 'map-group')
 			return true;
 
 		return false;
