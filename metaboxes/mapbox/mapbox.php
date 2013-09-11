@@ -80,15 +80,15 @@ function mapbox_inner_custom_box($post) {
 		<div class="layers-container">
 
 			<?php 
-			if(isset($map_data['layer'])) 
-				$select_base_layer = $map_data['layer']['0']['type'];
+			if(isset($map_data['layers'])) 
+				$select_base_layer = $map_data['layers']['0']['type'];
 			else
 				$select_base_layer = 'openstreetmap';
 			?>
 
 			<div>
 				Select base layer
-				<select name="map_data[layer][0][type]" id="baselayer_drop_down">
+				<select name="map_data[layers][0][type]" id="baselayer_drop_down">
 					<option value="openstreetmap" <?=$select_base_layer == 'openstreetmap' ? ' selected="selected"' : '';?> >OpenStreetMap</option>
 					<option value="mapquest_osm" <?=$select_base_layer == 'mapquest_osm' ? ' selected="selected"' : '';?> >Mapquest OpenStreetMap</option>
 					<option value="mapquest_sat" <?=$select_base_layer == 'mapquest_sat' ? ' selected="selected"' : '';?> >Mapquest Satellite</option>
@@ -98,81 +98,87 @@ function mapbox_inner_custom_box($post) {
 					<option value="custom" <?=$select_base_layer == 'custom' ? ' selected="selected"' : '';?> ><?php _e('Custom','jeo'); ?></option>
 					<option value="none" <?=$select_base_layer == 'none' ? ' selected="selected"' : '';?> ><?php _e('None','jeo'); ?></option>	
 				</select>
-				<input type="text" name="map_data[layer][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
+				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
 			</div>
 
 			<p><a class="button add-layer" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a></p>
 
 
 			<ol class="layers-list">
-			<?php if(isset($map_data['layers'][1])) {
+			
+			<?php 
+				
+				if(isset($map_data['layers'][1])) {
 
-				$i = 1;
-				$swap_first = false;
-				if(isset($map_data['swap_first_layer']))
-					$swap_first = $map_data['swap_first_layer'];
+					$i = 1;
+					$swap_first = false;
+					if(isset($map_data['swap_first_layer']))
+						$swap_first = $map_data['swap_first_layer'];
 
-				foreach($map_data['layers'] as $layer) {
+					foreach($map_data['layers'] as $key => $layer) {
 
-					/*
-					 * Deprecated fallback
-					 */
-					if(isset($layer['layer'])) {
-						$layer_id = $layer['layer'];
-						$layer['id'] = $layer_id;	
-					}
+						if($key === 0)
+							continue;
 
-					if(is_string($layer)) {
-						$layer_id = $layer;
-						$layer = array();
-						$layer['id'] = $layer_id;
-					}
-					/*
-					 *
-					 */
+						/*
+						 * Deprecated fallback
+						 */
+						if(isset($layer['layer'])) {
+							$layer_id = $layer['layer'];
+							$layer['id'] = $layer_id;	
+						}
 
-					$filtering = 'fixed';
-					if(isset($layer['opts']['filtering']))
-						$filtering = $layer['opts']['filtering'];
+						if(is_string($layer)) {
+							$layer_id = $layer;
+							$layer = array();
+							$layer['id'] = $layer_id;
+						}
+						/*
+						 *
+						 */
 
-					$title = '';
-					if(isset($layer['title']))
-						$title = $layer['title'];
+						$filtering = 'fixed';
+						if(isset($layer['opts']['filtering']))
+							$filtering = $layer['opts']['filtering'];
 
-					?>
-					<li>
-						<div class="layer-actions">
-							<span class="sort"></span>
-							<a href="#" class="button remove-layer"><?php _e('Remove', 'jeo'); ?></a>
-						</div>
-						<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" />
-						<div class="layer-opts">
-							<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" />
-							<h4><?php _e('Layer options', 'jeo'); ?></h4>
-							<div class="filter-opts">
-								<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" <?php if($filtering == 'fixed') echo 'checked'; ?> />
-								<?php _e('Fixed', 'jeo'); ?>
-								<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="switch_layer filtering-opt" value="switch" type="radio" <?php if($filtering == 'switch') echo 'checked'; ?> />
-								<?php _e('Switchable', 'jeo'); ?>
-								<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="swap_layer filtering-opt" value="swap" type="radio" <?php if($filtering == 'swap') echo 'checked'; ?> />
-								<?php _e('Swapable', 'jeo'); ?>
+						$title = '';
+						if(isset($layer['title']))
+							$title = $layer['title'];
 
-								<div class="filtering-opts">
-									<span class="switch-opts">
-										<input type="checkbox" name="map_data[layers][<?php echo $i; ?>][switch_hidden]" class="layer_hidden" value="1" <?php if(isset($layer['switch_hidden'])) echo 'checked'; ?> /> <?php _e('Hidden', 'jeo'); ?>
-									</span>
-									<span class="swap-opts">
-										<input type="radio" name="map_data[swap_first_layer]" class="swap_first_layer" value="<?php echo $layer['id']; ?>" <?php if($swap_first == $layer['id']) echo 'checked'; ?> /> <?php _e('Default swap option', 'jeo'); ?>
-									</span>
+						?>
+						<li>
+							<div class="layer-actions">
+								<span class="sort"></span>
+								<a href="#" class="button remove-layer"><?php _e('Remove', 'jeo'); ?></a>
+							</div>
+							<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" />
+							<div class="layer-opts">
+								<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" />
+								<h4><?php _e('Layer options', 'jeo'); ?></h4>
+								<div class="filter-opts">
+									<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" <?php if($filtering == 'fixed') echo 'checked'; ?> />
+									<?php _e('Fixed', 'jeo'); ?>
+									<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="switch_layer filtering-opt" value="switch" type="radio" <?php if($filtering == 'switch') echo 'checked'; ?> />
+									<?php _e('Switchable', 'jeo'); ?>
+									<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="swap_layer filtering-opt" value="swap" type="radio" <?php if($filtering == 'swap') echo 'checked'; ?> />
+									<?php _e('Swapable', 'jeo'); ?>
+
+									<div class="filtering-opts">
+										<span class="switch-opts">
+											<input type="checkbox" name="map_data[layers][<?php echo $i; ?>][switch_hidden]" class="layer_hidden" value="1" <?php if(isset($layer['switch_hidden'])) echo 'checked'; ?> /> <?php _e('Hidden', 'jeo'); ?>
+										</span>
+										<span class="swap-opts">
+											<input type="radio" name="map_data[swap_first_layer]" class="swap_first_layer" value="<?php echo $layer['id']; ?>" <?php if($swap_first == $layer['id']) echo 'checked'; ?> /> <?php _e('Default swap option', 'jeo'); ?>
+										</span>
+									</div>
 								</div>
 							</div>
-						</div>
-					</li><?php
-					$i++;
-				}
-			} ?>
+						</li><?php
+						$i++;
+					}
+				} 
+			?>
 			</ol>
-			
 </p>
 			
 			
