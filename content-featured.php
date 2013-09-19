@@ -11,7 +11,7 @@
 						<ul class="featured-list">
 							<?php $class = 'slider-item'; ?>
 							<?php $i = 0; while(have_posts()) : the_post(); ?>
-								<?php $geometry = jeo_element_geometry_data(); ?>
+								<?php $geometry = jeo_get_element_geometry_data(); ?>
 								<?php if(!$geometry) continue; ?>
 								<?php $active = $i >= 1 ? '' : ' active'; ?>
 								<li id="post-<?php the_ID(); ?>" <?php post_class($class . ' ' . $active); ?> <?php echo $geometry; ?> <?php echo jeo_element_max_zoom(); ?>>
@@ -39,7 +39,7 @@
 					<div class="slider-controllers">
 						<ul>
 							<?php $i = 0; while(have_posts()) : the_post(); $i++; ?>
-								<?php if(!jeo_element_geometry_data()) continue; ?>
+								<?php if(!jeo_get_element_geometry_data()) continue; ?>
 								<li class="slider-item-controller" data-postid="post-<?php the_ID(); ?>" title="<?php _e('Go to', 'jeo'); ?> <?php the_title(); ?>"><?php _e('Go to', 'jeo'); ?> <?php the_title(); ?></li>
 							<?php endwhile; ?>
 						</ul>
