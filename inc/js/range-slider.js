@@ -110,6 +110,8 @@
 
 				self._filterMarkers(markers);
 
+				jeo.runCallbacks('rangeSliderFiltered', [markers, this._map]);
+
 			});
 
 			return this._container;
@@ -135,5 +137,7 @@
 	jeo.markersReady(function(map) {
 		map.addControl(new jeo.rangeSliderFilter());
 	});
+
+	jeo.createCallback('rangeSliderFiltered');
 
 })(jQuery);

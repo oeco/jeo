@@ -17,7 +17,7 @@ class JEO_Range_Slider {
 
 		add_filter('jeo_marker_data', array($this, 'marker_data'));
 		add_action('wp_footer', array($this, 'enqueue_scripts'));
-		add_action('jeo_childtheme_custom_scripts', array($this, 'enqueue_scripts'));
+		add_action('jeo_markers_enqueue_scripts', array($this, 'enqueue_scripts'), 5);
 		add_action('jeo_map_setup_options', array($this, 'map_options'));
 
 	}
