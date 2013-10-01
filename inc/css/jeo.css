@@ -11,13 +11,37 @@
 	height: 100%;
 }
 
-.fullscreen-map {
+.fullscreen-map,
+.fullscreen-map.map-container {
 	z-index: 9999999;
 	position: fixed !important;
 	top: 0;
 	bottom:0;
 	left: 0;
 	right: 0;
+	width: auto !important;
+	height: auto !important;
+}
+
+.map-fullscreen .mapgroup-container,
+.map-fullscreen .mapgroup-container .mapgroup,
+.map-fullscreen.map-container {
+	background: #fff;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+}
+
+.leaflet-control .map-fullscreen {
+	background-image: url(../img/fullscreen-button.png);
+	background-position: 6px 6px;
+	background-repeat: no-repeat;
+}
+
+.fullscreen-map .leaflet-control .map-fullscreen {
+	background-position: -18px 6px;
 }
 
 .lang-en,

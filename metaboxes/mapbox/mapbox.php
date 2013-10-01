@@ -151,9 +151,9 @@ function mapbox_inner_custom_box($post) {
 								<span class="sort"></span>
 								<a href="#" class="button remove-layer"><?php _e('Remove', 'jeo'); ?></a>
 							</div>
-							<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" />
+							<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Title', 'jeo'); ?>" />
 							<div class="layer-opts">
-								<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Layer title', 'jeo'); ?>" />
+								<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" placeholder="<?php _e('ID', 'jeo'); ?>" />
 								<h4><?php _e('Layer options', 'jeo'); ?></h4>
 								<div class="filter-opts">
 									<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" <?php if($filtering == 'fixed') echo 'checked'; ?> />

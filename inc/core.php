@@ -90,7 +90,7 @@ class JEO {
 		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.5');
 
 		wp_enqueue_script('jeo.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('jeo'), '0.0.5');
-		wp_enqueue_script('jeo.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('jeo'), '0.0.6');
+		wp_enqueue_script('jeo.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('jeo'), '0.0.7');
 		wp_enqueue_script('jeo.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
 			.js', array('jeo'), '0.1.0');
 		wp_enqueue_script('jeo.ui', get_template_directory_uri() . '/inc/js/ui.js', array('jeo'), '0.0.9');

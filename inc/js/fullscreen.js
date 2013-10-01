@@ -8,7 +8,7 @@
 
 		onAdd: function(map) {
 
-			this._container = L.DomUtil.create('div', 'jeo-fullscreen');
+			this._container = L.DomUtil.create('div', 'jeo-fullscreen leaflet-bar leaflet-control');
 			this._$ = $(this._container);
 
 			this._map = map;
