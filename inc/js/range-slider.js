@@ -20,9 +20,7 @@
 
 			L.DomEvent.disableClickPropagation(this._container);
 
-			if(map.conf.rangeSliderFilter)
-				this._build();
-
+			this._build();
 			return this._container;
 
 		},
@@ -135,7 +133,8 @@
 	});
 
 	jeo.markersReady(function(map) {
-		map.addControl(new jeo.rangeSliderFilter());
+		if(map.conf.rangeSliderFilter)
+			map.addControl(new jeo.rangeSliderFilter());
 	});
 
 	jeo.createCallback('rangeSliderFiltered');
