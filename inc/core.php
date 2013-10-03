@@ -530,6 +530,12 @@ class JEO {
 		return $map_data['zoom'];
 	}
 
+	function get_map_max_zoom($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data= $this->get_map_data($map_id);
+		return $map_data['max_zoom'];
+	}
+
 	function get_mapbox_image($map_id_or_layers = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
 
 		$layers_ids = array();
@@ -799,6 +805,11 @@ function jeo_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat
 function jeo_get_map_zoom($map_id = false) {
 	global $jeo;
 	return $jeo->get_map_zoom($map_id);
+}
+
+function jeo_get_map_max_zoom($map_id = false) {
+	global $jeo;
+	return $jeo->get_map_max_zoom($map_id);
 }
 
 function jeo_get_map_legend($map_id = false) {
