@@ -33,7 +33,10 @@
 			var layer = L.geoJson(geojson, {
 				pointToLayer: function(f, latLng) {
 
-					var marker = new L.marker(latLng);
+					var marker = new L.marker(latLng, {
+						riseOnHover: true,
+						riseOffset: 9999
+					});
 					map._markers.push(marker);
 					return marker;
 
