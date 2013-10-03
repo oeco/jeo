@@ -334,7 +334,6 @@ class JEO {
 			}
 
 		}
-					error_log($this->map->ID);
 
 		return $query;
 	}
