@@ -22,10 +22,12 @@
 			var icons = {};
 			var parentLayer;
 
-			if(jeo_markers.enable_clustering)
-				parentLayer = new L.MarkerClusterGroup();
-			else
+			if(jeo_markers.enable_clustering) {
+				var options = (typeof jeo_markerclusterer.options == 'object') ? jeo_markerclusterer.options : {};
+				parentLayer = new L.MarkerClusterGroup(options);
+			} else {
 				parentLayer = new L.layerGroup();
+			}
 
 			map._markerLayer = parentLayer;
 
