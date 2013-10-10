@@ -37,7 +37,7 @@ if($allow_layers) {
 }
 ?>
 
-<section id="content">
+<section id="content" class="share-page">
 	<header class="page-header">
 		<div class="container">
 			<div class="twelve columns">
