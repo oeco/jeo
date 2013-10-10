@@ -238,7 +238,7 @@ if($allow_layers) {
 		</div>
 
 	</div>
-</div>
+</section>
 
 <script type="text/javascript">
 	jQuery(document).ready(function($) { 
