@@ -33,7 +33,7 @@ class JEO_Range_Slider {
 
 		wp_register_script('moment-js', get_template_directory_uri() . '/lib/moment.js');
 
-		wp_enqueue_script('jeo-range-slider', get_template_directory_uri() . '/inc/js/range-slider.js', array('range-slider', 'jeo.markers', 'jeo.groups', 'underscore', 'moment-js'), '0.0.2');
+		wp_enqueue_script('jeo-range-slider', get_template_directory_uri() . '/inc/js/range-slider.js', array('range-slider', 'jeo.markers', 'jeo.groups', 'underscore', 'moment-js'), '0.1.2');
 
 		$range_slider_options = apply_filters('jeo_range_slider_options', array(
 			'rangeType' => 'dateRangeSlider',

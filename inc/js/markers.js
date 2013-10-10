@@ -27,6 +27,8 @@
 			else
 				parentLayer = new L.layerGroup();
 
+			map._markerLayer = parentLayer;
+
 			map.addLayer(parentLayer);
 			map._markers = [];
 
@@ -38,6 +40,7 @@
 						riseOffset: 9999
 					});
 					map._markers.push(marker);
+					parentLayer.addLayer(marker);
 					return marker;
 
 				},
@@ -72,9 +75,7 @@
 				}
 			});
 
-			map._markerLayer = layer;
-
-			layer.addTo(parentLayer);
+			//layer.addTo(parentLayer);
 
 			var bounds = layer.getBounds();
 			if(!jeo.fragment().get('loc') && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {

@@ -118,14 +118,18 @@
 
 		_filterMarkers: function(markers) {
 
+			var self = this;
+
 			_.each(this._map._markers, function(m, i) {
-				m.setOpacity(0);
-				L.DomUtil.addClass(m._icon, 'leaflet-hidden');
+				//m.setOpacity(0);
+				//L.DomUtil.addClass(m._icon, 'leaflet-hidden');
+				self._map._markerLayer.removeLayer(m);
 			});
 
 			_.each(markers, function(m, i) {
-				m.setOpacity(1);
-				L.DomUtil.removeClass(m._icon, 'leaflet-hidden');
+				//m.setOpacity(1);
+				//L.DomUtil.removeClass(m._icon, 'leaflet-hidden');
+				self._map._markerLayer.addLayer(m);
 			});
 
 		}

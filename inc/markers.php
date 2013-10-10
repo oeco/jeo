@@ -144,12 +144,12 @@ class JEO_Markers {
 		 */
 		if($this->use_clustering()) {
 
-			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'));
+			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'), '2.0');
 			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
 
 		}
 
-		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.12');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.15');
 	}
 
 	function setup_query_vars() {
