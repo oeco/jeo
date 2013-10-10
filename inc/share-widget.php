@@ -21,8 +21,9 @@ class JEO_Share_Widget {
 			add_filter('query_vars', array($this, 'query_var'));
 			add_action('generate_rewrite_rules', array($this, 'generate_rewrite_rule'));
 			add_action('template_redirect', array($this, 'template_redirect'));
-			if(!apply_filters('jeo_disable_share_map_menu', false))
+			if(!apply_filters('jeo_disable_share_map_menu', false)) {
 				add_filter('wp_nav_menu_items', array($this, 'nav'), 10, 2);
+			}
 		}
 	}
 

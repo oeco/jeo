@@ -59,9 +59,9 @@ if($allow_layers) {
 									<?php _e('Choose a map', 'jeo'); ?>
 									<a class='tip' href='#'>
 										?
-										<div class='popup arrow-left'>
+										<span class="popup arrow-left">
 											<?php _e('Choose any map from the list', 'jeo'); ?>
-										</div>
+										</span>
 									</a>
 								</h4>
 								<div id='maps'>
@@ -84,9 +84,9 @@ if($allow_layers) {
 									<?php endif; ?>
 									<a class="tip" href="#">
 										?
-										<div class="popup arrow-left">
+										<span class="popup arrow-left">
 											<?php _e('Choose any layers from the list', 'jeo'); ?>
-										</div>
+										</span>
 									</a>
 								</h4>
 								<div id="maps">
@@ -127,9 +127,9 @@ if($allow_layers) {
 							<?php _e('Filter content', 'jeo'); ?>
 							<a class="tip" href="#">
 								?
-								<div class="popup arrow-left">
+								<span class="popup arrow-left">
 									<?php _e('Filter the content displayed on the map through our options', 'jeo'); ?>
-								</div>
+								</span>
 							</a>
 						</h4>
 						<div id="map-content">
@@ -173,9 +173,9 @@ if($allow_layers) {
 							<?php _e('Width & Height', 'jeo'); ?>
 							<a class='tip' href='#'>
 								?
-								<div class='popup arrow-left'>
+								<span class="popup arrow-left">
 									<?php _e('Select the width and height proportions you would like to embed to be.', 'jeo'); ?>
-								</div>
+								</span>
 							</a>
 						</h4>
 						<ul id='sizes' class='sizes clearfix'>
@@ -194,9 +194,9 @@ if($allow_layers) {
 							<?php _e('HTML Output', 'jeo'); ?>
 							<a class='tip' href='#'>
 								?
-								<div class='popup arrow-left'>
+								<span class="popup arrow-left">
 									<?php _e('Copy and paste this code into an HTML page to embed with it\'s current settings and location', 'jeo'); ?>
-								</div>
+								</span>
 							</a>
 						</h4>
 						<textarea id='output'></textarea>
@@ -211,9 +211,9 @@ if($allow_layers) {
 							<?php _e('Share', 'jeo'); ?>
 							<a class="tip" href="#">
 								?
-								<div class="popup arrow-left">
+								<span class="popup arrow-left">
 									<?php _e('Share this map, with it\'s current settings and location, on your social network', 'jeo'); ?>
-								</div>
+								</span>
 							</a>
 						</h4>
 					</div>
