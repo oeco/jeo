@@ -76,6 +76,7 @@
     font-size: 12px;
     line-height:30px;
     padding:0 10px;
+    color: #333;
     border:1px solid #aaa;
 }
 
@@ -106,7 +107,7 @@
 #jeo-share-widget #embed-container {
   background: #333;
   padding: 52px 0 40px;
-  margin: -52px 0 -60px;
+  margin: -52px 0 0;
 }
 
 #jeo-share-widget .preview-title {
@@ -147,11 +148,9 @@
 #jeo-share-widget {
   position:relative;
   margin: 0 auto;
-  padding: 20px 0;
-  }
+}
 
 #jeo-share-widget #configuration {
-  margin: -40px 0 0;
   position: relative;
   z-index: 2;
   background:#fafafa;

@@ -43,7 +43,7 @@ class JEO_Share_Widget {
 
 	function admin_settings_form_section($sections = array(), $page_slug) {
 
-		$taxonomies = get_taxonomies(array('_builtin' => true));
+		$taxonomies = get_taxonomies(array('public' => true));
 
 		foreach($taxonomies as $taxonomy) {
 			$taxonomies[$taxonomy] = $taxonomy;

@@ -195,7 +195,10 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 	
 }
 
-$jeo_admin = new JEO_Settings_Page('jeo_settings', __FILE__);
+function jeo_init_settings_page() {
+	$GLOBALS['jeo_admin'] = new JEO_Settings_Page('jeo_settings', __FILE__);
+}
+add_action('jeo_init', 'jeo_init_settings_page', 100);
 
 function jeo_admin_add_form_sections($sections = array()) {
 	if(is_array($sections) && !empty($sections)) {
