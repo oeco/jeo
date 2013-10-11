@@ -136,7 +136,7 @@ class JEO_Share_Widget {
 
 		wp_enqueue_script('jeo-share-widget', get_template_directory_uri() . '/inc/js/share-widget.js', array('jquery', 'underscore', 'chosen'), '1.5.3');
 		wp_localize_script('jeo-share-widget', 'jeo_share_widget_settings', array(
-			'baseurl' => home_url('/embed/'),
+			'baseurl' => jeo_get_embed_url(),
 			'default_label' => __('default', 'jeo')
 		));
 		wp_enqueue_style('jeo-share-widget', get_template_directory_uri() . '/inc/css/share-widget.css', array(), '1.0');
@@ -154,7 +154,7 @@ class JEO_Share_Widget {
 
 	function get_share_url($vars = array()) {
 		$query = http_build_query($vars);
-		return home_url('/' . $this->slug . '/?' . $query);
+		return apply_filters('jeo_share_url', home_url('/' . $this->slug . '/?' . $query));
 	}
 
 	/*
