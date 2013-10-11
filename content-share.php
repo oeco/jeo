@@ -105,7 +105,7 @@ if($allow_layers) {
 									<?php endif; ?>
 									<a class="clear-layers" href="#"><?php _e('Back to default layer configuration', 'jeo'); ?></a>
 									<?php if(count($maps) > 1) : ?>
-										<p><a class="button" href="<?php echo jeo_get_share_url(); ?>"><?php _e('View all maps', 'jeo'); ?></a></p>
+										<p><a class="button" href="<?php echo remove_query_arg('map_id'); ?>"><?php _e('View all maps', 'jeo'); ?></a></p>
 									<?php endif; ?>
 								</div>
 							<?php else : ?>

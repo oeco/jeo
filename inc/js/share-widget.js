@@ -95,11 +95,6 @@ if (!Array.prototype.indexOf) {
 			height: 480
 		};
 
-		if($('#map-select').length) {
-			$('#map-select').find('option[value="' + DEFAULTMAP + '"]').attr('selected', 'selected');
-			$('a.select-map-lapers').attr('href', '?map_id=' + DEFAULTMAP);
-		}
-
 		function serialize(obj) {
 			var str = [];
 			for(var p in obj) {
