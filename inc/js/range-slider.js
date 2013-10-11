@@ -37,7 +37,7 @@
 		_build: function() {
 
 			if(this._map._markers.length <= 1) {
-				this.removeFrom(this._map);
+				this._$.css({'display': 'none'});
 				return false;
 			}
 
