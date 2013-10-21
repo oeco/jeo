@@ -1,4 +1,4 @@
-var BASEURL = jeo_share_widget_settings.baseurl + '?';
+var BASEURL = jeo_share_widget_settings.baseurl;
 var DEFAULTMAP = jeo_share_widget_settings.defaultmap;
 
 // indexOf shim via
