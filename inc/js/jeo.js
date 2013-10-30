@@ -172,7 +172,11 @@ var jeo = {};
 
 		$.each(layers, function(i, layer) {
 
-			if(layer.layerType == 'cartodb' || layer.layerID.indexOf('http') !== -1) {
+			layerID = layer.layerID;
+			if(typeof layerID == 'undefined')
+				layerID = layer;
+
+			if(layer.layerType == 'cartodb' || layerID.indexOf('http') !== -1) {
 
 				parsedLayers.push(layer);
 				composite++;
@@ -200,20 +204,24 @@ var jeo = {};
 		var layers = [];
 		$.each(parsedLayers, function(i, layer) {
 
+			layerID = layer.layerID;
+			if(typeof layerID == 'undefined')
+				layerID = layer;
+
 			if(layer.layerType == 'cartodb') {
 
 				var cartoLayer = cartodb.createLayer(map, layer.layerID);
 
 				layers.push(cartoLayer);
 
-			} else if(layer.layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
+			} else if(layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
 
-				layers.push(L.mapbox.tileLayer(layer.layerID));
-				layers.push(L.mapbox.gridLayer(layer.layerID));
+				layers.push(L.mapbox.tileLayer(layerID));
+				layers.push(L.mapbox.gridLayer(layerID));
 
 			} else {
 
-				layers.push(L.tileLayer(layer.layerID));
+				layers.push(L.tileLayer(layerID));
 
 			}
 
@@ -282,8 +290,6 @@ var jeo = {};
 				}
 			}
 		});
-
-		console.log(newConf);
 
 		newConf.center = [parseFloat(conf.center.lat), parseFloat(conf.center.lon)];
 

@@ -319,7 +319,10 @@
 		
 		// add other layers
 		$('#mapbox-metabox .layers-list li').each(function() {
-			layers.push($(this).find('input.layer_id').val());
+			layers.push({
+				layerID: $(this).find('input.layer_id').val(),
+				layerType: $(this).find('input.layer_type').val()
+			});
 		});
 
 		return layers;
