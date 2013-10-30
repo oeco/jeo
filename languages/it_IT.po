@@ -1,0 +1,1191 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MapPress 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-09 18:49-0300\n"
+"PO-Revision-Date: 2013-10-12 19:21+0100\n"
+"Last-Translator: sabas <sabas88@gmail.com>\n"
+"Language-Team: Cardume <contato@cardume.art.br>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../single.php:16 ../loop.php:12 ../content-featured.php:23
+msgid "by"
+msgstr "da"
+
+#: ../content-map-group.php:27
+msgid "More..."
+msgstr "Di più..."
+
+#: ../content-map-group.php:37
+msgid "View all maps"
+msgstr "Guarda tutte le mappe"
+
+#: ../functions.php:16
+msgid "Header menu"
+msgstr "Menu di testata"
+
+#: ../functions.php:17
+msgid "Footer menu"
+msgstr "Menu nel footer"
+
+#: ../functions.php:22
+msgid "Post sidebar"
+msgstr "Barra laterale con post"
+
+#: ../functions.php:28
+msgid "General sidebar"
+msgstr "Barra laterale generica"
+
+#: ../functions.php:34
+msgid "Front page"
+msgstr "Pagina iniziale"
+
+#: ../content-embed.php:16
+msgid "Page"
+msgstr "Pagina"
+
+#: ../footer.php:10
+#, php-format
+msgid ""
+"This website is built on <a href=\"%s\" target=\"_blank\" rel=\"external"
+"\">WordPress</a> using the <a href=\"%s\" target=\"_blank\" rel=\"external"
+"\">JEO Beta</a> theme"
+msgstr ""
+"Questo sito è basato su <a href=\"%s\" target=\"_blank\" rel=\"external"
+"\">WordPress</a>, utilizzando il tema <a href=\"%s\" target=\"_blank\" rel="
+"\"external\">JEO Beta</a>"
+
+#: ../search.php:8
+msgid "Search results for:"
+msgstr "Risultati di ricerca:"
+
+#: ../single-map.php:9
+msgid "Latest articles on"
+msgstr "Ultimi articoli su"
+
+#: ../loop.php:22 ../content-featured.php:32
+msgid "Read more"
+msgstr "Continua a leggere"
+
+#: ../content-featured.php:7
+msgid "Featured"
+msgstr "Featured"
+
+#: ../content-featured.php:43
+msgid "Go to"
+msgstr "Vai a"
+
+#: ../archive.php:10
+#, php-format
+msgid "Daily Archives: %s"
+msgstr "Archivi del giorno: %s"
+
+#: ../archive.php:12
+#, php-format
+msgid "Monthly Archives: %s"
+msgstr "Archivi del mese: %s"
+
+#: ../archive.php:12
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr "F Y"
+
+#: ../archive.php:14
+#, php-format
+msgid "Yearly Archives: %s"
+msgstr "Archivi dell'anno: %s"
+
+#: ../archive.php:14
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr "Y"
+
+#: ../archive.php:16
+msgid "Archives"
+msgstr "Archivi"
+
+#: ../404.php:7
+msgid "404 - Page not found"
+msgstr "404 - Pagina non trovata"
+
+#: ../404.php:13
+msgid "Trying searching:"
+msgstr "Prova a cercare:"
+
+#: ../content-marker-bubble.php:6
+msgctxt "map bubble date format"
+msgid "m/d/Y"
+msgstr "d/m/Y"
+
+#: ../content-share.php:4 ../inc/share-widget.php:147
+msgid "Share a map"
+msgstr "Condividi una mappa"
+
+#: ../content-share.php:9 ../content-share.php:211
+msgid "Share"
+msgstr "Condividi"
+
+#: ../content-share.php:20
+msgid "Share the map"
+msgstr "Condividi la mappa"
+
+#: ../content-share.php:59
+msgid "Choose a map"
+msgstr "Scegli una mappa"
+
+#: ../content-share.php:63
+msgid "Choose any map from the list"
+msgstr "Scegli una mappa dalla lista"
+
+#: ../content-share.php:68
+msgid "Select a map"
+msgstr "Seleziona una mappa"
+
+#: ../content-share.php:74
+msgid "Select layers from this map"
+msgstr "Seleziona livelli da questa mappa"
+
+#: ../content-share.php:81 ../content-share.php:83 ../content-share.php:94
+msgid "Select layers"
+msgstr "Seleziona i livelli"
+
+#: ../content-share.php:88
+msgid "Choose any layers from the list"
+msgstr "Scegli i livelli dalla lista"
+
+#: ../content-share.php:106
+msgid "Back to default layer configuration"
+msgstr "Torna alla configurazione iniziale del livello"
+
+#: ../content-share.php:127
+msgid "Filter content"
+msgstr "Filtra contenuto"
+
+#: ../content-share.php:131
+msgid "Filter the content displayed on the map through our options"
+msgstr "Filtra il contenuto mostrato sulla mappa attraverso le nostre opzioni"
+
+#: ../content-share.php:136
+msgid "Select content"
+msgstr "Seleziona contenuto"
+
+#: ../content-share.php:141
+msgid "Selected content"
+msgstr "Contenuto selezionato"
+
+#: ../content-share.php:146
+msgid "General content"
+msgstr "Contenuto generale"
+
+#: ../content-share.php:147
+msgid "Content from the map"
+msgstr "Contenuto dalla mappa"
+
+#: ../content-share.php:147
+msgid "Latest content"
+msgstr "Ultimo contenuto"
+
+#: ../content-share.php:148
+msgid "No content (map only)"
+msgstr "Nessun contenuto (solo la mappa)"
+
+#: ../content-share.php:156
+msgid "By"
+msgstr "Da"
+
+#: ../content-share.php:173
+msgid "Width & Height"
+msgstr "Larghezza & Altezza"
+
+#: ../content-share.php:177
+msgid "Select the width and height proportions you would like to embed to be."
+msgstr ""
+"Seleziona le proporzioni di larghezza ed altezza che vorresti per l'embed"
+
+#: ../content-share.php:182
+msgid "Small"
+msgstr "Piccolo"
+
+#: ../content-share.php:183
+msgid "Medium"
+msgstr "Medio"
+
+#: ../content-share.php:184
+msgid "Large"
+msgstr "Grande"
+
+#: ../content-share.php:194
+msgid "HTML Output"
+msgstr "Output HTML"
+
+#: ../content-share.php:198
+msgid ""
+"Copy and paste this code into an HTML page to embed with it's current "
+"settings and location"
+msgstr ""
+"Copia ed incolla questo codice su una pagina HTML per fare l'embed della "
+"mappa con le impostazioni e la posizione corrente"
+
+#: ../content-share.php:215
+msgid ""
+"Share this map, with it's current settings and location, on your social "
+"network"
+msgstr ""
+"Condividi questa mappa con le impostazioni e la posizione correnti sul tuo "
+"social network"
+
+#: ../content-share.php:231
+msgid "Map preview"
+msgstr "Anteprima della mappa"
+
+#: ../searchform.php:3
+msgid "Search and hit enter"
+msgstr "Cerca e premi invio"
+
+#: ../index.php:18
+msgid "Latest articles"
+msgstr "Ultimi articoli"
+
+#: ../metaboxes/mapbox/mapbox.php:17 ../metaboxes/mapbox/mapbox.php:82
+#: ../metaboxes/mapbox/mapbox.php:145 ../metaboxes/mapgroup/mapgroup.php:18
+#: ../metaboxes/mapgroup/mapgroup.php:67
+msgid "Remove"
+msgstr "Rimuovi"
+
+#: ../metaboxes/mapbox/mapbox.php:21 ../metaboxes/mapbox/mapbox.php:86
+#: ../metaboxes/mapbox/mapbox.php:149
+msgid "Layer title"
+msgstr "Titolo del livello"
+
+#: ../metaboxes/mapbox/mapbox.php:22 ../metaboxes/mapbox/mapbox.php:87
+#: ../metaboxes/mapbox/mapbox.php:150
+msgid "Layer options"
+msgstr "Opzioni del livello"
+
+#: ../metaboxes/mapbox/mapbox.php:25 ../metaboxes/mapbox/mapbox.php:90
+#: ../metaboxes/mapbox/mapbox.php:153
+msgid "Fixed"
+msgstr "Fisso"
+
+#: ../metaboxes/mapbox/mapbox.php:27 ../metaboxes/mapbox/mapbox.php:92
+#: ../metaboxes/mapbox/mapbox.php:155
+msgid "Switchable"
+msgstr "Cambiabile"
+
+#: ../metaboxes/mapbox/mapbox.php:29 ../metaboxes/mapbox/mapbox.php:94
+#: ../metaboxes/mapbox/mapbox.php:157
+msgid "Swapable"
+msgstr "Scambiabile"
+
+#: ../metaboxes/mapbox/mapbox.php:33 ../metaboxes/mapbox/mapbox.php:98
+#: ../metaboxes/mapbox/mapbox.php:161
+msgid "Hidden"
+msgstr "Nascosto"
+
+#: ../metaboxes/mapbox/mapbox.php:36 ../metaboxes/mapbox/mapbox.php:101
+#: ../metaboxes/mapbox/mapbox.php:164
+msgid "Default swap option"
+msgstr "Opzione di scambio"
+
+#: ../metaboxes/mapbox/mapbox.php:50
+msgid "MapBox Setup"
+msgstr "Impostazioni della mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:69
+msgid ""
+"First, define your map server. Most likely you will be using the MapBox "
+"default servers. If not and you know what you are doing, feel free to type "
+"your own TileStream server url below."
+msgstr ""
+"Per prima cosa definisci il tuo fornitore di mappe. Probabilmente userai le "
+"impostazioni di default di MapBox. Altrimenti se sai cosa stai facendo, "
+"inserisci il tuo indirizzo del server qui sotto."
+
+#: ../metaboxes/mapbox/mapbox.php:71
+msgid "Use MapBox servers"
+msgstr "Usa i servizi MapBox"
+
+#: ../metaboxes/mapbox/mapbox.php:71
+msgid "(default)"
+msgstr "(default)"
+
+#: ../metaboxes/mapbox/mapbox.php:72
+msgid "Use custom TileStream server"
+msgstr "Usa un server TileStream personalizzato"
+
+#: ../metaboxes/mapbox/mapbox.php:75
+msgid ""
+"Edit the default layer and fill the IDs of the maps to overlay layers of "
+"your map, in order of appearance"
+msgstr ""
+"Modifica il livello di default ed inserisci gli identificativi delle mappe "
+"che appariranno sopra la tua mappa in ordine di apparizione"
+
+#: ../metaboxes/mapbox/mapbox.php:174
+msgid "Add new layer"
+msgstr "Aggiungi un nuovo livello"
+
+#: ../metaboxes/mapbox/mapbox.php:175 ../metaboxes/mapbox/mapbox.php:286
+msgid "Update preview"
+msgstr "Aggiorna l'anteprima"
+
+#: ../metaboxes/mapbox/mapbox.php:177
+msgid "Preview map"
+msgstr "Anteprima mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:182
+msgid "Map settings"
+msgstr "Impostazioni mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:184
+msgid "Currently viewing"
+msgstr "Visualizzazione attuale"
+
+#: ../metaboxes/mapbox/mapbox.php:187 ../metaboxes/mapbox/mapbox.php:217
+msgid "Center"
+msgstr "Centro"
+
+#: ../metaboxes/mapbox/mapbox.php:191 ../metaboxes/mapbox/mapbox.php:221
+msgid "Zoom"
+msgstr "Zoom"
+
+#: ../metaboxes/mapbox/mapbox.php:195 ../metaboxes/mapbox/mapbox.php:248
+msgid "East"
+msgstr "Est"
+
+#: ../metaboxes/mapbox/mapbox.php:199 ../metaboxes/mapbox/mapbox.php:252
+msgid "North"
+msgstr "Nord"
+
+#: ../metaboxes/mapbox/mapbox.php:203 ../metaboxes/mapbox/mapbox.php:256
+msgid "South"
+msgstr "Sud"
+
+#: ../metaboxes/mapbox/mapbox.php:207 ../metaboxes/mapbox/mapbox.php:260
+msgid "West"
+msgstr "Ovest"
+
+#: ../metaboxes/mapbox/mapbox.php:213
+msgid "Map center & zoom"
+msgstr "Centro e zoom della mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:214
+msgid "Set current as map center & zoom"
+msgstr "Ottieni zoom e centro dalla mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:225
+msgid "Min zoom"
+msgstr "Zoom minimo"
+
+#: ../metaboxes/mapbox/mapbox.php:228 ../metaboxes/mapbox/mapbox.php:235
+msgid "Current"
+msgstr "Attuale"
+
+#: ../metaboxes/mapbox/mapbox.php:232
+msgid "Max zoom"
+msgstr "Zoom massimo"
+
+#: ../metaboxes/mapbox/mapbox.php:244
+msgid "Pan limits"
+msgstr "Limiti dello spostamento"
+
+#: ../metaboxes/mapbox/mapbox.php:245
+msgid "Set current as map panning limits"
+msgstr "Ottieni i limiti dalla mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:270
+msgid "Enable geocoding service"
+msgstr "Abilita il servizio di geocodifica"
+
+#: ../metaboxes/mapbox/mapbox.php:273
+msgid "Enable geocode search service"
+msgstr "Abilita il servizio di ricerca tramite geocodifica"
+
+#: ../metaboxes/mapbox/mapbox.php:277
+msgid "Map handlers"
+msgstr "Handler della mappa"
+
+#: ../metaboxes/mapbox/mapbox.php:280
+msgid "Disable mousewheel zooming"
+msgstr "Disabilita lo zoom con la rotella del mouse"
+
+#: ../metaboxes/mapbox/mapbox.php:287
+msgid "Preview mode"
+msgstr "Modalità anteprima"
+
+#: ../metaboxes/mapbox/mapbox.php:288
+msgid "(preview mode doesn't apply zoom range nor pan limits setup)"
+msgstr ""
+"(la modalità anteprima non applica le impostazioni relative all'intervallo "
+"di zoom o ai limiti di spostamento)"
+
+#: ../metaboxes/mapbox/legend.php:13
+msgid "Map legend"
+msgstr "Legenda della mappa"
+
+#: ../metaboxes/mapbox/legend.php:25
+msgid "Enter your HTML code to use as legend on the map"
+msgstr "Inserisci il tuo codice HTML per usarlo come legenda sulla mappa"
+
+#: ../metaboxes/map-relation/map-relation.php:9
+msgid "Set maps for this post"
+msgstr "Imposta le mappe per questo post"
+
+#: ../metaboxes/map-relation/map-relation.php:23
+msgid ""
+"Select which maps this post belongs to. If you don't mark any they will "
+"appear in all maps."
+msgstr ""
+"Seleziona a quali mappe appartiene questo post. Se non ne selezioni uno "
+"appariranno in tutte le mappe."
+
+#: ../metaboxes/map-relation/map-relation.php:32
+msgid "You haven't created any map, yet!"
+msgstr "Non hai creato ancora nessuna mappa!"
+
+#: ../metaboxes/mapgroup/mapgroup.php:15 ../metaboxes/mapgroup/mapgroup.php:64
+msgid "Add to \"more\" tab"
+msgstr "Aggiungi alla scheda \"More\""
+
+#: ../metaboxes/mapgroup/mapgroup.php:30
+msgid "Map group"
+msgstr "Gruppo di mappe"
+
+#: ../metaboxes/mapgroup/mapgroup.php:45
+msgid "Select a map to add to your map group"
+msgstr "Seleziona una mappa da aggiungere al tuo gruppo di mappe"
+
+#: ../metaboxes/mapgroup/mapgroup.php:54
+msgid "Add map"
+msgstr "Aggiungi la mappa"
+
+#: ../inc/markers.php:358
+msgid "We couldn't find what you are looking for, please try again."
+msgstr "Non abbiamo trovato quello che cercavi, prova di nuovo."
+
+#: ../inc/markers.php:359
+msgid "results found"
+msgstr "risultati trovati"
+
+#: ../inc/markers.php:376
+msgid "Address and geolocation"
+msgstr "Indirizzo e geolocalizzazione"
+
+#: ../inc/markers.php:407
+msgid "Find the location"
+msgstr "Cerca un luogo"
+
+#: ../inc/markers.php:409
+msgid "Full address"
+msgstr "Indirizzo completo"
+
+#: ../inc/markers.php:410
+msgid "Find"
+msgstr "Cerca"
+
+#: ../inc/markers.php:415
+msgid "Drag the marker for a more precise result"
+msgstr "Trascina l'indicatore per un posizionamento più preciso"
+
+#: ../inc/markers.php:419
+msgid "Result"
+msgstr "Risultato"
+
+#: ../inc/markers.php:421
+msgid "Latitude"
+msgstr "Latitudine"
+
+#: ../inc/markers.php:424
+msgid "Longitude"
+msgstr "Longitudine"
+
+#: ../inc/markers.php:529
+msgctxt "reduced date format"
+msgid "m/d/Y"
+msgstr "d/m/Y"
+
+#: ../inc/markers.php:701
+msgid "Clear GeoJSON Cache"
+msgstr "Pulisci la cache GeoJSON"
+
+#: ../inc/markers.php:714
+msgid ""
+"<strong>Markers GeoJSON cache has been cleared. Don't worry! They will be "
+"dynamically regenerated.</strong>"
+msgstr ""
+"<strong>La cache degli indicatori GeoJSON è stata cancellata. Non ti "
+"preoccupare! Saranno rigenerati dinamicamente.</strong>"
+
+#: ../inc/markers.php:714
+msgid ""
+"The next map markers load might take a little while, depending on the amount "
+"of markers. If you want to speed this up for your users, we recommend you "
+"clear your browser's cache and navigate through your website to let the "
+"markers cache be replaced."
+msgstr ""
+"Il prossimo caricamento degli indicatori sarà un po' più lungo a seconda "
+"della quantità di indicatori. Se vuoi velocizzare questa cosa per i tuoi "
+"utenti, ti suggeriamo di pulire la tua cache del browser e navigare il tuo "
+"sito per sostituire la cache degli indicatori."
+
+#: ../inc/featured.php:96
+msgid "Featured content"
+msgstr "Contenuto evidenziato"
+
+#: ../inc/ui.php:16
+msgid "Locate on map"
+msgstr "Localizza sulla mappa"
+
+#: ../inc/streetview.php:37
+msgid "Use Google Street View"
+msgstr "Usa Google Street View"
+
+#: ../inc/share-widget.php:38
+msgid "Map embed tool"
+msgstr "Strumento per l'embed della mappa"
+
+#: ../inc/share-widget.php:56
+msgid "Embed tool settings"
+msgstr "Impostazioni per lo strumento per l'embed"
+
+#: ../inc/share-widget.php:57
+msgid ""
+"Setup your embed tool. Here you can enable or disable it and set which "
+"taxonomies and maps are allowed to share."
+msgstr ""
+"Imposta lo strumento di embed. Qui puoi abilitare o disabilitare lo "
+"strumento e selezionare quali tassonomie e quali mappe possono essere "
+"condivise."
+
+#: ../inc/share-widget.php:61
+msgid "Enable embed tool"
+msgstr "Abilita lo strumento per l'embed"
+
+#: ../inc/share-widget.php:62
+msgid "Select if you'd like to enable your embed tool"
+msgstr "Seleziona se vorresti abilitare lo strumento per l'embed"
+
+#: ../inc/share-widget.php:65 ../inc/api.php:54
+msgid "Enable"
+msgstr "Abilita"
+
+#: ../inc/share-widget.php:69
+msgid "Filter taxonomies"
+msgstr "Filtra le tassonomie"
+
+#: ../inc/share-widget.php:70
+msgid "Choose the taxonomies that can be filtered as an embed result"
+msgstr ""
+"Seleziona le tassonomie che possono essere filtrate come risultato per "
+"l'embed"
+
+#: ../inc/share-widget.php:79
+#, php-format
+msgid ""
+"Your embed tool is <strong>enabled</strong>! <a href=\"%s\" target=\"_blank"
+"\">Check it out</a>."
+msgstr ""
+"Lo strumento di embed è stato <strong>abilitato</strong>! <a href=\"%s\" "
+"target=\"_blank\">Guarda qua</a>."
+
+#: ../inc/share-widget.php:138
+msgid "default"
+msgstr "(default)"
+
+#: ../inc/range-slider.php:41
+msgctxt "Range slider date format"
+msgid "MM/DD/YYYY"
+msgstr "DD/MM/YYYY"
+
+#: ../inc/range-slider.php:58
+msgid "Date range slider filter"
+msgstr "Filtra per data"
+
+#: ../inc/range-slider.php:61
+msgid "Enable date range slider filter for markers"
+msgstr "Abilita il filtro per data per gli indicatori"
+
+#: ../inc/api.php:35
+msgid "GeoJSON API"
+msgstr "API GeoJSON"
+
+#: ../inc/api.php:45
+msgid "GeoJSON API Settings"
+msgstr "Impostazioni della API GeoJSON"
+
+#: ../inc/api.php:50
+msgid "Enable API"
+msgstr "Abilita API"
+
+#: ../inc/api.php:51
+msgid "Select if you'd like to enable the GeoJSON API"
+msgstr "Seleziona se vuoi abilitare l'API GeoJSON"
+
+#: ../inc/api.php:60
+#, php-format
+msgid ""
+"Your API is <strong>enabled</strong>! <a href=\"%s\" target=\"_blank\">Click "
+"here to learn more</a>."
+msgstr ""
+"La tua api è stata <strong>attivata</strong>! <a href=\"%s\" target=\"_blank"
+"\">Clicca qui per maggiori informazioni</a>."
+
+#: ../inc/core.php:103 ../inc/core.php:115
+msgid "More"
+msgstr "Di più"
+
+#: ../inc/core.php:107
+msgid "Find a location"
+msgstr "Cerca un luogo"
+
+#: ../inc/core.php:108
+msgid "Results"
+msgstr "Risultati"
+
+#: ../inc/core.php:109
+msgid "Close search"
+msgstr "Chiudi la ricerca"
+
+#: ../inc/core.php:110
+msgid "Nothing found, try something else."
+msgstr "Nessun risultato, prova un'altra ricerca."
+
+#: ../inc/core.php:134 ../inc/core.php:144 ../inc/admin/settings.php:25
+msgid "Maps"
+msgstr "Mappe"
+
+#: ../inc/core.php:135
+msgid "Map"
+msgstr "Mappa"
+
+#: ../inc/core.php:136 ../inc/core.php:137
+msgid "Add new map"
+msgstr "Aggiungi una nuova mappa"
+
+#: ../inc/core.php:138
+msgid "Edit map"
+msgstr "Modifica mappa"
+
+#: ../inc/core.php:139
+msgid "New map"
+msgstr "Nuova mappa"
+
+#: ../inc/core.php:140
+msgid "View map"
+msgstr "Guarda la mappa"
+
+#: ../inc/core.php:141
+msgid "Search maps"
+msgstr "Cerca mappe"
+
+#: ../inc/core.php:142
+msgid "No map found"
+msgstr "Nessuna mappa trovata"
+
+#: ../inc/core.php:143
+msgid "No map found in the trash"
+msgstr "Nessuna mappa trovata nel cestino"
+
+#: ../inc/core.php:150
+msgid "JEO Maps"
+msgstr "Mappe JEO"
+
+#: ../inc/core.php:167 ../inc/core.php:177 ../inc/core.php:197
+msgid "Map groups"
+msgstr "Gruppi di mappe"
+
+#: ../inc/core.php:169 ../inc/core.php:170 ../inc/core.php:198
+msgid "Add new map group"
+msgstr "Aggiungi un nuovo gruppo di mappe"
+
+#: ../inc/core.php:171
+msgid "Edit map group"
+msgstr "Modifica gruppo di mappe"
+
+#: ../inc/core.php:172
+msgid "New map group"
+msgstr "Nuovo gruppo di mappe"
+
+#: ../inc/core.php:173
+msgid "View map group"
+msgstr "Guarda il gruppo di mappe"
+
+#: ../inc/core.php:174
+msgid "Search map group"
+msgstr "Cerca gruppo di mappe"
+
+#: ../inc/core.php:175
+msgid "No map group found"
+msgstr "Nessun gruppo di mappe trovato"
+
+#: ../inc/core.php:176
+msgid "No map group found in the trash"
+msgstr "Nessun gruppo di mappe trovato nel cestino"
+
+#: ../inc/core.php:183
+msgid "JEO Map Groups"
+msgstr "Gruppi di mappe JEO"
+
+#: ../inc/core.php:198
+msgid "Add new group"
+msgstr "Aggiungi un nuovo gruppo"
+
+#: ../inc/core.php:450
+msgid "You haven't created any maps!"
+msgstr "Non hai creato ancora nessuna mappa!"
+
+#: ../inc/core.php:451
+msgid "Click here to create your first"
+msgstr "Clicca qui per creare la tua prima"
+
+#: ../inc/marker-icons.php:179 ../inc/marker-icons.php:189
+#: ../inc/marker-icons.php:308
+msgid "Marker icons"
+msgstr "Icone"
+
+#: ../inc/marker-icons.php:180
+msgid "Marker icon"
+msgstr "Icona"
+
+#: ../inc/marker-icons.php:181
+msgid "Add marker icon"
+msgstr "Aggiungi icona"
+
+#: ../inc/marker-icons.php:182 ../inc/marker-icons.php:309
+msgid "Add new marker icon"
+msgstr "Aggiungi un nuovo indicatore"
+
+#: ../inc/marker-icons.php:183
+msgid "Edit marker icon"
+msgstr "Modifica indicatore"
+
+#: ../inc/marker-icons.php:184
+msgid "New marker icon"
+msgstr "Nuova icona"
+
+#: ../inc/marker-icons.php:185
+msgid "View marker icon"
+msgstr "Guarda l'indicatore"
+
+#: ../inc/marker-icons.php:186
+msgid "Search marker icons"
+msgstr "Cerca indicatori"
+
+#: ../inc/marker-icons.php:187
+msgid "No marker icon found"
+msgstr "Nessuna indicatore trovato"
+
+#: ../inc/marker-icons.php:188
+msgid "No marker icon found in the trash"
+msgstr "Nessun indicatore trovato nel cestino"
+
+#: ../inc/marker-icons.php:195
+msgid "JEO marker icons"
+msgstr "Icone di JEO"
+
+#: ../inc/marker-icons.php:224 ../inc/marker-icons.php:479
+msgid "Marker"
+msgstr "Indicatore"
+
+#: ../inc/marker-icons.php:263
+msgid "Set as default marker "
+msgstr "Imposta come indicatore di default"
+
+#: ../inc/marker-icons.php:296
+msgid "Default marker updated"
+msgstr "Indicatore di default aggiornato"
+
+#: ../inc/marker-icons.php:330
+msgid "Setup marker icon"
+msgstr "Imposta l'icona"
+
+#: ../inc/marker-icons.php:349
+msgid "Choose image to use as marker icon"
+msgstr "Scegli l'immagina da usare come icona"
+
+#: ../inc/marker-icons.php:350
+msgid "PNG image format is recomended"
+msgstr "E' raccomandato il formato PNG"
+
+#: ../inc/marker-icons.php:354
+msgid "Upload image"
+msgstr "Carica una immagine"
+
+#: ../inc/marker-icons.php:362
+msgid "Use default"
+msgstr "Usa il default"
+
+#: ../inc/marker-icons.php:363
+msgid "Cancel"
+msgstr "Cancella"
+
+#: ../inc/marker-icons.php:364
+msgid "Save"
+msgstr "Salva"
+
+#: ../inc/marker-icons.php:366
+msgid "Mouse"
+msgstr "Mouse"
+
+#: ../inc/marker-icons.php:371
+msgid "Point"
+msgstr "Punto"
+
+#: ../inc/marker-icons.php:376
+msgid "Tip:"
+msgstr "Dica:"
+
+#: ../inc/marker-icons.php:376
+msgid "Use ARROWS to move the pointer, press ENTER to save or ESC to cancel."
+msgstr ""
+"Usa le frecce per muovere il puntatore, premi Invio per salvare o Esc per "
+"cancellare."
+
+#: ../inc/marker-icons.php:380
+msgid "Icon anchor"
+msgstr "Ancora dell'icona"
+
+#: ../inc/marker-icons.php:381
+msgid "Coordinates to correctly position the marker on the map"
+msgstr "Coordinate per posizionare correttamente l'indicatore sulla mappa"
+
+#: ../inc/marker-icons.php:383 ../inc/marker-icons.php:394
+msgid "Find coordinates"
+msgstr "Trova coordinate"
+
+#: ../inc/marker-icons.php:386
+msgid "X"
+msgstr "X"
+
+#: ../inc/marker-icons.php:387
+msgid "Y"
+msgstr "Y"
+
+#: ../inc/marker-icons.php:391
+msgid "Popup anchor"
+msgstr "Ancora del popup"
+
+#: ../inc/marker-icons.php:392
+msgid "Coordinates to correctly position the marker's popup"
+msgstr "Coordinate per posizionare correttamente il popup dell'indicatore"
+
+#: ../inc/marker-icons.php:444
+msgid "Could not save image file"
+msgstr "Non posso salvare l'immagine"
+
+#: ../inc/marker-icons.php:486
+msgid "Default"
+msgstr "(default)"
+
+#: ../inc/marker-icons.php:490
+msgid "Create a new marker"
+msgstr "Crea un nuovo indicatore"
+
+#: ../inc/marker-icons.php:491
+msgid "Select a marker"
+msgstr "Seleziona un indicatore"
+
+#: ../inc/marker-icons.php:493
+msgid "You don't have custom markers yet."
+msgstr "Non hai ancora indicatori personalizzati."
+
+#: ../inc/marker-icons.php:493
+msgid "Create your first here!"
+msgstr "Crea qui il tuo primo!"
+
+#: ../inc/marker-icons.php:561
+msgid "Custom marker"
+msgstr "Indicatore personalizzato"
+
+#: ../inc/marker-icons.php:575
+msgid ""
+"Choose a custom marker for your content. If it's set to <em>auto</em> we'll "
+"try to find the marker based on categories or map markers."
+msgstr ""
+"Seleziona un indicatore personalizzato per il tuo contenuto. Se è impostato "
+"su <em>automatico</em> cercheremo di trovare l'indicatore basandoci sulle "
+"categorie o sugli indicatori della mappa."
+
+#: ../inc/marker-icons.php:579
+msgid "Auto"
+msgstr "Auto"
+
+#: ../inc/admin/settings.php:12
+msgid "JEO"
+msgstr "JEO"
+
+#: ../inc/admin/settings.php:15
+msgid "JEO Settings"
+msgstr "Impostazioni di JEO"
+
+#: ../inc/admin/settings.php:26
+msgid "Geocode"
+msgstr "Geocodifica"
+
+#: ../inc/admin/settings.php:43
+msgid "No maps were found"
+msgstr "Nessuna mappa trovata"
+
+#: ../inc/admin/settings.php:72
+msgid "Front page settings"
+msgstr "Impostazioni della pagina iniziale"
+
+#: ../inc/admin/settings.php:73
+msgid "Set your front page contents."
+msgstr "Imposta i contenuti per la pagina iniziale."
+
+#: ../inc/admin/settings.php:78
+msgid "Front page map"
+msgstr "Mappa sulla pagina iniziale"
+
+#: ../inc/admin/settings.php:79
+msgid ""
+"Select if the front page map should be the featured map with latest content "
+"or a selection of featured posts."
+msgstr ""
+"Seleziona se la mappa sulla pagina iniziale dovrebbe essere la mappa in "
+"evidenza con gli ultimi contenuti o una selezione di post in evidenza."
+
+#: ../inc/admin/settings.php:82
+msgid "Featured map with latest posts"
+msgstr "Mappa in evidenza con gli ultimi post"
+
+#: ../inc/admin/settings.php:82
+msgid "Selection of featured posts"
+msgstr "Selezione di post in evidenza"
+
+#: ../inc/admin/settings.php:82
+msgid "featured map cannot be a map-group"
+msgstr "la mappa in evidenza non può essere un gruppo di mappe"
+
+#: ../inc/admin/settings.php:86
+msgid "Featured map"
+msgstr "Mappa principale"
+
+#: ../inc/admin/settings.php:87
+msgid "Select the map to be featured on the homepage and posts."
+msgstr ""
+"Seleziona la mappa che sarà in evidenza sulla pagina iniziale e sui post."
+
+#: ../inc/admin/settings.php:98
+msgid "Geocode settings"
+msgstr "Impostazioni di geocodifica"
+
+#: ../inc/admin/settings.php:104
+msgid "Geocode type"
+msgstr "Tipo di geocodifica"
+
+#: ../inc/admin/settings.php:105
+msgid ""
+"Choose simple latitude/longitude inputs or complete address lookup geocoding "
+"system"
+msgstr ""
+"Scegli l'inserimento per latitudine/longitudine o per ricerca tramite "
+"sistema di geocodifica"
+
+#: ../inc/admin/settings.php:108
+msgid "Address geocoding with interactive map (default)"
+msgstr "Geocodifica degli indirizzi con mappa interattiva (default)"
+
+#: ../inc/admin/settings.php:108
+msgid "Latitude/longitude inputs"
+msgstr "Inserimento di latitudine/longitudine"
+
+#: ../inc/admin/settings.php:112
+msgid "Geocode service"
+msgstr "Abilita il servizio di geocodifica"
+
+#: ../inc/admin/settings.php:113
+msgid "Choose the geocoding service to be used"
+msgstr "Scegli il servizio di geocodifica da usare"
+
+#: ../inc/admin/settings.php:116
+msgid "OpenStreetMaps with Nominatim"
+msgstr "OpenStreetMap con Nominatim"
+
+#: ../inc/admin/settings.php:116
+msgid "Google Maps"
+msgstr "Google Maps"
+
+#: ../inc/admin/settings.php:120
+msgid "Google Maps API Key"
+msgstr "Chiave API di Google Maps"
+
+#: ../inc/admin/settings.php:121
+#, php-format
+msgid ""
+"Key to use the Google Maps geocoding services. <a href=\"%s\" target=\"_blank"
+"\">Click here to get one.</a>"
+msgstr ""
+"Chiave per usare i servizi di geocoding di Google Maps. <a href=\"%s\" "
+"target=\"_blank\">Clicca qui per ottenerne una.</a>"
+
+#: ../inc/admin/settings.php:131
+msgid "Map behaviours"
+msgstr "Comportamenti della mappa"
+
+#: ../inc/admin/settings.php:135
+msgid "Fragment hash"
+msgstr "Fragment hash"
+
+#: ../inc/admin/settings.php:136
+msgid ""
+"Enable use of fragment hash url to share map location, selected maps on "
+"mapgroup and fullscreen state. <br/>E.g.: yoursite.com/#!/"
+"loc=-23,-42,7&map=12&full=true"
+msgstr ""
+"Abilita l'uso degli indirizzi con il fragment hash per condividere la "
+"posizione sulla mappa, le mappe selezionate sui gruppi e se la mappa è a "
+"pieno schermo. <br/>Esempio: yoursite.com/#!/loc=-23,-42,7&map=12&full=true"
+
+#: ../inc/admin/settings.php:143
+msgid "Enable marker clustering"
+msgstr "Abilita il clustering degli indicatori"
+
+#: ../inc/admin/settings.php:144
+msgid "Enable marker clustering system."
+msgstr "Abilita il sistema di clustering degli indicatori."
+
+#: ../inc/admin/settings.php:151
+msgid "Map query"
+msgstr "Query sulla mappa"
+
+#: ../inc/admin/settings.php:152
+msgid "Display posts only associated to the viewing map"
+msgstr "Mostra solamente i post associati alla mappa visualizzata"
+
+#: ../inc/admin/settings.php:159
+msgid "Mapped post types"
+msgstr "Tipi di post mappati"
+
+#: ../inc/admin/settings.php:160
+msgid "Post types to enable map functionalities"
+msgstr "Tipi di post sui quali abilitare le funzionalità della mappa"
+
+#: ../inc/admin/admin-page-framework.php:551
+#: ../inc/admin/admin-page-framework.php:2544
+msgid "Upload Image"
+msgstr "Carica immagine"
+
+#: ../inc/admin/admin-page-framework.php:552
+#: ../inc/admin/admin-page-framework.php:1177
+msgid "Use This Image"
+msgstr "Usa questa immagine"
+
+#: ../inc/admin/admin-page-framework.php:1010
+msgid "Options have been updated."
+msgstr "Le opzioni sono state aggiornate."
+
+#: ../inc/admin/admin-page-framework.php:1194
+msgid "The file is bigger than this PHP installation allows."
+msgstr "Il file è più grande di quanto permette la tua installazione di PHP."
+
+#: ../inc/admin/admin-page-framework.php:1195
+msgid "The file is bigger than this form allows."
+msgstr "Il file è più grande di quanto permette il form."
+
+#: ../inc/admin/admin-page-framework.php:1196
+msgid "Only part of the file was uploaded."
+msgstr "E' stata caricata solo una parte del file."
+
+#: ../inc/admin/admin-page-framework.php:1197
+msgid "No file was uploaded."
+msgstr "Nessun file è stato caricato."
+
+#: ../inc/admin/admin-page-framework.php:1202
+msgid "Import Error: Wrong file type."
+msgstr "Errore di importazione: Tipo di file sbagliato."
+
+#: ../inc/admin/admin-page-framework.php:1208
+msgid "Import Error: Wrong text format."
+msgstr "Errore di importazione: Formato del testo sbagliato."
+
+#: ../inc/admin/admin-page-framework.php:1230
+msgid "The importing process has been failed."
+msgstr "Il processo di importazione ha fallito."
+
+#: ../inc/admin/admin-page-framework.php:1241
+msgid "Options were imported."
+msgstr "Le opzioni sono state importate."
+
+#: ../inc/admin/admin-page-framework.php:1538
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: ../inc/admin/admin-page-framework.php:1565
+msgid "Powered by"
+msgstr "Basato su"
+
+#: ../inc/admin/admin-page-framework.php:2220
+#: ../inc/admin/admin-page-framework.php:2247
+msgid "Export Options"
+msgstr "Opzioni di esportazione"
+
+#: ../inc/admin/admin-page-framework.php:2267
+msgid "Import Options"
+msgstr "Opzioni di importazione"
+
+#: ../inc/admin/admin-page-framework.php:2476
+#: ../inc/admin/admin-page-framework.php:2496
+msgid "Submit"
+msgstr "Invia"
+
+#: ../inc/admin/admin-page-framework.php:2545
+msgid "Delete Image"
+msgstr "Cancella immagine"
+
+#: ../inc/admin/admin-page-framework.php:2546
+msgid "Unset Image"
+msgstr "Rimuovi immagine"
+
+#: ../inc/admin/admin-page-framework.php:2583
+msgid "No url has been set."
+msgstr "Nessun url inserito."
+
+msgid "Select layers from"
+msgstr "Seleziona livelli da"
+
+msgid "Copy and paste this code into an HTML page"
+msgstr "Copia e incolla questo codice in una pagina HTML"
+
+msgid "MapPress marker icons"
+msgstr "Icone di MapPress"
+
+msgid "MapPress"
+msgstr "MapPress"
+
+msgid "About"
+msgstr "About"
+
+#, fuzzy
+#~ msgid "Share this map"
+#~ msgstr "Cerca mappe"
+
+#, fuzzy
+#~ msgid "jeo Maps"
+#~ msgstr "Mappe"
+
+#, fuzzy
+#~ msgid "MapPress Maps"
+#~ msgstr "Mappe MapBox"
+
+#, fuzzy
+#~ msgid "MapPress maps group"
+#~ msgstr "Nuovo gruppo di mappe"
+
+#~ msgid "Write an address"
+#~ msgstr "Inserisci un indirizzo"
+
+#~ msgid "Geolocate"
+#~ msgstr "Geolocalizzazione"
+
+#~ msgid "MapBox maps agroupment"
+#~ msgstr "Raggruppamento di mappe MapBox"
