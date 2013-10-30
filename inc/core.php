@@ -55,7 +55,7 @@ class JEO {
 	}
 
 	function setup_scripts() {
-		add_action('wp_enqueue_scripts', array($this, 'scripts'), 2);
+		add_action('wp_head', array($this, 'scripts'), 2);
 		add_action('admin_footer', array($this, 'scripts'));
 	}
 
@@ -64,8 +64,26 @@ class JEO {
 		 * Libraries
 		 */
 
-		// LEAFLET
-		wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+		// LEAFLET or CARTODB
+		// If map contains CartoDB layer, use cartodb lib (includes own leaflet)
+		$layers = $this->get_map_layers();
+		$cartodb = false;
+		foreach($layers as $layer) {
+			if($layer['type'] == 'cartodb')
+				$cartodb = true;
+		}
+
+		if($cartodb) {
+
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.2.04');
+			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
+
+		} else {
+
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+
+		}
+
 		wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		wp_register_style('leaflet-ie', get_template_directory_uri() . '/lib/leaflet/leaflet.ie.css');
@@ -85,7 +103,7 @@ class JEO {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.5');
+		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.6');
 
 		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.5');
 
@@ -118,6 +136,8 @@ class JEO {
 		wp_localize_script('jeo.hash', 'jeo_hash', array(
 			'enable' => $this->use_hash()
 		));
+
+		do_action('jeo_enqueue_scripts');
 	}
 
 	function setup_post_types() {

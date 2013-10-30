@@ -117,7 +117,7 @@ class JEO_Markers {
 	}
 
 	function setup_scripts() {
-		add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
+		add_action('jeo_enqueue_scripts', array($this, 'register_scripts'));
 		add_action('wp_footer', array($this, 'enqueue_scripts'));
 	}
 
@@ -338,7 +338,7 @@ class JEO_Markers {
 	 */
 
 	function geocode_setup() {
-		add_action('wp_enqueue_scripts', array($this, 'geocode_register_scripts'));
+		add_action('jeo_enqueue_scripts', array($this, 'geocode_register_scripts'));
 		add_action('admin_footer', array($this, 'geocode_register_scripts'));
 		add_action('admin_footer', array($this, 'geocode_enqueue_scripts'));
 		add_action('add_meta_boxes', array($this, 'geocode_add_meta_box'));

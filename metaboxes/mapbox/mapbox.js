@@ -159,7 +159,7 @@
 		 */
 				
 		$('#mapbox-metabox .add-layer').click(function() {
-			addLayer();
+			addLayer($(this).data('layertype'));
 			return false;
 		});
 
@@ -284,8 +284,8 @@
 	});
 
   // Add an entry to the layer list.
-	function addLayer() {
-	  
+	function addLayer(type) {
+
 		var layersList = $('#mapbox-metabox .layers-list');
 		var layerItem = $(mapbox_metabox_localization.layer_item);
 		var layerLength = layersList.find('li').length + 1;
@@ -295,6 +295,8 @@
 		layerID.attr('name', 'map_data[layers][' + layerLength + '][id]');
 		layerItem.find('.fixed_layer, .switch_layer, .swap_layer').attr('name', 'map_data[layers][' + layerLength + '][opts][filtering]');
 		layerItem.find('.layer_title').attr('name', 'map_data[layers][' + layerLength + '][title]');
+		layerItem.find('.layer_type').attr('name', 'map_data[layers][' + layerLength + '][type]');
+		layerItem.find('.layer_type').attr('value', type);
 		layerItem.find('.layer_hidden').attr('name', 'map_data[layers][' + layerLength + '][switch_hidden]');
 
 		layerItem.find('.filtering-opts').hide();

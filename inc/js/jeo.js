@@ -103,7 +103,7 @@ var jeo = {};
 			map.postID = conf.postID;
 
 		// layers
-		jeo.loadLayers(map, jeo.parseLayers(conf.layers));
+		jeo.loadLayers(map, jeo.parseLayers(map, conf.layers));
 
 		// set bounds
 		if(conf.fitBounds instanceof L.LatLngBounds)
@@ -163,7 +163,7 @@ var jeo = {};
 	 * Utils
 	 */
 
-	jeo.parseLayers = function(layers) {
+	jeo.parseLayers = function(map, layers) {
 
 		var parsedLayers = [];
 
@@ -172,7 +172,7 @@ var jeo = {};
 
 		$.each(layers, function(i, layer) {
 
-			if(layer.indexOf('http') !== -1) {
+			if(layer.layerType == 'cartodb' || layer.layerID.indexOf('http') !== -1) {
 
 				parsedLayers.push(layer);
 				composite++;
@@ -181,7 +181,7 @@ var jeo = {};
 
 				composited++;
 
-				if(!parsedLayers[composite] || parsedLayers[composite].indexOf('http') !== -1)
+				if(!parsedLayers[composite] || parsedLayers[composite].layerID.indexOf('http') !== -1)
 					parsedLayers.push(layer);
 				else
 					parsedLayers[composite] += ',' + layer;
@@ -200,11 +200,21 @@ var jeo = {};
 		var layers = [];
 		$.each(parsedLayers, function(i, layer) {
 
-			if(layer.indexOf('http') !== -1) {
-				layers.push(L.tileLayer(layer));
+			if(layer.layerType == 'cartodb') {
+
+				var cartoLayer = cartodb.createLayer(map, layer.layerID);
+
+				layers.push(cartoLayer);
+
+			} else if(layer.layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
+
+				layers.push(L.mapbox.tileLayer(layer.layerID));
+				layers.push(L.mapbox.gridLayer(layer.layerID));
+
 			} else {
-				layers.push(L.mapbox.tileLayer(layer));
-				layers.push(L.mapbox.gridLayer(layer));
+
+				layers.push(L.tileLayer(layer.layerID));
+
 			}
 
 		});
@@ -222,7 +232,7 @@ var jeo = {};
 		}
 
 		$.each(parsedLayers, function(i, layer) {
-			map.coreLayers.addLayer(layer);
+			layer.addTo(map.coreLayers);
 			if(layer._tilejson) {
 				map.addControl(L.mapbox.gridControl(layer));
 			}
@@ -247,7 +257,10 @@ var jeo = {};
 		newConf.filteringLayers.swapLayers = [];
 
 		$.each(conf.layers, function(i, layer) {
-			newConf.layers.push(layer.id);
+			newConf.layers.push({
+				layerID: layer.id,
+				layerType: layer.type
+			});
 			if(layer.opts) {
 				if(layer.opts.filtering == 'switch') {
 					var switchLayer = {
@@ -269,6 +282,8 @@ var jeo = {};
 				}
 			}
 		});
+
+		console.log(newConf);
 
 		newConf.center = [parseFloat(conf.center.lat), parseFloat(conf.center.lon)];
 

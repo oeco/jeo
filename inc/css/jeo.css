@@ -11,6 +11,10 @@
 	height: 100%;
 }
 
+.map .cartodb-logo {
+	display: none !important;
+}
+
 .fullscreen-map,
 .fullscreen-map.map-container {
 	z-index: 9999999;

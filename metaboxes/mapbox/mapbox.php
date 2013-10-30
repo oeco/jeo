@@ -6,7 +6,7 @@ add_action('save_post', 'mapbox_save_postdata');
 
 function mapbox_metabox_init() {
 	// javascript stuff for the metabox
-	wp_enqueue_script('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'jeo', 'jquery-ui-sortable'), '0.5');
+	wp_enqueue_script('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.js', array('jquery', 'jeo', 'jquery-ui-sortable'), '0.5.1');
 	wp_enqueue_style('mapbox-metabox', get_template_directory_uri() . '/metaboxes/mapbox/mapbox.css', array(), '0.0.9.1');
 
 	wp_localize_script('mapbox-metabox', 'mapbox_metabox_localization', array(
@@ -18,7 +18,8 @@ function mapbox_metabox_init() {
 					</div>
 					<div class="layer-opts">
 						<p><input type="text" class="layer_title" size="60" placeholder="' . __('Title', 'jeo') . '" /></p>
-						<p><input type="text" class="layer_id" size="60" placeholder="' . __('ID', 'jeo') . '" /></p>
+						<p><input type="text" class="layer_id" size="60" placeholder="' . __('ID or URL', 'jeo') . '" /></p>
+						<input type="hidden" class="layer_type" />
 						<h4>' . __('Layer options', 'jeo') . '</h4>
 						<div class="filter-opts">
 							<input class="fixed_layer filtering-opt" value="fixed" type="radio" checked />
@@ -101,7 +102,10 @@ function mapbox_inner_custom_box($post) {
 				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
 			</div>
 
-			<p><a class="button add-layer" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a></p>
+			<p>
+				<a class="button add-layer" data-layertype="mapbox" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a>
+				<a class="button add-layer" data-layertype="cartodb" href="#"><?php _e('Add CartoDB layer', 'jeo'); ?></a>
+			</p>
 
 
 			<ol class="layers-list">
@@ -153,7 +157,8 @@ function mapbox_inner_custom_box($post) {
 							</div>
 							<input type="text" name="map_data[layers][<?php echo $i; ?>][title]" class="layer_title" value="<?php echo $title; ?>" size="60" placeholder="<?php _e('Title', 'jeo'); ?>" />
 							<div class="layer-opts">
-								<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" placeholder="<?php _e('ID', 'jeo'); ?>" />
+								<input type="text" name="map_data[layers][<?php echo $i; ?>][id]" value="<?php echo $layer['id']; ?>" class="layer_id" size="40" placeholder="<?php _e('ID or URL', 'jeo'); ?>" />
+								<input type="hidden" class="layer_type" name="map_data[layers][<?php echo $i; ?>][type]" value="<?php echo $layer['type']; ?>" />
 								<h4><?php _e('Layer options', 'jeo'); ?></h4>
 								<div class="filter-opts">
 									<input name="map_data[layers][<?php echo $i; ?>][opts][filtering]" class="fixed_layer filtering-opt" value="fixed" type="radio" <?php if($filtering == 'fixed') echo 'checked'; ?> />
