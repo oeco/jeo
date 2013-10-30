@@ -68,9 +68,11 @@ class JEO {
 		// If map contains CartoDB layer, use cartodb lib (includes own leaflet)
 		$layers = $this->get_map_layers();
 		$cartodb = false;
-		foreach($layers as $layer) {
-			if($layer['type'] == 'cartodb')
-				$cartodb = true;
+		if($layers) {
+			foreach($layers as $layer) {
+				if($layer['type'] == 'cartodb')
+					$cartodb = true;
+			}
 		}
 
 		if($cartodb || is_admin()) {
