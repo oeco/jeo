@@ -30,6 +30,7 @@ class JEO {
 	function init() {
 		$this->setup_directories();
 		$this->get_options();
+		$this->setup_the_post_map();
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
@@ -358,6 +359,24 @@ class JEO {
 		}
 
 		return $query;
+	}
+
+	/*
+	 * Set map when post is initialized
+	 */
+	function setup_the_post_map() {
+		add_action('wp', array($this, 'the_post_map'));
+	}
+	function the_post_map() {
+		global $post;
+		error_log($post->ID);
+		$post_maps_ids = get_post_meta($post->ID, 'maps');
+		if($post_maps_ids)
+			$map = get_post(array_shift($post_maps_ids));
+		else
+			$map = $this->featured();
+
+		$this->set_map($map);
 	}
 
 	function set_map($post) {
