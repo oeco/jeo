@@ -48,7 +48,7 @@ function mapbox_add_meta_box() {
 	// register the metabox
 	add_meta_box(
 		'mapbox', // metabox id
-		__('MapBox Setup', 'jeo'), // metabox title
+		__('Map setup', 'jeo'), // metabox title
 		'mapbox_inner_custom_box', // metabox inner code
 		'map', // post type
 		'advanced', // metabox position (advanced to show on main area)
@@ -66,17 +66,7 @@ function mapbox_inner_custom_box($post) {
 
 	?>
 	<div id="mapbox-metabox">
-		<div style="display:none;">
-			<h4><?php _e('First, define your map server. Most likely you will be using the MapBox default servers. If not and you know what you are doing, feel free to type your own TileStream server url below.', 'jeo'); ?></h4>
-			<p>
-				<input id="input_server_mapbox" type="radio" name="map_data[server]" value="mapbox" <?php if($map_data['server'] == 'mapbox') echo 'checked'; ?> /> <label for="input_server_mapbox"><strong><?php _e('Use MapBox servers', 'jeo'); ?></strong> <i><?php _e('(default)', 'jeo'); ?></i></label><br/>
-				<input id="input_server_custom" type="radio" name="map_data[server]" value="custom" <?php if($map_data['server'] == 'custom') echo 'checked'; ?> /> <label for="input_server_custom"><?php _e('Use custom TileStream server', 'jeo'); ?>: <input type="text" name="map_data[custom_server]" value="<?php if(isset($map_data['custom_server'])) echo $map_data['custom_server']; ?>" size="70" placeholder="http://maps.example.com/v2/" /></label>
-			</p>
-		</div>
-		
 
-		
-		
 		<h4><?php _e('Edit the default layer and fill the IDs of the maps to overlay layers of your map, in order of appearance', 'jeo'); ?></h4>
 		<div class="layers-container">
 
