@@ -140,7 +140,9 @@ class JEO {
 			'enable' => $this->use_hash()
 		));
 
-		do_action('jeo_enqueue_scripts');
+		if(!is_admin()) {
+			do_action('jeo_enqueue_scripts');
+		}
 	}
 
 	function setup_post_types() {
