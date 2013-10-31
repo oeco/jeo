@@ -125,7 +125,7 @@ var groups = {};
 
 			// prepare new conf and layers
 			var conf = jeo.parseConf(group.mapsData[mapID]);
-			var layers = jeo.loadLayers(group.map, jeo.parseLayers(conf.layers));
+			var layers = jeo.loadLayers(group.map, jeo.parseLayers(group.map, conf.layers));
 
 			// store new conf
 			group.map.conf = conf;
