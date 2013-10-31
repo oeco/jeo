@@ -185,10 +185,10 @@ var jeo = {};
 
 				composited++;
 
-				if(!parsedLayers[composite] || parsedLayers[composite].layerID.indexOf('http') !== -1)
-					parsedLayers.push(layer);
+				if(!parsedLayers[composite] || parsedLayers[composite].indexOf('http') !== -1)
+					parsedLayers.push(layerID);
 				else
-					parsedLayers[composite] += ',' + layer;
+					parsedLayers[composite] += ',' + layerID;
 
 				if(composited >= 16) {
 					composited = 0;

@@ -106,7 +106,7 @@ class JEO {
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.4.0');
+		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.4.1');
 
 		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.5');
 
@@ -370,15 +370,16 @@ class JEO {
 		add_action('wp', array($this, 'the_post_map'));
 	}
 	function the_post_map() {
-		global $post;
-		error_log($post->ID);
-		$post_maps_ids = get_post_meta($post->ID, 'maps');
-		if($post_maps_ids)
-			$map = get_post(array_shift($post_maps_ids));
-		else
-			$map = $this->featured();
+		if(!$this->map) {
+			global $post;
+			$post_maps_ids = get_post_meta($post->ID, 'maps');
+			if($post_maps_ids)
+				$map = get_post(array_shift($post_maps_ids));
+			else
+				$map = $this->featured();
 
-		$this->set_map($map);
+			$this->set_map($map);
+		}
 	}
 
 	function set_map($post) {

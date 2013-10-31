@@ -135,6 +135,7 @@ class JEO_Share_Widget {
 		wp_register_script('chosen', get_template_directory_uri() . '/lib/chosen.jquery.min.js', array('jquery'));
 
 		wp_enqueue_script('jeo-share-widget', get_template_directory_uri() . '/inc/js/share-widget.js', array('jquery', 'underscore', 'chosen'), '1.5.5');
+
 		wp_localize_script('jeo-share-widget', 'jeo_share_widget_settings', array(
 			'baseurl' => jeo_get_embed_url(),
 			'default_label' => __('default', 'jeo')
