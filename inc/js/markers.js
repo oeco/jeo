@@ -77,13 +77,15 @@
 				}
 			});
 
+			var bounds = layer.getBounds();
+
 			var fragmentLoc = false;
 			if(jeo.fragment) {
 				fragmentLoc = jeo.fragment().get('loc');
 			}
 
 			if(!fragmentLoc && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {
-					map.fitBounds(layer.getBounds());
+					map.fitBounds(bounds);
 			}
 
 			jeo.runCallbacks('markersReady', [map]);
