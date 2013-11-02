@@ -117,7 +117,8 @@ class JEO {
 		wp_enqueue_script('jeo.ui', get_template_directory_uri() . '/inc/js/ui.js', array('jeo'), '0.0.9');
 		wp_enqueue_style('jeo', get_template_directory_uri() . '/inc/css/jeo.css', array(), '0.0.2');
 
-		wp_enqueue_script('jeo.hash', get_template_directory_uri() . '/inc/js/hash.js', array('jeo'), '0.0.6');
+		if($this->use_hash())
+			wp_enqueue_script('jeo.hash', get_template_directory_uri() . '/inc/js/hash.js', array('jeo'), '0.1.0');
 
 		wp_localize_script('jeo', 'jeo_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -134,10 +135,6 @@ class JEO {
 		wp_localize_script('jeo.groups', 'jeo_groups', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'more_label' => __('More', 'jeo')
-		));
-
-		wp_localize_script('jeo.hash', 'jeo_hash', array(
-			'enable' => $this->use_hash()
 		));
 
 		if(!is_admin()) {

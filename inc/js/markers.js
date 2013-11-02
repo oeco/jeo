@@ -80,8 +80,10 @@
 			//layer.addTo(parentLayer);
 
 			var bounds = layer.getBounds();
-			if(!jeo.fragment().get('loc') && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {
-				map.fitBounds(layer.getBounds());
+			if(jeo.fragment) {
+				if(!jeo.fragment().get('loc') && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {
+					map.fitBounds(layer.getBounds());
+				}
 			}
 
 			jeo.runCallbacks('markersReady', [map]);
