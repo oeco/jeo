@@ -80,7 +80,6 @@ class JEO_API extends JEO_Markers {
 	function template_redirect() {
 		global $wp_query;
 		if(isset($wp_query->query['geojson'])) {
-			define('DONOTCACHEPAGE', true);
 			$query = apply_filters('jeo_geojson_api_query', $this->query());
 			$this->get_data($query);
 			exit;
@@ -127,10 +126,10 @@ class JEO_API extends JEO_Markers {
 
 $GLOBALS['jeo_api'] = new JEO_API;
 
-function jeo_get_api_url() {
-	return $GLOBALS['jeo_api']->get_api_url();
+function jeo_get_api_url($query_args = array()) {
+	return $GLOBALS['jeo_api']->get_api_url($query_args);
 }
 
-function jeo_get_api_download_url() {
-	return $GLOBALS['jeo_api']->get_download_url();
+function jeo_get_api_download_url($query_args = array()) {
+	return $GLOBALS['jeo_api']->get_download_url($query_args);
 }
