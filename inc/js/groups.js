@@ -166,10 +166,12 @@ var groups = {};
 			/*
 			 * reset legend
 			 */
-			if(prevConf.legend_full_content)
-				group.map.legendControl.removeLegend(prevConf.legend_full_content);
-			else
-				group.map.legendControl.removeLegend(prevConf.legend);
+			 if(typeof group.map.legendControl !== 'undefined') {
+				if(prevConf.legend_full_content)
+					group.map.legendControl.removeLegend(prevConf.legend_full_content);
+				else
+					group.map.legendControl.removeLegend(prevConf.legend);
+			}
 
 			if(conf.legend)
 				group.map.legendControl.addLegend(conf.legend);
