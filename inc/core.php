@@ -555,8 +555,17 @@ class JEO {
 
 	function get_map_layers($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
-		$map_data = $this->get_map_data($map_id);
-		return $map_data['layers'];
+		if(get_post_type($map_id) == 'map-group') {
+			$data = $this->get_mapgroup_data($map_id);
+			$layers = array();
+			foreach($data['maps'] as $map) {
+				$layers = array_merge($layers, $map['layers']);
+			}
+		} else {
+			$data = $this->get_map_data($map_id);
+			$layers = $data['layers'];
+		}
+		return $layers;
 	}
 
 	function get_map_center($map_id = false) {
