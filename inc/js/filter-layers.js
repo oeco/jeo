@@ -172,8 +172,6 @@
 		},
 
 		_getStatus: function(layer) {
-			console.log(layer);
-			console.log(this._layers.status);
 			return _.find(this._layers.status, function(l) { return layer == l.id; });
 		},
 
