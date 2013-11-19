@@ -80,6 +80,12 @@
     border:1px solid #aaa;
 }
 
+#jeo-share-widget .sub-inner,
+#jeo-share-widget .sub-inner h5,
+#jeo-share-widget .sub-inner input {
+    font-size: 90%;
+}
+
 #jeo-share-widget .social .links {
   font-size: 40px;
   line-height: 40px;

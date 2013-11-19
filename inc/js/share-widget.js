@@ -60,7 +60,7 @@ if (!Array.prototype.indexOf) {
 	// All textarea in the app should auto select
 	// its content if the element is in focus
 	function autoSelect($el) {
-		$el.focus(function() {
+		$el.bind('focus click', function() {
 			$textarea = $(this);
 			$textarea.select();
 			// Unbind the mouseup event for chrome
@@ -79,11 +79,13 @@ if (!Array.prototype.indexOf) {
 		var $maps = $('#maps');
 		var $stories = $('#stories');
 		var $output = $('#output');
+        var $urlOutput = $('#url-output');
 		var iframe = document.getElementById('iframe');
 		var hash = location.href.split('#/')[1];
 
 		// autoselect the contents of the textarea
 		autoSelect($output);
+        autoSelect($urlOutput);
 
 		var embed = {
 			p: undefined,
@@ -105,7 +107,9 @@ if (!Array.prototype.indexOf) {
 
 		function updateOutput() {
 			updateLocation();
-			$output.html('<iframe src="' + BASEURL + serialize(embed) + '" width="' + embed.width + '" height="' + embed.height + '" frameborder="0"></iframe>');
+            var url = BASEURL + serialize(embed);
+			$output.html('<iframe src="' + url + '" width="' + embed.width + '" height="' + embed.height + '" frameborder="0"></iframe>');
+            $urlOutput.val(url);
 		}
 
 		function updateIframe() {
@@ -233,17 +237,9 @@ if (!Array.prototype.indexOf) {
 			});
 		}
 
-		$('#output').focus(function() {
-
+		$('#output, #url-output').bind('focus click', function() {
 			updateOutput();
-
 			$(this).select();
-			// Unbind the mouseup event for chrome
-			$(this).mouseup(function() {
-				$textarea.off('mouseup');
-				return false;
-			});
-
 		});
 
 		$('.grab-centerzoom').click(function() {
