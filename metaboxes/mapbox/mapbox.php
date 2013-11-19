@@ -93,9 +93,9 @@ function mapbox_inner_custom_box($post) {
 			</div>
 
 			<p>
+				<a class="button add-layer" href="#"><?php _e('Add tile layer', 'jeo'); ?></a>
 				<a class="button add-layer" data-layertype="mapbox" href="#"><?php _e('Add Mapbox layer', 'jeo'); ?></a>
 				<a class="button add-layer" data-layertype="cartodb" href="#"><?php _e('Add CartoDB layer', 'jeo'); ?></a>
-				<a class="button add-layer" href="#"><?php _e('Add tile layer', 'jeo'); ?></a>
 			</p>
 
 
