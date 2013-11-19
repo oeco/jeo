@@ -80,7 +80,6 @@
 		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
 
-	if(jeo_hash.enable)
-		jeo.mapReady(setupHash);
+	jeo.mapReady(setupHash);
 
 })(jQuery);

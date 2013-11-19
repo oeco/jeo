@@ -22,14 +22,30 @@
 			var icons = {};
 			var parentLayer;
 
-			if(jeo_markers.enable_clustering)
-				parentLayer = new L.MarkerClusterGroup();
-			else
+			if(jeo_markers.enable_clustering) {
+				var options = (typeof jeo_markerclusterer.options == 'object') ? jeo_markerclusterer.options : {};
+				parentLayer = new L.MarkerClusterGroup(options);
+			} else {
 				parentLayer = new L.layerGroup();
+			}
+
+			map._markerLayer = parentLayer;
 
 			map.addLayer(parentLayer);
+			map._markers = [];
 
 			var layer = L.geoJson(geojson, {
+				pointToLayer: function(f, latLng) {
+
+					var marker = new L.marker(latLng, {
+						riseOnHover: true,
+						riseOffset: 9999
+					});
+					map._markers.push(marker);
+					parentLayer.addLayer(marker);
+					return marker;
+
+				},
 				onEachFeature: function(f, l) {
 
 					if(icons[f.properties.marker.markerId]) {
@@ -50,20 +66,26 @@
 						e.target.closePopup();
 					});
 					l.on('click', function(e) {
-						window.location = f.properties.url;
+						if(window.self === window.top) {
+							window.location = f.properties.url;
+						} else {
+							window.open(f.properties.url, '_blank');
+						}
 						return false;
 					});
 
 				}
 			});
 
-			map._markerLayer = layer;
-
-			layer.addTo(parentLayer);
-
 			var bounds = layer.getBounds();
-			if(!jeo.fragment().get('loc') && jeo_markers.markerextent && bounds.isValid()) {
-				map.fitBounds(layer.getBounds());
+
+			var fragmentLoc = false;
+			if(jeo.fragment) {
+				fragmentLoc = jeo.fragment().get('loc');
+			}
+
+			if(!fragmentLoc && !map.conf.forceCenter && jeo_markers.markerextent && bounds.isValid()) {
+					map.fitBounds(bounds);
 			}
 
 			jeo.runCallbacks('markersReady', [map]);

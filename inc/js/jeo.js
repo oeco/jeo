@@ -103,7 +103,7 @@ var jeo = {};
 			map.postID = conf.postID;
 
 		// layers
-		jeo.loadLayers(map, jeo.parseLayers(conf.layers));
+		jeo.loadLayers(map, jeo.parseLayers(map, conf.layers));
 
 		// set bounds
 		if(conf.fitBounds instanceof L.LatLngBounds)
@@ -163,7 +163,7 @@ var jeo = {};
 	 * Utils
 	 */
 
-	jeo.parseLayers = function(layers) {
+	jeo.parseLayers = function(map, layers) {
 
 		var parsedLayers = [];
 
@@ -172,7 +172,11 @@ var jeo = {};
 
 		$.each(layers, function(i, layer) {
 
-			if(layer.indexOf('http') !== -1) {
+			layerID = layer.layerID;
+			if(typeof layerID == 'undefined')
+				layerID = layer;
+
+			if(layer.layerType == 'cartodb' || layerID.indexOf('http') !== -1) {
 
 				parsedLayers.push(layer);
 				composite++;
@@ -182,9 +186,9 @@ var jeo = {};
 				composited++;
 
 				if(!parsedLayers[composite] || parsedLayers[composite].indexOf('http') !== -1)
-					parsedLayers.push(layer);
+					parsedLayers.push(layerID);
 				else
-					parsedLayers[composite] += ',' + layer;
+					parsedLayers[composite] += ',' + layerID;
 
 				if(composited >= 16) {
 					composited = 0;
@@ -200,11 +204,25 @@ var jeo = {};
 		var layers = [];
 		$.each(parsedLayers, function(i, layer) {
 
-			if(layer.indexOf('http') !== -1) {
-				layers.push(L.tileLayer(layer));
+			layerID = layer.layerID;
+			if(typeof layerID == 'undefined')
+				layerID = layer;
+
+			if(layer.layerType == 'cartodb') {
+
+				var cartoLayer = cartodb.createLayer(map, layer.layerID);
+
+				layers.push(cartoLayer);
+
+			} else if(layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
+
+				layers.push(L.mapbox.tileLayer(layerID));
+				layers.push(L.mapbox.gridLayer(layerID));
+
 			} else {
-				layers.push(L.mapbox.tileLayer(layer));
-				layers.push(L.mapbox.gridLayer(layer));
+
+				layers.push(L.tileLayer(layerID));
+
 			}
 
 		});
@@ -222,7 +240,7 @@ var jeo = {};
 		}
 
 		$.each(parsedLayers, function(i, layer) {
-			map.coreLayers.addLayer(layer);
+			layer.addTo(map.coreLayers);
 			if(layer._tilejson) {
 				map.addControl(L.mapbox.gridControl(layer));
 			}
@@ -234,12 +252,9 @@ var jeo = {};
 
 	jeo.parseConf = function(conf) {
 
-		var newConf = {};
+		var newConf = $.extend({}, conf);
 
 		newConf.server = conf.server;
-
-		if(conf.dataReady)
-			newConf.dataReady = true;
 
 		if(conf.conf)
 			newConf = _.extend(newConf, conf.conf);
@@ -250,7 +265,10 @@ var jeo = {};
 		newConf.filteringLayers.swapLayers = [];
 
 		$.each(conf.layers, function(i, layer) {
-			newConf.layers.push(layer.id);
+			newConf.layers.push({
+				layerID: layer.id,
+				layerType: layer.type
+			});
 			if(layer.opts) {
 				if(layer.opts.filtering == 'switch') {
 					var switchLayer = {
@@ -327,28 +345,6 @@ var jeo = {};
 				$detailsContainer.find('.map-details-page').remove();
 				return false;
 			});
-
-		});
-	}
-
-	/*
-	 * Custom fullscreen
-	 */
-	jeo.fullscreen = function(map) {
-
-		if(map.$.parents('.content-map').length)
-			var container = map.$.parents('.content-map');
-		else
-			var container = map.$.parents('.map-container');
-
-		map.$.find('.map-fullscreen').click(function() {
-
-			if(container.hasClass('fullsreen-map'))
-				container.removeClass('fullscreen-map');
-			else
-				container.addClass('fullscreen-map');
-
-			return false;
 
 		});
 	}

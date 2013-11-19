@@ -24,7 +24,36 @@
 </head>
 <body <?php body_class(get_bloginfo('language')); ?>>
 
-<?php jeo_map($_GET['map_id']); ?>
+	<?php $conf = jeo_get_map_embed_conf(); ?>
+
+	<header id="embed-header">
+		<h1><a href="<?php echo home_url('/'); ?>" target="_blank"><?php bloginfo('name'); ?><span>&nbsp;</span></a></h1>
+	</header>
+
+	<div class="map-container"><div id="map_embed" class="map"></div></div>
+
+	<input type="hidden" id="latitude" />
+	<input type="hidden" id="longitude" />
+	<input type="hidden" id="zoom" />
+
+	<script type="text/javascript">
+		(function($) {
+			jeo(<?php echo $conf; ?>, function(map) {
+
+				var track = function() {
+					var c = map.getCenter();
+					$('#latitude').val(c.lat);
+					$('#longitude').val(c.lng);
+					$('#zoom').val(map.getZoom());
+				}
+
+				map.on('zoomend', track);
+				map.on('dragend', track);
+
+			});
+
+		})(jQuery);
+	</script>
 
 <?php wp_footer(); ?>
 </body>

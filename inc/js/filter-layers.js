@@ -8,6 +8,9 @@
 
 		onAdd: function(map) {
 
+			if(!this._map.conf.filteringLayers || this._map.conf.disableInteraction)
+				return false;
+
 			var self = this;
 
 			this._map = map;
@@ -18,21 +21,17 @@
 
 			this._$ = $(this._container);
 
-			if(!this._map.conf.filteringLayers || this._map.conf.disableInteraction)
-				return false;
-
 			this._layers = map.conf.filteringLayers;
 
 			this._swapWidget;
 			this._switchWidget;
 
 			this._layers.status = [];
-			_.each(this._map.conf.layers, function(layerID) {
-				var layer = {
-					id: layerID,
+			_.each(this._map.conf.layers, function(layer) {
+				self._layers.status.push({
+					id: layer.layerID,
 					on: true
-				};
-				self._layers.status.push(layer);
+				});
 			});
 
 			this._build();
@@ -143,7 +142,6 @@
 
 				}
 			});
-
 			this._update();
 
 		},
@@ -169,7 +167,7 @@
 		_update: function() {
 
 			this._map.$.find('.map-tooltip').hide();
-			jeo.loadLayers(this._map, jeo.parseLayers(this._getActiveLayers()));
+			jeo.loadLayers(this._map, jeo.parseLayers(this._map, this._getActiveLayers()));
 
 		},
 
@@ -189,11 +187,13 @@
 		},
 
 		_getActiveLayers: function() {
-
+			var self = this;
 			var activeLayers = [];
 			_.each(this._layers.status, function(layer) {
-				if(layer.on)
-					activeLayers.push(layer.id);
+				if(layer.on) {
+					var actualLayer = _.find(self._map.conf.layers, function(l) { return l.layerID == layer.id; });
+					activeLayers.push(actualLayer);
+				}
 			});
 			return activeLayers;
 

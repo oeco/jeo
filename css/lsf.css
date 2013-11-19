@@ -1,0 +1,43 @@
+/*
+ * LigatureSymbols font
+ */
+
+@font-face {
+    font-family: 'LigatureSymbols';
+    src: url('../fonts/LigatureSymbols-2.11.eot');
+    src: url('../fonts/LigatureSymbols-2.11.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/LigatureSymbols-2.11.woff') format('woff'),
+         url('../fonts/LigatureSymbols-2.11.ttf') format('truetype'),
+         url('../fonts/LigatureSymbols-2.11.svg#LigatureSymbols') format('svg');
+    src: url('../fonts/LigatureSymbols-2.11.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.lsf, .lsf-icon:before {
+  font-family: 'LigatureSymbols';
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  -ms-text-rendering: optimizeLegibility;
+  -o-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  font-weight: normal !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  font-size: 150%;
+}
+
+.lsf-icon:before {
+  content:attr(title);
+  margin-right:0.3em;
+  font-size:130%;
+}
+
+.lsf-icon.amazon:before {
+  content: '\E007';
+}

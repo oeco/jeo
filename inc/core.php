@@ -23,23 +23,20 @@ class JEO {
 	var $options = array();
 
 	function __construct() {
-		add_action('init', array($this, 'setup'));
+		add_action('init', array($this, 'init'));
 		$this->plugin_fixes();
 	}
 
-	function setup() {
+	function init() {
 		$this->setup_directories();
-		$this->setup_options();
+		$this->get_options();
+		$this->setup_the_post_map();
 		$this->setup_scripts();
 		$this->setup_post_types();
 		$this->setup_query();
 		$this->setup_pre_get_map();
 		$this->setup_ajax();
 		$this->setup_canonical();
-		$this->init();
-	}
-
-	function init() {
 		do_action('jeo_init');
 	}
 
@@ -48,7 +45,7 @@ class JEO {
 		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri());
 	}
 
-	function setup_options() {
+	function get_options() {
 		$options = get_option('jeo_settings');
 		if($options && isset($options['jeo_settings'])) {
 			$this->options = $options['jeo_settings'];
@@ -59,7 +56,7 @@ class JEO {
 	}
 
 	function setup_scripts() {
-		add_action('wp_enqueue_scripts', array($this, 'scripts'), 2);
+		add_action('wp_head', array($this, 'scripts'), 2);
 		add_action('admin_footer', array($this, 'scripts'));
 	}
 
@@ -68,8 +65,28 @@ class JEO {
 		 * Libraries
 		 */
 
-		// LEAFLET
-		wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+		// LEAFLET or CARTODB
+		// If map contains CartoDB layer, use cartodb lib (includes own leaflet)
+		$layers = $this->get_map_layers();
+		$cartodb = false;
+		if($layers) {
+			foreach($layers as $layer) {
+				if($layer['type'] == 'cartodb')
+					$cartodb = true;
+			}
+		}
+
+		if($cartodb || is_admin()) {
+
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.2.04');
+			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
+
+		} else {
+
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+
+		}
+
 		wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		wp_register_style('leaflet-ie', get_template_directory_uri() . '/lib/leaflet/leaflet.ie.css');
@@ -80,24 +97,28 @@ class JEO {
 		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.2.0');
 		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
 
+		// CARTODB
+		//wp_enqueue_script('cartodb-js', get_template_directory_uri() . '/lib/cartodb.js', array(), '0.0.1');
+
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
 		wp_register_script('underscore', get_template_directory_uri() . '/lib/underscore-min.js', array(), '1.4.3');
 
 		/*
 		 * Local
 		 */
-		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.3.4');
+		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.4.2');
 
-		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.3');
+		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.7');
 
 		wp_enqueue_script('jeo.geocode', get_template_directory_uri() . '/inc/js/geocode.js', array('jeo'), '0.0.5');
-		wp_enqueue_script('jeo.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('jeo'), '0.0.6');
+		wp_enqueue_script('jeo.fullscreen', get_template_directory_uri() . '/inc/js/fullscreen.js', array('jeo'), '0.0.7');
 		wp_enqueue_script('jeo.filterLayers', get_template_directory_uri() . '/inc/js/filter-layers
-			.js', array('jeo'), '0.1.0');
+			.js', array('jeo'), '0.1.3');
 		wp_enqueue_script('jeo.ui', get_template_directory_uri() . '/inc/js/ui.js', array('jeo'), '0.0.9');
 		wp_enqueue_style('jeo', get_template_directory_uri() . '/inc/css/jeo.css', array(), '0.0.2');
 
-		wp_enqueue_script('jeo.hash', get_template_directory_uri() . '/inc/js/hash.js', array('jeo'), '0.0.6');
+		if($this->use_hash())
+			wp_enqueue_script('jeo.hash', get_template_directory_uri() . '/inc/js/hash.js', array('jeo'), '0.1.0');
 
 		wp_localize_script('jeo', 'jeo_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
@@ -116,9 +137,9 @@ class JEO {
 			'more_label' => __('More', 'jeo')
 		));
 
-		wp_localize_script('jeo.hash', 'jeo_hash', array(
-			'enable' => $this->use_hash()
-		));
+		if(!is_admin()) {
+			do_action('jeo_enqueue_scripts');
+		}
 	}
 
 	function setup_post_types() {
@@ -340,14 +361,33 @@ class JEO {
 	}
 
 	/*
-	 * Allow search box inside map page (disable `s` argument for the map query)
+	 * Set map when post is initialized
 	 */
+	function setup_the_post_map() {
+		add_action('wp', array($this, 'the_post_map'));
+	}
+	function the_post_map() {
+		if(!$this->map) {
+			global $post;
+			$post_maps_ids = get_post_meta($post->ID, 'maps');
+			if($post_maps_ids)
+				$map = get_post(array_shift($post_maps_ids));
+			else
+				$map = $this->featured();
+
+			$this->set_map($map);
+		}
+	}
 
 	function set_map($post) {
 		$this->map = $post;
 		return $this->map;
 	}
 
+
+	/*
+	 * Allow search box inside map page (disable `s` argument for the map query)
+	 */
 	function setup_pre_get_map() {
 		add_action('pre_get_posts', array($this, 'pre_get_map'));
 	}
@@ -394,10 +434,10 @@ class JEO {
 		return $map;
 	}
 
-	function is_map($map_id = false) {
+	function is_map($post_id = false) {
 		global $post;
-		$map_id = $map_id ? $map_id : $post->ID;
-		if(get_post_type($map_id) == 'map' || get_post_type($map_id) == 'map-group')
+		$post_id = $post_id ? $post_id : $post->ID;
+		if(get_post_type($post_id) == 'map' || get_post_type($post_id) == 'map-group')
 			return true;
 
 		return false;
@@ -420,9 +460,9 @@ class JEO {
 			}
 		}
 
-		if($map_id)
+		if($map_id) {
 			$this->set_map(get_post($map_id));
-		else
+		} else
 			$map_id = $this->map->ID;
 
 		if($main_map) add_filter('jeo_map_conf', array($this, 'set_main'));
@@ -515,8 +555,17 @@ class JEO {
 
 	function get_map_layers($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
-		$map_data = $this->get_map_data($map_id);
-		return $map_data['layers'];
+		if(get_post_type($map_id) == 'map-group') {
+			$data = $this->get_mapgroup_data($map_id);
+			$layers = array();
+			foreach($data['maps'] as $map) {
+				$layers = array_merge($layers, $map['layers']);
+			}
+		} else {
+			$data = $this->get_map_data($map_id);
+			$layers = $data['layers'];
+		}
+		return $layers;
 	}
 
 	function get_map_center($map_id = false) {
@@ -529,6 +578,12 @@ class JEO {
 		$map_id = $map_id ? $map_id : $this->map->ID;
 		$map_data = $this->get_map_data($map_id);
 		return $map_data['zoom'];
+	}
+
+	function get_map_max_zoom($map_id = false) {
+		$map_id = $map_id ? $map_id : $this->map->ID;
+		$map_data= $this->get_map_data($map_id);
+		return $map_data['max_zoom'];
 	}
 
 	function get_mapbox_image($map_id_or_layers = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
@@ -591,10 +646,6 @@ class JEO {
 	function get_map_legend($map_id = false) {
 		$map_id = $map_id ? $map_id : $this->map->ID;
 		return apply_filters('jeo_map_legend', get_post_meta($map_id, 'legend', true), $this->map);
-	}
-
-	function get_options() {
-		return $this->options;
 	}
 
 	/*
@@ -669,150 +720,156 @@ class JEO {
 	}
 }
 
-$JEO = new JEO();
+$jeo = new JEO();
 
-require_once(TEMPLATEPATH . '/inc' . '/markers.php');
-require_once(TEMPLATEPATH . '/inc' . '/ui.php');
+require_once(TEMPLATEPATH . '/inc/markers.php');
+require_once(TEMPLATEPATH . '/inc/ui.php');
 // GeoJSON API
-require_once(TEMPLATEPATH . '/inc' . '/api.php');
+require_once(TEMPLATEPATH . '/inc/api.php');
 // Embed functionality
-require_once(TEMPLATEPATH . '/inc' . '/embed.php');
+require_once(TEMPLATEPATH . '/inc/embed.php');
 // Metaboxes
 require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
-require_once(TEMPLATEPATH . '/inc' . '/featured.php');
+require_once(TEMPLATEPATH . '/inc/featured.php');
+include_once(TEMPLATEPATH . '/inc/range-slider.php');
 
 /*
  * JEO functions api
  */
 
+function jeo_get_options() {
+	global $jeo;
+	return $jeo->get_options();
+}
+
 function jeo_the_query($query) {
-	global $JEO;
-	return $JEO->the_query($query);	
+	global $jeo;
+	return $jeo->the_query($query);	
 }
 
 // mapped post types
 function jeo_get_mapped_post_types() {
-	global $JEO;
-	return $JEO->mapped_post_types();
+	global $jeo;
+	return $jeo->mapped_post_types();
 }
 
 function jeo_set_map($post) {
-	global $JEO;
-	return $JEO->set_map($post);
+	global $jeo;
+	return $jeo->set_map($post);
 }
 
 // get the main map post
 function jeo_the_map() {
-	global $JEO;
-	return $JEO->map;
+	global $jeo;
+	return $jeo->map;
 }
 
 
 // get the featured map post
 function jeo_map_featured($post_type = false) {
-	global $JEO;
-	return $JEO->featured($post_type);
+	global $jeo;
+	return $jeo->featured($post_type);
 }
 
 
 // get the latest map post
 function jeo_map_latest($post_type = false) {
-	global $JEO;
-	return $JEO->latest($post_type);
+	global $jeo;
+	return $jeo->latest($post_type);
 }
 
 // if post is map
 function jeo_is_map($map_id = false) {
-	global $JEO;
-	return $JEO->is_map($map_id);
+	global $jeo;
+	return $jeo->is_map($map_id);
 }
 
 // display the featured map
 function jeo_featured($main_map = true, $force = false) {
-	global $JEO;
-	return $JEO->get_featured($main_map, $force);
+	global $jeo;
+	return $jeo->get_featured($main_map, $force);
 }
 
 // display map
 function jeo_map($map_id = false, $main_map = true, $force = false) {
-	global $JEO;
-	return $JEO->get_map($map_id, $main_map, $force = false);
+	global $jeo;
+	return $jeo->get_map($map_id, $main_map, $force = false);
 }
 
 // get JSON map conf
 function jeo_map_conf() {
-	global $JEO;
-	return $JEO->map_conf();
+	global $jeo;
+	return $jeo->map_conf();
 }
 
 // get ARRAY map conf
 function jeo_get_map_conf($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_conf();
+	global $jeo;
+	return $jeo->get_map_conf();
 }
 
 // get the map conf
 function jeo_mapgroup_conf() {
-	global $JEO;
-	return $JEO->mapgroup_conf();
+	global $jeo;
+	return $jeo->mapgroup_conf();
 }
 
 // get the main map id
 function jeo_get_map_id() {
-	global $JEO;
-	return $JEO->get_id();
+	global $jeo;
+	return $jeo->get_id();
 }
 
 // get the main map id
 function jeo_get_the_ID() {
-	global $JEO;
-	return $JEO->get_the_ID();
+	global $jeo;
+	return $jeo->get_the_ID();
 }
 
 function jeo_get_mapgroup_data($map_id = false) {
-	global $JEO;
-	return $JEO->get_mapgroup_data($map_id);
+	global $jeo;
+	return $jeo->get_mapgroup_data($map_id);
 }
 
 // get the map formatted data
 function jeo_get_map_data($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_data($map_id);
+	global $jeo;
+	return $jeo->get_map_data($map_id);
 }
 
 function jeo_get_map_layers($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_layers($map_id);
+	global $jeo;
+	return $jeo->get_map_layers($map_id);
 }
 
 function jeo_get_map_center($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_center($map_id);
+	global $jeo;
+	return $jeo->get_map_center($map_id);
 }
 
 function jeo_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
-	global $JEO;
-	return $JEO->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
+	global $jeo;
+	return $jeo->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
 }
 
 function jeo_get_map_zoom($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_zoom($map_id);
+	global $jeo;
+	return $jeo->get_map_zoom($map_id);
+}
+
+function jeo_get_map_max_zoom($map_id = false) {
+	global $jeo;
+	return $jeo->get_map_max_zoom($map_id);
 }
 
 function jeo_get_map_legend($map_id = false) {
-	global $JEO;
-	return $JEO->get_map_legend($map_id);
-}
-
-function jeo_get_options() {
-	global $JEO;
-	return $JEO->get_options();
+	global $jeo;
+	return $jeo->get_map_legend($map_id);
 }
 
 function jeo_has_main_map() {
-	global $JEO;
-	return $JEO->has_main_map;
+	global $jeo;
+	return $jeo->has_main_map;
 }
 
 ?>

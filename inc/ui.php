@@ -7,7 +7,7 @@
 
 function jeo_find_post_on_map_button($zoom = null, $text = false, $post_id = false) {
 
-	if(!jeo_has_main_map())
+	if(!jeo_the_map())
 		return false;
 
 	global $post;
@@ -15,7 +15,7 @@ function jeo_find_post_on_map_button($zoom = null, $text = false, $post_id = fal
 
 	$text = $text ? $text : __('Locate on map', 'jeo');
 
-	$geometry = jeo_element_geometry_data($post_id);
+	$geometry = jeo_get_element_geometry_data($post_id);
 
 	if(!$geometry)
 		return false;
@@ -24,13 +24,13 @@ function jeo_find_post_on_map_button($zoom = null, $text = false, $post_id = fal
 		$map_data = jeo_get_map_data();
 		$zoom = $map_data['max_zoom'];
 	}
-	
+
 	$zoom_attr = 'data-zoom="' . $zoom . '"';
 
 	return apply_filters('jeo_find_post_on_map_button', '<a class="find-on-map center-map" ' . $geometry . ' ' . $zoom_attr . ' href="#"><span class="lsf">&#xE056;</span> ' . $text . '</a>');
 }
 
-function jeo_element_geometry_data($post_id = false) {
+function jeo_get_element_geometry_data($post_id = false) {
 	global $post;
 	$post_id = $post_id ? $post_id : $post->ID;
 

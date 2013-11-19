@@ -117,7 +117,7 @@ class JEO_Markers {
 	}
 
 	function setup_scripts() {
-		add_action('wp_enqueue_scripts', array($this, 'register_scripts'));
+		add_action('jeo_enqueue_scripts', array($this, 'register_scripts'));
 		add_action('wp_footer', array($this, 'enqueue_scripts'));
 	}
 
@@ -144,12 +144,16 @@ class JEO_Markers {
 		 */
 		if($this->use_clustering()) {
 
-			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'));
+			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'), '2.0');
 			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
+
+			wp_localize_script('leaflet-markerclusterer', 'jeo_markerclusterer', array(
+				'options' => apply_filters('jeo_markerclusterer_options', array())
+			));
 
 		}
 
-		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.8');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.17');
 	}
 
 	function setup_query_vars() {
@@ -222,12 +226,16 @@ class JEO_Markers {
 	function the_post_map($p = false) {
 		global $post;
 		$p = $p ? $p : $post;
+		$map = jeo_the_map();
 		if(is_single() && $this->has_location($p->ID) && !is_singular(array('map', 'map-group'))) {
 			$post_maps = get_post_meta($p->ID, 'maps');
-			if(!$post_maps) {
-				jeo_set_map(jeo_map_featured());
-			} else {
-				jeo_set_map(get_post(array_shift($post_maps)));
+			if(!$map) {
+				if($post_maps) {
+					$map = get_post(array_shift($post_maps));
+				} else {
+					$map = jeo_map_featured();
+				}
+				jeo_set_map($map);
 			}
 		}
 		return jeo_the_map();
@@ -270,7 +278,6 @@ class JEO_Markers {
 
 			$markers_query = new WP_Query($query);
 
-			$data['query_id'] = $cache_key;
 			$data['type'] = 'FeatureCollection';
 			$data['features'] = array();
 
@@ -296,7 +303,9 @@ class JEO_Markers {
 				set_transient($cache_key, $data, 60*10); // 10 minutes transient
 		}
 
-		header('Content Type: application/json');
+		$content_type = apply_filters('jeo_geojson_content_type', 'application/json');
+
+		header('Content-Type: ' . $content_type . ';charset=UTF-8');
 
 		if($this->use_browser_caching()) {
 			/* Browser caching */
@@ -307,7 +316,11 @@ class JEO_Markers {
 			/* --------------- */
 		}
 
-		echo $data;
+		do_action('jeo_markers_before_print');
+
+		echo apply_filters('jeo_markers_geojson', $data);
+
+		do_action('jeo_markers_after_print');
 		exit;
 	}
 
@@ -325,7 +338,7 @@ class JEO_Markers {
 	 */
 
 	function geocode_setup() {
-		add_action('wp_enqueue_scripts', array($this, 'geocode_register_scripts'));
+		add_action('jeo_enqueue_scripts', array($this, 'geocode_register_scripts'));
 		add_action('admin_footer', array($this, 'geocode_register_scripts'));
 		add_action('admin_footer', array($this, 'geocode_enqueue_scripts'));
 		add_action('add_meta_boxes', array($this, 'geocode_add_meta_box'));
@@ -494,12 +507,15 @@ class JEO_Markers {
 
 	function get_icon() {
 		global $post;
-		$marker = array(
-			'url' => get_template_directory_uri() . '/img/marker.png',
-			'width' => 26,
-			'height' => 30
-		);
-		return apply_filters('jeo_marker_icon', $marker, $post);
+		if($this->has_location()) {
+			$marker = array(
+				'url' => get_template_directory_uri() . '/img/marker.png',
+				'width' => 26,
+				'height' => 30
+			);
+			return apply_filters('jeo_marker_icon', $marker, $post);
+		}
+		return null;
 	}
 
 	function get_class() {
@@ -575,7 +591,7 @@ class JEO_Markers {
 	function has_location($post_id = false) {
 		global $post;
 		$post_id = $post_id ? $post_id : $post->ID;
-		return $this->get_coordinates($post_id);
+		return ($this->get_coordinates($post_id));
 	}
 
 	function get_city($post_id = false) {

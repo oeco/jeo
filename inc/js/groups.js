@@ -125,7 +125,7 @@ var groups = {};
 
 			// prepare new conf and layers
 			var conf = jeo.parseConf(group.mapsData[mapID]);
-			var layers = jeo.loadLayers(group.map, jeo.parseLayers(conf.layers));
+			var layers = jeo.loadLayers(group.map, jeo.parseLayers(group.map, conf.layers));
 
 			// store new conf
 			group.map.conf = conf;
@@ -157,8 +157,6 @@ var groups = {};
 			if(group.map.conf.filteringLayers)
 				group.map.addControl(new jeo.filterLayers());
 
-			console.log(prevMap);
-
 			/*
 			 * clear tooltips
 			 */
@@ -168,10 +166,12 @@ var groups = {};
 			/*
 			 * reset legend
 			 */
-			if(prevConf.legend_full_content)
-				group.map.legendControl.removeLegend(prevConf.legend_full_content);
-			else
-				group.map.legendControl.removeLegend(prevConf.legend);
+			 if(typeof group.map.legendControl !== 'undefined') {
+				if(prevConf.legend_full_content)
+					group.map.legendControl.removeLegend(prevConf.legend_full_content);
+				else
+					group.map.legendControl.removeLegend(prevConf.legend);
+			}
 
 			if(conf.legend)
 				group.map.legendControl.addLegend(conf.legend);
@@ -181,7 +181,7 @@ var groups = {};
 
 
 			// callbacks
-			jeo.runCallbacks('groupChanged', [mapID, group]);
+			jeo.runCallbacks('groupChanged', [group, prevMap]);
 
 		}
 

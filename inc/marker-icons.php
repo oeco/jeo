@@ -68,11 +68,22 @@ class JEO_Marker_Icons {
 
 	function get_marker_formatted($post_id = false) {
 
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$marker = array(
+			'iconUrl' => get_template_directory_uri() . '/img/marker.png',
+			'iconSize' => array(26, 30),
+			'iconAnchor' => array(13, 30),
+			'popupAnchor' => array(0, -40),
+			'markerId' => 'none'
+		);
+
 		if($post_id) {
 			$post_marker_id = $this->get_post_marker_id($post_id);
 
 			if($post_marker_id && get_post($post_marker_id)) {
-				return array(
+				$marker = array(
 					'iconUrl' => $this->get_marker_image_url($post_marker_id),
 					'iconSize' => $this->get_marker_size($post_marker_id),
 					'iconAnchor' => $this->get_marker_anchor($post_marker_id),
@@ -82,13 +93,7 @@ class JEO_Marker_Icons {
 			}
 		}
 
-		return array(
-			'iconUrl' => get_template_directory_uri() . '/img/marker.png',
-			'iconSize' => array(26, 30),
-			'iconAnchor' => array(13, 30),
-			'popupAnchor' => array(0, -40),
-			'markerId' => 'none'
-		);
+		return $marker;
 	}
 
  	/*
