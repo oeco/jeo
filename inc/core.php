@@ -77,17 +77,16 @@ class JEO {
 		}
 
 		if($cartodb || is_admin()) {
-
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.2.04');
+            
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.3.05');
 			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
 
 		} else {
 
 			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+            wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		}
-
-		wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		wp_register_style('leaflet-ie', get_template_directory_uri() . '/lib/leaflet/leaflet.ie.css');
 		$GLOBALS['wp_styles']->add_data('leaflet-ie', 'conditional', 'lte IE 8');
@@ -97,15 +96,15 @@ class JEO {
 		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.2.0');
 		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
 
-		// CARTODB
-		//wp_enqueue_script('cartodb-js', get_template_directory_uri() . '/lib/cartodb.js', array(), '0.0.1');
-
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
 		wp_register_script('underscore', get_template_directory_uri() . '/lib/underscore-min.js', array(), '1.4.3');
 
 		/*
 		 * Local
 		 */
+        if($cartodb || is_admin()) {
+            wp_enqueue_script('cartodb-mod-torque', get_template_directory_uri() . '/lib/cartodb.mod.torque.js', array('leaflet'), '3.3.05');
+        }
 		wp_enqueue_script('jeo', get_template_directory_uri() . '/inc/js/jeo.js', array('mapbox-js', 'underscore', 'jquery'), '0.4.2');
 
 		wp_enqueue_script('jeo.groups', get_template_directory_uri() . '/inc/js/groups.js', array('jeo'), '0.2.7');
