@@ -295,19 +295,21 @@ class JEO {
 				AND (
 			";
 
-			foreach($groupdata['maps'] as $m) {
+      if(is_array($groupdata['maps'])) {
+        foreach($groupdata['maps'] as $m) {
 
-				$c_map_id = $m['id'];
+          $c_map_id = $m['id'];
 
-				$where .= "
-					(
-						m_maps.meta_key = 'maps'
-						AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}'
-					)
-					OR
-				";
+          $where .= "
+            (
+              m_maps.meta_key = 'maps'
+              AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}'
+            )
+            OR
+          ";
 
-			}
+        }
+      }
 
 			$where .= "
 				m_has_maps.post_id IS NULL
@@ -557,9 +559,11 @@ class JEO {
 		if(get_post_type($map_id) == 'map-group') {
 			$data = $this->get_mapgroup_data($map_id);
 			$layers = array();
-			foreach($data['maps'] as $map) {
-				$layers = array_merge($layers, $map['layers']);
-			}
+      if(is_array($data['maps'])) {
+        foreach($data['maps'] as $map) {
+          $layers = array_merge($layers, $map['layers']);
+        }
+      }
 		} else {
 			$data = $this->get_map_data($map_id);
 			$layers = $data['layers'];
@@ -634,11 +638,13 @@ class JEO {
 		if(get_post_type($group_id) != 'map-group')
 			return;
 		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
-		foreach($group_data['maps'] as $map) {
-			$map_id = $map['id'];
-			$data['maps'][$map_id] = $map;
-			$data['maps'][$map_id] += $this->get_map_data($map['id']);
-		}
+    if(is_array($group_data['maps'])) {
+      foreach($group_data['maps'] as $map) {
+        $map_id = $map['id'];
+        $data['maps'][$map_id] = $map;
+        $data['maps'][$map_id] += $this->get_map_data($map['id']);
+      }
+    }
 		return apply_filters('jeo_mapgroup_data', $data, $post);
 	}
 
