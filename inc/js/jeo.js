@@ -74,10 +74,8 @@ var jeo = {};
 
 		var map_id = conf.containerID;
 
-		if(conf.server == 'mapbox')
-			map = L.mapbox.map(map_id, null, options);
-		else
-			map = L.map(map_id, options);
+		// use mapbox map for more map resources
+		map = L.mapbox.map(map_id, null, options);
 
 		if(conf.mainMap)
 			jeo.map = map;
