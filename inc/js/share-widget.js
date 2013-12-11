@@ -247,6 +247,7 @@ if (!Array.prototype.indexOf) {
 			embed.lat = parseFloat($('iframe').contents().find('#latitude').val())
 			embed.lon = parseFloat($('iframe').contents().find('#longitude').val());
 			embed.zoom = parseInt($('iframe').contents().find('#zoom').val());
+			embed.embedTitle = $('iframe').contents().find('#embed-title').text();
 
 			$('.zoom .val').text(embed.zoom);
 			$('.latitude .val').text(embed.lat);
@@ -258,6 +259,12 @@ if (!Array.prototype.indexOf) {
 			return false;
 
 		});
+
+		function getEmbedTitle() {
+
+			return $('#iframe').contents().find('#embed-title').text();
+
+		}
 
 		$('.default-centerzoom').click(function() {
 
@@ -303,6 +310,7 @@ if (!Array.prototype.indexOf) {
 			updateOutput();
 
 			var share_embed = $.extend({}, embed);
+			var title = getEmbedTitle();
 
 			share_embed.width = undefined;
 			share_embed.height = undefined;
@@ -319,7 +327,7 @@ if (!Array.prototype.indexOf) {
 
 			} else if($(this).hasClass('twitter')) {
 
-				window.open('http://twitter.com/share?url=' + share_url + '&',
+				window.open('http://twitter.com/share?url=' + share_url + '&text=' + title,
 					'twitterwindow',
 					'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+$(window).width()/2 +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 

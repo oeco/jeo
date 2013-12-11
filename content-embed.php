@@ -28,6 +28,7 @@
 
 	<header id="embed-header">
 		<h1><a href="<?php echo home_url('/'); ?>" target="_blank"><?php bloginfo('name'); ?><span>&nbsp;</span></a></h1>
+		<h2 id="embed-title" style="display:none;"><?php wp_title('', true, 'right'); ?></h2>
 	</header>
 
 	<div class="map-container"><div id="map_embed" class="map"></div></div>
