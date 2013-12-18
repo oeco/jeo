@@ -41,7 +41,7 @@ function jeo_get_element_geometry_data($post_id = false) {
 	if(!$coords[0] && !$coords[1])
 		return false;
 
-	return 'data-lat="' . $coords[1] . '"" data-lon="' . $coords[0] . '"';
+	return 'data-lat="' . $coords[1] . '" data-lon="' . $coords[0] . '"';
 }
 
 function jeo_element_max_zoom($post_id = false) {
