@@ -199,7 +199,21 @@ if($allow_layers) {
 								</span>
 							</a>
 						</h4>
-						<textarea id='output'></textarea>
+						<textarea id="output"></textarea>
+                        <div class="sub-inner">                        
+                            <h5>
+                                <div class='popup arrow-right'>
+                                </div>
+                                <?php _e('URL', 'jeo'); ?>
+                                <a class='tip' href='#'>
+                                    ?
+                                    <span class="popup arrow-left">
+                                        <?php _e('Get the original to use as a link or a custom embed.', 'jeo'); ?>
+                                    </span>
+                                </a>
+                            </h5>
+                            <input type="text" id="url-output" />
+                        </div>
 					</div>
 				</div>
 

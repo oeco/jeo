@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MapPress 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-19 11:48-0300\n"
-"PO-Revision-Date: 2013-11-19 11:48-0300\n"
+"POT-Creation-Date: 2013-11-26 17:56-0300\n"
+"PO-Revision-Date: 2013-11-26 17:57-0300\n"
 "Last-Translator: Miguel Peixe <miguel@cardume.art.br>\n"
 "Language-Team: Cardume <contato@cardume.art.br>\n"
 "Language: en_US\n"
@@ -130,7 +130,7 @@ msgstr "d/m/Y"
 msgid "Share a map"
 msgstr "Compartilhe um mapa"
 
-#: ../content-share.php:9 ../content-share.php:211
+#: ../content-share.php:9 ../content-share.php:225
 msgid "Share"
 msgstr "Compartilhar"
 
@@ -234,7 +234,17 @@ msgstr ""
 "Copie e cole este código em uma página HTML para incorporar o mapa com sua "
 "localização e configurações atuais"
 
-#: ../content-share.php:215
+#: ../content-share.php:207
+msgid "URL"
+msgstr "URL"
+
+#: ../content-share.php:211
+msgid "Get the original to use as a link or a custom embed."
+msgstr ""
+"Utilize a URL original para usar como um link ou uma incorporação "
+"customizada."
+
+#: ../content-share.php:229
 msgid ""
 "Share this map, with it's current settings and location, on your social "
 "network"
@@ -242,7 +252,7 @@ msgstr ""
 "Compartilhe este mapa, com a localização e configurações atuais, em sua rede "
 "social"
 
-#: ../content-share.php:231
+#: ../content-share.php:245
 msgid "Map preview"
 msgstr "Pré-visualização do mapa"
 
@@ -453,7 +463,7 @@ msgstr "Você não criou um mapa, ainda!"
 msgid "Add to \"more\" tab"
 msgstr "Adicionar a aba \"mais\""
 
-#: ../metaboxes/mapgroup/mapgroup.php:30 ../inc/core.php:190
+#: ../metaboxes/mapgroup/mapgroup.php:30 ../inc/core.php:186
 msgid "Map group"
 msgstr "Grupo de mapas"
 
@@ -465,56 +475,56 @@ msgstr "Selecione um mapa para adicionar ao seu grupo de mapas"
 msgid "Add map"
 msgstr "Adicionar mapa"
 
-#: ../inc/markers.php:362
+#: ../inc/markers.php:365
 msgid "We couldn't find what you are looking for, please try again."
 msgstr "Não encontramos resultados para o que procura, tente novamente."
 
-#: ../inc/markers.php:363
+#: ../inc/markers.php:366
 msgid "results found"
 msgstr "resultados encontrados"
 
-#: ../inc/markers.php:380
+#: ../inc/markers.php:383
 msgid "Address and geolocation"
 msgstr "Endereço e geolocalização"
 
-#: ../inc/markers.php:411
+#: ../inc/markers.php:414
 msgid "Find the location"
 msgstr "Encontre a localização"
 
-#: ../inc/markers.php:413
+#: ../inc/markers.php:416
 msgid "Full address"
 msgstr "Endereço completo"
 
-#: ../inc/markers.php:414
+#: ../inc/markers.php:417
 msgid "Find"
 msgstr "Encontrar"
 
-#: ../inc/markers.php:419
+#: ../inc/markers.php:422
 msgid "Drag the marker for a more precise result"
 msgstr "Arraste o marcador para melhor precisão"
 
-#: ../inc/markers.php:423
+#: ../inc/markers.php:426
 msgid "Result"
 msgstr "Resultados"
 
-#: ../inc/markers.php:425
+#: ../inc/markers.php:428
 msgid "Latitude"
 msgstr "Latitude"
 
-#: ../inc/markers.php:428
+#: ../inc/markers.php:431
 msgid "Longitude"
 msgstr "Longitude"
 
-#: ../inc/markers.php:533
+#: ../inc/markers.php:536
 msgctxt "reduced date format"
 msgid "m/d/Y"
 msgstr "d/m/Y"
 
-#: ../inc/markers.php:705
+#: ../inc/markers.php:708
 msgid "Clear GeoJSON Cache"
 msgstr "Limpar cache do GeoJSON"
 
-#: ../inc/markers.php:718
+#: ../inc/markers.php:721
 msgid ""
 "<strong>Markers GeoJSON cache has been cleared. Don't worry! They will be "
 "dynamically regenerated.</strong>"
@@ -522,7 +532,7 @@ msgstr ""
 "<strong>O cache GeoJSON dos marcados foi apagado. Não se preocupe! Eles "
 "serão gerados dinamicamente.</strong>"
 
-#: ../inc/markers.php:718
+#: ../inc/markers.php:721
 msgid ""
 "The next map markers load might take a little while, depending on the amount "
 "of markers. If you want to speed this up for your users, we recommend you "
@@ -638,111 +648,111 @@ msgstr ""
 "Sua API está <strong>ativada</strong>! <a href=\"%s\" target=\"_blank"
 "\">Clique aqui para saber mais</a>."
 
-#: ../inc/core.php:125 ../inc/core.php:137
+#: ../inc/core.php:121 ../inc/core.php:133
 msgid "More"
 msgstr "Mais"
 
-#: ../inc/core.php:129
+#: ../inc/core.php:125
 msgid "Find a location"
 msgstr "Encontre no mapa"
 
-#: ../inc/core.php:130
+#: ../inc/core.php:126
 msgid "Results"
 msgstr "Resultados"
 
-#: ../inc/core.php:131
+#: ../inc/core.php:127
 msgid "Close search"
 msgstr "Fechar busca"
 
-#: ../inc/core.php:132
+#: ../inc/core.php:128
 msgid "Nothing found, try something else."
 msgstr "Nada encontrado, tente outra busca"
 
-#: ../inc/core.php:156 ../inc/core.php:166 ../inc/admin/settings.php:25
+#: ../inc/core.php:152 ../inc/core.php:162 ../inc/admin/settings.php:25
 msgid "Maps"
 msgstr "Mapas"
 
-#: ../inc/core.php:157
+#: ../inc/core.php:153
 msgid "Map"
 msgstr "Mapa"
 
-#: ../inc/core.php:158 ../inc/core.php:159
+#: ../inc/core.php:154 ../inc/core.php:155
 msgid "Add new map"
 msgstr "Adicionar novo mapa"
 
-#: ../inc/core.php:160
+#: ../inc/core.php:156
 msgid "Edit map"
 msgstr "Editar mapa"
 
-#: ../inc/core.php:161
+#: ../inc/core.php:157
 msgid "New map"
 msgstr "Novo mapa"
 
-#: ../inc/core.php:162
+#: ../inc/core.php:158
 msgid "View map"
 msgstr "Ver mapa"
 
-#: ../inc/core.php:163
+#: ../inc/core.php:159
 msgid "Search maps"
 msgstr "Buscar mapas"
 
-#: ../inc/core.php:164
+#: ../inc/core.php:160
 msgid "No map found"
 msgstr "Nenhum mapa foi encontrado"
 
-#: ../inc/core.php:165
+#: ../inc/core.php:161
 msgid "No map found in the trash"
 msgstr "Nenhum mapa foi encontrado na lixeira"
 
-#: ../inc/core.php:172
+#: ../inc/core.php:168
 msgid "JEO Maps"
 msgstr "Mapas do JEO"
 
-#: ../inc/core.php:189 ../inc/core.php:199 ../inc/core.php:219
+#: ../inc/core.php:185 ../inc/core.php:195 ../inc/core.php:215
 msgid "Map groups"
 msgstr "Grupos de mapa"
 
-#: ../inc/core.php:191 ../inc/core.php:192 ../inc/core.php:220
+#: ../inc/core.php:187 ../inc/core.php:188 ../inc/core.php:216
 msgid "Add new map group"
 msgstr "Adicionar novo grupo de mapa"
 
-#: ../inc/core.php:193
+#: ../inc/core.php:189
 msgid "Edit map group"
 msgstr "Editar grupo de mapa"
 
-#: ../inc/core.php:194
+#: ../inc/core.php:190
 msgid "New map group"
 msgstr "Novo grupo de mapa"
 
-#: ../inc/core.php:195
+#: ../inc/core.php:191
 msgid "View map group"
 msgstr "Ver grupo de mapa"
 
-#: ../inc/core.php:196
+#: ../inc/core.php:192
 msgid "Search map group"
 msgstr "Buscar grupo de mapa"
 
-#: ../inc/core.php:197
+#: ../inc/core.php:193
 msgid "No map group found"
 msgstr "Nenhum grupo de mapa foi encontrado"
 
-#: ../inc/core.php:198
+#: ../inc/core.php:194
 msgid "No map group found in the trash"
 msgstr "Nenhum grupo de mapa foi encontrado na lixeira"
 
-#: ../inc/core.php:205
+#: ../inc/core.php:201
 msgid "JEO Map Groups"
 msgstr "Grupos de mapa do JEO"
 
-#: ../inc/core.php:220
+#: ../inc/core.php:216
 msgid "Add new group"
 msgstr "Adicionar novo grupo"
 
-#: ../inc/core.php:491
+#: ../inc/core.php:489
 msgid "You haven't created any maps!"
 msgstr "Você ainda não criou um mapa!"
 
-#: ../inc/core.php:492
+#: ../inc/core.php:490
 msgid "Click here to create your first"
 msgstr "Clique aqui para criar o seu primeiro"
 

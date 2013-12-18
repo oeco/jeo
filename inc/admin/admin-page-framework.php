@@ -309,6 +309,8 @@ class Admin_Page_Framework {
 	}
 
 	protected function CreateRootMenu( $strTitle, $strPathIcon16x16=null ) {
+
+		/*
 		
 		$strPathIcon16x16 = ( $strPathIcon16x16 ) ? $strPathIcon16x16 : $this->strPathIcon16x16;
 		add_menu_page(  
@@ -329,6 +331,8 @@ class Admin_Page_Framework {
 		// Add a setting link in the plugin listing 
 		if ( $this->oLink->arrCallerInfo['type'] == 'plugin' )
 			add_filter( 'plugin_action_links_' . $this->oLink->GetCallerPluginBaseName() , array( $this->oLink, 'AddSettingsLinkInPluginListingPage' ) );
+
+		*/
 	
 	}	
 	protected function AddSubMenu( $strSubTitle, $strPageSlug, $strPathIcon32x32=null, $strCapability=null ) {
@@ -339,9 +343,8 @@ class Admin_Page_Framework {
 		
 		// add the sub-menu and sub-page
 		$strPageSlug = $this->oUtil->SanitizeSlug( $strPageSlug );	// - => _, . => _
-		add_submenu_page( 
-			trim( $this->strPageSlug )			// $parent_slug
-			, $strSubTitle						// $page_title
+		add_theme_page( 
+			$strSubTitle						// $page_title
 			, $strSubTitle						// $menu_title
 			, $strCapability				 	// $strCapability
 			, $strPageSlug						// $menu_slug
@@ -1448,7 +1451,8 @@ class Admin_Page_Framework_Debug {
 	public function DumpArray( $arr, $strFilePath=null ) {
 		if ( $strFilePath ) {
 			
-			file_put_contents( 
+			global $wp_filesystem;
+			$wp_filesystem->put_contents( 
 				$strFilePath , 
 				date( "Y/m/d H:i:s" ) . PHP_EOL
 				. print_r( $arr, true ) . PHP_EOL . PHP_EOL
@@ -1911,7 +1915,8 @@ class Admin_Page_Framework_Utilities {	// since 1.0.4
 		
 		// Used for the Import functionality.
 		// Returns an array from the contents of a given file
-		$arr = unserialize( file_get_contents( $strFilePath, true ) );
+		global $wp_filesystem;
+		$arr = unserialize( $wp_filesystem->get_contents( $strFilePath, true ) );
 		return ( $arr ) ? $arr : null; 
 		
 	}

@@ -47,12 +47,14 @@
 
 				},
 				onEachFeature: function(f, l) {
+					
+					var markerId = f.properties.marker.markerId ? f.properties.marker.markerId : f.properties.marker.iconUrl;
 
-					if(icons[f.properties.marker.markerId]) {
-						var fIcon = icons[f.properties.marker.markerId];
+					if(icons[markerId]) {
+						var fIcon = icons[markerId];
 					} else {
 						var fIcon = new icon(f.properties.marker);
-						icons[f.properties.marker.markerId] = fIcon;
+						icons[markerId] = fIcon;
 					}
 
 					l.setIcon(fIcon);

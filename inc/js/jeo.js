@@ -74,10 +74,8 @@ var jeo = {};
 
 		var map_id = conf.containerID;
 
-		if(conf.server == 'mapbox')
-			map = L.mapbox.map(map_id, null, options);
-		else
-			map = L.map(map_id, options);
+		// use mapbox map for more map resources
+		map = L.mapbox.map(map_id, null, options);
 
 		if(conf.mainMap)
 			jeo.map = map;
@@ -167,35 +165,27 @@ var jeo = {};
 
 		var parsedLayers = [];
 
-		var composite = 0;
-		var composited = 0;
+		var mapBoxComposite = 1;
+		var mapBoxCompositionAmount = 0;
 
 		$.each(layers, function(i, layer) {
 
-			layerID = layer.layerID;
+			var layerID = layer.layerID;
 			if(typeof layerID == 'undefined')
 				layerID = layer;
 
-			if(layer.layerType == 'cartodb' || layerID.indexOf('http') !== -1) {
+			if(layer.layerType == 'mapbox' || layerID.indexOf('http') === -1) {
+                
+                layer.mapboxComposition = mapBoxComposite;
 
-				parsedLayers.push(layer);
-				composite++;
-
-			} else {
-
-				composited++;
-
-				if(!parsedLayers[composite] || parsedLayers[composite].indexOf('http') !== -1)
-					parsedLayers.push(layerID);
-				else
-					parsedLayers[composite] += ',' + layerID;
-
-				if(composited >= 16) {
-					composited = 0;
-					composite++;
-				}
+                if(mapBoxCompositionAmount >= 16) {
+                    mapBoxCompositionAmount = 0;
+                    mapBoxComposite++;
+                }
 
 			}
+            
+            parsedLayers.push(layer);
 
 		});
 
@@ -210,9 +200,7 @@ var jeo = {};
 
 			if(layer.layerType == 'cartodb') {
 
-				var cartoLayer = cartodb.createLayer(map, layer.layerID);
-
-				layers.push(cartoLayer);
+				layers.push(cartodb.createLayer(map, layer.layerID));
 
 			} else if(layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
 

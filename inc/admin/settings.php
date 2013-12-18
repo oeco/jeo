@@ -1,15 +1,13 @@
 <?php
 
 if ( !class_exists( 'Admin_Page_Framework' ) ) 
-	include_once( TEMPLATEPATH . '/inc/admin/admin-page-framework.php' );
+	include_once( get_template_directory() . '/inc/admin/admin-page-framework.php' );
 
 class JEO_Settings_Page extends Admin_Page_Framework {
 
 	var $page_slug = 'jeo_settings';
 
 	function SetUp() {
-					
-		$this->SetRootMenu(__('JEO', 'jeo'));	
 		
 		$this->AddSubMenu(
 			__('JEO Settings', 'jeo'),
@@ -79,7 +77,7 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 						'description' => __('Select if the front page map should be the featured map with latest content or a selection of featured posts.', 'jeo'),
 						'type' => 'radio',
 						'default' => 'latest',
-						'label' => array('latest' => __('Featured map with latest posts', 'jeo'), 'featured' => __('Selection of featured posts') . ' <strong>(' . __('featured map cannot be a map-group', 'jeo') . ')</strong>')
+						'label' => array('latest' => __('Featured map with latest posts', 'jeo'), 'featured' => __('Selection of featured posts', 'jeo') . ' <strong>(' . __('featured map cannot be a map-group', 'jeo') . ')</strong>')
 					),
 					array(  
 						'id' => 'featured_map',
@@ -113,7 +111,7 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 						'description' => __('Choose the geocoding service to be used', 'jeo'),
 						'type' => 'radio',
 						'default' => 'osm',
-						'label' => array('osm' => __('OpenStreetMaps with Nominatim', 'jeo'), 'gmaps' => __('Google Maps'))
+						'label' => array('osm' => __('OpenStreetMaps with Nominatim', 'jeo'), 'gmaps' => 'Google Maps')
 					),
 					array(
 						'id' => 'gmaps_api_key',

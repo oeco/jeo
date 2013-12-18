@@ -41,7 +41,7 @@ class JEO {
 	}
 
 	function setup_directories() {
-		$this->directory = apply_filters('jeo_directory', TEMPLATEPATH . '/inc');
+		$this->directory = apply_filters('jeo_directory', get_template_directory() . '/inc');
 		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri());
 	}
 
@@ -61,6 +61,23 @@ class JEO {
 	}
 
 	function scripts() {
+
+		if(is_admin()) {
+			wp_enqueue_style('jeo-dashicons', get_template_directory_uri() . '/css/dashicons.css');
+			?>
+			<style>
+			#adminmenu #menu-posts-map.menu-icon-post div.wp-menu-image:before {
+			  font-family: 'jeo-dashicons' !important;
+			  content: '\e609';
+			}
+			#adminmenu #menu-posts-map-group.menu-icon-post div.wp-menu-image:before {
+			  font-family: 'jeo-dashicons' !important;
+			  content: '\e607';
+			}
+			</style>
+			<?php
+		}
+
 		/*
 		 * Libraries
 		 */
@@ -77,17 +94,16 @@ class JEO {
 		}
 
 		if($cartodb || is_admin()) {
-
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.2.04');
+            
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.3.05');
 			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
 
 		} else {
 
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.6.2');
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.7');
+            wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		}
-
-		wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		wp_register_style('leaflet-ie', get_template_directory_uri() . '/lib/leaflet/leaflet.ie.css');
 		$GLOBALS['wp_styles']->add_data('leaflet-ie', 'conditional', 'lte IE 8');
@@ -96,9 +112,6 @@ class JEO {
 		// MAPBOX
 		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.2.0');
 		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
-
-		// CARTODB
-		//wp_enqueue_script('cartodb-js', get_template_directory_uri() . '/lib/cartodb.js', array(), '0.0.1');
 
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
 		wp_register_script('underscore', get_template_directory_uri() . '/lib/underscore-min.js', array(), '1.4.3');
@@ -159,7 +172,7 @@ class JEO {
 			'add_new_item' => __('Add new map', 'jeo'),
 			'edit_item' => __('Edit map', 'jeo'),
 			'new_item' => __('New map', 'jeo'),
-			'view_item' => __('View map'),
+			'view_item' => __('View map', 'jeo'),
 			'search_items' => __('Search maps', 'jeo'),
 			'not_found' => __('No map found', 'jeo'),
 			'not_found_in_trash' => __('No map found in the trash', 'jeo'),
@@ -206,7 +219,8 @@ class JEO {
 			'supports' => array( 'title'),
 			'public' => true,
 			'show_ui' => true,
-			'show_in_menu' => false,
+			'show_in_menu' => true,
+			'menu_position' => 4,
 			'exclude_from_search' => true,
 			'rewrite' => array('slug' => 'mapgroup', 'with_front' => false),
 			'capability_type' => 'page'
@@ -216,8 +230,8 @@ class JEO {
 	}
 
 	function admin_menu() {
-		add_submenu_page('edit.php?post_type=map', __('Map groups', 'jeo'), __('Map groups', 'jeo'), 'edit_posts', 'edit.php?post_type=map-group');
-		add_submenu_page('edit.php?post_type=map', __('Add new group', 'jeo'), __('Add new map group', 'jeo'), 'edit_posts', 'post-new.php?post_type=map-group');
+		//add_theme_page(__('Map groups', 'jeo'), __('Map groups', 'jeo'), 'edit_posts', 'edit.php?post_type=map-group');
+		//add_theme_page(__('Add new group', 'jeo'), __('Add new map group', 'jeo'), 'edit_posts', 'post-new.php?post_type=map-group');
 	}
 
 	function mapped_post_types() {
@@ -296,18 +310,20 @@ class JEO {
 				AND (
 			";
 
-			foreach($groupdata['maps'] as $m) {
+			if(is_array($groupdata['maps'])) {
+				foreach($groupdata['maps'] as $m) {
 
-				$c_map_id = $m['id'];
+					$c_map_id = $m['id'];
 
-				$where .= "
+					$where .= "
 					(
 						m_maps.meta_key = 'maps'
 						AND CAST(m_maps.meta_value AS CHAR) = '{$c_map_id}'
 					)
 					OR
-				";
+					";
 
+				}
 			}
 
 			$where .= "
@@ -558,8 +574,10 @@ class JEO {
 		if(get_post_type($map_id) == 'map-group') {
 			$data = $this->get_mapgroup_data($map_id);
 			$layers = array();
-			foreach($data['maps'] as $map) {
-				$layers = array_merge($layers, $map['layers']);
+			if(is_array($data['maps'])) {
+				foreach($data['maps'] as $map) {
+					$layers = array_merge($layers, $map['layers']);
+				}
 			}
 		} else {
 			$data = $this->get_map_data($map_id);
@@ -603,8 +621,10 @@ class JEO {
 
 			if(get_post_type($map_id) == 'map-group') {
 				$mapgroup = $this->get_mapgroup_data($map_id);
-				$map = array_shift($mapgroup['maps']);
-				$map_id = $map['postID'];
+				if(is_array($mapgroup['maps'])) {
+					$map = array_shift($mapgroup['maps']);
+					$map_id = $map['postID'];
+				}
 			}
 
 			$layers = $this->get_map_layers($map_id);
@@ -635,11 +655,13 @@ class JEO {
 		if(get_post_type($group_id) != 'map-group')
 			return;
 		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
-		foreach($group_data['maps'] as $map) {
-			$map_id = $map['id'];
-			$data['maps'][$map_id] = $map;
-			$data['maps'][$map_id] += $this->get_map_data($map['id']);
-		}
+    if(is_array($group_data['maps'])) {
+      foreach($group_data['maps'] as $map) {
+        $map_id = $map['id'];
+        $data['maps'][$map_id] = $map;
+        $data['maps'][$map_id] += $this->get_map_data($map['id']);
+      }
+    }
 		return apply_filters('jeo_mapgroup_data', $data, $post);
 	}
 
@@ -722,16 +744,16 @@ class JEO {
 
 $jeo = new JEO();
 
-require_once(TEMPLATEPATH . '/inc/markers.php');
-require_once(TEMPLATEPATH . '/inc/ui.php');
+require_once(get_template_directory() . '/inc/markers.php');
+require_once(get_template_directory() . '/inc/ui.php');
 // GeoJSON API
-require_once(TEMPLATEPATH . '/inc/api.php');
+require_once(get_template_directory() . '/inc/api.php');
 // Embed functionality
-require_once(TEMPLATEPATH . '/inc/embed.php');
+require_once(get_template_directory() . '/inc/embed.php');
 // Metaboxes
-require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
-require_once(TEMPLATEPATH . '/inc/featured.php');
-include_once(TEMPLATEPATH . '/inc/range-slider.php');
+require_once(get_template_directory() . '/metaboxes/metaboxes.php');
+require_once(get_template_directory() . '/inc/featured.php');
+include_once(get_template_directory() . '/inc/range-slider.php');
 
 /*
  * JEO functions api

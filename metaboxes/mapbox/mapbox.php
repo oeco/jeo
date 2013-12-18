@@ -80,14 +80,14 @@ function mapbox_inner_custom_box($post) {
 			<div>
 				Select base layer
 				<select name="map_data[layers][0][type]" id="baselayer_drop_down">
-					<option value="openstreetmap" <?=$select_base_layer == 'openstreetmap' ? ' selected="selected"' : '';?> >OpenStreetMap</option>
-					<option value="mapquest_osm" <?=$select_base_layer == 'mapquest_osm' ? ' selected="selected"' : '';?> >Mapquest OpenStreetMap</option>
-					<option value="mapquest_sat" <?=$select_base_layer == 'mapquest_sat' ? ' selected="selected"' : '';?> >Mapquest Satellite</option>
-					<option value="stamen_toner" <?=$select_base_layer == 'stamen_toner' ? ' selected="selected"' : '';?> >Stamen Toner</option>
-					<option value="stamen_watercolor" <?=$select_base_layer == 'stamen_watercolor' ? ' selected="selected"' : '';?> >Stamen Watercolor</option>
-					<option value="stamen_terrain" <?=$select_base_layer == 'stamen_terrain' ? ' selected="selected"' : '';?> >Stamen Terrain <?php _e('(USA Only)','jeo'); ?></option>
-					<option value="custom" <?=$select_base_layer == 'custom' ? ' selected="selected"' : '';?> ><?php _e('Custom','jeo'); ?></option>
-					<option value="none" <?=$select_base_layer == 'none' ? ' selected="selected"' : '';?> ><?php _e('None','jeo'); ?></option>	
+					<option value="openstreetmap" <?php echo $select_base_layer == 'openstreetmap' ? ' selected="selected"' : ''; ?> >OpenStreetMap</option>
+					<option value="mapquest_osm" <?php echo $select_base_layer == 'mapquest_osm' ? ' selected="selected"' : ''; ?> >Mapquest OpenStreetMap</option>
+					<option value="mapquest_sat" <?php echo $select_base_layer == 'mapquest_sat' ? ' selected="selected"' : ''; ?> >Mapquest Satellite</option>
+					<option value="stamen_toner" <?php echo $select_base_layer == 'stamen_toner' ? ' selected="selected"' : ''; ?> >Stamen Toner</option>
+					<option value="stamen_watercolor" <?php echo $select_base_layer == 'stamen_watercolor' ? ' selected="selected"' : ''; ?>>Stamen Watercolor</option>
+					<option value="stamen_terrain" <?php echo $select_base_layer == 'stamen_terrain' ? ' selected="selected"' : ''; ?> >Stamen Terrain <?php _e('(USA Only)','jeo'); ?></option>
+					<option value="custom" <?php echo $select_base_layer == 'custom' ? ' selected="selected"' : ''; ?> ><?php _e('Custom','jeo'); ?></option>
+					<option value="none" <?php echo $select_base_layer == 'none' ? ' selected="selected"' : ''; ?> ><?php _e('None','jeo'); ?></option>	
 				</select>
 				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
 			</div>

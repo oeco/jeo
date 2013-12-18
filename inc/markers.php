@@ -139,13 +139,16 @@ class JEO_Markers {
 
 	function register_scripts() {
 
+		wp_register_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'), '0.2');
+		wp_register_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css', array(), '0.2');
+
 		/* 
 		 * Clustering
 		 */
 		if($this->use_clustering()) {
 
-			wp_enqueue_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'), '2.0');
-			wp_enqueue_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css');
+			wp_enqueue_script('leaflet-markerclusterer');
+			wp_enqueue_style('leaflet-markerclusterer');
 
 			wp_localize_script('leaflet-markerclusterer', 'jeo_markerclusterer', array(
 				'options' => apply_filters('jeo_markerclusterer_options', array())
@@ -153,7 +156,7 @@ class JEO_Markers {
 
 		}
 
-		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.17');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.18');
 	}
 
 	function setup_query_vars() {
@@ -509,9 +512,11 @@ class JEO_Markers {
 		global $post;
 		if($this->has_location()) {
 			$marker = array(
-				'url' => get_template_directory_uri() . '/img/marker.png',
-				'width' => 26,
-				'height' => 30
+				'iconUrl' => get_template_directory_uri() . '/img/marker.png',
+				'iconSize' => array(26, 30),
+				'iconAnchor' => array(13, 30),
+				'popupAnchor' => array(0, -40),
+				'markerId' => 'none'
 			);
 			return apply_filters('jeo_marker_icon', $marker, $post);
 		}

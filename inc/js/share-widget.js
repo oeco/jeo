@@ -60,7 +60,7 @@ if (!Array.prototype.indexOf) {
 	// All textarea in the app should auto select
 	// its content if the element is in focus
 	function autoSelect($el) {
-		$el.focus(function() {
+		$el.bind('focus click', function() {
 			$textarea = $(this);
 			$textarea.select();
 			// Unbind the mouseup event for chrome
@@ -79,11 +79,13 @@ if (!Array.prototype.indexOf) {
 		var $maps = $('#maps');
 		var $stories = $('#stories');
 		var $output = $('#output');
+        var $urlOutput = $('#url-output');
 		var iframe = document.getElementById('iframe');
 		var hash = location.href.split('#/')[1];
 
 		// autoselect the contents of the textarea
 		autoSelect($output);
+        autoSelect($urlOutput);
 
 		var embed = {
 			p: undefined,
@@ -105,7 +107,9 @@ if (!Array.prototype.indexOf) {
 
 		function updateOutput() {
 			updateLocation();
-			$output.html('<iframe src="' + BASEURL + serialize(embed) + '" width="' + embed.width + '" height="' + embed.height + '" frameborder="0"></iframe>');
+            var url = BASEURL + serialize(embed);
+			$output.html('<iframe src="' + url + '" width="' + embed.width + '" height="' + embed.height + '" frameborder="0"></iframe>');
+            $urlOutput.val(url);
 		}
 
 		function updateIframe() {
@@ -233,17 +237,9 @@ if (!Array.prototype.indexOf) {
 			});
 		}
 
-		$('#output').focus(function() {
-
+		$('#output, #url-output').bind('focus click', function() {
 			updateOutput();
-
 			$(this).select();
-			// Unbind the mouseup event for chrome
-			$(this).mouseup(function() {
-				$textarea.off('mouseup');
-				return false;
-			});
-
 		});
 
 		$('.grab-centerzoom').click(function() {
@@ -251,6 +247,7 @@ if (!Array.prototype.indexOf) {
 			embed.lat = parseFloat($('iframe').contents().find('#latitude').val())
 			embed.lon = parseFloat($('iframe').contents().find('#longitude').val());
 			embed.zoom = parseInt($('iframe').contents().find('#zoom').val());
+			embed.embedTitle = $('iframe').contents().find('#embed-title').text();
 
 			$('.zoom .val').text(embed.zoom);
 			$('.latitude .val').text(embed.lat);
@@ -262,6 +259,12 @@ if (!Array.prototype.indexOf) {
 			return false;
 
 		});
+
+		function getEmbedTitle() {
+
+			return $('#iframe').contents().find('#embed-title').text();
+
+		}
 
 		$('.default-centerzoom').click(function() {
 
@@ -307,6 +310,7 @@ if (!Array.prototype.indexOf) {
 			updateOutput();
 
 			var share_embed = $.extend({}, embed);
+			var title = getEmbedTitle();
 
 			share_embed.width = undefined;
 			share_embed.height = undefined;
@@ -323,7 +327,7 @@ if (!Array.prototype.indexOf) {
 
 			} else if($(this).hasClass('twitter')) {
 
-				window.open('http://twitter.com/share?url=' + share_url + '&',
+				window.open('http://twitter.com/share?url=' + share_url + '&text=' + title,
 					'twitterwindow',
 					'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+$(window).width()/2 +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 

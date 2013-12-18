@@ -196,7 +196,8 @@ class JEO_Marker_Icons {
 			'supports' => array('title'),
 			'public' => false,
 			'show_ui' => true,
-			'show_in_menu' => false
+			'show_in_menu' => true,
+			'menu_position' => 4
 		);
 
 		register_post_type($this->post_type, $args);
@@ -248,6 +249,10 @@ class JEO_Marker_Icons {
 			.wp-list-table #marker { width: 150px; }
 			#the-list .marker { text-align: center; font-weight: bold; padding-bottom: 10px; }
 			#the-list .marker img { display: block; margin: 10px auto; }
+			#adminmenu #menu-posts-<?php echo $this->post_type; ?>.menu-icon-post div.wp-menu-image:before {
+			  font-family: 'jeo-dashicons' !important;
+			  content: '\e608';
+			}
 		</style>
 		<?php
 	}
@@ -273,7 +278,7 @@ class JEO_Marker_Icons {
 
 	function action_row_js() {
 		$screen = get_current_screen();
-		if($screen->parent_base == 'edit' && $screen->post_type == 'marker-icon') {
+		if($screen->post_type == 'marker-icon') {
 			?>
 			<script type="text/javascript">
 				jQuery(document).ready(function($) {
@@ -305,8 +310,8 @@ class JEO_Marker_Icons {
 	}
 
 	function admin_menu() {
-	    add_submenu_page('edit.php?post_type=map', __('Marker icons', 'jeo'), __('Marker icons', 'jeo'), 'edit_posts', 'edit.php?post_type=marker-icon');
-	    add_submenu_page('edit.php?post_type=map', __('Add new marker icon', 'jeo'), __('Add new marker icon', 'jeo'), 'edit_posts', 'post-new.php?post_type=marker-icon');
+	    //add_theme_page(__('Marker icons', 'jeo'), __('Marker icons', 'jeo'), 'edit_posts', 'edit.php?post_type=marker-icon');
+	    //add_theme_page(__('Add new marker icon', 'jeo'), __('Add new marker icon', 'jeo'), 'edit_posts', 'post-new.php?post_type=marker-icon');
 	}
 
 	/*
@@ -380,18 +385,18 @@ class JEO_Marker_Icons {
 						<h4><?php _e('Icon anchor', 'jeo'); ?></h4>
 						<p><?php _e('Coordinates to correctly position the marker on the map', 'jeo'); ?></p>
 						<p>
-							<button class="button enable-point-edit" data-xinput="marker_icon_anchor_x" data-yinput="marker_icon_anchor_y" data-anchortype="icon"><?php _e('Find coordinates'); ?></button>
+							<button class="button enable-point-edit" data-xinput="marker_icon_anchor_x" data-yinput="marker_icon_anchor_y" data-anchortype="icon"><?php _e('Find coordinates', 'jeo'); ?></button>
 						</p>
 						<p>
-							<input type="text" size="3" name="marker_icon_anchor_x" id="marker_icon_anchor_x" value="<?php echo $icon_x; ?>" /> <label for="marker_icon_anchor_x"><?php _e('X'); ?></label><br/>
-							<input type="text" size="3" name="marker_icon_anchor_y" id="marker_icon_anchor_y" value="<?php echo $icon_y; ?>" /> <label for="marker_icon_anchor_y"><?php _e('Y'); ?></label>
+							<input type="text" size="3" name="marker_icon_anchor_x" id="marker_icon_anchor_x" value="<?php echo $icon_x; ?>" /> <label for="marker_icon_anchor_x"><?php _ex('X', 'Cartesian coordination system axis', 'jeo'); ?></label><br/>
+							<input type="text" size="3" name="marker_icon_anchor_y" id="marker_icon_anchor_y" value="<?php echo $icon_y; ?>" /> <label for="marker_icon_anchor_y"><?php _ex('Y', 'Cartesian coordination system axis', 'jeo'); ?></label>
 						</p>
 					</div>
 					<div class="marker-icon-popup-anchor marker-icon-setting">
 						<h4><?php _e('Popup anchor', 'jeo'); ?></h4>
 						<p><?php _e('Coordinates to correctly position the marker\'s popup', 'jeo'); ?></p>
 						<p>
-							<button class="button enable-point-edit" data-xinput="marker_icon_popup_anchor_x" data-yinput="marker_icon_popup_anchor_y" data-anchortype="popup"><?php _e('Find coordinates'); ?></button>
+							<button class="button enable-point-edit" data-xinput="marker_icon_popup_anchor_x" data-yinput="marker_icon_popup_anchor_y" data-anchortype="popup"><?php _e('Find coordinates', 'jeo'); ?></button>
 						</p>
 						<p>
 							<input type="text" size="3" name="marker_icon_popup_anchor_x" id="marker_icon_popup_anchor_x" value="<?php echo $popup_x; ?>" /> <label for="marker_icon_popup_anchor_x">X</label><br/>
@@ -572,7 +577,7 @@ class JEO_Marker_Icons {
 		$post_marker_id = get_post_meta($post->ID, 'marker_id', true);
 		?>
 		<div id="marker-icon-relationship-metabox">
-			<h4><?php _e('Choose a custom marker for your content. If it\'s set to <em>auto</em> we\'ll try to find the marker based on categories or map markers.'); ?></h4>
+			<h4><?php _e('Choose a custom marker for your content. If it\'s set to <em>auto</em> we\'ll try to find the marker based on categories or map markers.', 'jeo'); ?></h4>
 			<?php if($markers) : ?>
 				<ul id="markers-list" class="clearfix">
 					<li>
