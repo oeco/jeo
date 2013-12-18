@@ -2,7 +2,7 @@
 
 /* gather metaboxes */
 
-include(TEMPLATEPATH .  '/metaboxes/map-relation/map-relation.php');
-include(TEMPLATEPATH .  '/metaboxes/mapbox/mapbox.php');
-include(TEMPLATEPATH .  '/metaboxes/mapbox/legend.php');
-include(TEMPLATEPATH .  '/metaboxes/mapgroup/mapgroup.php');
+include(get_template_directory() .  '/metaboxes/map-relation/map-relation.php');
+include(get_template_directory() .  '/metaboxes/mapbox/mapbox.php');
+include(get_template_directory() .  '/metaboxes/mapbox/legend.php');
+include(get_template_directory() .  '/metaboxes/mapgroup/mapgroup.php');

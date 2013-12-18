@@ -41,7 +41,7 @@ class JEO {
 	}
 
 	function setup_directories() {
-		$this->directory = apply_filters('jeo_directory', TEMPLATEPATH . '/inc');
+		$this->directory = apply_filters('jeo_directory', get_template_directory() . '/inc');
 		$this->directory_uri = apply_filters('jeo_directory_uri', get_template_directory_uri());
 	}
 
@@ -61,6 +61,23 @@ class JEO {
 	}
 
 	function scripts() {
+
+		if(is_admin()) {
+			wp_enqueue_style('jeo-dashicons', get_template_directory_uri() . '/css/dashicons.css');
+			?>
+			<style>
+			#adminmenu #menu-posts-map.menu-icon-post div.wp-menu-image:before {
+			  font-family: 'jeo-dashicons' !important;
+			  content: '\e609';
+			}
+			#adminmenu #menu-posts-map-group.menu-icon-post div.wp-menu-image:before {
+			  font-family: 'jeo-dashicons' !important;
+			  content: '\e607';
+			}
+			</style>
+			<?php
+		}
+
 		/*
 		 * Libraries
 		 */
@@ -155,7 +172,7 @@ class JEO {
 			'add_new_item' => __('Add new map', 'jeo'),
 			'edit_item' => __('Edit map', 'jeo'),
 			'new_item' => __('New map', 'jeo'),
-			'view_item' => __('View map'),
+			'view_item' => __('View map', 'jeo'),
 			'search_items' => __('Search maps', 'jeo'),
 			'not_found' => __('No map found', 'jeo'),
 			'not_found_in_trash' => __('No map found in the trash', 'jeo'),
@@ -202,7 +219,8 @@ class JEO {
 			'supports' => array( 'title'),
 			'public' => true,
 			'show_ui' => true,
-			'show_in_menu' => false,
+			'show_in_menu' => true,
+			'menu_position' => 4,
 			'exclude_from_search' => true,
 			'rewrite' => array('slug' => 'mapgroup', 'with_front' => false),
 			'capability_type' => 'page'
@@ -212,8 +230,8 @@ class JEO {
 	}
 
 	function admin_menu() {
-		add_submenu_page('edit.php?post_type=map', __('Map groups', 'jeo'), __('Map groups', 'jeo'), 'edit_posts', 'edit.php?post_type=map-group');
-		add_submenu_page('edit.php?post_type=map', __('Add new group', 'jeo'), __('Add new map group', 'jeo'), 'edit_posts', 'post-new.php?post_type=map-group');
+		//add_theme_page(__('Map groups', 'jeo'), __('Map groups', 'jeo'), 'edit_posts', 'edit.php?post_type=map-group');
+		//add_theme_page(__('Add new group', 'jeo'), __('Add new map group', 'jeo'), 'edit_posts', 'post-new.php?post_type=map-group');
 	}
 
 	function mapped_post_types() {
@@ -726,16 +744,16 @@ class JEO {
 
 $jeo = new JEO();
 
-require_once(TEMPLATEPATH . '/inc/markers.php');
-require_once(TEMPLATEPATH . '/inc/ui.php');
+require_once(get_template_directory() . '/inc/markers.php');
+require_once(get_template_directory() . '/inc/ui.php');
 // GeoJSON API
-require_once(TEMPLATEPATH . '/inc/api.php');
+require_once(get_template_directory() . '/inc/api.php');
 // Embed functionality
-require_once(TEMPLATEPATH . '/inc/embed.php');
+require_once(get_template_directory() . '/inc/embed.php');
 // Metaboxes
-require_once(TEMPLATEPATH . '/metaboxes/metaboxes.php');
-require_once(TEMPLATEPATH . '/inc/featured.php');
-include_once(TEMPLATEPATH . '/inc/range-slider.php');
+require_once(get_template_directory() . '/metaboxes/metaboxes.php');
+require_once(get_template_directory() . '/inc/featured.php');
+include_once(get_template_directory() . '/inc/range-slider.php');
 
 /*
  * JEO functions api

@@ -1,0 +1,10 @@
+@font-face {
+	font-family: 'jeo-dashicons';
+	src:url('../fonts/jeoicons.eot');
+	src:url('../fonts/jeoicons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/jeoicons.ttf') format('truetype'),
+		url('../fonts/jeoicons.woff') format('woff'),
+		url('../fonts/jeoicons.svg#jeoicons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
