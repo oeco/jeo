@@ -327,7 +327,7 @@ var jeo = {};
 		if(!$detailsContainer.hasClass('clearfix'))
 			$detailsContainer.addClass('clearfix');
 
-		map.$.find('.map-details-link').unbind().click(function() {
+		map.$.on('click', '.map-details-link', function() {
 			$detailsContainer.append($('<div class="map-details-page"><div class="inner"><a href="#" class="close">×</a>' + full + '</div></div>'));
 			$detailsContainer.find('.map-details-page .close, .map-nav a').click(function() {
 				$detailsContainer.find('.map-details-page').remove();
