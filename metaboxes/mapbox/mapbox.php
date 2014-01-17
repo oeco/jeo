@@ -64,6 +64,8 @@ function mapbox_inner_custom_box($post) {
 
 	$map_conf = get_post_meta($post->ID, 'map_conf', true);
 
+	print_r($map_data);
+
 	?>
 	<div id="mapbox-metabox">
 
@@ -71,14 +73,17 @@ function mapbox_inner_custom_box($post) {
 		<div class="layers-container">
 
 			<?php 
-			if(isset($map_data['layers'])) 
-				$select_base_layer = $map_data['layers']['0']['type'];
-			else
+			if(isset($map_data['layers']))  {
+				$select_base_layer = $map_data['layers'][0]['type'];
+				$base_layer_url = $map_data['layers'][0]['id'];
+			} else {
 				$select_base_layer = 'openstreetmap';
+				$base_layer_url = '';
+			}
 			?>
 
 			<div>
-				Select base layer
+				<?php _e('Select base layer', 'jeo'); ?>
 				<select name="map_data[layers][0][type]" id="baselayer_drop_down">
 					<option value="openstreetmap" <?php echo $select_base_layer == 'openstreetmap' ? ' selected="selected"' : ''; ?> >OpenStreetMap</option>
 					<option value="mapquest_osm" <?php echo $select_base_layer == 'mapquest_osm' ? ' selected="selected"' : ''; ?> >Mapquest OpenStreetMap</option>
@@ -87,9 +92,9 @@ function mapbox_inner_custom_box($post) {
 					<option value="stamen_watercolor" <?php echo $select_base_layer == 'stamen_watercolor' ? ' selected="selected"' : ''; ?>>Stamen Watercolor</option>
 					<option value="stamen_terrain" <?php echo $select_base_layer == 'stamen_terrain' ? ' selected="selected"' : ''; ?> >Stamen Terrain <?php _e('(USA Only)','jeo'); ?></option>
 					<option value="custom" <?php echo $select_base_layer == 'custom' ? ' selected="selected"' : ''; ?> ><?php _e('Custom','jeo'); ?></option>
-					<option value="none" <?php echo $select_base_layer == 'none' ? ' selected="selected"' : ''; ?> ><?php _e('None','jeo'); ?></option>	
+					<option value="none" <?php echo $select_base_layer == 'none' ? ' selected="selected"' : ''; ?> ><?php _e('None','jeo'); ?></option>
 				</select>
-				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" />
+				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="60" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" value="<?php echo $base_layer_url; ?>" />
 			</div>
 
 			<p>
