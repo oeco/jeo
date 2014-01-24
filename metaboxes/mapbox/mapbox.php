@@ -64,8 +64,6 @@ function mapbox_inner_custom_box($post) {
 
 	$map_conf = get_post_meta($post->ID, 'map_conf', true);
 
-	print_r($map_data);
-
 	?>
 	<div id="mapbox-metabox">
 
