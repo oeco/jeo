@@ -16,6 +16,7 @@ class JEO_Share_Widget {
 	function __construct() {
 		add_filter('jeo_settings_tabs', array($this, 'admin_settings_tab'));
 		add_filter('jeo_settings_form_sections', array($this, 'admin_settings_form_section'), 10, 2);
+		// add_filter('wp_title', array($this, 'wp_title')); FIX
 
 		if($this->is_enabled()) {
 			add_filter('query_vars', array($this, 'query_var'));
@@ -25,6 +26,14 @@ class JEO_Share_Widget {
 				add_filter('wp_nav_menu_items', array($this, 'nav'), 10, 2);
 			}
 		}
+	}
+
+	function wp_title($title) {
+		global $wp_query;
+		if(isset($wp_query->query[$this->query_var])) {
+			$title = __('Share', 'jeo');
+		}
+		return $title;
 	}
 
 	/*
