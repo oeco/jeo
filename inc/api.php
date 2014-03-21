@@ -16,6 +16,7 @@ class JEO_API extends JEO_Markers {
 			add_rewrite_endpoint('geojson', EP_ALL);
 			add_filter('query_vars', array($this, 'query_var'));
 			add_filter('jeo_markers_geojson', array($this, 'jsonp_callback'));
+			add_filter('jeo_markers_data', array($this, 'filter_markers'), 10, 2);
 			add_filter('jeo_geojson_content_type', array($this, 'content_type'));
 			add_action('jeo_markers_before_print', array($this, 'headers'));
 			add_action('template_redirect', array($this, 'template_redirect'));
@@ -75,6 +76,18 @@ class JEO_API extends JEO_Markers {
 		$vars[] = 'geojson';
 		$vars[] = 'download';
 		return $vars;
+	}
+
+	function filter_markers($data, $query) {
+		if(isset($query->query['geojson'])) {
+			$features_with_geometry = array();
+			foreach($data['features'] as $feature) {
+				if(isset($feature['geometry']))
+					$features_with_geometry[] = $feature;
+			}
+			$data['features'] = $features_with_geometry;
+		}
+		return $data;
 	}
 
 	function template_redirect() {
