@@ -684,7 +684,7 @@ class JEO {
 	function get_mapgroup_json_data($group_id = false) {
 		$group_id = $group_id ? $group_id : $_REQUEST['group_id'];
 		$data = json_encode($this->get_mapgroup_data($group_id));
-		header('Content Type: application/json');
+		header('Content-Type: application/json');
 		echo $data;
 		exit;
 	}
@@ -692,7 +692,7 @@ class JEO {
 	function get_map_json_data($map_id = false) {
 		$map_id = $map_id ? $map_id : $_REQUEST['map_id'];
 		$data = json_encode($this->get_map_data($map_id));
-		header('Content Type: application/json');
+		header('Content-Type: application/json');
 		echo $data;
 		exit;
 	}
