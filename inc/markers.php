@@ -183,6 +183,7 @@ class JEO_Markers {
 			$marker_query->parse_query();
 			$query = $marker_query->query_vars;
 			$query['map_id'] = $post->ID;
+			unset($query['page_id']);
 		}
 
 		if($wp_query->get('map_id') && !$wp_query->get('p')) {
