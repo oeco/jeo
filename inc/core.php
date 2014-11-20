@@ -655,13 +655,13 @@ class JEO {
 		if(get_post_type($group_id) != 'map-group')
 			return;
 		$group_data = get_post_meta($group_id, 'mapgroup_data', true);
-    if(is_array($group_data['maps'])) {
-      foreach($group_data['maps'] as $map) {
-        $map_id = $map['id'];
-        $data['maps'][$map_id] = $map;
-        $data['maps'][$map_id] += $this->get_map_data($map['id']);
-      }
-    }
+		if(is_array($group_data['maps'])) {
+			foreach($group_data['maps'] as $map) {
+				$map_id = $map['id'];
+				$data['maps'][$map_id] = $map;
+				$data['maps'][$map_id] += $this->get_map_data($map['id']);
+			}
+		}
 		return apply_filters('jeo_mapgroup_data', $data, $post);
 	}
 
