@@ -565,8 +565,9 @@ class JEO {
 		$data['legend'] = $this->get_map_legend($map_id);
 		if($post->post_content)
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', $post->post_content);
+		$data = apply_filters('jeo_map_data', $data, $post);
 		wp_reset_postdata();
-		return apply_filters('jeo_map_data', $data, $post);
+		return $data;
 	}
 
 	function get_map_layers($map_id = false) {
