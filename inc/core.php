@@ -238,6 +238,7 @@ class JEO {
 		$custom = get_post_types(array('public' => true, '_builtin' => false));
 		$this->mapped_post_types = $custom + array('post');
 		unset($this->mapped_post_types['map']);
+		unset($this->mapped_post_types['map-layer']);
 		unset($this->mapped_post_types['map-group']);
 		return apply_filters('jeo_mapped_post_types', $this->mapped_post_types);
 	}
@@ -745,6 +746,7 @@ class JEO {
 
 $jeo = new JEO();
 
+require_once(get_template_directory() . '/inc/layers.php');
 require_once(get_template_directory() . '/inc/markers.php');
 require_once(get_template_directory() . '/inc/ui.php');
 // GeoJSON API
