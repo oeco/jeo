@@ -13,6 +13,8 @@ class JEO_Layers {
 		add_action('admin_menu', array($this, 'admin_menu'));
 		add_action('add_meta_boxes', array($this, 'add_meta_box'));
 		add_action('save_post', array($this, 'layer_save'));
+		add_action('admin_footer', array($this, 'meta_box_scripts'));
+		add_action('save_post', array($this, 'map_save'));
 
 	}
 
@@ -21,7 +23,7 @@ class JEO_Layers {
 		/*
 		 * Layer
 		 */
-		$labels = array( 
+		$labels = array(
 			'name' => __('Layers', 'jeo'),
 			'singular_name' => __('Layer', 'jeo'),
 			'add_new' => __('Add new layer', 'jeo'),
@@ -104,19 +106,11 @@ class JEO_Layers {
 		);
 	}
 
-	function get_layer_type($post_id = false) {
-
-		global $post;
-		$post_id = $post_id ? $post_id : $post->ID;
-
-		$terms = get_the_terms($post_id, 'layer-type');
-
-		if($terms) {
-			return array_shift($terms)->name;
-		} else {
-			return false;
-		}
-
+	function meta_box_scripts() {
+		wp_enqueue_script('underscore');
+		wp_enqueue_script('jquery-ui-sortable');
+		wp_enqueue_script('json2');
+		wp_enqueue_script('knockoutjs', get_template_directory_uri() . '/lib/knockout-3.2.0.js');
 	}
 
 	function settings_box($post = false) {
@@ -133,7 +127,7 @@ class JEO_Layers {
 
 					<input type="radio" id="layer_type_mapbox" name="layer_type" value="mapbox" <?php if($layer_type == 'mapbox') echo 'checked'; ?> />
 					<label for="layer_type_mapbox"><?php _e('MapBox', 'jeo'); ?></label>
-					
+
 					<input type="radio" id="layer_type_cartodb" name="layer_type" value="cartodb" <?php if($layer_type == 'cartodb') echo 'checked'; ?> />
 					<label for="layer_type_cartodb"><?php _e('CartoDB', 'jeo'); ?></label>
 				</p>
@@ -143,6 +137,7 @@ class JEO_Layers {
 
 				$tileurl = $post ? get_post_meta($post->ID, '_tilelayer_tile_url', true) : '';
 				$utfgridurl = $post ? get_post_meta($post->ID, '_tilelayer_utfgrid_url', true) : '';
+				$utfgrid_template = $post ? get_post_meta($post->ID, '_tilelayer_utfgrid_template', true) : '';
 
 				?>
 				<tbody>
@@ -158,6 +153,13 @@ class JEO_Layers {
 						<td>
 							<input id="tilelayer_utfgrid_url" type="text" placeholder="<?php _e('http://{s}.example.com/{z}/{x}/{y}.grid.json', 'jeo'); ?>" size="40" name="_tilelayer_utfgrid_url" value="<?php echo $utfgridurl; ?>" />
 							<p class="description"><?php _e('Optional UTFGrid URL. E.g.: http://{s}.example.com/{z}/{x}/{y}.grid.json', 'jeo'); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="tilelayer_utfgrid_url"><?php _e('UTFGrid Template (optional)', 'jeo'); ?></label></th>
+						<td>
+							<textarea id="tilelayer_utfgrid_template" rows="10" cols="40" name="_tilelayer_utfgrid_template"><?php echo $utfgrid_template; ?></textarea>
+							<p class="description"><?php _e('UTFGrid template using mustache.<br/>E.g.: City: {{city}}'); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -244,7 +246,7 @@ class JEO_Layers {
 						<th><label for="cartodb_viz_template"><?php _e('Template', 'jeo'); ?></label></th>
 						<td>
 							<textarea id="cartodb_viz_template" rows="10" cols="40" name="_cartodb_template"><?php echo $template; ?></textarea>
-							<p class="description"><?php _e('UTFGrid template.<br/>E.g.: City: {{city}}'); ?></p>
+							<p class="description"><?php _e('UTFGrid template using mustache.<br/>E.g.: City: {{city}}'); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -329,6 +331,9 @@ class JEO_Layers {
 			if(isset($_REQUEST['_tilelayer_utfgrid_url']))
 				update_post_meta($post_id, '_tilelayer_utfgrid_url', $_REQUEST['_tilelayer_utfgrid_url']);
 
+			if(isset($_REQUEST['_tilelayer_utfgrid_template']))
+				update_post_meta($post_id, '_tilelayer_utfgrid_template', $_REQUEST['_tilelayer_utfgrid_template']);
+
 			/*
 			 * MapBox
 			 */
@@ -369,7 +374,8 @@ class JEO_Layers {
 	function post_layers_box($post = false) {
 
 		$layer_query = new WP_Query(array('post_type' => 'map-layer', 'posts_per_page' => -1));
-		$post_layers = $post ? get_post_meta($post->ID, '_layers', true) : false;
+		$layers = array();
+		$post_layers = $post ? $this->get_map_layers($post->ID) : false;
 		?>
 
 		<p>
@@ -380,45 +386,100 @@ class JEO_Layers {
 			?>
 		</p>
 
-		<?php if($layer_query->have_posts()) {
+		<?php
+		if($layer_query->have_posts()) {
+			while($layer_query->have_posts()) {
+				$layer_query->the_post();
+				$layers[] = array(
+					'ID' => get_the_ID(),
+					'title' => get_the_title(),
+					'type' => $this->get_layer_type(get_the_ID())
+				);
+				wp_reset_postdata();
+			}
 			?>
+			<input type="text" data-bind="textInput: search" placeholder="<?php _e('Search for layers', 'jeo'); ?>" size="50">
 
-			<input type="text" placeholder="<?php _e('Search for layers', 'jeo'); ?>" size="50">
+			<!-- ko if: !search() -->
+				<h4 class="results-title"><?php _e('Latest layers', 'jeo'); ?></h4>
+			<!-- /ko -->
 
-			<h4 class="results-title"><?php _e('Latest layers', 'jeo'); ?></h4>
+			<!-- ko if: search() -->
+				<h4 class="results-title"><?php _e('Search results', 'jeo'); ?></h4>
+			<!-- /ko -->
+
+			<!-- ko if: !filteredLayers().length && !search() -->
+				<p style="font-style:italic;color: #999;"><?php _e('You are using all of your layers.', 'jeo'); ?></p>
+			<!-- /ko -->
+
+			<!-- ko if: !filteredLayers().length && search() -->
+				<p style="font-style:italic;color: #999;"><?php _e('No layers were found.', 'jeo'); ?></p>
+			<!-- /ko -->
+
 			<table class="layers-list available-layers">
-				<tbody>
-					<?php 
-					while($layer_query->have_posts()) {
-						$layer_query->the_post();
-
-						?>
-						<tr id="layer-<?php the_ID(); ?>">
-							<td><strong><?php the_title(); ?></strong></td>
-							<td><?php echo $this->get_layer_type(get_the_ID()); ?></td>
-							<td><a class="button add-layer" href="javascript:void(0);" title="<?php _e('Add layer', 'jeo'); ?>">+ <?php _e('Add'); ?></a></td>
-						</tr>
-
-						<?php
-						wp_reset_postdata();
-					} ?>
+				<tbody data-bind="foreach: filteredLayers">
+					<tr>
+						<td><strong data-bind="text: title"></strong></td>
+						<td data-bind="text: type"></td>
+						<td style="width:1%;"><a class="button" data-bind="click: $parent.addLayer" href="javascript:void(0);" title="<?php _e('Add layer', 'jeo'); ?>">+ <?php _e('Add'); ?></a></td>
+					</tr>
 				</tbody>
 			</table>
 
 			<h4 class="selected-title"><?php _e('Selected layers', 'jeo'); ?></h4>
 
-			<table class="layers-list selected-layers" data-layers="<?php if($post_layers) echo json_encode($post_layers); ?>">
-				<tbody>
+			<table class="layers-list selected-layers">
+				<tbody class="selected-layers-list">
+					<!-- ko foreach: {data: selectedLayers} -->
+						<tr class="layer-item">
+							<td style="width: 30%;">
+								<p><strong data-bind="text: title"></strong></p>
+								<p data-bind="text: type"></p>
+							</td>
+							<td>
+								<p><?php _e('Layer options', 'jeo'); ?></p>
+								<div class="filter-opts">
+									<input type="radio" value="fixed" data-bind="attr: {name: ID + '_filtering_opt', id: ID + '_filtering_opt_fixed'}, checked: $data.filtering" />
+									<label data-bind="attr: {for: ID + '_filtering_opt_fixed'}"><?php _e('Fixed', 'jeo'); ?></label>
+									<input  type="radio" value="switch" data-bind="attr: {name: ID + '_filtering_opt', id: ID + '_filtering_opt_switch'}, checked: $data.filtering" />
+									<label data-bind="attr: {for: ID + '_filtering_opt_switch'}"><?php _e('Switchable', 'jeo'); ?></label>
+									<input type="radio" value="swap"  data-bind="attr: {name: ID + '_filtering_opt', id: ID + '_filtering_opt_swap'}, checked: $data.filtering" />
+									<label data-bind="attr: {for: ID + '_filtering_opt_swap'}"><?php _e('Swapable', 'jeo'); ?></label>
+
+									<div class="filtering-opts">
+										<!-- ko if: $data.filtering() == 'switch' -->
+											<input type="checkbox" data-bind="attr: {id: ID + '_switch_hidden'}, checked: $data.hidden" />
+											<label data-bind="attr: {for: ID + '_switch_hidden'}"><?php _e('Hidden', 'jeo'); ?></label>
+										<!-- /ko -->
+										<!-- ko if: $data.filtering() == 'swap' -->
+											<input type="radio" data-bind="attr: {id: ID + '_first_swap'}, checked: $data.first_swap" name="_jeo_map_layer_first_swap" />
+											<label data-bind="attr: {for: ID + '_first_swap'}"><?php _e('Default swap option', 'jeo'); ?></label>
+										<!-- /ko -->
+									</div>
+								</div>
+							</td>
+							<td style="width:1%;"><a class="button" data-bind="click: $parent.removeLayer" href="javascript:void(0);" title="<?php _e('Remove layer', 'jeo'); ?>"><?php _e('Remove'); ?></a></td>
+						</tr>
+					<!-- /ko -->
 				</tbody>
 			</table>
 
+			<input type="hidden" name="_jeo_map_layers" data-bind="textInput: selection" />
+
 			<style type="text/css">
+				#post-layers input[type='text'] {
+					width: 100%;
+				}
 				#post-layers .layers-list {
 					background: #fcfcfc;
 					border-collapse: collapse;
 					width: 100%;
 				}
-				#post-layers .layers-list td {
+				#post-layers .selected-layers .layer-item {
+					width: 100%;
+					height: 100px;
+				}
+				#post-layers .layers-list tr td {
 					margin: 0;
 					border: 1px solid #f0f0f0;
 					padding: 5px 8px;
@@ -426,30 +487,132 @@ class JEO_Layers {
 				#post-layers .layers-list tr:hover td {
 					background: #fff;
 				}
-				#post-layers .available-layers .selected {
-					display: none !important;
-				}
 			</style>
 
 			<script type="text/javascript">
-				jQuery(document).ready(function($) {
-					$list = $('#post-layers .available-layers');
-					$selected = $('#post-layers .selected-layers');
+				function LayersModel() {
+					var self = this;
 
-					var addLayer = function($layer) {
+					var origLayers = <?php echo json_encode($layers); ?>;
 
-						$layer.addClass('selected');
+					self.search = ko.observable('');
 
-						var $selectedLayer = $layer.clone();
-						$selected.find('tbody').append($selectedLayer);
+					self.addLayer = function(layer) {
+						var layer = layer || this;
+						if(typeof layer.filtering !== 'function')
+							layer.filtering = ko.observable(layer.filtering || 'fixed');
+						if(typeof layer.hidden !== 'function')
+							layer.hidden = ko.observable(layer.hidden || false);
+						if(typeof layer.first_swap !== 'function')
+							layer.first_swap = ko.observable(layer.first_swap || false);
+						self.selectedLayers.push(layer);
+						self.layers.remove(layer);
+					};
 
-						$selectedLayer.find('.add-layer').parents('td').remove();
+					self.removeLayer = function(layer) {
+						var layer = layer || this;
+						self.layers.push(layer);
+						self.selectedLayers.remove(layer);
+					};
+
+					/*
+					 * Layer list
+					 */
+
+					self.layers = ko.observableArray(origLayers.slice(0));
+
+					self.filteredLayers = ko.computed(function() {
+						if(!self.search()) {
+							return self.layers().slice(0, 4);
+						} else {
+							return ko.utils.arrayFilter(self.layers(), function(l) {
+								return l.title.toLowerCase().indexOf(self.search().toLowerCase()) !== -1;
+							}).slice(0, 4);
+						}
+					});
+
+					/*
+					 * Layer selection
+					 */
+
+					self.selectedLayers = ko.observableArray([]);
+
+					var initSelection = <?php if($post_layers) echo json_encode($post_layers); else echo '[]'; ?>;
+
+					if(initSelection.length) {
+						_.each(initSelection, function(l) {
+							var layer = _.extend(_.find(self.layers(), function(layer) {
+								if(layer.ID == l.ID) {
+									_.extend(l, layer);
+									return true;
+								}
+								return false;
+							}), l);
+							self.addLayer(layer);
+						});
+					}
+
+					self.selection = ko.computed(function() {
+						var layers = [];
+						_.each(self.selectedLayers(), function(layer) {
+							var layer = _.extend({}, layer);
+							layer.filtering = layer.filtering();
+							layer.hidden = layer.hidden();
+							layer.first_swap = layer.first_swap();
+							layers.push(layer);
+						});
+						window.editingLayers = layers;
+						return JSON.stringify(layers);
+					});
+
+					/*
+					 * Sortable selected layers
+					 */
+
+					// jquery sort binding method
+					self.bindSort = function(listSelector, listKey) {
+						var startIndex = -1;
+
+						var sortableSetup = {
+
+							// on sorting start
+							start: function (event, ui) {
+								// cache the item index when the dragging starts
+								startIndex = ui.item.index();
+							},
+
+							// on sorting stop
+							stop: function (event, ui) {
+
+								// get the new location item index
+								var newIndex = ui.item.index();
+
+								if (startIndex > -1) {
+									//  get the item to be moved
+									var item = self[listKey]()[startIndex];
+
+									//  move the item
+									self[listKey].remove(item);
+									self[listKey].splice(newIndex, 0, item);
+
+									//  ko rebinds to the array so we need to remove duplicate ui item
+									ui.item.remove();
+								}
+
+							}
+						};
+
+						// bind jquery using the .fruitList class selector
+						jQuery(listSelector).sortable( sortableSetup );
 
 					};
 
-					$list.on('click', '.add-layer', function() {
-						addLayer($(this).parents('tr'));
-					});
+				}
+
+				jQuery(document).ready(function() {
+					var model = new LayersModel();
+					model.bindSort('.selected-layers-list', 'selectedLayers');
+					ko.applyBindings(model);
 				});
 			</script>
 			<?php
@@ -458,6 +621,111 @@ class JEO_Layers {
 
 	}
 
+	function map_save($post_id) {
+
+		if(get_post_type($post_id) == 'map') {
+			if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+				return;
+
+			if (false !== wp_is_post_revision($post_id))
+				return;
+
+			if(isset($_REQUEST['_jeo_map_layers'])) {
+				update_post_meta($post_id, '_jeo_map_layers', json_decode(stripslashes($_REQUEST['_jeo_map_layers']), true));
+			}
+		}
+
+	}
+
+	function get_layer_type($post_id = false) {
+
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$terms = get_the_terms($post_id, 'layer-type');
+
+		if($terms) {
+			return array_shift($terms)->name;
+		} else {
+			return false;
+		}
+
+	}
+
+	function get_layer($post_id = false) {
+
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$post = get_post($post_id);
+		setup_postdata($post);
+
+		$type = $this->get_layer_type();
+
+		$layer = array(
+			'ID' => $post->ID,
+			'title' => get_the_title(),
+			'type' => $type
+		);
+
+		if($type == 'tilelayer') {
+			$layer['tile_url'] = htmlspecialchars(urldecode(get_post_meta($post->ID, '_tilelayer_tile_url', true)));
+			error_log($layer['tile_url']);
+			$layer['utfgrid_url'] = get_post_meta($post->ID, '_tilelayer_utfgrid_url', true);
+			$layer['utfgrid_template'] = get_post_meta($post->ID, '_tilelayer_utfgrid_template', true);
+			error_log($layer['utfgrid_template']);
+		} elseif($type == 'mapbox') {
+			$layer['mapbox_id'] = get_post_meta($post->ID, '_mapbox_id', true);
+		} elseif($type == 'cartodb') {
+			$layer['cartodb_type'] = get_post_meta($post->ID, '_cartodb_type', true);
+			if($layer['cartodb_type'] == 'viz') {
+				$layer['cartodb_viz_url'] = get_post_meta($post->ID, '_cartodb_viz_url', true);
+			} else {
+				$layer['cartodb_username'] = get_post_meta($post->ID, '_cartodb_username', true);
+				$layer['cartodb_table'] = get_post_meta($post->ID, '_cartodb_table', true);
+				$layer['cartodb_where'] = get_post_meta($post->ID, '_cartodb_where', true);
+				$layer['cartodb_cartocss'] = get_post_meta($post->ID, '_cartodb_cartocss', true);
+				$layer['cartodb_template'] = get_post_meta($post->ID, '_cartodb_template', true);
+			}
+		}
+
+		wp_reset_postdata();
+
+		return $layer;
+
+	}
+
+	function get_map_layers($post_id = false) {
+		global $post;
+		$post_id = $post_id ? $post_id : $post->ID;
+
+		$layers = array();
+
+		$map_layers = get_post_meta($post_id, '_jeo_map_layers', true);
+
+		foreach($map_layers as $l) {
+			$layer = $this->get_layer($l['ID']);
+			$layer['filtering'] = $l['filtering'];
+			if($layer['filtering'] == 'swap') {
+				$layer['first_swap'] = $l['first_swap'];
+			} elseif($layer['filtering'] == 'switch') {
+				$layer['hidden'] = $l['hidden'];
+			}
+			$layers[] = $layer;
+		}
+
+		return $layers;
+
+	}
+
 }
 
 $GLOBALS['jeo_layers'] = new JEO_Layers();
+
+function jeo_get_layer($post_id = false) {
+	return $GLOBALS['jeo_layers']->get_layer($post_id);
+}
+
+function jeo_get_map_layers2($post_id = false) {
+	return $GLOBALS['jeo_layers']->get_map_layers($post_id);
+}

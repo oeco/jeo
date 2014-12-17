@@ -33,13 +33,13 @@ var jeo = {};
 		} else {
 			return $(document).ready(_init);
 		}
-		
+
 	};
 
 	jeo.maps = {};
 
 	jeo.build = function(conf, callback) {
-		
+
 		/*
 		 * Map settings
 		 */
@@ -114,7 +114,7 @@ var jeo = {};
 				map.scrollWheelZoom.disable();
 		}
 
-		/* 
+		/*
 		 * Legends
 		 */
 		if(conf.legend) {
@@ -165,64 +165,49 @@ var jeo = {};
 
 		var parsedLayers = [];
 
-		var mapBoxComposite = 1;
-		var mapBoxCompositionAmount = 0;
-
 		$.each(layers, function(i, layer) {
 
-			var layerID = layer.layerID;
-			if(typeof layerID == 'undefined')
-				layerID = layer;
+			if(layer.type == 'cartodb' && layer.cartodb_type == 'viz') {
 
-			if(layer.layerType == 'mapbox' || layerID.indexOf('http') === -1) {
-                
-                layer.mapboxComposition = mapBoxComposite;
+				var layer = cartodb.createLayer(map, layer.cartodb_viz_url, {legends: false});
 
-                if(mapBoxCompositionAmount >= 16) {
-                    mapBoxCompositionAmount = 0;
-                    mapBoxComposite++;
-                }
+				parsedLayers.push(layer);
 
-			}
-            
-            parsedLayers.push(layer);
+			} else if(layer.type == 'mapbox') {
 
-		});
+				parsedLayers.push(L.mapbox.tileLayer(layer.mapbox_id));
+				parsedLayers.push(L.mapbox.gridLayer(layer.mapbox_id));
 
-		// create tileLayers
+			} else if(layer.type == 'tilelayer') {
 
-		var layers = [];
-		$.each(parsedLayers, function(i, layer) {
+				parsedLayers.push(L.tileLayer(layer.tile_url));
 
-			layerID = layer.layerID;
-			if(typeof layerID == 'undefined')
-				layerID = layer;
+				if(layer.utfgrid_url && layer.utfgrid_template) {
 
-			if(layer.layerType == 'cartodb') {
+					parsedLayers.push(L.mapbox.gridLayer({
+						"name": layer.title,
+						"tilejson": "2.0.0",
+						"scheme": "xyz",
+						"template": layer.utfgrid_template,
+						"grids": [layer.utfgrid_url.replace('{s}', 'a')]
+					}));
 
-				layers.push(cartodb.createLayer(map, layer.layerID));
-
-			} else if(layerID.indexOf('http') === -1 || layer.layerType == 'mapbox') {
-
-				layers.push(L.mapbox.tileLayer(layerID));
-				layers.push(L.mapbox.gridLayer(layerID));
-
-			} else {
-
-				layers.push(L.tileLayer(layerID));
+				}
 
 			}
 
 		});
 
-		return layers;
+		return parsedLayers;
 	};
 
 	jeo.loadLayers = function(map, parsedLayers) {
 
-		if(map.coreLayers)
-			map.coreLayers.clearLayers();
-		else {
+		if(map.coreLayers) {
+			for(var key in map.coreLayers._layers) {
+				map.coreLayers.removeLayer(key);
+			}
+		} else {
 			map.coreLayers = new L.layerGroup();
 			map.addLayer(map.coreLayers);
 		}
@@ -253,29 +238,24 @@ var jeo = {};
 		newConf.filteringLayers.swapLayers = [];
 
 		$.each(conf.layers, function(i, layer) {
-			newConf.layers.push({
-				layerID: layer.id,
-				layerType: layer.type
-			});
-			if(layer.opts) {
-				if(layer.opts.filtering == 'switch') {
-					var switchLayer = {
-						id: layer.id,
-						title: layer.title
-					};
-					if(layer.switch_hidden)
-						switchLayer.hidden = true;
-					newConf.filteringLayers.switchLayers.push(switchLayer);
-				}
-				if(layer.opts.filtering == 'swap') {
-					var swapLayer = {
-						id: layer.id,
-						title: layer.title
-					};
-					if(conf.swap_first_layer == layer.id)
-						swapLayer.first = true;
-					newConf.filteringLayers.swapLayers.push(swapLayer);
-				}
+			newConf.layers.push(_.clone(layer));
+			if(layer.filtering == 'switch') {
+				var switchLayer = {
+					ID: layer.ID,
+					title: layer.title
+				};
+				if(layer.hidden)
+					switchLayer.hidden = true;
+				newConf.filteringLayers.switchLayers.push(switchLayer);
+			}
+			if(layer.filtering == 'swap') {
+				var swapLayer = {
+					ID: layer.ID,
+					title: layer.title
+				};
+				if(layer.first_swap)
+					swapLayer.first = true;
+				newConf.filteringLayers.swapLayers.push(swapLayer);
 			}
 		});
 
@@ -304,7 +284,7 @@ var jeo = {};
 
 		if(conf.legend_full)
 			newConf.legend_full = conf.legend_full;
-		
+
 		return newConf;
 	}
 

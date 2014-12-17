@@ -94,8 +94,8 @@ class JEO {
 		}
 
 		if($cartodb || is_admin()) {
-            
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.3.05');
+
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.11.26');
 			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
 
 		} else {
@@ -110,7 +110,7 @@ class JEO {
 		wp_enqueue_style('leaflet-ie');
 
 		// MAPBOX
-		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.2.0');
+		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.6.4');
 		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
 
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
@@ -165,7 +165,7 @@ class JEO {
 		/*
 		 * Map
 		 */
-		$labels = array( 
+		$labels = array(
 			'name' => __('Maps', 'jeo'),
 			'singular_name' => __('Map', 'jeo'),
 			'add_new' => __('Add new map', 'jeo'),
@@ -198,7 +198,7 @@ class JEO {
 		/*
 		 * Map group
 		 */
-		$labels = array( 
+		$labels = array(
 			'name' => __('Map groups', 'jeo'),
 			'singular_name' => __('Map group', 'jeo'),
 			'add_new' => __('Add new map group', 'jeo'),
@@ -212,7 +212,7 @@ class JEO {
 			'menu_name' => __('Map groups', 'jeo')
 		);
 
-		$args = array( 
+		$args = array(
 			'labels' => $labels,
 			'hierarchical' => true,
 			'description' => __('JEO Map Groups', 'jeo'),
@@ -564,6 +564,8 @@ class JEO {
 		$data['postID'] = $map_id;
 		$data['title'] = get_the_title($map_id);
 		$data['legend'] = $this->get_map_legend($map_id);
+		$data['layers'] = jeo_get_map_layers2($map_id);
+		//error_log(print_r(jeo_get_map_layers2($map_id), true));
 		if($post->post_content)
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', $post->post_content);
 		$data = apply_filters('jeo_map_data', $data, $post);
@@ -769,7 +771,7 @@ function jeo_get_options() {
 
 function jeo_the_query($query) {
 	global $jeo;
-	return $jeo->the_query($query);	
+	return $jeo->the_query($query);
 }
 
 // mapped post types

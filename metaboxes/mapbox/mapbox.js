@@ -10,7 +10,7 @@
 		// layers
 		mapConf.layers = getLayers();
 		mapConf.filteringLayers = getFilteringLayers();
-		
+
 		// server
 		if($('input[name="map_data[server]"]:checked').val() === 'custom') {
 			mapConf.server = $('input[name="map_data[custom_server]"]').val();
@@ -157,44 +157,9 @@
 		/*
 		 * Layer management
 		 */
-				
-		$('#mapbox-metabox .add-layer').click(function() {
-			addLayer($(this).data('layertype'));
-			return false;
-		});
-
-		$('#mapbox-metabox .remove-layer').live('click', function() {
-			removeLayer($(this).parents('li'));
-			return false;
-		});
 
 		// update base layer select and set change listener
 		$('#baselayer_drop_down').change(updateBaseLayerURLBox);
-
-		// filtering layers opts
-		$('#mapbox-metabox .filtering-opts').hide();
-		$('#mapbox-metabox .layers-list input.filtering-opt').live('change', function() {
-			var optInput = $(this).parent().find(':checked');
-			var filteringOpts = optInput.parents('.filter-opts').find('.filtering-opts');
-			var opt = optInput.val();
-			if(opt != 'fixed') {
-				filteringOpts.show();
-				if(opt == 'switch') {
-					filteringOpts.find('.switch-opts').show();
-					filteringOpts.find('.swap-opts').hide();
-				} else if(opt == 'swap') {
-					filteringOpts.find('.switch-opts').hide();
-					filteringOpts.find('.swap-opts').show();
-				}
-			} else {
-				filteringOpts.hide();
-			}
-		}).change();
-
-		// update swap layer id
-		$('#mapbox-metabox .layers-list input.swap_first_layer').live('change', function() {
-			$(this).val($(this).parents('li').find('.layer_id').val());
-		}).change();
 
 		/*
 		 * Map preview button
@@ -283,82 +248,54 @@
 
 	});
 
-  // Add an entry to the layer list.
-	function addLayer(type) {
-
-		var layersList = $('#mapbox-metabox .layers-list');
-		var layerItem = $(mapbox_metabox_localization.layer_item);
-		var layerLength = layersList.find('li').length + 1;
-		var layerTypeCaption = layerItem.find('.layer_type');
-		var layerID = layerItem.find('.layer_id');
-
-		layerID.attr('name', 'map_data[layers][' + layerLength + '][id]');
-		layerItem.find('.fixed_layer, .switch_layer, .swap_layer').attr('name', 'map_data[layers][' + layerLength + '][opts][filtering]');
-		layerItem.find('.layer_title').attr('name', 'map_data[layers][' + layerLength + '][title]');
-		layerItem.find('.layer_type').attr('name', 'map_data[layers][' + layerLength + '][type]');
-		layerItem.find('.layer_type').attr('value', type);
-		layerItem.find('.layer_hidden').attr('name', 'map_data[layers][' + layerLength + '][switch_hidden]');
-
-		layerItem.find('.filtering-opts').hide();
-
-
-		layersList.append(layerItem);
-	}
-
-	function removeLayer(layer) {
-		layer.remove();
-	}
-
 	function getLayers() {
 		var layers = [];
-		
+
 		// add base layer url
 		base_layer_url = $('#baselayer_url_box').val();
-		if (base_layer_url) 
-			layers.push(base_layer_url);
-		
-		// add other layers
-		$('#mapbox-metabox .layers-list li').each(function() {
+		if (base_layer_url)
 			layers.push({
-				layerID: $(this).find('input.layer_id').val(),
-				layerType: $(this).find('input.layer_type').val()
+				type: 'tilelayer',
+				tile_url: base_layer_url
 			});
-		});
+
+		// add other layers
+		layers = layers.concat(window.editingLayers.slice(0));
 
 		return layers;
 	}
 
 	function getFilteringLayers() {
+
 		var filtering = {};
+
 		filtering.switchLayers = [];
 		filtering.swapLayers = [];
-		$('#mapbox-metabox .layers-list li').each(function() {
-			var id = $(this).find('input.layer_id').val();
-			var filteringOpt = $(this).find('.filtering-opt:checked').val();
-			if(filteringOpt == 'switch') {
 
-				var layer = {
-					id: id,
-					title: $(this).find('input.layer_title').val()
-				}
-				if($(this).find('input.layer_hidden:checked').length)
-					layer.hidden = true;
+		var layers = getLayers();
 
-				filtering.switchLayers.push(layer);
+		_.each(layers, function(layer) {
 
-			} else if(filteringOpt == 'swap') {
-
-				var layer = {
-					id: id,
-					title: $(this).find('input.layer_title').val()
-				}
-				if($('#mapbox .layers-list .swap_first_layer:checked').val() == id)
-					layer.first = true;
-
-				filtering.swapLayers.push(layer);
-
+			if(layer.filtering == 'switch') {
+				var switchLayer = {
+					ID: layer.ID,
+					title: layer.title
+				};
+				if(layer.hidden)
+					switchLayer.hidden = true;
+				filtering.switchLayers.push(switchLayer);
+			}
+			if(layer.filtering == 'swap') {
+				var swapLayer = {
+					ID: layer.ID,
+					title: layer.title
+				};
+				if(layer.first_swap)
+					swapLayer.first = true;
+				filtering.swapLayers.push(swapLayer);
 			}
 		});
+
 		return filtering;
 	}
 
@@ -386,7 +323,7 @@
 		    case 'stamen_watercolor':
 			    base_layer_url_box.val('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg');
 			    base_layer_url_box.attr('readonly', true);
-			    break;		  
+			    break;
 		    case 'stamen_terrain':
 			    base_layer_url_box.val('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg');
 			    base_layer_url_box.attr('readonly', true);
@@ -395,7 +332,7 @@
 			    base_layer_url_box.val('');
 			    base_layer_url_box.attr('readonly', true);
 			    break;
-			case 'custom': 
+			case 'custom':
 				base_layer_url_box.attr('readonly', false);
 				break;
 		}
