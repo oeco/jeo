@@ -724,15 +724,17 @@ class JEO_Layers {
 
 		$map_layers = get_post_meta($post_id, '_jeo_map_layers', true);
 
-		foreach($map_layers as $l) {
-			$layer = $this->get_layer($l['ID']);
-			$layer['filtering'] = $l['filtering'];
-			if($layer['filtering'] == 'swap') {
-				$layer['first_swap'] = $l['first_swap'];
-			} elseif($layer['filtering'] == 'switch') {
-				$layer['hidden'] = $l['hidden'];
+		if($map_layers) {
+			foreach($map_layers as $l) {
+				$layer = $this->get_layer($l['ID']);
+				$layer['filtering'] = $l['filtering'];
+				if($layer['filtering'] == 'swap') {
+					$layer['first_swap'] = $l['first_swap'];
+				} elseif($layer['filtering'] == 'switch') {
+					$layer['hidden'] = $l['hidden'];
+				}
+				$layers[] = $layer;
 			}
-			$layers[] = $layer;
 		}
 
 		return $layers;
