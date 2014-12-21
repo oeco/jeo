@@ -260,7 +260,8 @@
 			});
 
 		// add other layers
-		layers = layers.concat(window.editingLayers.slice(0));
+		if(window.editingLayers)
+			layers = layers.concat(window.editingLayers.slice(0));
 
 		return layers;
 	}
