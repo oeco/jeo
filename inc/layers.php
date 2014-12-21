@@ -95,6 +95,15 @@ class JEO_Layers {
 			'advanced',
 			'high'
 		);
+		// Layer legend
+		add_meta_box(
+			'layer-legend',
+			__('Layer legend', 'jeo'),
+			array($this, 'legend_box'),
+			'map-layer',
+			'side',
+			'default'
+		);
 		// Post layers
 		add_meta_box(
 			'post-layers',
@@ -203,8 +212,8 @@ class JEO_Layers {
 						<td>
 							<input name="_cartodb_type" id="cartodb_viz_type_viz" type="radio" value="viz" <?php if($cartodb_type == 'viz' || !$cartodb_type) echo 'checked'; ?> />
 							<label for="cartodb_viz_type_viz"><?php _e('Visualization', 'jeo'); ?></label>
-							<input name="_cartodb_type" id="cartodb_viz_type_custom" type="radio" value="custom" <?php if($cartodb_type == 'custom') echo 'checked'; ?> />
-							<label for="cartodb_viz_type_custom"><?php _e('Advanced (build from your tables)', 'jeo'); ?></label>
+							<input name="_cartodb_type" id="cartodb_viz_type_custom" type="radio" value="custom" disabled <?php if($cartodb_type == 'custom') echo 'checked'; ?> />
+							<label for="cartodb_viz_type_custom"><?php _e('Advanced (build from your tables)', 'jeo'); ?> - <?php _e('coming soon', 'jeo'); ?></label>
 						</td>
 					</tr>
 					<tr class="subopt viz_type_viz">
@@ -306,6 +315,17 @@ class JEO_Layers {
 
 	}
 
+	function legend_box($post = false) {
+
+		$legend = $post ? get_post_meta($post->ID, '_layer_legend', true) : '';
+
+		?>
+		<h4><?php _e('Enter your HTML code to use as legend on the layer', 'jeo'); ?></h4>
+		<textarea name="_layer_legend" style="width:100%;height: 200px;"><?php echo $legend; ?></textarea>
+		<?php
+
+	}
+
 	function layer_save($post_id) {
 
 		if(get_post_type($post_id) == 'map-layer') {
@@ -314,6 +334,12 @@ class JEO_Layers {
 
 			if (false !== wp_is_post_revision($post_id))
 				return;
+
+			/*
+			 * Layer legend
+			 */
+			if(isset($_REQUEST['_layer_legend']))
+				update_post_meta($post_id, '_layer_legend', $_REQUEST['_layer_legend']);
 
 			/*
 			 * Layer type
@@ -390,11 +416,7 @@ class JEO_Layers {
 		if($layer_query->have_posts()) {
 			while($layer_query->have_posts()) {
 				$layer_query->the_post();
-				$layers[] = array(
-					'ID' => get_the_ID(),
-					'title' => get_the_title(),
-					'type' => $this->get_layer_type(get_the_ID())
-				);
+				$layers[] = $this->get_layer(get_the_ID());
 				wp_reset_postdata();
 			}
 			?>
@@ -665,15 +687,14 @@ class JEO_Layers {
 		$layer = array(
 			'ID' => $post->ID,
 			'title' => get_the_title(),
-			'type' => $type
+			'type' => $type,
+			'legend' => get_post_meta($post->ID, '_layer_legend', true)
 		);
 
 		if($type == 'tilelayer') {
 			$layer['tile_url'] = htmlspecialchars(urldecode(get_post_meta($post->ID, '_tilelayer_tile_url', true)));
-			error_log($layer['tile_url']);
 			$layer['utfgrid_url'] = get_post_meta($post->ID, '_tilelayer_utfgrid_url', true);
 			$layer['utfgrid_template'] = get_post_meta($post->ID, '_tilelayer_utfgrid_template', true);
-			error_log($layer['utfgrid_template']);
 		} elseif($type == 'mapbox') {
 			$layer['mapbox_id'] = get_post_meta($post->ID, '_mapbox_id', true);
 		} elseif($type == 'cartodb') {
@@ -726,6 +747,6 @@ function jeo_get_layer($post_id = false) {
 	return $GLOBALS['jeo_layers']->get_layer($post_id);
 }
 
-function jeo_get_map_layers2($post_id = false) {
+function jeo_get_map_layers($post_id = false) {
 	return $GLOBALS['jeo_layers']->get_map_layers($post_id);
 }

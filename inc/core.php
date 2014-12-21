@@ -84,14 +84,14 @@ class JEO {
 
 		// LEAFLET or CARTODB
 		// If map contains CartoDB layer, use cartodb lib (includes own leaflet)
-		$layers = $this->get_map_layers();
-		$cartodb = false;
-		if($layers) {
-			foreach($layers as $layer) {
-				if($layer['type'] == 'cartodb')
-					$cartodb = true;
-			}
-		}
+		$cartodb = true;
+		// $layers = jeo_get_map_layers();
+		// if($layers) {
+		// 	foreach($layers as $layer) {
+		// 		if($layer['type'] == 'cartodb')
+		// 			$cartodb = true;
+		// 	}
+		// }
 
 		if($cartodb || is_admin()) {
 
@@ -100,7 +100,7 @@ class JEO {
 
 		} else {
 
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.7');
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.js', array(), '0.7.3');
             wp_enqueue_style('leaflet', get_template_directory_uri() . '/lib/leaflet/leaflet.css');
 
 		}
@@ -564,30 +564,18 @@ class JEO {
 		$data['postID'] = $map_id;
 		$data['title'] = get_the_title($map_id);
 		$data['legend'] = $this->get_map_legend($map_id);
-		$data['layers'] = jeo_get_map_layers2($map_id);
-		//error_log(print_r(jeo_get_map_layers2($map_id), true));
+		$data['layers'] = jeo_get_map_layers($map_id);
+		if($data['base_layer']) {
+			array_unshift($data['layers'], array(
+				'type' => 'tilelayer',
+				'tile_url' => $data['base_layer']['url']
+			));
+		}
 		if($post->post_content)
 			$data['legend_full'] = '<h2>' . $data['title'] . '</h2>' . apply_filters('the_content', $post->post_content);
 		$data = apply_filters('jeo_map_data', $data, $post);
 		wp_reset_postdata();
 		return $data;
-	}
-
-	function get_map_layers($map_id = false) {
-		$map_id = $map_id ? $map_id : $this->map->ID;
-		if(get_post_type($map_id) == 'map-group') {
-			$data = $this->get_mapgroup_data($map_id);
-			$layers = array();
-			if(is_array($data['maps'])) {
-				foreach($data['maps'] as $map) {
-					$layers = array_merge($layers, $map['layers']);
-				}
-			}
-		} else {
-			$data = $this->get_map_data($map_id);
-			$layers = $data['layers'];
-		}
-		return $layers;
 	}
 
 	function get_map_center($map_id = false) {
@@ -606,51 +594,6 @@ class JEO {
 		$map_id = $map_id ? $map_id : $this->map->ID;
 		$map_data= $this->get_map_data($map_id);
 		return $map_data['max_zoom'];
-	}
-
-	function get_mapbox_image($map_id_or_layers = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
-
-		$layers_ids = array();
-		$center = array('lat' => 0, 'lon' => 0);
-
-		if(is_array($map_id_or_layers)) {
-
-			$layer_ids = $map_id_or_layers;
-
-		} else {
-
-			$map_id = $map_id ? $map_id : $this->map->ID;
-
-			$zoom = $zoom ? $zoom : $this->get_map_zoom($map_id);
-
-			if(get_post_type($map_id) == 'map-group') {
-				$mapgroup = $this->get_mapgroup_data($map_id);
-				if(is_array($mapgroup['maps'])) {
-					$map = array_shift($mapgroup['maps']);
-					$map_id = $map['postID'];
-				}
-			}
-
-			$layers = $this->get_map_layers($map_id);
-			$layers_ids = array();
-			if($layers) {
-				foreach($layers as $layer) {
-					if($layer['opts']['filtering'] == 'fixed') {
-						$layers_ids[] = $layer['id'];
-					}
-				}
-			}
-
-			$center = $this->get_map_center($map_id);
-		}
-
-		if(!$zoom)
-			$zoom = 1;
-
-		$lat = $lat ? $lat : $center['lat'];
-		$lng = $lng ? $lng : $center['lon'];
-
-		return 'http://api.tiles.mapbox.com/v3/' . implode(',', $layers_ids) . '/' . $lng . ',' . $lat . ',' . $zoom . '/' . $width . 'x' . $height . '.png';
 	}
 
 	function get_mapgroup_data($group_id = false) {
@@ -862,11 +805,6 @@ function jeo_get_mapgroup_data($map_id = false) {
 function jeo_get_map_data($map_id = false) {
 	global $jeo;
 	return $jeo->get_map_data($map_id);
-}
-
-function jeo_get_map_layers($map_id = false) {
-	global $jeo;
-	return $jeo->get_map_layers($map_id);
 }
 
 function jeo_get_map_center($map_id = false) {

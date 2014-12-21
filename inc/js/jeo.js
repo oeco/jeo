@@ -169,18 +169,34 @@ var jeo = {};
 
 			if(layer.type == 'cartodb' && layer.cartodb_type == 'viz') {
 
-				var layer = cartodb.createLayer(map, layer.cartodb_viz_url, {legends: false});
+				var pLayer = cartodb.createLayer(map, layer.cartodb_viz_url, {legends: false});
 
-				parsedLayers.push(layer);
+				if(layer.legend) {
+					pLayer._legend = layer.legend;
+				}
+
+				parsedLayers.push(pLayer);
 
 			} else if(layer.type == 'mapbox') {
 
-				parsedLayers.push(L.mapbox.tileLayer(layer.mapbox_id));
+				var pLayer = L.mapbox.tileLayer(layer.mapbox_id);
+
+				if(layer.legend) {
+					pLayer._legend = layer.legend;
+				}
+
+				parsedLayers.push(pLayer);
 				parsedLayers.push(L.mapbox.gridLayer(layer.mapbox_id));
 
 			} else if(layer.type == 'tilelayer') {
 
-				parsedLayers.push(L.tileLayer(layer.tile_url));
+				var pLayer = L.mapbox.tileLayer(layer.tile_url);
+
+				if(layer.legend) {
+					pLayer._legend = layer.legend;
+				}
+
+				parsedLayers.push(pLayer);
 
 				if(layer.utfgrid_url && layer.utfgrid_template) {
 
@@ -203,6 +219,11 @@ var jeo = {};
 
 	jeo.loadLayers = function(map, parsedLayers) {
 
+		for(var key in map.legendControl._legends) {
+			console.log('removing: ' + key);
+			map.legendControl.removeLegend(key);
+		}
+
 		if(map.coreLayers) {
 			for(var key in map.coreLayers._layers) {
 				map.coreLayers.removeLayer(key);
@@ -213,12 +234,15 @@ var jeo = {};
 		}
 
 		$.each(parsedLayers, function(i, layer) {
+			if(layer._legend) {
+				console.log('adding: ' + layer._legend);
+				map.legendControl.addLegend(layer._legend);
+			}
 			layer.addTo(map.coreLayers);
 			if(layer._tilejson) {
 				map.addControl(L.mapbox.gridControl(layer));
 			}
 		});
-
 
 		return map.coreLayers;
 	}

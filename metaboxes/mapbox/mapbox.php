@@ -37,9 +37,9 @@ function mapbox_inner_custom_box($post) {
 		<div class="layers-container">
 
 			<?php
-			if(isset($map_data['layers']))  {
-				$select_base_layer = $map_data['layers'][0]['type'];
-				$base_layer_url = $map_data['layers'][0]['id'];
+			if(isset($map_data['base_layer']))  {
+				$select_base_layer = $map_data['base_layer']['type'];
+				$base_layer_url = $map_data['base_layer']['url'];
 			} else {
 				$select_base_layer = 'openstreetmap';
 				$base_layer_url = '';
@@ -48,7 +48,7 @@ function mapbox_inner_custom_box($post) {
 
 			<div>
 				<?php _e('Select base layer', 'jeo'); ?>
-				<select name="map_data[layers][0][type]" id="baselayer_drop_down">
+				<select name="map_data[base_layer][type]" id="baselayer_drop_down">
 					<option value="openstreetmap" <?php echo $select_base_layer == 'openstreetmap' ? ' selected="selected"' : ''; ?> >OpenStreetMap</option>
 					<option value="mapquest_osm" <?php echo $select_base_layer == 'mapquest_osm' ? ' selected="selected"' : ''; ?> >Mapquest OpenStreetMap</option>
 					<option value="mapquest_sat" <?php echo $select_base_layer == 'mapquest_sat' ? ' selected="selected"' : ''; ?> >Mapquest Satellite</option>
@@ -58,7 +58,7 @@ function mapbox_inner_custom_box($post) {
 					<option value="custom" <?php echo $select_base_layer == 'custom' ? ' selected="selected"' : ''; ?> ><?php _e('Custom','jeo'); ?></option>
 					<option value="none" <?php echo $select_base_layer == 'none' ? ' selected="selected"' : ''; ?> ><?php _e('None','jeo'); ?></option>
 				</select>
-				<input type="text" name="map_data[layers][0][id]" id="baselayer_url_box" class="layer_title" size="40" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" value="<?php echo $base_layer_url; ?>" />
+				<input type="text" name="map_data[base_layer][url]" id="baselayer_url_box" class="layer_title" size="40" placeholder="<?php _e('Enter layer URL', 'jeo'); ?>" value="<?php echo $base_layer_url; ?>" />
 			</div>
 
 			<p><a class="button-primary preview-map" href="#"><?php _e('Update preview', 'jeo'); ?></a></p>
