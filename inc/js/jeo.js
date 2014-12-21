@@ -190,7 +190,7 @@ var jeo = {};
 
 			} else if(layer.type == 'tilelayer') {
 
-				var pLayer = L.mapbox.tileLayer(layer.tile_url);
+				var pLayer = L.tileLayer(layer.tile_url);
 
 				if(layer.legend) {
 					pLayer._legend = layer.legend;
