@@ -220,7 +220,6 @@ var jeo = {};
 	jeo.loadLayers = function(map, parsedLayers) {
 
 		for(var key in map.legendControl._legends) {
-			console.log('removing: ' + key);
 			map.legendControl.removeLegend(key);
 		}
 
@@ -235,7 +234,6 @@ var jeo = {};
 
 		$.each(parsedLayers, function(i, layer) {
 			if(layer._legend) {
-				console.log('adding: ' + layer._legend);
 				map.legendControl.addLegend(layer._legend);
 			}
 			layer.addTo(map.coreLayers);
