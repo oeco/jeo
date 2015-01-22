@@ -18,7 +18,6 @@
 						<?php the_tags('<p class="tags"><span class="lsf">&#xE128;</span> ', ', ', '</p>'); ?>
 					</div>
 				</div>
-				</div>
 			</div>
 		</header>
 		<section class="content">

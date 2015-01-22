@@ -303,7 +303,7 @@ class JEO {
 				) ";
 
 		// MAPGROUP
-		} else {
+		} elseif(get_post_type($map_id) == 'map-group') {
 
 			$groupdata = get_post_meta($map_id, 'mapgroup_data', true);
 
@@ -311,7 +311,7 @@ class JEO {
 				AND (
 			";
 
-			if(is_array($groupdata['maps'])) {
+			if(isset($groupdata['maps']) && is_array($groupdata['maps'])) {
 				foreach($groupdata['maps'] as $m) {
 
 					$c_map_id = $m['id'];
