@@ -142,7 +142,7 @@ class JEO_Markers {
 		wp_register_script('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/leaflet.markercluster.js', array('jeo'), '0.2');
 		wp_register_style('leaflet-markerclusterer', get_template_directory_uri() . '/lib/leaflet/MarkerCluster.Default.css', array(), '0.2');
 
-		/* 
+		/*
 		 * Clustering
 		 */
 		if($this->use_clustering()) {
@@ -552,7 +552,7 @@ class JEO_Markers {
 		} else {
 			$geometry = array();
 			$geometry['type'] = 'Point';
-			$geometry['coordinates'] = $coordinates;
+			$geometry['coordinates'] = array_map('floatval', $coordinates);
 		}
 		return apply_filters('jeo_marker_geometry', $geometry, $post);
 	}
