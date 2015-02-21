@@ -147,6 +147,7 @@ class JEO_Layers {
 				$tileurl = $post ? get_post_meta($post->ID, '_tilelayer_tile_url', true) : '';
 				$utfgridurl = $post ? get_post_meta($post->ID, '_tilelayer_utfgrid_url', true) : '';
 				$utfgrid_template = $post ? get_post_meta($post->ID, '_tilelayer_utfgrid_template', true) : '';
+				$tms = $post ? get_post_meta($post->ID, '_tilelayer_tms', true) : '';
 
 				?>
 				<tbody>
@@ -165,10 +166,17 @@ class JEO_Layers {
 						</td>
 					</tr>
 					<tr>
-						<th><label for="tilelayer_utfgrid_url"><?php _e('UTFGrid Template (optional)', 'jeo'); ?></label></th>
+						<th><label for="tilelayer_utfgrid_template"><?php _e('UTFGrid Template (optional)', 'jeo'); ?></label></th>
 						<td>
 							<textarea id="tilelayer_utfgrid_template" rows="10" cols="40" name="_tilelayer_utfgrid_template"><?php echo $utfgrid_template; ?></textarea>
 							<p class="description"><?php _e('UTFGrid template using mustache.<br/>E.g.: City: {{city}}'); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="tilelayer_tms"><?php _e('TMS', 'jeo'); ?></label></th>
+						<td>
+							<input id="tilelayer_tms" type="checkbox" name="_tilelayer_tms" <?php if($tms) echo 'checked'; ?> /> <label for="tilelayer_tms"><?php _e('Enable TMS', 'jeo'); ?></label>
+							<p class="description"><?php _e('Inverses Y axis numbering for tiles (turn this on for TMS services).'); ?></p>
 						</td>
 					</tr>
 				</tbody>
@@ -359,6 +367,13 @@ class JEO_Layers {
 
 			if(isset($_REQUEST['_tilelayer_utfgrid_template']))
 				update_post_meta($post_id, '_tilelayer_utfgrid_template', $_REQUEST['_tilelayer_utfgrid_template']);
+
+			if(isset($_REQUEST['_tilelayer_tms'])) {
+				if($_REQUEST['_tilelayer_tms'])
+					update_post_meta($post_id, '_tilelayer_tms', true);
+			} else {
+				delete_post_meta($post_id, '_tilelayer_tms');
+			}
 
 			/*
 			 * MapBox
@@ -695,6 +710,7 @@ class JEO_Layers {
 			$layer['tile_url'] = htmlspecialchars(urldecode(get_post_meta($post->ID, '_tilelayer_tile_url', true)));
 			$layer['utfgrid_url'] = get_post_meta($post->ID, '_tilelayer_utfgrid_url', true);
 			$layer['utfgrid_template'] = get_post_meta($post->ID, '_tilelayer_utfgrid_template', true);
+			$layer['tms'] = get_post_meta($post->ID, '_tilelayer_tms', true);
 		} elseif($type == 'mapbox') {
 			$layer['mapbox_id'] = get_post_meta($post->ID, '_mapbox_id', true);
 		} elseif($type == 'cartodb') {

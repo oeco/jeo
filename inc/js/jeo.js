@@ -190,7 +190,12 @@ var jeo = {};
 
 			} else if(layer.type == 'tilelayer') {
 
-				var pLayer = L.tileLayer(layer.tile_url);
+				var options = {};
+
+				if(layer.tms)
+					options.tms = true;
+
+				var pLayer = L.tileLayer(layer.tile_url, options);
 
 				if(layer.legend) {
 					pLayer._legend = layer.legend;
