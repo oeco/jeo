@@ -1,6 +1,6 @@
 <?php
 
-if ( !class_exists( 'Admin_Page_Framework' ) ) 
+if ( !class_exists( 'Admin_Page_Framework' ) )
 	include_once( get_template_directory() . '/inc/admin/admin-page-framework.php' );
 
 class JEO_Settings_Page extends Admin_Page_Framework {
@@ -8,20 +8,21 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 	var $page_slug = 'jeo_settings';
 
 	function SetUp() {
-		
+
 		$this->AddSubMenu(
 			__('JEO Settings', 'jeo'),
 			$this->page_slug
 		);
 
 		$this->ShowPageHeadingTabs(false);
-		
+
 		// Add in-page tabs in the first page.
 
 		$page_tabs = apply_filters('jeo_settings_tabs', array(
 			'home'		=> __('Front page', 'jeo'),
 			'map'		=> __('Maps', 'jeo'),
-			'geocode'	=> __('Geocode', 'jeo')
+			'geocode'	=> __('Geocode', 'jeo'),
+			'mapbox' => __('MapBox', 'jeo')
 		));
 
 		$this->AddInPageTabs($this->page_slug, $page_tabs);
@@ -57,7 +58,7 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 		foreach($pts as $pt) {
 			$post_types[$pt] = $pt;
 		}
-		
+
 		// Add form elements.
 		// Here we have four sections as an example.
 		// If you wonder what array keys are need to be used, please refer to http://en.michaeluno.jp/admin-page-framework/methods/
@@ -66,7 +67,7 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 			array(
 				'pageslug' => $this->page_slug,
 				'tabslug' => 'home',
-				'id' => 'front_page', 
+				'id' => 'front_page',
 				'title' => __('Front page settings', 'jeo'),
 				'description' => __('Set your front page contents.', 'jeo'),
 				'fields' => array(	// Field Arrays
@@ -79,7 +80,7 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 						'default' => 'latest',
 						'label' => array('latest' => __('Featured map with latest posts', 'jeo'), 'featured' => __('Selection of featured posts', 'jeo') . ' <strong>(' . __('featured map cannot be a map-group', 'jeo') . ')</strong>')
 					),
-					array(  
+					array(
 						'id' => 'featured_map',
 						'title' => __('Featured map', 'jeo'),
 						'description' => __('Select the map to be featured on the homepage and posts.', 'jeo'),
@@ -92,18 +93,18 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 			array(
 				'pageslug' => $this->page_slug,
 				'tabslug' => 'geocode',
-				'id' => 'geocode', 
+				'id' => 'geocode',
 				'title' => __('Geocode settings', 'jeo'),
 				'description' => '',
 				'fields' => array(	// Field Arrays
 					// Text Field
-					array(  
-						'id' => 'type', 
+					array(
+						'id' => 'type',
 						'title' => __('Geocode type', 'jeo'),
 						'description' => __('Choose simple latitude/longitude inputs or complete address lookup geocoding system', 'jeo'),	// additional notes besides the form field
 						'type' => 'radio',
 						'default' => 'default',
-						'label' => array('default' => __('Address geocoding with interactive map (default)', 'jeo'), 'latlng' => __('Latitude/longitude inputs', 'jeo')) 
+						'label' => array('default' => __('Address geocoding with interactive map (default)', 'jeo'), 'latlng' => __('Latitude/longitude inputs', 'jeo'))
 					),
 					array(
 						'id' => 'service',
@@ -125,16 +126,16 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 			array(
 				'pageslug' => $this->page_slug,
 				'tabslug' => 'map',
-				'id' => 'map', 
+				'id' => 'map',
 				'title' => __('Map behaviours', 'jeo'),
 				'fields' => array(
-					array(  
-						'id' => 'use_hash', 
+					array(
+						'id' => 'use_hash',
 						'title' => __('Fragment hash', 'jeo'),
 						'description' => __('Enable use of fragment hash url to share map location, selected maps on mapgroup and fullscreen state. <br/>E.g.: yoursite.com/#!/loc=-23,-42,7&map=12&full=true', 'jeo'),
 						'type' => 'checkbox',
 						'default' => true,
-						'label' => __('Enable', 'jeo') 
+						'label' => __('Enable', 'jeo')
 					),
 					array(
 						'id' => 'enable_clustering',
@@ -144,21 +145,37 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 						'default' => true,
 						'label' => __('Enable', 'jeo')
 					),
-					array(  
+					array(
 						'id' => 'use_map_query',
 						'title' => __('Map query', 'jeo'),
 						'description' => __('Display posts only associated to the viewing map', 'jeo'),
 						'type' => 'checkbox',
 						'default' => true,
 						'label' => __('Enable', 'jeo')
-					),	
-					array(  
+					),
+					array(
 						'id' => 'mapped_post_types',
 						'title' => __('Mapped post types', 'jeo'),
 						'description' => __('Post types to enable map functionalities', 'jeo'),
 						'type' => 'checkbox',
 						'default' => $mapped_post_types,
 						'label' => $post_types
+					),
+				)
+			),
+			array(
+				'pageslug' => $this->page_slug,
+				'tabslug' => 'mapbox',
+				'id' => 'mapbox',
+				'title' => __('MapBox', 'jeo'),
+				'description' => '',
+				'fields' => array(
+					array(
+						'id' => 'access_token',
+						'title' => __('Access token', 'jeo'),
+						'description' => __('MapBox access token'),
+						'type' => 'text',
+						'size' => 100
 					),
 				)
 			),
@@ -171,13 +188,13 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 	function do_jeo_settings() {
 
 		if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'about' ) return;
-	
+
 		submit_button();
 
 	}
-	
+
 	function content_jeo_settings_about( $strContent ) {
-		
+
 		return $strContent . '<h3>Documentation</h3>'
 			. '<ul class="admin-page-framework">'
 			. '<li><a href="http://en.michaeluno.jp/admin-page-framework/get-started/">Get Started</a></li>'
@@ -188,9 +205,9 @@ class JEO_Settings_Page extends Admin_Page_Framework {
 			. '<h3>Participate in the Project</h3>'
 			. '<p>The repository is available at GitHub. <a href="https://github.com/michaeluno/admin-page-framework">https://github.com/michaeluno/admin-page-framework</a></p>'
 		;
-		
+
 	}
-	
+
 }
 
 function jeo_init_settings_page() {

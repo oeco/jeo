@@ -1,3 +1,9 @@
+if(jeo_settings.mapbox_access_token) {
+	L.mapbox.accessToken = jeo_settings.mapbox_access_token;
+}
+
+console.log(L.mapbox);
+
 var jeo = {};
 
 (function($) {

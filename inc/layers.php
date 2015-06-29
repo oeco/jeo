@@ -126,6 +126,8 @@ class JEO_Layers {
 
 		$layer_type = $post ? $this->get_layer_type($post->ID) : false;
 
+		$mapbox_token = jeo_get_mapbox_access_token();
+
 		?>
 		<div id="layer_settings_box">
 			<div class="layer-type">
@@ -134,8 +136,13 @@ class JEO_Layers {
 					<input type="radio" id="layer_type_tilelayer" name="layer_type" value="tilelayer" <?php if($layer_type == 'tilelayer' || !$layer_type) echo 'checked'; ?> />
 					<label for="layer_type_tilelayer"><?php _e('Tilelayer', 'jeo'); ?></label>
 
-					<input type="radio" id="layer_type_mapbox" name="layer_type" value="mapbox" <?php if($layer_type == 'mapbox') echo 'checked'; ?> />
-					<label for="layer_type_mapbox"><?php _e('MapBox', 'jeo'); ?></label>
+					<input type="radio" id="layer_type_mapbox" name="layer_type" value="mapbox" <?php if($layer_type == 'mapbox') echo 'checked'; ?> <?php if(!$mapbox_token) echo 'disabled'; ?> />
+					<label for="layer_type_mapbox">
+						<?php _e('MapBox', 'jeo'); ?>
+						<?php if(!$mapbox_token) : ?>
+							(<a href="<?php echo admin_url('/themes.php?page=jeo_settings&tab=mapbox'); ?>"><?php _e('activate MapBox with an access token', 'jeo'); ?></a>)
+						<?php endif; ?>
+					</label>
 
 					<input type="radio" id="layer_type_cartodb" name="layer_type" value="cartodb" <?php if($layer_type == 'cartodb') echo 'checked'; ?> />
 					<label for="layer_type_cartodb"><?php _e('CartoDB', 'jeo'); ?></label>

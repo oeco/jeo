@@ -110,7 +110,7 @@ class JEO {
 		wp_enqueue_style('leaflet-ie');
 
 		// MAPBOX
-		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '1.6.4');
+		wp_register_script('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.js', array('leaflet'), '2.2.1');
 		wp_enqueue_style('mapbox-js', get_template_directory_uri() . '/lib/mapbox/mapbox.standalone.css');
 
 		wp_register_script('imagesloaded', get_template_directory_uri() . '/lib/jquery.imagesloaded.min.js', array('jquery'));
@@ -136,6 +136,10 @@ class JEO {
 		wp_localize_script('jeo', 'jeo_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'more_label' => __('More', 'jeo')
+		));
+
+		wp_localize_script('jeo', 'jeo_settings', array(
+			'mapbox_access_token' => $this->mapbox_access_token()
 		));
 
 		wp_localize_script('jeo.geocode', 'jeo_labels', array(
@@ -267,6 +271,15 @@ class JEO {
 		else
 			$use_hash = true;
 		return apply_filters('jeo_use_hash', $use_hash);
+	}
+
+	function mapbox_access_token() {
+		$options = $this->get_options();
+		if(isset($options['mapbox']))
+			$access_token = $options['mapbox']['access_token'];
+		else
+			$access_token = false;
+		return apply_filters('jeo_mapbox_access_token', $access_token);
 	}
 
 	function query_vars($vars) {
@@ -710,6 +723,11 @@ include_once(get_template_directory() . '/inc/range-slider.php');
 function jeo_get_options() {
 	global $jeo;
 	return $jeo->get_options();
+}
+
+function jeo_get_mapbox_access_token() {
+	global $jeo;
+	return $jeo->mapbox_access_token();
 }
 
 function jeo_the_query($query) {
