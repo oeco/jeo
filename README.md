@@ -30,15 +30,18 @@ After setting the files, go to **Appearance > Themes** and activate **JEO**.
  - Customizable marker icons that can be associated to categories, custom taxonomies or posts directly.
  - Map markers query integrated to posts query.
  - GeoJSON API (any content `/?geojson` gives the geojson output). *E.g.: yourwebsite.com/category/one/?geojson*
- - Extensive hooks with documentation yet to come
  - Support [qTranslate](http://wordpress.org/extend/plugins/qtranslate/) multilanguage plugin
+
+## Wiki
+
+Checkout our [wiki](https://github.com/oeco/jeo/wiki) for tutorials and detailed developer documentation.
 
 ## Using JEO
 
 ### First map
 After activating your theme, you'll see a big message on your homepage to create your first map. Do it! You can start by selecting one of our presetted open layers, or already add custom layers if you have any.
 
-### Settings, configurations and contents
+### Settings and contents
 After setting your first map, go to the bottom of your dashboard's menu and click on JEO Settings to change website styles, map behaviours and basic settings to set it up the way you need it.
 
 Now you can go manage your posts, geolocate them and add custom marker icons!
@@ -48,4 +51,4 @@ Now you can go manage your posts, geolocate them and add custom marker icons!
 JEO is a collaboration between [@oeco](https://github.com/oeco/), [@cardume](https://github.com/cardume/), [@memelab](https://github.com/memelab/) and [@icfjknight](https://github.com/icfjknight/). Developed after the theme was built for [InfoAmazonia](http://infoamazonia.org/), a project led by ICFJ Knight International Journalism Fellow [Gustavo Faleiros](http://www.icfj.org/our-work/brazil-expand-use-satellite-mapping-and-other-technologies-improve-environmental-reporting) and supported by [Internews](http://www.internews.org/).
 
 ### Support or Contact
-Having trouble with JEO? Go to our [issues page](https://github.com/cardume/jeo/issues) and we'll help you there!
+Having trouble with JEO? Go to our [issues page](https://github.com/oeco/jeo/issues) and we'll help you there!
