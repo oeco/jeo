@@ -534,10 +534,11 @@ class JEO {
 		return json_encode($this->get_map_conf());
 	}
 
-	function get_map_conf() {
+	function get_map_conf($map_id) {
 		global $post;
+		$map = $map_id ? get_post($map_id) : $this->map;
 		$conf = array(
-			'postID' => $this->map->ID,
+			'postID' => $map_id ? $map_id :  $this->map->ID,
 			'count' => $this->map_count
 		); // default
 		if(is_post_type_archive('map')) {
@@ -545,7 +546,7 @@ class JEO {
 			$conf['disableHash'] = true;
 			$conf['disableInteraction'] = true;
 		}
-		return apply_filters('jeo_map_conf', $conf, $this->map, $post);
+		return apply_filters('jeo_map_conf', $conf, $map, $post);
 	}
 
 	function mapgroup_conf() {
@@ -793,7 +794,7 @@ function jeo_map_conf() {
 // get ARRAY map conf
 function jeo_get_map_conf($map_id = false) {
 	global $jeo;
-	return $jeo->get_map_conf();
+	return $jeo->get_map_conf($map_id);
 }
 
 // get the map conf
