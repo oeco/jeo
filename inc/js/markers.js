@@ -8,7 +8,7 @@
 		$.getJSON(jeo_markers.ajaxurl,
 		{
 			action: 'markers_geojson',
-			query: jeo_markers.query
+			query: map.conf.marker_query || jeo_markers.query
 		},
 		function(geojson) {
 			if(geojson === 0)
@@ -47,7 +47,7 @@
 
 				},
 				onEachFeature: function(f, l) {
-					
+
 					var markerId = f.properties.marker.markerId ? f.properties.marker.markerId : f.properties.marker.iconUrl;
 
 					if(icons[markerId]) {

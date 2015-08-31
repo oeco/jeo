@@ -156,7 +156,7 @@ class JEO_Markers {
 
 		}
 
-		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.18');
+		wp_register_script('jeo.markers', $this->directory_uri . '/js/markers.js', array('jeo', 'underscore'), '0.2.19');
 	}
 
 	function setup_query_vars() {
