@@ -19,6 +19,7 @@ class JEO_API extends JEO_Markers {
 			add_filter('jeo_markers_data', array($this, 'filter_markers'), 10, 2);
 			add_filter('jeo_geojson_content_type', array($this, 'content_type'));
 			add_action('jeo_markers_before_print', array($this, 'headers'));
+			add_action('pre_get_posts', array($this, 'pre_get_posts'));
 			add_action('template_redirect', array($this, 'template_redirect'));
 		}
 	}
@@ -90,11 +91,19 @@ class JEO_API extends JEO_Markers {
 		return $data;
 	}
 
+	function pre_get_posts($query) {
+		if(isset($query->query['geojson'])) {
+			$query->set('offset', null);
+			$query->set('nopaging', null);
+			$query->set('paged', (get_query_var('paged')) ? get_query_var('paged') : 1);
+		}
+	}
+
 	function template_redirect() {
 		global $wp_query;
 		if(isset($wp_query->query['geojson'])) {
-			$query = apply_filters('jeo_geojson_api_query', $this->query());
-			$this->get_data($query);
+			$query = $this->query();
+			$this->get_data(apply_filters('jeo_geojson_api_query', $query));
 			exit;
 		}
 	}
@@ -118,11 +127,14 @@ class JEO_API extends JEO_Markers {
 
 	function headers() {
 		global $wp_query;
-		if(isset($wp_query->query['geojson']) && isset($_GET['download'])) {
-			$filename = apply_filters('jeo_geojson_filename', sanitize_title(get_bloginfo('name') . ' ' . wp_title(null, false)));
-			header('Content-Disposition: attachment; filename="' . $filename . '.geojson"');
+		if(isset($wp_query->query['geojson'])) {
+			header('X-Total-Count: ' . $wp_query->found_posts);
+			header('Access-Control-Allow-Origin: *');
+			if(isset($_GET['download'])) {
+				$filename = apply_filters('jeo_geojson_filename', sanitize_title(get_bloginfo('name') . ' ' . wp_title(null, false)));
+				header('Content-Disposition: attachment; filename="' . $filename . '.geojson"');
+			}
 		}
-		header('Access-Control-Allow-Origin: *');
 	}
 
 	function get_api_url($query_args = array()) {
