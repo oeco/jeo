@@ -534,7 +534,7 @@ class JEO {
 		return json_encode($this->get_map_conf());
 	}
 
-	function get_map_conf($map_id) {
+	function get_map_conf($map_id = false) {
 		global $post;
 		$map = $map_id ? get_post($map_id) : $this->map;
 		$conf = array(
