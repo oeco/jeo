@@ -70,7 +70,7 @@ class JEO_Embed {
 
 	function get_embed_url($vars = array()) {
 		$query = http_build_query($vars);
-		return apply_filters('jeo_embed_url', home_url('/' . $this->slug . '/?' . $query));
+		return apply_filters('jeo_embed_url', home_url('/' . $this->slug) . '/?' . $query);
 	}
 
 	function get_map_conf() {
