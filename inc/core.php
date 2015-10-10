@@ -831,11 +831,6 @@ function jeo_get_map_center($map_id = false) {
 	return $jeo->get_map_center($map_id);
 }
 
-function jeo_get_mapbox_image($map_id = false, $width = 200, $height = 200, $lat = false, $lng = false, $zoom = false) {
-	global $jeo;
-	return $jeo->get_mapbox_image($map_id, $width, $height, $lat, $lng, $zoom);
-}
-
 function jeo_get_map_zoom($map_id = false) {
 	global $jeo;
 	return $jeo->get_map_zoom($map_id);
