@@ -229,7 +229,9 @@ var jeo = {};
 	jeo.loadLayers = function(map, parsedLayers) {
 
 		for(var key in map.legendControl._legends) {
-			map.legendControl.removeLegend(key);
+			console.log(key);
+			if(key.indexOf('map-details-link') == -1)
+				map.legendControl.removeLegend(key);
 		}
 
 		if(map.coreLayers) {
