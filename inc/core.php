@@ -717,6 +717,9 @@ require_once(get_template_directory() . '/metaboxes/metaboxes.php');
 require_once(get_template_directory() . '/inc/featured.php');
 include_once(get_template_directory() . '/inc/range-slider.php');
 
+// WP API
+include_once(get_template_directory() . '/inc/wp-api.php');
+
 /*
  * JEO functions api
  */

@@ -294,7 +294,7 @@ class JEO_Markers {
 					$geojson = $this->get_geojson();
 
 					if($geojson) {
-						$data['features'][$i] = $this->get_geojson();
+						$data['features'][$i] = $geojson;
 						$i++;
 					}
 				}
