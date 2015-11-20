@@ -4,14 +4,17 @@ add_action('add_meta_boxes', 'map_relation_add_meta_box');
 add_action('save_post', 'map_relation_save_postdata');
 
 function map_relation_add_meta_box() {
-	add_meta_box(
-		'map_relation',
-		__('Set maps for this post', 'jeo'),
-		'map_relation_inner_custom_box',
-		'post',
-		'advanced',
-		'high'
-	);
+	$screens = jeo_get_mapped_post_types();
+	foreach($screens as $screen) {
+		add_meta_box(
+			'map_relation',
+			__('Set maps for this post', 'jeo'),
+			'map_relation_inner_custom_box',
+			$screen,
+			'advanced',
+			'high'
+		);
+	}
 }
 
 function map_relation_inner_custom_box($post) {
