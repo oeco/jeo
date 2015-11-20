@@ -57,6 +57,7 @@ class JEO_WP_API {
 
     if(in_array($post['post_type'], jeo_get_mapped_post_types())) {
 
+      $_post['maps'] = get_post_meta($post['ID'], 'maps');
       $_post['coordinates'] = jeo_get_marker_coordinates($post['ID']);
 
     }
