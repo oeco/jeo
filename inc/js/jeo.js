@@ -173,7 +173,14 @@ var jeo = {};
 
 			if(layer.type == 'cartodb' && layer.cartodb_type == 'viz') {
 
-				var pLayer = cartodb.createLayer(map, layer.cartodb_viz_url, {legends: false});
+				var cdbOpts = {
+					legends: false
+				};
+
+				if(jeo_localization.ssl)
+					cdbOpts.https = true;
+
+				var pLayer = cartodb.createLayer(map, layer.cartodb_viz_url, cdbOpts);
 
 				if(layer.legend) {
 					pLayer._legend = layer.legend;

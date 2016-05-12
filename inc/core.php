@@ -135,6 +135,7 @@ class JEO {
 
 		wp_localize_script('jeo', 'jeo_localization', array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
+			'ssl' => is_ssl(),
 			'more_label' => __('More', 'jeo')
 		));
 

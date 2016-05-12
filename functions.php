@@ -51,7 +51,7 @@ function jeo_theme_scripts() {
 	wp_register_style('jeo-lsf', get_template_directory_uri() . '/css/lsf.css');
 	wp_register_style('jeo-base', get_template_directory_uri() . '/css/base.css', array(), '1.2');
 	wp_register_style('jeo-skeleton', get_template_directory_uri() . '/css/skeleton.css', array('jeo-base'), '1.2');
-	wp_register_style('font-opensans', 'http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800');
+	wp_register_style('font-opensans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800');
 	wp_register_style('jeo-main', get_template_directory_uri() . '/css/main.css', array('jeo-skeleton', 'jeo-lsf', 'font-opensans'), '0.0.3');
 
 	wp_register_script('jquery-isotope', get_template_directory_uri() . '/lib/jquery.isotope.min.js', array('jquery'), '1.5.25');
@@ -111,7 +111,7 @@ function jeo_comment( $comment, $args, $depth ) {
 						get_comment_author_link()
 					);
 					?>
-				</span> | 
+				</span> |
 				<span class="comment-date">
 					<?php
 					printf( '<a href="%1$s"><time datetime="%2$s">%3$s</time></a>',
