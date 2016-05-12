@@ -384,7 +384,7 @@ var geocodeBox;
 				box.map = new L.map(mapCanvasID);
 				box.map.setView([0,0], 2);
 
-				box.map.addLayer(L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'));
+				box.map.addLayer(L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'));
 				box.map.addLayer(box.markerLayer);
 
 				box.isMapReady = true;
@@ -400,7 +400,7 @@ var geocodeBox;
 					format: 'json'
 				};
 
-				$.getJSON('http://nominatim.openstreetmap.org/search.php?json_callback=?', query, function(results) {
+				$.getJSON('//nominatim.openstreetmap.org/search.php?json_callback=?', query, function(results) {
 
 					_results(results, 'display_name', 'lat', 'lon', 'boundingbox');
 
@@ -432,7 +432,7 @@ var geocodeBox;
 								parseFloat(bounds[3])
 							]
 						]);
-					
+
 					box.map.panTo([lat, lng]);
 
 					var features = [
@@ -566,7 +566,7 @@ var geocodeBox;
 				return false;
 			}
 			if(!callbacks[name].length) {
-				return false;	
+				return false;
 			}
 
 			var _run = function(callbacks) {

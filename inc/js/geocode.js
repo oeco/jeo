@@ -69,7 +69,7 @@
 				query.bounded = 1;
 			}
 
-			$.getJSON('http://nominatim.openstreetmap.org/search.php?json_callback=?', query, function(data) {
+			$.getJSON('//nominatim.openstreetmap.org/search.php?json_callback=?', query, function(data) {
 				if(data.length)
 					self._draw(data);
 				else
@@ -141,7 +141,7 @@
 						south: obj.boundingbox[1],
 						east: obj.boundingbox[3]
 					}
-				}); 
+				});
 			});
 
 			list.find('li').click(function() {

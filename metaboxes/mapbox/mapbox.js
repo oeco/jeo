@@ -306,7 +306,7 @@
 
 		switch ( $('#baselayer_drop_down').val() ){
 			case 'openstreetmap':
-				base_layer_url_box.val('http://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
+				base_layer_url_box.val('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 				base_layer_url_box.attr('readonly', true);
 				break;
 		    case 'mapquest_osm':
