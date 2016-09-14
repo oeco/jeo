@@ -95,8 +95,8 @@ class JEO {
 
 		if($cartodb || is_admin()) {
 
-			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.11.26');
-			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css');
+			wp_register_script('leaflet', get_template_directory_uri() . '/lib/cartodb.js', array(), '3.15.10');
+			wp_enqueue_style('cartodb', get_template_directory_uri() . '/lib/cartodb.css', array(), '3.15.10');
 
 		} else {
 
@@ -679,10 +679,11 @@ class JEO {
 	}
 
 	function fix_qtranslate() {
-		if(function_exists('qtrans_getLanguage')) {
+		if(function_exists('qtranxf_getLanguage')) {
 			add_filter('get_the_date', array($this, 'qtranslate_get_the_date'), 10, 2);
 			add_filter('admin_url', array($this, 'qtranslate_admin_url'), 10, 2);
-			add_action('post_type_archive_link', 'qtrans_convertURL');
+			if(function_exists('qtranxf_convertURL'))
+				add_action('post_type_archive_link', 'qtranxf_convertURL');
 		}
 	}
 
@@ -697,8 +698,8 @@ class JEO {
 
 	// send lang to ajax requests
 	function qtranslate_admin_url($url, $path) {
-		if($path == 'admin-ajax.php' && function_exists('qtrans_getLanguage'))
-			$url .= '?lang=' . qtrans_getLanguage();
+		if($path == 'admin-ajax.php' && function_exists('qtranxf_getLanguage'))
+			$url .= '?lang=' . qtranxf_getLanguage();
 
 		return $url;
 	}
